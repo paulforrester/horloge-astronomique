@@ -29,7 +29,7 @@ taken as given. This architecture adds five working principles:
   - Normal running, catch-up and setting are all "move forward until `position = target`".
 - **P2 — State lives in the trains; events are stateless shows.**
   - Anything whose *position* must match the date or time is driven continuously or indexed by a
-    gear train: the ages carousel, the weekday carousel, the calendar ring.
+    gear train: which of the four ages appears, the weekday carousel, the calendar ring.
   - An event motor only performs a motion that starts and ends in a rest state: striking, a
     procession, a crow.
   - Skipping a show (night silence, catch-up, fault) can then never leave a display wrong.
@@ -51,7 +51,7 @@ taken as given. This architecture adds five working principles:
 | ID | Module | Contents (inventory IDs) | Location (envelope §2) | Drive | Version |
 |---|---|---|---|---|---|
 | M0 | Controller and time base | MCU, RTC, FRAM, drivers, PSU | left (weight) tower bay | 24 V PSU | v1 |
-| M1 | Time and release | I1 mean-time hands; I2 legal-time hands; quarter, hour and noon release cams; ages-carousel index drive | gallery (mean-time dial) | stepper, 1 rev/h | v1 |
+| M1 | Time and release | I1 mean-time hands; I2 legal-time hands; quarter, hour and noon release cams; ages selection cam | gallery (mean-time dial) | stepper, 1 rev/h | v1 |
 | M1b | Legal-time hands (only if summer time is followed, D9) | I2 | gallery, coaxial with M1 | stepper, 1 rev/h | optional |
 | M2 | Main dial | I3 Sun; I4 Moon; I5 eclipse arm; I6 shadow; I7 sunrise/sunset; I8 calendar ring; I9 feasts arc and leap gate; I10 dominical-letter dial; year-end trigger | lower centre | stepper, 1 rev/mean day | v1 (v1.5 parts provisioned) |
 | M3 | Equations | I13 solar and lunar cam stacks; two correction output shafts | base, right | stepper, 1 rev/mean day | v1.5 |
@@ -102,7 +102,7 @@ goes through a switch and the controller. A link that carries an angle is a shaf
 | M2 → M4 | Year-end trigger | Switch on the M2 year train → controller | Connector |
 | M4 → M2 | Easter position (feasts arc), dominical letter, century leap exception (v2) | Push-rod or rack, or a shaft. **TBD** in the v2 design; the original's transfer is unknown | Keyed |
 | M1 → E1, E2, E3 | Quarter, hour and noon releases | Switches on M1 cams → controller → event motors | Connector |
-| M1 → E2 | Ages-carousel index (state, P2) | Shaft from the M1 quarter arbor, indexed by Geneva | Keyed |
+| M1 → E2 | Which age appears (state, P2). The original has four lodges whose figures step out [S: DA p. 57]. | Shaft from the M1 quarter arbor turning a lodge-selection cam | Keyed |
 | M1 → E2 | Hour count (snail for Death's strokes) | Snail on the M1 hour arbor read by the E2 rack (as in rack striking) | Mechanical contact across the boundary. Keep M1 and E2 in one cassette, or move the snail into E2 on its own index (Phase 2). |
 | E3 → E4 | Rooster cue at Apostles 4, 8 and 12 | Cam switches on the E3 train → controller → E4 | Connector |
 
@@ -122,8 +122,8 @@ train's warning, release and locking.
 | Event | Trigger (cam on…) | Event motor runs until… | How many strokes, decided by | Policy during catch-up / night silence |
 |---|---|---|---|---|
 | E1 bell angel (A1) | M1 quarter cam, 4 lobes per rev of the minute arbor | E1 locking cam | one stroke per event | skip |
-| E1 hourglass (A2) | M1 hour flag | E1 locking cam (180° turn) | — | skip; the glass may end up inverted, which is harmless |
-| E2 ages (A3) | M1 quarter cam | E2 locking cam | quarter count from the ages carousel index (state from M1) | skip |
+| E1 hourglass (A2) | M1 hour flag | E1 locking cam (half turn, alternating direction [S: DA p. 51]) | — | skip; only the direction parity can change, which is harmless |
+| E2 ages (A3) | M1 quarter cam | E2 locking cam | quarter count from the M1 lodge-selection cam (state from M1) | skip. The original also stops the ages at night [S: DA p. 58, 65]. |
 | E2 Death (A4) | M1 hour flag, after A3 | E2 rack locked | hour snail on M1 (1–12) | skip |
 | E3 Apostles (A5) | M1 noon flag (24 h cam) | E3 locking cam (one procession cycle) | — | skip |
 | E4 rooster (A6) | E3 cue switches at Apostles 4, 8 and 12 | E4 locking cam | three crows (one per cue) | skip with E3 |
@@ -140,10 +140,21 @@ train's warning, release and locking.
   - a suppression flag during catch-up;
   - priority ordering when triggers coincide (on the hour: A1, then A3 old man, then A4 Death,
     then A2 glass; at noon: then A5).
-- **Faithful ordering.** At the hour, the old man strikes the fourth quarter, then Death strikes
-  the hours [Sn], and the hourglass turns at the last stroke of the fourth quarter [Sn: BDM].
-  Phase 2 reproduces this order, either with chained lock-switch cues or mechanically as in the
-  original (TBD).
+- **Faithful ordering.** The original chains its motors in exactly this way [S: DA p. 64–66]:
+  - "quand l'heure doit sonner, le moteur central détend le second moteur (ou rouage des quatre
+    âges); celui-ci à son tour transmet le mouvement au troisième rouage, c'est-à-dire à la
+    sonnerie des quarts, qui, de son côté, aussitôt que les quarts sont frappés, reporte le
+    mouvement au second moteur pour faire fonctionner les automates. Quand ce rouage a fini
+    d'agir, il communique le mouvement au quatrième pour opérer la sonnerie des heures."
+  - "De plus, à midi, un cinquième rouage, celui des apôtres et du coq, reçoit directement
+    l'impulsion du moteur des heures."
+  - DA counts "les autres moteurs, au nombre de cinq" besides the central motor [?]: the named
+    trains are four.
+  - The hourglass turns "au dernier coup des quatre quarts, un instant avant que la Mort ne sonne
+    les heures" [S: DA p. 51].
+  - The replica chains its event motors the same way: each one's lock switch cues the next
+    through the controller. So the order on the hour is: genie and age quarters → hourglass →
+    Death → (at noon) Apostles and rooster.
 
 ## 6. Homing and zero sensing
 
@@ -185,7 +196,7 @@ independently settable, by turning it forward, against a scale.**
 | Moon-phase globe (I15); celestial globe (I16) | Friction coupling between train and output | Globe phase or hour-circle marks |
 | Cams whose phase sets a calculation: equations (I13), sunrise/sunset (I7), node cam (I5) | **Indexed dog clutch**: spring-loaded, pulled axially to free it, turned to an index mark, re-engaged. Resolution is one tooth of its wheel; e.g. 1/200 rev of a 27.5-day cam is 3.3 h, below what the display can show. | Engraved index on the cam and plate |
 | Calendar ring (I8); 4-year leap count | A lever lifts the day jumper or pawl; the ring is turned to the date; the leap wheel is set to the year in the cycle | Ring sectors; leap-wheel numbers |
-| Weekday carousel (I11); ages carousel (A3) | Dog clutch at the drive | The carousel itself |
+| Weekday carousel (I11); ages lodge-selection cam (A3) | Dog clutch at the drive | The carousel itself; the selection-cam index |
 | Computus wheels (I12) | Each count wheel on a jumper, turned by hand | The computus dials |
 | Precession (I17) | Turned by hand (it moves about 1.4° per century [D]) | Globe scale |
 | Slip-clutch torque | Must exceed the train's running torque and stay below finger torque. Phase 2 calculates it per output. A commercial adjustable clutch for 6 mm shafts exists (Huco Vari-Tork) [Sn]. | — |

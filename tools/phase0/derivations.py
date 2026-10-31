@@ -69,6 +69,18 @@ for label, lon in [("Strasbourg cathedral 7.7506 E", 7.7506), ("Bordeaux 0.57 W"
     print(f"  {label:30s} LMT - UT = {off:+.2f} min; mean noon = {int(noon_cet // 60):02d}:"
           f"{noon_cet % 60:04.1f} CET, {int(noon_cet // 60) + 1:02d}:{noon_cet % 60:04.1f} CEST")
 
+# --- 3b. Calendar ring (DA p. 27: 25 cm wide, circumference "passé 9 mètres") -----------
+section("3b. Calendar ring from Description abrégée (DA p. 27)")
+C_min = 9000.0  # mm, lower bound ("over 9 m")
+D_min = C_min / math.pi
+print(f"  diameter > {D_min:.0f} mm -> 1:8 > {D_min / SCALE:.1f} mm; width 250 mm -> {250 / SCALE:.2f} mm")
+r = D_min / SCALE / 2
+for n in (3, 4):
+    chord = 2 * r * math.sin(math.radians(360 / n / 2))
+    print(f"  {n} segments of {360 // n} deg: chord {chord:.0f} mm (bed 320 mm)")
+dlon = 7.7506 - (-0.57)
+print(f"  Strasbourg-Bordeaux longitude difference {dlon:.4f} deg = {dlon * 4:.2f} min of time")
+
 # --- 4. Equation of time (Meeus 1998, eq. 28.3, low-precision form) ------------------------
 section("4. Equation of time extremes (Meeus 1998 eq. 28.3, epoch J2000 constants)")
 e, eps = 0.016709, math.radians(23.4393)

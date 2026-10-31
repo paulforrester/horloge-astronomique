@@ -10,7 +10,7 @@ the trade-offs and a recommendation. Status is **Proposed** until Paul approves;
 | ID | Decision | Recommendation | Needed before |
 |---|---|---|---|
 | D1 | CAD toolchain | **build123d** (Python, pinned), own gear library; OpenSCAD + BOSL2 as fallback | Phase 2 |
-| D2 | Strasbourg-faithful vs Bordeaux-localized | **Time: Strasbourg (accepted, PR #1)**, so the noon show is at 12:29 CET / 13:29 CEST. Sky: **Strasbourg too** (awaiting Paul) | v1.5 (sky parts) |
+| D2 | Strasbourg-faithful vs Bordeaux-localized | **Accepted: Strasbourg time** (noon show at 12:29 CET / 13:29 CEST) **plus Bordeaux sky** (horizon 44.83° N, globe on Bordeaux sidereal time). One sub-question on the horizon offset. | v1.5 (sky parts) |
 | D3 | Controller, drivers, RTC, event motors | **ESP32-S3 + TMC2209 (UART)** for the clock *and* the test rig, all bought new; DC gearmotors for events | Phase 2 test rig / Phase 3 |
 | D4 | Tooth profile, module, arbors, tubes, bearings | **Involute 20°**, module 1.0 / 0.8 as parameters; Ø3/5/8 ground rod; 0.45 mm-wall brass tubes in 1 mm steps; small standard bearing set | Phase 1 |
 | D5 | Scope of v1 vs deferred | **v1** time, main dial (steady-speed Sun and Moon), calendar, planets, Moon globe, sidereal globe, all automata; **v1.5** equations, eclipses, sunrise/sunset; **v2** computus. The question is rephrased in the D5 record. | Phase 1 |
@@ -18,7 +18,7 @@ the trade-offs and a recommendation. Status is **Proposed** until Paul approves;
 | D7 | Computus: faithful vs own design | Defer to v2; gather sources; design our own if Schwilgué's stays undocumented | v2 |
 | D8 | Sound | **Real small bells struck mechanically**; rooster crow through a small speaker in v1 | Phase 2 (E-modules) |
 | D9 | Legal-time hands and summer time | **Separately driven legal-time hands that follow CET/CEST** (M1b) | Phase 2 (M1) |
-| D10 | Night silence | **Quiet hours in firmware** (skip sound shows) | Phase 3 |
+| D10 | Night silence | **Quiet hours in firmware** (skip sound shows). The original already silences the four ages at night [S: DA]. | Phase 3 |
 | D11 | Case width (7.70 vs 8.60 m) and wall space | **1:8 accepted (PR #1)**; width (962.5 or 1075 mm) follows the source; wall dimensions to follow from Paul | Phase 2 (case) |
 
 Plus **Blockers** at the end: the network allowlist and the documents to obtain.
@@ -105,9 +105,28 @@ Read as: keep the show at Strasbourg's time. **Items 1, 2 and 5 are therefore St
 Strasbourg mean time, sunrise/sunset times and a globe horizon for Bordeaux on those dials would be
 a mixture (option C). That is harder to read and to validate.
 
-- Both parts stay swappable printed parts generated from φ.
-- Status: **Accepted for items 1, 2 and 5. Items 3 and 4 await Paul's confirmation of A**; they
-  are not needed before v1.5.
+**Paul's decision (chat, 31 Oct 2026):** "I'd prefer to use the Bordeaux sky as the reference
+point."
+
+**Status: Accepted, option C.** Time is Strasbourg (items 1, 2, 5); the sky is Bordeaux (items 3, 4).
+
+**What "Bordeaux sky" means in the design:**
+
+- **Sunrise/sunset (I7).** The mobile horizon (Schwilgué's own device [S: DA p. 31]) is computed for
+  φ = 44.83° N, with refraction, as the original does for Strasbourg.
+- **Celestial globe (I16).** The horizon ring is tilted for 44.83° N. The globe's rotation phase is
+  set to **Bordeaux local sidereal time**, which is Strasbourg's minus 33.3 min [D: longitude
+  difference 8.32°]. This is only M6's setting offset: no gear changes. The globe then shows the
+  sky actually above the house.
+- **Sub-question for Paul.** The main dial runs on Strasbourg apparent time. Do you want the mobile
+  horizon:
+  - **(i)** symmetric about the dial's noon, so it reads Bordeaux day length in local solar time;
+    or
+  - **(ii)** turned by the 33.3 min longitude difference, so the Sun hand crosses it at the moment
+    the Sun really rises and sets in Bordeaux?
+
+  **Recommendation: (ii)**, because the Sun hand above the horizon then means "the Sun is up
+  outside". It is one fixed angle in the linkage, so the choice can wait until v1.5.
 
 ---
 
@@ -361,6 +380,11 @@ on a 12 h dial, run at catch-up speed in seconds.
 
 **Recommendation: B**, configurable from Home Assistant, with C as a later option.
 
+**Supporting evidence:** this is original behaviour. Schwilgué's central motor produces "la
+suspension des fonctions des quatre âges pendant la nuit et la reprise de leur marche durant le
+jour", while Death strikes the hours day and night [S: DA p. 58, 65]. So the minimal faithful setting
+is to silence the four ages at night. The firmware option extends that to the other bells.
+
 ---
 
 ## D11 — Case width and wall space
@@ -397,6 +421,20 @@ to follow.
 
 **1. Network access for research.** This session could reach only package registries and GitHub.
 Only Paul can change this, in the environment settings; a PR comment or chat message cannot.
+
+**Update, 31 Oct 2026:** Paul widened access. The shell can now reach most hosts. Read in full
+since then: Schwilgué's *Description abrégée* (1844, archive.org). Still not obtainable
+automatically:
+
+| Host | Problem |
+|---|---|
+| `bibnum.publimath.fr` (LEF) | Answers 403 to automated clients |
+| `clea-astro.eu` (CLEA) | Does not resolve |
+| `www.elsolieltemps.com` (ELS), `gallica.bnf.fr`, `www.cathedrale-strasbourg.fr` | Bot protection (403) |
+| `upload.wikimedia.org` (photos) | Rate-limited (429) during this session; retry later |
+
+Circumventing bot protection is not acceptable, so **Paul, please download LEF, CLEA and ELS by
+hand** (links in reference-notes, Sources).
 The fix is in the cloud environment settings: environment menu → Edit → Network access, either a
 broader level or these hosts added under *Allowed domains*, with "Allow package managers" left
 ticked. Docs: https://code.claude.com/docs/en/cloud-environments#network-access.

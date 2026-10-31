@@ -5,16 +5,23 @@ every dial, vitrine and automaton stage. Tags as in `docs/reference-notes.md`. D
 from `tools/phase0/derivations.py`.
 
 > **Status: partial.** Positions were meant to come from scaling a frontal photograph against a
-> known dimension. This session's network policy blocked Wikimedia Commons and every other image
-> host, so **no photo could be measured**. Section 4 gives the photo set and the method so the
-> measurement can be done as soon as the hosts are allowed (`decisions.md` → Blockers). I have not
-> filled the gaps with guessed positions.
+> known dimension.
+>
+> - In the first pass, the network policy blocked all image hosts.
+> - After Paul widened access, Wikimedia answered "429 Too many requests" for every download in
+>   this session.
+>
+> So **no photo has been measured yet**. Section 4 has the verified photo set (Commons API: sizes
+> and licences confirmed) and the method. I have not filled the gaps with guessed positions.
+>
+> The stage *order* and the calendar ring's size now come from Schwilgué's own *Description
+> abrégée* (DA, 1844).
 
 ## 1. Overall case
 
 | Dimension | Original | 1:8 | Tag | Note |
 |---|---|---|---|---|
-| Height | 18 m | **2250 mm** | [S: ELS, AMIS] | AMIS describes the current case (three storeys, spiral staircase). |
+| Height | 18 m | **2250 mm** | [S: ELS, AMIS] | AMIS describes the current case (three storeys, spiral staircase). DA confirms the stone cabinet is the one cut for the 1547 project, "le cabinet qui sert encore à l'horloge actuelle" [S: DA p. 9]. |
 | Width at base | 7.70 m **or** 8.60 m | **962.5 mm or 1075 mm** | [?] | 7.70 m [S: ELS, snippet] may be the *first* clock's width [Sn: WIKI]. 8.60 m [S: ODY] is for the second (Dasypodius) clock, whose case is the current one. **Unresolved, and it changes the wall space by 112.5 mm.** |
 | Depth | TBD | TBD | — | No source found. Measure from a three-quarter photo, or find it in Bach/Rieb. |
 | Globe projection in front of the case | TBD | TBD | — | Same. |
@@ -41,16 +48,20 @@ From the layout notes [S: CLEA unless marked]. Heights are TBD.
 
 ```
  ┌──────────────────────────────────────────────┐   ← top of case, 2250 mm
- │  Apostles pass before Christ (noon)          │   E3
- │  Four ages pass before Death (quarters)      │   E2
- │  Moon-phase globe                            │   M5
- │  Heliocentric planetary dial                 │   M5
- │  Mean-time dial · angel (bell) · angel (glass)│  M1 + E1   [S: CLEA, TS]
- │  Weekday carousel (seven deities)            │   M7
- │  MAIN DIAL Ø287.5 mm + calendar ring         │   M2 (+ dominical-letter dial, left)
+ │  Dome: Isaiah, evangelists, seraphim         │   decoration [S: DA p. 60]
+ │  Upper hall: Apostles pass before Christ     │   E3        [S: DA p. 56, 58]
+ │  Lower hall: four ages (4 lodges) + Death    │   E2        [S: DA p. 56–57]
+ │  Moon-phase globe (inclined)                 │   M5        [S: DA p. 53]
+ │  Copernican planetary dial                   │   M5        [S: DA p. 51]
+ │  Lion gallery: genie (bell) · mean-time      │   M1 + E1   [S: DA p. 49–51]
+ │    dial (small) · genie (hourglass)          │
+ │  Weekday chariots on a circular rail         │   M7        [S: DA p. 46–47]
+ │  Calendar ring (25 cm × >9 m circ.) around   │   M2        [S: DA p. 27, 30]
+ │    the apparent-time dial Ø287.5 mm          │   (+ dominical-letter dial, left)
  │  Computus (left)        Equations (right)    │   M4 / M3   [S: TS, MERP]
  └──────────────────────────────────────────────┘   ← base
-        Celestial globe at floor level, in front  M6
+        Celestial sphere at floor level, in front, on four metal columns  M6  [S: DA p. 24–25]
+        (the calendar compartment is "immédiatement derrière la sphère céleste" [S: DA p. 27])
  Left tower: drive weights (5 × 50 kg), rooster on top (E4)
  Right: spiral staircase tower [S: AMIS]
 ```
@@ -72,19 +83,19 @@ horizontal offset from the case centreline, at 1:8.
 | Element | Module | Original size | 1:8 size | Position | Tag / status |
 |---|---|---|---|---|---|
 | Main (apparent-time) dial | M2 | Ø 2.30 m | **Ø 287.5 mm** | TBD | [S: ELS]; [D] |
-| Calendar ring (366 sectors) | M2 | TBD (second clock's ring Ø 2.92 m outer, 0.30 m wide [Sn: PH-H]) | TBD | concentric with the main dial | If the outer Ø is > 2.56 m it exceeds the 320 mm bed at 1:8 and must be printed in segments [D] |
+| Calendar ring | M2 | **25 cm wide, circumference "passé 9 mètres"** [S: DA p. 27, checked on the page image], so Ø > 2.86 m [D] | **Ø > 358 mm, 31.25 mm wide** [D] | around the main dial [S: DA p. 30] | **Exceeds the 320 mm bed: print in 4 × 90° segments** (chord 253 mm [D]) |
 | Dominical-letter dial | M2 | TBD | TBD | left of the main dial [S: CLEA] | photo |
 | Weekday carousel | M7 | TBD | TBD | above the main dial [S: CLEA] | photo |
-| Mean-time dial | M1 | TBD | TBD | above the carousel [S: CLEA] | photo |
+| Mean-time dial | M1 | "petit cadran" (small dial); diameter TBD [S: DA p. 49] | TBD | middle of the lion gallery, above the weekday chariots [S: DA p. 49] | photo |
 | Angels (bell, hourglass) | E1 | TBD | TBD | either side of the mean-time dial [S: CLEA] | photo |
-| Planetary dial | M5 | TBD | TBD | above the mean-time dial [S: CLEA] | photo |
-| Moon-phase globe | M5 | TBD | TBD | above the planetary dial [S: CLEA] | photo |
-| Ages and Death stage | E2 | TBD (figures TBD) | TBD | above the Moon globe [S: CLEA] | photo |
+| Planetary dial | M5 | "grand cadran" (large dial); diameter TBD [S: DA p. 51] | TBD | storey above the lion gallery [S: DA p. 51] | photo |
+| Moon-phase globe | M5 | TBD; inclined globe on a starry sky [S: DA p. 53] | TBD | above the planetary dial [S: CLEA, DA] | photo |
+| Ages and Death stage | E2 | lower hall with ogival arcades; Death on a central pedestal; four lodges [S: DA p. 56–57]. Sizes TBD | TBD | above the Moon globe [S: CLEA] | photo |
 | Apostles and Christ stage | E3 | figures ~18 in (457 mm) [S: WIKI; Sn: WIKI for Christ] | **figures ~57 mm** | top stage [S: CLEA] | [D] |
-| Rooster | E4 | "life-size" [Sn: WIKI]; no number | TBD | top of the left tower [S: CLEA] | photo; a primary source |
+| Rooster | E4 | "exécuté d'après nature" (life-size) [S: DA p. 59]; no number | TBD | top of the weight tower [S: DA p. 59] | photo |
 | Computus vitrine | M4 | TBD (the 1821 *model* is 15 × 20 × 6 cm [Sn: EXO]; the clock's computus is an enlarged version [S: RGL]) | TBD | bottom left [S: TS] | photo |
 | Equations vitrine | M3 | TBD | TBD | bottom right [S: MERP, CLEA] | photo |
-| Celestial globe | M6 | **TBD** (83/86 cm is the *second* clock's globe [Sn]) | TBD | floor level, in front [S: CLEA] | photo; a primary source |
+| Celestial globe | M6 | **TBD**: copper sphere on four metal columns [S: DA p. 25] (83/86 cm is the *second* clock's globe [Sn]) | TBD | floor level, in front [S: CLEA, DA] | photo |
 | Left weight tower | — | TBD | TBD | left [S: CLEA] | photo |
 | Staircase tower | — | TBD | TBD | [S: AMIS] | photo |
 
@@ -99,19 +110,19 @@ horizontal offset from the case centreline, at 1:8.
 
 ## 4. Photo-scaling method (ready to run when the hosts are allowed)
 
-### Candidate photographs [Sn]
+### Candidate photographs
 
-The agent could not open Commons. Resolutions and licences were seen in search snippets only. The
-upload URLs are **derived** from the Commons MD5 naming rule and untested.
+Sizes and licences below are checked through the Commons API. The image downloads themselves were
+rate-limited (429) in this session.
 `https://commons.wikimedia.org/wiki/Special:FilePath/<filename>` always redirects to the original.
 
-| # | File (Wikimedia Commons) | Reported size / licence | Notes |
+| # | File (Wikimedia Commons) | Size / author / licence (Commons API, 31 Oct 2026) | Notes |
 |---|---|---|---|
-| P1 | `Strasbourg_Cathedral_Astronomical_Clock_-_Diliff.jpg` | Diliff, 2014, CC BY-SA; size not seen | Diliff's photos are typically very high resolution. First choice. |
-| P2 | `Horloge_astronomique_de_la_cathédrale_de_Strasbourg.jpg` | 3864 × 5152 [?] | Seen once in a snippet |
-| P3 | `Astronomical_Clock_in_Cathedral_Strasbourg_France.jpg` | 3024 × 4032, CC BY 2.0 | |
-| P4 | `00_1012_Straßburger_Münster_-_Astronomische_Uhr.jpg` | 1733 × 2600, CC BY-SA | |
-| P5 | `Strasbourg_Astronomical_clock_Comput_ecclesiastique.jpg` | ? | Close-up of the computus |
+| P1 | `Strasbourg_Cathedral_Astronomical_Clock_-_Diliff.jpg` | 1754 × 2886, Diliff, 2014-02-08, CC BY-SA 3.0 | First choice: a careful architectural photographer |
+| P2 | `Horloge_astronomique_de_la_cathédrale_de_Strasbourg.jpg` | 3864 × 5152, Balwina54, CC BY-SA 3.0 | Highest resolution |
+| P3 | `Astronomical_Clock_in_Cathedral_Strasbourg_France.jpg` | 3024 × 4032, amanderson2, 2019-02-15, CC BY 2.0 | |
+| P4 | `00_1012_Straßburger_Münster_-_Astronomische_Uhr.jpg` | 1733 × 2600, W. Bulach, 2012-06-26, CC BY-SA 4.0 | |
+| P5 | `Strasbourg_Astronomical_clock_Comput_ecclesiastique.jpg` | 3312 × 4416, Tangopaso, 2009-12-05, public domain | Close-up of the computus |
 | — | Category `Strasbourg_Astronomical_clock_(present)` (about 194 files) | | For close-ups of the main dial, planetary dial and equations vitrine |
 | — | Period frontal prints: Gallica `btv1b10202446r`; Numistral `btv1b10202448n` (1845); 1842 Grieshaber lithograph (Nancy archives) | | No perspective, but drawn. Use as a cross-check of proportions, not as the primary measurement. |
 

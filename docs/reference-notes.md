@@ -450,3 +450,169 @@ Status of each item in "Open items / unknowns" above, in the same order:
 | Hourglass hourly or quarter-hourly | **Provisionally hourly** [Sn ×4]. |
 | Case width 7.70 vs 8.60 m | **Worse than thought**: 7.70 m may be the first clock's width [Sn: WIKI]. Open. |
 | ELS PDF and the Ungerer / Bach-Rieb books | ELS host blocked. Schwilgué's *Description abrégée* (public domain, Google Books) is now the top target. |
+
+---
+
+## Phase 0 research pass 2 (31 Oct 2026, after Paul widened network access)
+
+### New primary sources
+
+| Key | Source |
+|---|---|
+| **DA** | Charles Schwilgué (the builder's son), *Description abrégée de l'horloge astronomique de la cathédrale de Strasbourg*, 2nd edition, Strasbourg, Ph.-Alb. Dannbach, 1844, 70 pp. Public domain (archive.org: NOT_IN_COPYRIGHT; Google scan). https://archive.org/details/descriptionabrg00schwgoog. **Read in full** from the OCR text. Numbers that matter were checked against the page images (PDF page = printed page + 11). Page numbers below are the printed ones. |
+| SCH | Charles Schmidt, *Bericht über das astronomische Uhrwerk des Straßburger Münsters, verfaßt bei Gelegenheit das Hrn. Schwilgué, Vater, durch seine Mitbürger gegebenen Feste*, Strasbourg, Dannbach, 1842, 27 pp. https://archive.org/details/bub_gb_cSlBAAAAcAAJ. The Fraktur OCR is unreadable; it needs proper OCR or a human reader. **Not yet used.** |
+
+DA announces "une description complète, qui sera enrichie de dix planches" (a complete
+description with ten plates) [S: DA p. 5]. **Lead:** find it.
+
+### Facts from DA (verbatim; page)
+
+**Case and history**
+
+- First clock (1352–54): in the south transept "en face de l'horloge actuelle; on voit encore
+  aujourd'hui, dans le mur, les consoles en pierre, qui ont servi à la soutenir" [p. 7–8]. This
+  agrees with WIKI on where the first clock stood. DA gives no dimensions.
+- Second clock: in 1547 the stonecutters were finishing "le cabinet qui sert encore à l'horloge
+  actuelle" [p. 9]. So the current case is the 16th-century stone cabinet. DA gives no case
+  dimensions.
+- New clock begun 24 June 1838; first ran Sunday 2 October 1842; inaugurated 31 December 1842
+  [p. 22]. "Entièrement de l'invention de mon père", reusing only some statuettes [p. 23].
+- **"Il n'entre dans la construction de l'horloge aucune pièce de bois"** (no wooden parts) [p. 67].
+
+**Celestial sphere** [p. 24–26]
+
+- Sidereal time on a dial; copper sphere on four metal columns; "disposée pour la latitude de
+  Strasbourg".
+- More than 5000 stars of the first six magnitudes in **110** constellations (page image; the OCR
+  reads "1 1").
+- Turns east to west in a sidereal day, about 3 min 56 s shorter than the mean solar day.
+- Equator, ecliptic and colures turn with it. Meridian and horizon stay fixed.
+- **Precession: "environ 25,804 années"** (page image; the OCR reads 26,804). Footnote: periods are
+  given only to their main units.
+- The second clock's globe: papier-mâché, about 50 kg, 1020 stars, 48 constellations [p. 14].
+
+**Calendar** [p. 27–29]
+
+- "Une bande métallique, en forme d'anneau, n'ayant que **25 centimètres** de largeur sur une
+  circonférence de **passé 9 mètres**" (page image; the OCR reads 26).
+- "Avance chaque jour d'une division, le passage d'un jour à un autre s'effectuant
+  instantanément à minuit".
+- Apollo, on the right, points "avec une flèche"; Diana is only a counterpart.
+- Turns in 365 or 366 days and suppresses 3 days in 400 years by itself.
+- "Commencement de l'année commune" between 31 Dec and 1 Jan; in leap years "commune" disappears
+  and a day is inserted between 28 Feb and 1 Mar.
+- Movable feasts placed at midnight on 31 Dec. Advent and St Arbogast have their own mechanisms.
+
+**Apparent-time dial** [p. 30–36]
+
+- Azure dial, silver ring with 1–12 twice.
+- Shows: sunrise and sunset by a **"horizon mobile"**; true time; the Moon's true right ascension
+  and meridian passage; the Moon's phases (Moon globe silver and black); eclipses.
+- Sunrise and sunset in apparent time, for the Strasbourg meridian, with refraction.
+- Northern hemisphere at the centre.
+- Lunar eclipses shown by a disc representing a section of the Earth's shadow cone.
+- The Moon's latitude is shown by its radial position relative to the Sun.
+
+**Computus** [p. 36–43]
+
+- Shows: millésime (four digit circles), solar cycle, golden number, Roman indiction, dominical
+  letter, epacts, Easter.
+- Contains all the Gregorian modifications and the lunar equations.
+- Released by the clock at midnight on 31 Dec. It first determines the cycles, which then set "le
+  mécanisme principal" to fix Easter. Easter is transmitted to the calendar as the "véhicule" of
+  the dependent feasts.
+
+**Equations** [p. 43–46]
+
+- Sun: mean time to true time, "par l'anomalie pour obtenir la longitude vraie, laquelle à son tour
+  est convertie en ascension droite vraie".
+- Moon: centre, evection, variation, annual equation, reduction, plus the equation of the nodes
+  (for latitude).
+- Visible behind glass. The Moon's longitude-to-right-ascension converter is inside the clock.
+
+**Weekday** [p. 46–48]
+
+- Chariots "roulent sur un chemin de fer circulaire, en suivant un mouvement continu".
+
+**Mean time** [p. 49–50]
+
+- Small dial in the "galerie aux lions" (the two lions are from the old clock and never moved).
+- Driven directly by the single central motor, which is wound every 8 days.
+
+**Genies** [p. 50–51]
+
+- The left genie (sceptre and bell) strikes the first stroke of each quarter and signals the ages.
+- The right genie turns the red-sand glass **each hour**, alternately half a turn right and half a
+  turn left, at the last stroke of the four quarters, just before Death strikes.
+
+**Planetary** [p. 51–53]
+
+- Copernican, on a large azure dial. The Sun disc has no visible support; twelve rays lead to the
+  zodiac.
+- Seven small gilded spheres.
+- Periods: ~88 d, ~225 d, Earth 365 d 5 h 48 min 48 s, ~687 d, ~4330 d, 10747 d.
+- The Moon goes round the Earth in a lunar month.
+
+**Moon globe** [p. 53–55]
+
+- An inclined globe turning on its axis.
+
+**Automata** [p. 56–60]
+
+- Two halls with ogival arcades: ages and Death below, Christ above.
+- The ages strike only the second stroke of each quarter: child (thyrsus), youth (hunter, arrow),
+  man (warrior, sword), old man (crutch).
+- Each steps two paces out of its lodge to a bell.
+- **The ages work only by day.**
+- Death with a scythe on a central pedestal drops a bone on the bell to its right, day and night.
+- At Death's last stroke of noon the twelve Apostles pass (named, in order). Each turns, bows and
+  receives the blessing. After the last, Christ blesses with the sign of the cross.
+- Rooster: during the Apostles' march it flaps its wings, moves its head and tail and swells its
+  neck. It is "d'après nature", the same size as the earlier clocks' rooster, and crows three times
+  daily at noon.
+
+**Motors** [p. 64–66]
+
+- One central motor, with a seconds regulator, compensated pendulum and jewelled escapement, wound
+  weekly. It drives:
+  - the mean-time dial;
+  - the exterior dial;
+  - the planetary dial;
+  - the Moon phases;
+  - the weekday figures;
+  - the apparent-time dial;
+  - the equations;
+  - the sphere.
+- It also suspends the ages at night.
+- "Les autres moteurs, au nombre de cinq" drive the automata and striking, chained in order: ages
+  → quarters → ages → hours; at noon, Apostles and rooster from the hour train. **[?]** Five
+  motors are counted but only four trains are named.
+
+**Other** [p. 62–64]
+
+- Exterior Gothic dial over the portal, circumference about 16 m, showing mean time and the
+  weekday.
+- A meridian line inside the church, lit through a gnomon over the door, for checking the clock.
+
+### Resolved by DA (supersedes the [Sn] entries above)
+
+| Item | Resolution |
+|---|---|
+| Hourglass hourly or quarter-hourly | **Hourly**, alternating direction [S: DA p. 51] |
+| Apollo or Diana points to the day | **Apollo** [S: DA p. 27] |
+| Calendar ring continuous or jumping | **Jumps at midnight** [S: DA p. 27] |
+| Calendar ring size | **25 cm wide, circumference over 9 m** [S: DA p. 27] |
+| Sunrise/sunset display | **Mobile horizon** [S: DA p. 31]. Its drive is still TBD. |
+| Weekday carousel motion | **Continuous**, on a circular rail [S: DA p. 47] |
+| Precession period | **25,804 years** [S: DA p. 26] (CATH's 25,806 [Sn] is close) |
+| Rooster size | **Life-size** [S: DA p. 59–60]. Still no number. |
+| Night behaviour | **The ages are silent at night; Death strikes day and night** [S: DA p. 58, 65] |
+
+### Still open after pass 2
+
+- Case width (7.70 vs 8.60 m) and depth, and every dial diameter except the calendar ring. DA gives
+  none.
+- The drive of the mobile horizon; the mechanisms for leap-day insertion and Easter transfer; the
+  computus internals.
+- LEF, CLEA and ELS: not downloadable automatically (403 or no DNS). **Paul to download them.**
+- Photos: Wikimedia rate-limited this session.
