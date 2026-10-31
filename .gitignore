@@ -1,0 +1,7 @@
+# generated geometry and renders (commit only released STL/3MF deliberately, with git add -f)
+export/
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv*/
