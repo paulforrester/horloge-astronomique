@@ -243,8 +243,8 @@ Scale aids [D]:
   - A scissor linkage moves the two edges of a mobile horizon, a shutter dividing the Sun's circle
     as in the original, symmetric about noon.
   - **Bordeaux latitude** (D2, accepted): φ = 44.83°. The cam is a swappable printed part.
-  - D2 also asks Paul whether the horizon is rotated by the longitude difference (33.3 min [D]), so
-    the Sun hand crosses it at the real Bordeaux sunrise and sunset.
+  - The horizon is turned by the longitude difference (33.3 min of time, i.e. 8.32° on the 24 h
+    dial [D]), so the Sun hand crosses it at the real Bordeaux sunrise and sunset (D2, accepted).
 - **Difficulty:** 3.
 - **Depends on:** the tropical-year arbor; D2; I3 (if the dial is in apparent time).
 

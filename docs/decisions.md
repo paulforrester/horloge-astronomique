@@ -128,6 +128,9 @@ point."
   **Recommendation: (ii)**, because the Sun hand above the horizon then means "the Sun is up
   outside". It is one fixed angle in the linkage, so the choice can wait until v1.5.
 
+  **Paul's decision (chat, 31 Oct 2026): (ii).** The horizon is offset by the longitude
+  difference of 33.3 min [D]. **Accepted.**
+
 ---
 
 ## D3 — Controller platform, stepper drivers, RTC, event motors
