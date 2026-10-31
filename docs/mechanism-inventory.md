@@ -7,7 +7,9 @@ approach for the replica, its difficulty, and what it depends on.
 Tags and source keys are those of `docs/reference-notes.md`. **DA** is Charles Schwilgué's
 *Description abrégée de l'horloge astronomique de la cathédrale de Strasbourg*, 2nd edition, 1844.
 It is the builder's son's own description, read in full in the Phase 0 research pass; page numbers
-refer to its printed pages.
+refer to its printed pages. **ELS** is now identified as Alfred Ungerer's 1920 lecture, published in
+*L'Astronomie* in 1921 in five instalments, cited i1–i5. Ungerer was Schwilgué's successor and
+maintained the clock. LEF's gear table reproduces Ungerer's 1922 figure.
 
 - **[S]** sourced;
 - **[Sn]** search snippet only, page not opened, verify;
@@ -70,8 +72,8 @@ Scale aids [D]:
 | I4b | Moon phase on the main-dial Moon (globe silver on one side, black on the other) [S: DA p. 32] | M2 | synodic month | The Moon ball turns on the hand, geared from the Sun–Moon difference | 4 | v1.5 |
 | I5 | Eclipse indication (variable-length Moon arm) | M2 | draconitic month; 18.6 yr; eclipse year | Node cam plus a radial slide on the Moon arm | 4 | v1.5 |
 | I6 | Earth-shadow disc | M2 | apparent solar day | Rigid with the Sun hand, 180° opposite | 1 | v1 |
-| I7 | Sunrise and sunset times | M2 | tropical year | "Mobile horizon" [S: DA p. 31] set by a latitude cam on the year arbor (Bordeaux, D2) | 3 | v1.5 |
-| I8 | Annual calendar ring | M2 | civil year (365/366 d) | 366 sectors, one sector per day at midnight, double step on 28 Feb in common years | 3 | v1 |
+| I7 | Sunrise and sunset times | M2 | tropical year | Two hands moved symmetrically by a cam turning once a year [S: ELS i1] (DA's "horizon mobile"); cam cut for Bordeaux (D2) | 3 | v1.5 |
+| I8 | Annual calendar ring | M2 + E6 | civil year (365/366 d) | Copy Schwilgué [S: ELS i4]: 368-division ring on rollers, advanced each midnight by its own event motor; a projection and cam give 3 or 4 divisions at New Year; the century wheel applies the 4/100/400 rules | 3 | v1 |
 | I9 | Movable feasts / Easter and leap day on the ring | M2 ← M4 | yearly | Sliding feasts arc set by the computus; leap gate from the 4-year count | 4–5 | v1 leap, v2 feasts |
 | I10 | Dominical letter of the year | M2 ← M4 | yearly | Seven-position dial set by the computus | 2 | v2 (v1: set by hand) |
 | I11 | Weekday carousel (seven deities) | M7 (driven by M2) | 7 d | 7:1 from the daily arbor; continuous on a circular rail [S: DA p. 47] | 2 | v1 |
@@ -89,6 +91,7 @@ Scale aids [D]:
 | A5 | Apostles pass before Christ, who blesses | E3 | daily, at mean noon | Event motor turns the procession once; blessing arm on a cam | 3 | v1 |
 | A6 | Rooster crows three times and flaps its wings | E4 | daily, during A5 | Event motor plus wing and head cams; sound per D8 | 3 | v1 |
 | A7 | Computus run | E5 = M4 | yearly, night of 31 Dec | Trigger cam on the year train; motor powers the computus cycle | 5 | v2 |
+| A8 | Calendar advance at midnight | E6 | daily (3 or 4 divisions at New Year) | Event motor released by the time train; the stop lever is held by the ring's projection [S: ELS i4]. Stateful: must run during catch-up. | 3 | v1 |
 
 ## 3. Details
 
@@ -117,6 +120,8 @@ Scale aids [D]:
 - **Shows:** Central European Time [S: WIKI].
   - **[?]** Whether the original follows summer time is unresolved: "12 h 30 en heure d'hiver"
     (FR Wikipedia) vs "tous les jours, à 12 h 30 précises" [Sn: CATH].
+- **Ungerer [S: ELS i1]:** "les aiguilles argentées, ajoutées en Mars 1919, donnent l'heure
+  légale". The legal-time hands are a **1919 addition**, not Schwilgué's.
 - **Replica:** standard time is a fixed angular offset from mean time. For Strasbourg it is
   29.0 min [D]; for Bordeaux 62.3 min [D].
   - The offset can be set once on a slip-clutched hand.
@@ -148,6 +153,11 @@ Scale aids [D]:
   - The solar part of the equations works "par l'anomalie pour obtenir la longitude vraie, laquelle
     à son tour est convertie en ascension droite vraie" (from the anomaly to the true longitude,
     then converted to true right ascension).
+- **Ungerer [S: ELS i1–i2]:**
+  - The dial is 2.30 m, "divisé en 2 fois 12 heures, qui représente le plan de l'équateur".
+  - The Sun hand is "exactement de 1 mètre", so 1° = 17.45 mm.
+  - The equation cams use "6mm de déplacement vertical pour un degré de correction".
+  - The conversion to right ascension uses a helical pinion with a 12°13′ lead.
 - **Replica:**
   - Mean Sun = the M2 input arbor (1 rev per mean day on a 24 h dial).
   - A differential (printed spur or bevel) sits between the mean-Sun arbor and the Sun hand. Its
@@ -177,6 +187,11 @@ Scale aids [D]:
   - Lunar equations: centre, evection, variation, annual equation, reduction, plus "l'Equation
     relative aux nœuds". A further mechanism inside the clock "convertir en ascension droite de la
     lune, la longitude vraie".
+- **Ungerer/Lefort:**
+  - The five lunar cams (reduction, annual equation, variation, evection, centre) sum to "102mm,7"
+    of travel [S: ELS i2]; evection follows Burckhardt's tables.
+  - The Moon's daily motion comes from an arbor turning once in 2 h, through
+    334/28 × 65/341 × 300/57 [S: LEF].
 - **Replica:**
   - Mean Moon: reproduce Schwilgué's differential, or an equivalent compound train (Phase 1
     compares them).
@@ -205,6 +220,11 @@ Scale aids [D]:
     be partial or total, northern or southern.
   - The clock shows all eclipses, visible at Strasbourg or not. The hemisphere at the centre shows
     where they are visible.
+- **Ungerer [S: ELS i2]:**
+  - Latitude cam: mean radius 134 mm, "R = 154mm,2 et r = 113mm,8" (19.3 / 14.2 mm at 1:8 [D]).
+  - Disc diameters: Sun 9.3 mm, Moon 9.1 mm, Earth-shadow 24.3 mm, all at 17.45 mm per degree. At
+    1:8 these are about 1.2 mm [D], too small to see: see `envelope.md` §5 for the enlargement
+    options. Choose in the Phase 2 main-dial study.
 - **Replica:**
   - A node cam on its own coaxial arbor, with a follower on a radial slide in the Moon arm.
   - The arm length becomes f(Moon longitude − node longitude).
@@ -240,8 +260,11 @@ Scale aids [D]:
 - **Replica:**
   - A cam on the continuous tropical-year arbor. Its profile is the semi-diurnal arc H0(δ), with
     cos H0 = (sin h0 − sin φ sin δ)/(cos φ cos δ), h0 = −0.833°, φ = chosen latitude.
-  - A scissor linkage moves the two edges of a mobile horizon, a shutter dividing the Sun's circle
-    as in the original, symmetric about noon.
+  - **Ungerer [S: ELS i1]:** "Deux aiguilles (11) portant les inscriptions « Lever du Soleil » et
+    « Coucher du Soleil » sont actionnées symétriquement par une courbe décrivant un tour en une
+    année". So DA's "horizon mobile" is a pair of hands.
+  - The replica copies this: a scissor linkage moves the two hands symmetrically, from a yearly
+    cam.
   - **Bordeaux latitude** (D2, accepted): φ = 44.83°. The cam is a swappable printed part.
   - The horizon is turned by the longitude difference (33.3 min of time, i.e. 8.32° on the 24 h
     dial [D]), so the Sun hand crosses it at the real Bordeaux sunrise and sunset (D2, accepted).
@@ -268,18 +291,33 @@ Scale aids [D]:
   - Between 31 Dec and 1 Jan the ring carries the words "commencement de l'année commune". In leap
     years "le mot de « commune » disparaît, et un nouveau jour s'intercale entre le 28 février et
     le 1er mars" [S: DA p. 28]. **TBD:** the mechanism.
-  - Size: circumference over 9 m, so diameter > 2.86 m; width 25 cm [D from DA]. The 2.30 m main
-    dial [S: ELS] sits inside it.
+  - Size [?]: DA gives a circumference over 9 m (Ø > 2.86 m) and a width of 25 cm. **Ungerer
+    gives "2m,73 de diamètre extérieur et de 21 centimètres de large, divisé en 368 fuseaux"**
+    [S: ELS i4], and the forged rings were machined at 2.73 m. The design uses Ungerer's figures.
+  - **Ungerer's mechanism [S: ELS i4]:**
+    - The ring sits on two rollers. It "avance chaque jour à minuit d'un fuseau, sous l'action d'un
+      moteur spécial déclanché par le rouage de temps moyen" (it has its own motor, released by the
+      time train).
+    - 1 Jan – 28 Feb are on a movable sector. Three divisions read "COMMENCEMENT DE L'ANNÉE
+      commune". In leap years the sector covers "commune" and uncovers 29 Feb.
+    - The New Year advance is 4 divisions (common years) or 3 (leap years). A projection S holds the
+      stop lever L up; a cam E lengthens S in common years.
+    - E is set by wheel C, which turns 1/100 of a turn per year through a 6-point star and a fixed
+      3-tooth rake. C carries 24 projections for years 4, 8, …; a satellite wheel brings in the
+      25th projection every 400 years.
+    - The sector is moved by a connecting rod from a second star-and-rake pair.
 - **Replica:**
-  - A 366-sector ring advanced one sector per day at local midnight by a star wheel or Geneva drive
-    on the M2 daily arbor.
-  - In common years, a gate from a 4-year count wheel (turned by the ring) makes the ring step two
-    sectors on the night of 28 Feb, skipping 29 Feb. That is mechanical, as rule 2 requires.
-  - The Gregorian century exception (2100) is v2, from the computus; until then it needs a manual
-    note.
-  - **Bed fit: the ring must be segmented.** At 1:8 it is more than 358 mm across and 31 mm wide
-    [D], larger than the 320 mm bed.
-    - Four 90° segments (chord about 253 mm [D]) on a carrier ring fit easily.
+  - **Copy Schwilgué's mechanism** (above).
+    - It matches rule 4: the time train releases the event, an event motor (E6) supplies the
+      energy, and the ring's projection decides when it stops.
+    - It also matches rule 2: the 4/100/400 logic is entirely in wheel C and its satellite.
+  - The ring runs on rollers (printed or bearing-backed), with a 368-division scale.
+  - Because the century logic is self-contained, **include it in v1**. This revises D5, which had
+    deferred the 2100 exception.
+  - E6 is *stateful*: it must run during catch-up (architecture §5, §8).
+  - **Bed fit: the ring must be segmented.** At 1:8 it is 341 mm across and 26 mm wide (ELS
+    figures [D]), larger than the 320 mm bed.
+    - Four 90° segments (chord 241 mm [D]) on a carrier ring fit easily.
     - Join the segments at day boundaries.
   - Gregorian century rule: DA confirms the original applies it automatically. It stays v2 in the
     replica (D5); the next exception is 2100.
@@ -304,6 +342,10 @@ Scale aids [D]:
     the feast of St Arbogast, "un dimanche dans la dernière quinzaine du mois de juillet".
   - **TBD:** the transfer mechanism. The 1821 model has no transfer train [Sn: WSC].
 - **Replica (proposal):**
+  - **Confirmed as the original's method:** "Celles de ces fêtes qui dépendent de Pâques sont
+    réunies par un cercle en fer qui peut glisser sur des galets sur le bord intérieur du
+    calendrier" [S: ELS i4] (the Easter-dependent feasts are joined by an iron circle sliding on
+    rollers along the ring's inner edge).
   - All Easter-dependent feasts sit at fixed day offsets from Easter. Examples, from the Gregorian
     rules: Ash Wednesday −46, Ascension +39, Pentecost +49.
   - So one rigid "feasts arc" sliding in a groove of the ring can carry all of them.
@@ -366,6 +408,14 @@ Scale aids [D]:
     comput" to fix Easter, which is passed to the calendar (I9).
   - In other words: released by the clock, then a two-stage computation (cycles first, then
     Easter). This matches E5's trigger-and-run design.
+- **Ungerer [S: ELS i4–i5]:**
+  - The epact disc carries "un limaçon à degrés", a stepped snail whose steps cover the dates of the
+    Paschal 14th day, 21 March–18 April, at "4 millimètres" per step.
+  - Piece N and cam x, on the golden-number arbor, apply the epact XXV/25 rule.
+  - "Un grand rateau R" rests on the snail with its heel; each step moves it one day. In the 1821
+    model this rack carries the Easter hand. It matches Roegel's "grand râteau".
+  - The full description (more figures and counts) is in ELS i4–i5. **Use it as the v2 design
+    basis**, so that D7 can be "faithful" after all.
 - **Replica (v2):**
   - Design our own mechanical Gregorian computus from count wheels:
     - 28-, 19- and 15-position wheels stepped once a year;
@@ -425,6 +475,21 @@ Scale aids [D]:
   - Stated periods: about 88 d, 225 d, 365 d 5 h 48 min 48 s (Earth), 687 d, 4330 d, 10747 d.
     These agree with the CLEA factors [D].
   - The Moon goes round the Earth "dans l'espace du mois lunaire".
+- **Ungerer/Lefort:**
+  - "Autour d'un cercle de 2m,20 de diamètre sont peints les douze signes du Zodiaque"
+    [S: ELS i2]. The band is about 2.75 m outer [E, plate], so it prints in segments.
+  - Planet arbors stand on a crown of 20 cm radius, with intermediate wheels of ≤ 250 teeth
+    [S: ELS, agent extraction].
+  - Gear table [S: LEF, Ungerer's fig. 49, page image checked]:
+    - Earth: A = A′; 9/156, 10/188, 10/269.
+    - Mercury: 44/240, 102/134.
+    - Venus: 17/197, 31/221.
+    - Mars: 95/203, 53/213.
+    - Jupiter: 96/157, 32/232.
+    - Saturn: 58/161, 20/212.
+  - The Earth train's product equals the year in hours, so the input A turns **once per hour**
+    [D, inference]. Our M5 input rate (1 rev/day) must add a 24:1 stage, or the module can take
+    an hourly input.
 - **Replica:**
   - Reproduce these ratios from a year arbor (itself geared from the M5 1 rev/day input), with
     coaxial tubes for the six arms.
@@ -440,6 +505,11 @@ Scale aids [D]:
 - **Schwilgué's description [S: DA p. 53–55]:** "un globe spécialement destiné à rendre
   visibles les phases de la lune. En tournant sur son axe, ce globe, qui est incliné, s'éclaire et
   s'obscurcit" (an *inclined* globe on a starry sky, turning on its axis).
+- **Ungerer/Lefort:**
+  - "un globe de 40 centimètres de diamètre, mi-partie doré, mi-partie noir", axis tilted about 40°
+    [S: ELS i3]. That is 50 mm at 1:8.
+  - Gear table "Lune: k/K = 83/122; l/L = 14/196; J/j = 312/24" [S: LEF]. This is the differential
+    CLEA describes: the planetarium and Moon-globe train.
 - **Replica:** a half-dark sphere turned once per synodic month by its own train from the M5 input.
   Phase 1 compares it with Schwilgué's lunar differential.
   - **TBD:** the globe diameter.
@@ -468,6 +538,11 @@ Scale aids [D]:
   - **TBD:** the precession gearing and the sphere's diameter (the 83/86 cm figure is the
     *second* clock's globe [Sn]). The second clock's globe was papier-mâché, weighed about 50 kg
     and showed 1020 stars in 48 constellations [S: DA p. 14].
+- **Ungerer [S: ELS i3]:**
+  - "une sphère en cuivre de 0m,84 de diamètre, peinte en bleu" (105 mm at 1:8). The polar axis is
+    "incliné de 48°35 sur l'horizon", i.e. Strasbourg's latitude.
+  - Precession "25 806 ans … fournie par la constante de Bessel (50″,22)" (DA: 25,804).
+  - For the Bordeaux sky (D2) the axis is set at 44°50′.
 - **Replica:**
   - Reproduce the exact epicyclic train. The 270- and 269-tooth wheels fit the bed at module 1.0
     (tip ≤ 272 mm) [D].
@@ -568,6 +643,16 @@ Scale aids [D]:
     horloges" (made from nature, as large as the earlier clocks' rooster) [S: DA p. 59–60].
     **TBD:** a number in centimetres.
   - The mechanism is mechanical and pneumatic [S: CLEA]. **TBD:** details.
+- **Sound mechanism [S: ELS i5]:** "L'appareil qui produit le chant du coq est placé sous le
+  couronnement de l'horloge".
+  - A bellows is inflated when a wire lifts weight b. At the crow the wire is "subitement lâché"
+    and the weight drives the air out.
+  - The air vibrates "une anche g … constituée par une bandelette de papier tendu, … par le
+    ressort l" (a reed made of a tensioned paper strip).
+  - A trumpet f aimed at the rooster amplifies the sound.
+  - A cam d, driven from a rack on the bellows' moving wall, works the exhaust valve, so the crow
+    starts "clair et strident" and falls "de plus en plus grave".
+  - This is a buildable, fully mechanical design (D8).
 - **Replica:**
   - The E4 event motor drives wing and head cams.
   - The crow is triggered from cams on the E3 procession train (synchronised with Apostles 4, 8

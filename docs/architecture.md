@@ -56,7 +56,7 @@ taken as given. This architecture adds five working principles:
 | M2 | Main dial | I3 Sun; I4 Moon; I5 eclipse arm; I6 shadow; I7 sunrise/sunset; I8 calendar ring; I9 feasts arc and leap gate; I10 dominical-letter dial; year-end trigger | lower centre | stepper, 1 rev/mean day | v1 (v1.5 parts provisioned) |
 | M3 | Equations | I13 solar and lunar cam stacks; two correction output shafts | base, right | stepper, 1 rev/mean day | v1.5 |
 | M4 | Computus | I12; transfer to I9 and I10 | base, left | event motor E5 | v2 |
-| M5 | Planets and Moon phase | I14 planetary dial; I15 Moon globe | upper centre | stepper, 1 rev/mean day | v1 |
+| M5 | Planets and Moon phase | I14 planetary dial; I15 Moon globe | upper centre | stepper. The original's planetarium input turns once per hour (Earth train 9/156 · 10/188 · 10/269 = year in hours [S: LEF; D]), so M5 takes a **1 rev/h** input to keep Schwilgué's ratios unchanged | v1 |
 | M6 | Celestial globe | I16 sidereal rotation; I17 precession | floor level, front | stepper, 1 rev/mean day | v1 |
 | M7 | Weekday carousel | I11 | above the main dial | shaft from M2 (7:1 in M7) | v1 |
 | E1 | Angels | A1 bell, A2 hourglass | either side of the mean-time dial | event motor(s) | v1 |
@@ -64,6 +64,7 @@ taken as given. This architecture adds five working principles:
 | E3 | Apostles and Christ | A5 | top stage | event motor | v1 |
 | E4 | Rooster | A6 | top of the left tower | event motor | v1 |
 | E5 | Computus run | A7 | in M4 | event motor | v2 |
+| E6 | Calendar advance | A8: the ring advances one division each midnight (3 or 4 at New Year). This is Schwilgué's own arrangement: "un moteur spécial déclanché par le rouage de temps moyen" [S: ELS i4] | behind the main dial, in M2 | event motor | v1 |
 
 ## 3. Steppers and clockwork rates
 
@@ -128,6 +129,7 @@ train's warning, release and locking.
 | E3 Apostles (A5) | M1 noon flag (24 h cam) | E3 locking cam (one procession cycle) | — | skip |
 | E4 rooster (A6) | E3 cue switches at Apostles 4, 8 and 12 | E4 locking cam | three crows (one per cue) | skip with E3 |
 | E5 computus (A7) | M2 year-end cam (night of 31 Dec) | E5 locking cam (one computus cycle) | — | **must run**: it is stateful. Catch-up pauses while E5 completes. |
+| E6 calendar advance (A8) | M2 midnight cam | the stop lever drops; the ring's projection S holds it up for 3 or 4 divisions at New Year | divisions per night, decided by projection S and leap cam E [S: ELS i4] | **must run**: it is stateful. Catch-up runs it once per elapsed midnight. |
 
 - **Sensors.**
   - Triggers: Hall-effect switches with magnets on the cams. There is no mechanical load on the
@@ -140,6 +142,7 @@ train's warning, release and locking.
   - a suppression flag during catch-up;
   - priority ordering when triggers coincide (on the hour: A1, then A3 old man, then A4 Death,
     then A2 glass; at noon: then A5).
+- **Original drive, for comparison.** "Ce régulateur déclanche toutes les cinq secondes un rouage moteur qui met en mouvement toute la partie astronomique" (the regulator releases the astronomical train every 5 s) [S: ELS i1]. The replica's steppers step every 1.125 s.
 - **Faithful ordering.** The original chains its motors in exactly this way [S: DA p. 64–66]:
   - "quand l'heure doit sonner, le moteur central détend le second moteur (ou rouage des quatre
     âges); celui-ci à son tour transmet le mouvement au troisième rouage, c'est-à-dire à la
@@ -267,7 +270,7 @@ independently settable, by turning it forward, against a scale.**
 | Item | Count | I/O needed |
 |---|---|---|
 | Steppers | 4 (v1) to 6 | STEP + DIR each = 8–12 GPIO, plus ENABLE. TMC2209 UART: 4 addresses per bus, so 2 buses for 6 drivers. |
-| Event motors | 5–6 (E1×1–2, E2, E3, E4, E5), DC gearmotors, one direction | 6 PWM channels through H-bridges or MOSFETs |
+| Event motors | 6–7 (E1×1–2, E2, E3, E4, E5, E6), DC gearmotors, one direction | 7 PWM channels through H-bridges or MOSFETs |
 | Inputs | ~6 index, ~8 witness, ~6 trigger, ~6 lock, 1 door = **~27** | 2 × MCP23017 I²C expanders with interrupt |
 | I²C devices | RTC, FRAM, 2 expanders, optional current monitor | 1 bus |
 | Sound (if D8 chooses a speaker) | DFPlayer Mini-class module | 1 UART |

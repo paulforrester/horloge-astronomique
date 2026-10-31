@@ -81,6 +81,19 @@ for n in (3, 4):
 dlon = 7.7506 - (-0.57)
 print(f"  Strasbourg-Bordeaux longitude difference {dlon:.4f} deg = {dlon * 4:.2f} min of time")
 
+# --- 3c. Dimensions from Ungerer 1921 (ELS) at 1:8 ---------------------------------------
+section("3c. ELS (Ungerer 1921) dimensions at 1:8")
+for label, mm in [("calendar ring outer 2.73 m", 2730), ("calendar ring width 21 cm", 210),
+                  ("planetary circle 2.20 m", 2200), ("Moon globe 0.40 m", 400),
+                  ("celestial sphere 0.84 m", 840), ("Sun hand 1 m", 1000),
+                  ("Sun disc 9.3 mm", 9.3), ("Moon disc 9.1 mm", 9.1), ("shadow disc 24.3 mm", 24.3),
+                  ("eclipse cam R 154.2 mm", 154.2), ("eclipse cam r 113.8 mm", 113.8)]:
+    print(f"  {label:30s} -> {mm / SCALE:8.2f} mm")
+print(f"  1 degree on the 1 m Sun hand = {math.radians(1) * 1000:.2f} mm (ELS: 17.45 mm); at 1:8 {math.radians(1) * 1000 / SCALE:.2f} mm")
+print(f"  Sun disc check: 32 arcmin x 17.45 mm/deg = {32 / 60 * 17.45:.2f} mm")
+r = 2730 / SCALE / 2
+print(f"  2.73 m ring at 1:8 in 4 segments: chord {2 * r * math.sin(math.radians(45)):.0f} mm")
+
 # --- 4. Equation of time (Meeus 1998, eq. 28.3, low-precision form) ------------------------
 section("4. Equation of time extremes (Meeus 1998 eq. 28.3, epoch J2000 constants)")
 e, eps = 0.016709, math.radians(23.4393)

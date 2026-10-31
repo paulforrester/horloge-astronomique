@@ -65,8 +65,8 @@ ordering.
 | MCP23017 I/O expander | I²C | 2 | about 27 inputs (architecture §10) | Mouser FR |
 | Hall switches + magnets | as Batch 1 | 20 + 30 | ~6 index + ~8 witness + ~6 trigger sensors | as Batch 1 |
 | Opto forks / microswitches | as Batch 1 | 6 / 10 | ~6 event locks + door + spares | Gotronic |
-| DC gearmotors | as Batch 1 | 5 + 1 spare | E1 ×2 (bell, glass), E2, E3, E4 | Gotronic (Pololu) |
-| H-bridges | DRV8833-class dual | 3 | 2 motors each | Gotronic / Mouser FR |
+| DC gearmotors | as Batch 1 | 6 + 1 spare | E1 ×2 (bell, glass), E2, E3, E4, E6 (calendar advance, as in the original) | Gotronic (Pololu) |
+| H-bridges | DRV8833-class dual | 3 | 2 motors each (6 motors) | Gotronic / Mouser FR |
 | Sound (D8) | DFPlayer-Mini-class module + small speaker | 1 | rooster crow | TBD |
 | Bells | small, for the angel, the ages and Death | TBD (≥ 2) | strokes and bells TBD (inventory A3/A4) | TBD |
 | Connectors | JST-XH or Micro-Fit, keyed, one per module | ~12 | M1, M1b, M2, M5, M6, M7, E1–E4 + spares | TBD |

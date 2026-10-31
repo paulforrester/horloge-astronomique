@@ -15,11 +15,11 @@ the trade-offs and a recommendation. Status is **Proposed** until Paul approves;
 | D4 | Tooth profile, module, arbors, tubes, bearings | **Involute 20°**, module 1.0 / 0.8 as parameters; Ø3/5/8 ground rod; 0.45 mm-wall brass tubes in 1 mm steps; small standard bearing set | Phase 1 |
 | D5 | Scope of v1 vs deferred | **v1** time, main dial (steady-speed Sun and Moon), calendar, planets, Moon globe, sidereal globe, all automata; **v1.5** equations, eclipses, sunrise/sunset; **v2** computus. The question is rephrased in the D5 record. | Phase 1 |
 | D6 | Case construction and mounting | **Aluminium-extrusion module rack inside a birch-ply/MDF case**, printed ornament, hinged glazing; **floor-bearing plinth plus wall restraint** | Phase 2 |
-| D7 | Computus: faithful vs own design | Defer to v2; gather sources; design our own if Schwilgué's stays undocumented | v2 |
-| D8 | Sound | **Real small bells struck mechanically**; rooster crow through a small speaker in v1 | Phase 2 (E-modules) |
+| D7 | Computus: faithful vs own design | Defer to v2. **Faithful now looks feasible**: Ungerer (ELS i4–i5) describes the epact snail and the great rack | v2 |
+| D8 | Sound | **Real small bells struck mechanically**; **rooster: copy Schwilgué's bellows and paper-reed crow** (fully described by Ungerer), with a speaker as fallback | Phase 2 (E-modules) |
 | D9 | Legal-time hands and summer time | **Separately driven legal-time hands that follow CET/CEST** (M1b) | Phase 2 (M1) |
 | D10 | Night silence | **Quiet hours in firmware** (skip sound shows). The original already silences the four ages at night [S: DA]. | Phase 3 |
-| D11 | Case width (7.70 vs 8.60 m) and wall space | **1:8 accepted (PR #1)**; width (962.5 or 1075 mm) follows the source; wall dimensions to follow from Paul | Phase 2 (case) |
+| D11 | Case width (7.70 vs 8.60 m) and wall space | **1:8 accepted (PR #1)**. **Width resolved: 7.70 m → 962.5 mm** [S: ELS, Ungerer 1920]. Wall dimensions to follow from Paul | Phase 2 (case) |
 
 Plus **Blockers** at the end: the network allowlist and the documents to obtain.
 
@@ -183,6 +183,11 @@ Step rates are very low (about 1 Hz running, a few kHz catching up).
 | **Involute 20° (ISO 53 basic rack)** | Tolerant to centre-distance error (printed plates); standard; BOSL2 reference for validation; works in both driving directions | Undercut below 17 teeth without profile shift |
 | Cycloidal (horological, e.g. NIHS / BS 978) | Traditional; good for wheel-drives-pinion step-ups with low-count pinions | Sensitive to centre distance; little printed-gear precedent; harder to validate |
 
+**Faithfulness note:** Schwilgué's teeth are **epicycloidal**. He built "une machine servant à
+déterminer automatiquement la forme épicycloïdale des courbes des dents" [S: ELS i5]. The replica
+still uses involute, for the printing and centre-distance reasons above. This is a deliberate
+deviation, invisible behind the dials.
+
 **Recommendation: involute 20°**, with these parameters:
 
 - profile shift for z < 17;
@@ -256,7 +261,10 @@ with **0.10 mm diametral clearance** [D].
 | **v1.5** | M3 equations vitrine → apparent Sun and true Moon; eclipse arm (I5); sunrise/sunset (I7) | They depend on M3 and the main-dial feasibility study. The v1 main dial *provisions* them: differentials locked, tubes reserved, cam positions free. |
 | **v2** | M4 computus + E5; movable feasts arc (I9); dominical-letter drive (I10); Gregorian century leap exception (next one in 2100); precession drive (I17) | The computus mechanism is undocumented (D7) and is the biggest single design task. The precession is nearly static (about 1.4° per century [D]). |
 
-**Recommendation:** as above.
+**Recommendation:** as above, with one change after research pass 3. **The Gregorian century
+rule moves into v1.** Schwilgué's calendar applies it with a small, self-contained wheel C (1/100 turn
+per year, 24 projections, plus a satellite wheel for the 400-year case) [S: ELS i4]. It costs little
+and keeps the calendar correct beyond 2100 without the computus.
 
 - The **main-dial feasibility study** (Phase 2) must still include every v1.5 and v2 element, so
   nothing is designed out.
@@ -332,6 +340,16 @@ with **0.10 mm diametral clearance** [D].
 
 **Recommendation:** defer to v2 (D5) and buy or borrow the Flores 2007 book in the meantime.
 
+**Update (research pass 3):** Ungerer's 1920 lecture (ELS i4–i5) describes the computus in some
+depth:
+
+- the epact disc with a stepped snail, 4 mm per step, covering 21 March–18 April;
+- piece N and cam x, on the golden-number arbor, for the epact XXV/25 rule;
+- the great rack R that reads the snail;
+- the Easter-dependent feasts carried on an iron circle on rollers.
+
+So **option A (faithful) is now realistic for v2**, filling any gaps from Flores (2007) and Bach/Rieb.
+
 - If, when v2 starts, the mechanism is still undocumented, choose **B**, with the same displays
   and the same once-a-year New Year's Eve operation.
 - In both cases, design the v1 calendar ring with the feasts-arc groove and the leap gate
@@ -352,7 +370,19 @@ with **0.10 mm diametral clearance** [D].
 | **Rooster: speaker plus a recording (DFPlayer-class), cued by the E4 train switch** | Convincing, volume-controllable | Not mechanical |
 | No sound | Silent | Loses much of the charm |
 
-**Recommendation:** mechanical bells; speaker crow in v1; a bellows experiment in v2 if wanted.
+**Update (research pass 3):** the original crow is fully described [S: ELS i5]. It sits under the
+crown:
+
+- a weighted bellows, inflated by a wire and released suddenly;
+- a **paper-strip reed**, kept taut by a spring;
+- a trumpet aimed at the rooster;
+- a cam-controlled exhaust valve that makes the crow fall from strident to low.
+
+All of it is mechanical and small.
+
+**Revised recommendation:** mechanical bells; **build Schwilgué's bellows-and-reed crow** in v1,
+driven by the E4 event train (a good local-phase prototype). Keep a speaker only as a fallback if
+the 1:8 bellows cannot make a convincing sound.
 Quiet hours apply to both (D10).
 
 ---
@@ -370,6 +400,10 @@ on a 12 h dial, run at catch-up speed in seconds.
 | C. No legal-time hands | Simplest | Less useful; less faithful |
 
 **Recommendation: B.** The automata stay on mean time regardless.
+
+**Faithfulness note:** the original's legal-time (silver) hands were "ajoutées en Mars 1919"
+[S: ELS i1]. They are not Schwilgué's, so adding a summer-time drive does not depart from his
+design.
 
 ---
 
@@ -412,6 +446,10 @@ The choice can then wait until case design (Phase 2) without blocking anything.
 
 **Paul's input (PR #1 comment, 31 Oct 2026):** "1:8th scale is not a problem." Wall dimensions
 to follow.
+
+**Source resolved (research pass 3):** "l'ancien édifice, construit en pierres de taille, de 7m,70
+de largeur à la base, et de 18 mètres de hauteur, le couronnement gothique compris" [S: ELS i1,
+Ungerer]. **The width is 962.5 mm at 1:8**, as `CLAUDE.md` assumed.
 
 - **Status: Accepted. The scale is fixed at 1:8.** Option C (1:9) is dropped.
 - The case width will be 962.5 mm or 1075 mm, whichever the primary source supports.

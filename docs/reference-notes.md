@@ -616,3 +616,174 @@ description with ten plates) [S: DA p. 5]. **Lead:** find it.
   computus internals.
 - LEF, CLEA and ELS: not downloadable automatically (403 or no DNS). **Paul to download them.**
 - Photos: Wikimedia rate-limited this session.
+
+---
+
+## Phase 0 research pass 3 (31 Oct 2026): the documents Paul shared privately via Google Drive
+
+These are copyrighted (LEF, CLEA) or of unknown status (ELS), so they are **not** in this public
+repo. They were read in full from Paul's Drive. Key quotes were checked against the extracted text,
+and the Lefort gear table against its page image.
+
+### Sources identified
+
+| Key | Identification |
+|---|---|
+| **ELS** | **Alfred Ungerer** ("Fabricant d'Horloges à Strasbourg, Successeur de SCHWILGUÉ"), with A. Danjon and G. Rougier [?] (Strasbourg Observatory), "L'horloge astronomique de la cathédrale de Strasbourg". Lecture to the Société astronomique de France, 15 Dec 1920, published in ***L'Astronomie*** 1921 in five instalments: **i1** March, pp. 89–102; **i2** April, from p. 147; **i3** May, from p. 196; **i4** June, from p. 250; **i5** later in 1921. The Drive text has no page breaks, so facts are cited by instalment. The instalment is inferred from each passage's position between the footnotes that open each instalment, so allow for an error of one either way. |
+| **LEF** | J. Lefort, "L'horloge astronomique de la cathédrale de Strasbourg", 17 pp. Its single source is A. & Th. Ungerer, *L'horloge astronomique de la cathédrale de Strasbourg*, Imprimerie alsacienne, 1922. Its figures are reproduced from Ungerer (one carries Ungerer's caption "Fig. 49"). |
+| **CLEA** | G. Paturel (Observatoire de Lyon) & P. Dubois (Observatoire de Strasbourg), *Cahiers Clairaut* n°102, summer 2003, pp. 6–11, "largement inspiré" of Bach & Rieb. **It gives no dimensions.** |
+| DA 7th ed. | 1854, Veuve Dannbach. The same text as the 1844 edition; nothing new for the replica. It contains the same workshop lithograph of the clock (used in `envelope.md` §4a). |
+
+### Corrections to earlier entries
+
+- **Width resolved: 7.70 m is the current case.** "l'auteur s'est imposé de conserver l'ancien
+  édifice, construit en pierres de taille, de 7m,70 de largeur à la base, et de 18 mètres de
+  hauteur, le couronnement gothique compris" [S: ELS i1].
+  - The [Sn: WIKI] reading that tied 7.70 m to the first clock is superseded.
+  - ODY's 8.60 m is still unexplained [?].
+- **Height [?].** DA says the clock's "élévation … n'est pas moindre de 20 mètres" [S: DA p. 62, page
+  image; the 1844 OCR misreads it as 50]. ELS's explicit 18 m, crown included, is used.
+- **Year formula explained.** LEF's gear table (Ungerer's fig. 49, page image checked) gives the
+  planetarium's Earth train: "Terre: A = A′; b/B = 9/156; c/C = 10/188; d/D = 10/269" [S: LEF].
+  - CLEA prints the product as "= 365,2422 tours" with no arbor named [S: CLEA p. 9].
+  - The product is 8765.8133, which equals LEF's year of 31,556,928 s ÷ 3600. So **the planetarium
+    input A turns once per hour** (inference [D]), and the "×24" puzzle is resolved.
+- **The CLEA Moon train is the planetarium's Moon.** The same table gives "Lune: k/K = 83/122;
+  l/L = 14/196; J/j = 312/24" [S: LEF]. These are exactly CLEA's differential numbers, so that train
+  belongs to the planetarium and the Moon globe mechanism.
+- **Lefort's 11.70 m is the 1354 clock** [S: LEF p. 2]: a wooden cage; lower front about 4 m square;
+  calendar 2.80 m.
+- **Precession.** "25 806 ans, période de la précession fournie par la constante de Bessel
+  (50″,22)" [S: ELS i3]. DA (1844) says 25,804. Both are primary sources.
+- **Apostle height [?].** On the workshop plate the figures are drawn about 0.70 m tall [E], against
+  the 18 in of WIKI. Unresolved.
+
+### Dimensions (ELS)
+
+| Item | Value | Instalment |
+|---|---|---|
+| Main dial | "un cadran de 2m,30 de diamètre, divisé en 2 fois 12 heures, qui représente le plan de l'équateur" | i1 |
+| Sun hand | "exactement de 1 mètre, un degré équivaut à 17mm,45" | i2 |
+| Sun / Moon / shadow discs | 9.3 / 9.1 / 24.3 mm (OCR "g" read as 9; consistent with 32′ × 17.45 mm/° [D]) | i2 |
+| Eclipse (latitude) cam | mean radius 134 mm; "R = 154mm,2 et r = 113mm,8" | i2 |
+| Planetary dial | "Autour d'un cercle de 2m,20 de diamètre sont peints les douze signes du Zodiaque". Planet arbors on a crown of 20 cm radius; each planet uses an intermediate wheel of at most 250 teeth [agent extraction; not re-checked]. | i2 |
+| Moon globe | "un globe de 40 centimètres de diamètre, mi-partie doré, mi-partie noir"; axis tilted about 40° | i3 |
+| Celestial sphere | "une sphère en cuivre de 0m,84 de diamètre, peinte en bleu"; polar axis "incliné de 48°35 sur l'horizon" | i3 |
+| Calendar ring | "un anneau de 2m,73 de diamètre extérieur et de 21 centimètres de large, divisé en 368 fuseaux". The forged-iron rings are "2m,73" in diameter (i5). This conflicts with DA (1844): 25 cm × circumference > 9 m [?]. | i4 |
+
+### Mechanisms (ELS, verbatim where quoted)
+
+**Drive [i1].** "Le régulateur, à force constante, est muni d'un pendule compensateur à grille,
+battant la seconde de temps moyen, avec échappement Graham-Schwilgué. Ce régulateur déclanche toutes
+les cinq secondes un rouage moteur qui met en mouvement toute la partie astronomique de l'horloge".
+(Constant-force regulator, gridiron seconds pendulum; it releases the astronomical train every 5 s.)
+
+**Time [i1].**
+- "Les aiguilles dorées donnent le temps moyen de Strasbourg; les aiguilles argentées, ajoutées en
+  Mars 1919, donnent l'heure légale."
+- "L'heure de Strasbourg avance d'environ 31 minutes sur celle du méridien de Greenwich".
+
+**Sunrise and sunset [i1].** "Deux aiguilles (11) portant les inscriptions « Lever du Soleil » et
+« Coucher du Soleil » sont actionnées symétriquement par une courbe décrivant un tour en une année".
+(Two hands moved symmetrically by a cam turning once a year, in true time.) DA's "horizon mobile" is
+this pair of hands.
+
+**Solar equation [i1].**
+- Cams use a scale of "6mm de déplacement vertical pour un degré de correction".
+- The conversion to right ascension uses a helical pinion: "La pente de l'hélice … est de 12°13′",
+  cut on a special machine Schwilgué built.
+
+**Lunar equations [i2].**
+- Five cams: reduction, annual equation, variation, evection, equation of the centre. "L'amplitude
+  totale de la somme des cinq équations est de 102mm,7".
+- Evection follows Burckhardt's tables.
+
+**Calendar [i4].**
+- The ring "est posé sur deux galets … Il avance chaque jour à minuit d'un fuseau, sous l'action d'un
+  moteur spécial déclanché par le rouage de temps moyen" (it rests on two rollers and advances one
+  division each midnight, driven by a special motor released by the mean-time train).
+- Letters A–G, with A on 1 January.
+
+**Leap day [i4]** (the most original part, per ELS):
+- 1 January – 28 February are painted on a movable sector that can advance or retreat one division.
+- Three divisions after 31 December read "COMMENCEMENT DE L'ANNÉE commune". In leap years the
+  sector covers "commune" and uncovers 29 February, which is painted on the ring itself.
+- The New Year advance is 4 divisions in common years and 3 in leap years.
+- How the advance is extended:
+  - A projection S behind the ring holds the motor's stop lever L up for the extra divisions.
+  - A movable cam E lengthens S in common years.
+  - E is controlled by wheel C, which "avance d'un centième de tour chaque année" through a
+    6-point star struck by a fixed 3-tooth rake.
+  - C carries 24 projections, for years 4, 8, … of each century.
+  - "La 25e saillie … portée par une roue satellite, qui fait un quart de tour pour chaque tour de
+    la roue C … vient en place seulement tous les 400 ans".
+- The sector itself is moved by a connecting rod, driven by a second 6-point star meeting another
+  fixed 3-tooth rake during the 31 December advance.
+
+**Movable feasts [i4].**
+- Each feast is on a strip covering one division.
+- "Celles de ces fêtes qui dépendent de Pâques sont réunies par un cercle en fer qui peut glisser
+  sur des galets sur le bord intérieur du calendrier" (the Easter-dependent feasts are joined by an
+  iron circle sliding on rollers along the ring's inner edge).
+- The two last Ember days, St Arbogast and the first Sunday of Advent are handled separately.
+
+**Computus [i4–i5].**
+- An epact disc carries "un limaçon à degrés … du 21 mars au 18 avril. D'un degré à l'autre, le
+  rayon du limaçon augmente de la même quantité (4 millimètres)" (a stepped snail covering the
+  possible dates of the Paschal 14th day, 21 March–18 April, with 4 mm per step).
+- Piece N and cam x, on the golden-number arbor, apply the Gregorian rule for epact XXV/25: XXV is
+  treated as XXIV if the golden number is ≤ 11, otherwise as XXVI.
+- "Un grand rateau R … porte un bras R′ muni d'un talon qui vient s'appuyer sur le limaçon" (a great
+  rack R whose heel rests on the snail). Each step moves the rack one day. In the small 1821 model
+  this rack carries the Easter hand.
+- Released at midnight between 31 December and 1 January [i1].
+- Further details (a 14-tooth jumper wheel, a 10-tooth rack, discs turning in 2400 and 2500 years)
+  are reported by the extraction agent and not re-checked.
+
+**Rooster [i5].**
+- It crows three times while flapping its wings, as Christ makes the sign of the cross.
+- "L'appareil qui produit le chant du coq est placé sous le couronnement de l'horloge" (under the
+  crown).
+- How it works:
+  - A bellows is inflated when wire a lifts weight b. When the crow is due the wire is "subitement
+    lâché" (suddenly released), and the weight presses the air out.
+  - The air "fait vibrer une anche g … constituée par une bandelette de papier tendu, quel que soit
+    l'état hygrométrique de l'air, par le ressort l".
+  - A trumpet f aimed at the rooster amplifies the sound.
+  - Modulation: lever D opens the exhaust valve more or less, driven by cam d through pinion e on
+    rack E, which is fixed to the bellows' moving wall. "Au début du chant, le son est clair et
+    strident; mais à mesure que … la pression diminuant, le chant devient de plus en plus grave."
+
+**Schwilgué's machine tools [i5].**
+- A dividing and cutting engine for spur and bevel wheels.
+- "une machine servant à déterminer automatiquement la forme épicycloïdale des courbes des dents"
+  (the original's teeth are **epicycloidal**).
+- A large lathe for the 2.73 m calendar rings.
+- A planer for straight and helical pinions.
+
+### Facts from LEF and CLEA beyond the above
+
+- **LEF.** Lunar daily motion comes from "un arbre qui fait un tour en 2 h", through 334/28 × 65/341
+  × 300/57 = 12 × 271,375/272,118.
+  - The lunar equation cams are driven by "un arbre faisant un tour en un jour moyen".
+  - Node period "587 371 310 secondes".
+  - Wheels are "limitée à environ 500 dents", the largest found 420. The largest prime 281; minimum 6
+    teeth; smallest prime used alone 17.
+  - The three solar corrections are not named.
+- **LEF sidereal train.**
+  - The sphere is driven through B; the planet pinions d + e ride on B; C + D and E + F are free on
+    Z.
+  - The source's check line misprints 9/94 for 9/47; the result is still exactly 164,809/164,359.
+- **CLEA.** Precession "un tour tous les 26000 ans ! Depuis la construction, la rotation a été de
+  moins d'une dent d'engrenage" (less than one tooth since the clock was built).
+  - The eclipse example: "l'éclipse du 15 Février 1961".
+  - The pendulum drift claim is hedged: "Si on croit cette estimation".
+  - Bach & Rieb cited as "éditions Ronald Hirlé", with no year.
+
+### Still open after pass 3
+
+- Case depth.
+- Sizes of the computus and equations vitrines, the weekday carousel and the dominical-letter dial.
+- Figure heights (18 in vs about 0.70 m [?]) and the rooster's size.
+- The three solar equation terms by name.
+- Positions measured from a photo, to cross-check the plate estimates (Wikimedia rate-limited).
