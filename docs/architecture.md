@@ -267,7 +267,8 @@ independently settable, by turning it forward, against a scale.**
 PlatformIO; Paul knows it), with **TMC2209 stepsticks in UART mode** on a carrier board.
 
 - Phase 3 picks between an off-the-shelf multi-driver board and a custom carrier PCB.
-- For the Phase 2 test rig, reuse Paul's **Arduino Mega + RAMPS 1.4 + TMC2209**: no purchase.
+- The Phase 2 test rig uses the same platform (an ESP32-S3 dev board plus one or two TMC2209s from
+  BOM Batch 1). Everything is bought new; no parts come from other projects.
 - Write the firmware so the motion core is board-independent.
 
 ## 11. Power, wiring and serviceability

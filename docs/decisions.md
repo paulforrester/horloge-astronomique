@@ -10,16 +10,16 @@ the trade-offs and a recommendation. Status is **Proposed** until Paul approves;
 | ID | Decision | Recommendation | Needed before |
 |---|---|---|---|
 | D1 | CAD toolchain | **build123d** (Python, pinned), own gear library; OpenSCAD + BOSL2 as fallback | Phase 2 |
-| D2 | Strasbourg-faithful vs Bordeaux-localized | **Bordeaux sky and time**, Strasbourg look; latitude parts swappable | Phase 1 (cam data), Phase 2 |
-| D3 | Controller, drivers, RTC, event motors | **ESP32-S3 + TMC2209 (UART)**; Mega + RAMPS for the test rig; DC gearmotors for events | Phase 2 test rig / Phase 3 |
+| D2 | Strasbourg-faithful vs Bordeaux-localized | **Time: Strasbourg (accepted, PR #1)**, so the noon show is at 12:29 CET / 13:29 CEST. Sky: **Strasbourg too** (awaiting Paul) | v1.5 (sky parts) |
+| D3 | Controller, drivers, RTC, event motors | **ESP32-S3 + TMC2209 (UART)** for the clock *and* the test rig, all bought new; DC gearmotors for events | Phase 2 test rig / Phase 3 |
 | D4 | Tooth profile, module, arbors, tubes, bearings | **Involute 20°**, module 1.0 / 0.8 as parameters; Ø3/5/8 ground rod; 0.45 mm-wall brass tubes in 1 mm steps; small standard bearing set | Phase 1 |
-| D5 | Scope of v1 vs deferred | **v1** time, main dial (mean Sun and Moon), calendar, planets, Moon globe, sidereal globe, all automata; **v1.5** equations, eclipses, sunrise/sunset; **v2** computus | Phase 1 |
+| D5 | Scope of v1 vs deferred | **v1** time, main dial (steady-speed Sun and Moon), calendar, planets, Moon globe, sidereal globe, all automata; **v1.5** equations, eclipses, sunrise/sunset; **v2** computus. The question is rephrased in the D5 record. | Phase 1 |
 | D6 | Case construction and mounting | **Aluminium-extrusion module rack inside a birch-ply/MDF case**, printed ornament, hinged glazing; **floor-bearing plinth plus wall restraint** | Phase 2 |
 | D7 | Computus: faithful vs own design | Defer to v2; gather sources; design our own if Schwilgué's stays undocumented | v2 |
 | D8 | Sound | **Real small bells struck mechanically**; rooster crow through a small speaker in v1 | Phase 2 (E-modules) |
 | D9 | Legal-time hands and summer time | **Separately driven legal-time hands that follow CET/CEST** (M1b) | Phase 2 (M1) |
 | D10 | Night silence | **Quiet hours in firmware** (skip sound shows) | Phase 3 |
-| D11 | Case width (7.70 vs 8.60 m) and wall space | **Resolve the source; make scale a parameter; Paul to give the wall dimensions** | Phase 2 (case) |
+| D11 | Case width (7.70 vs 8.60 m) and wall space | **1:8 accepted (PR #1)**; width (962.5 or 1075 mm) follows the source; wall dimensions to follow from Paul | Phase 2 (case) |
 
 Plus **Blockers** at the end: the network allowlist and the documents to obtain.
 
@@ -93,6 +93,22 @@ pipeline). Each was verified in this environment on 31 Oct 2026; full results ar
 **Question for Paul:** is the 12:30-ish noon show important to you? If so, choose A for time and
 consider B for the sky (which is C).
 
+**Paul's input (PR #1 comment, 31 Oct 2026):** "The noon show is important."
+
+Read as: keep the show at Strasbourg's time. **Items 1, 2 and 5 are therefore Strasbourg.**
+
+- Mean time = UT + 31.00 min.
+- Noon show at 12:29 CET / 13:29 CEST.
+- Legal-time offset 29.0 min [D].
+
+**Revised recommendation for items 3 and 4: A (fully Strasbourg).** Once the dials run on
+Strasbourg mean time, sunrise/sunset times and a globe horizon for Bordeaux on those dials would be
+a mixture (option C). That is harder to read and to validate.
+
+- Both parts stay swappable printed parts generated from φ.
+- Status: **Accepted for items 1, 2 and 5. Items 3 and 4 await Paul's confirmation of A**; they
+  are not needed before v1.5.
+
 ---
 
 ## D3 — Controller platform, stepper drivers, RTC, event motors
@@ -110,15 +126,18 @@ Step rates are very low (about 1 Hz running, a few kHz catching up).
 |---|---|---|
 | **A. ESP32-S3 + TMC2209 stepsticks (UART) on a carrier**, with 2 × MCP23017 I/O expanders | One MCU; Wi-Fi, NTP and MQTT built in; Paul knows ESP32; plenty of capacity; low power | Needs a carrier board: off-the-shelf or a custom PCB (Phase 3). TMC2209 UART has 4 addresses per bus, so 6 drivers need 2 buses. |
 | B. Raspberry Pi + motion board (BTT SKR Pico: RP2040, 4 × TMC2209; or Octopus: 8 drivers) with custom firmware | Robust 24 V power stages, connectors, MOSFET outputs; Linux for UI and logging | Two computers to maintain; SD-card wear; STM32duino has no stock Octopus variant, so a custom one is needed [Sn] |
-| C. Arduino Mega + RAMPS 1.4 + TMC2209 (Paul owns it) | No purchase; 5 driver sockets; endstop inputs; 3 MOSFETs | No network (no NTP or Home Assistant); 8-bit; awkward TMC2209 UART wiring on RAMPS; only 5 drivers |
+| C. Arduino Mega + RAMPS 1.4 + TMC2209 | 5 driver sockets; endstop inputs; 3 MOSFETs | No network (no NTP or Home Assistant); 8-bit; awkward TMC2209 UART wiring on RAMPS; only 5 drivers. Its only advantage, reusing parts Paul already owns, is dropped: the BOM buys everything new (PR #1). |
 | D. Printer board standalone (Octopus / Spider / Manta, 8 drivers) + ESP32 for the network | 8 drivers and a power stage on one board | Same two-MCU complexity as B; firmware support for a non-printer use is DIY |
 
 **Recommendation.**
 
 - **A for the clock.** Firmware has a board-independent motion core (P1 time law, events, FRAM
   state) plus a thin board layer.
-- **C for the Phase 2 test rig**, with no purchase. The test rig needs neither NTP nor more than
-  one or two motors.
+- **The Phase 2 test rig uses the same platform.** An ESP32-S3 dev board and one or two TMC2209s
+  from Batch 1 of the BOM. Those parts later move into the clock, so the firmware is exercised on
+  the real target from the first print.
+  - The earlier "Mega + RAMPS for the test rig" recommendation is withdrawn after Paul's PR #1
+    comment: no parts from other projects.
 - **Drivers:** TMC2209 in StealthChop, with low hold current (quiet in a living space).
 - **RTC:** RV-3028-C7 with a supercapacitor (about ±1 ppm [Sn]), or a DS3231 (±2 ppm [Sn]). If a
   DS3231 module is used, remove or disable its charging diode when fitting a non-rechargeable
@@ -219,8 +238,23 @@ with **0.10 mm diametral clearance** [D].
 
 - The **main-dial feasibility study** (Phase 2) must still include every v1.5 and v2 element, so
   nothing is designed out.
-- **Question for Paul:** would you rather have the equations in v1, at the cost of a later first
-  run?
+- **Question for Paul (rephrased after PR #1):**
+
+  **Background.** The real Sun and Moon do not move across the sky at a steady speed. A sundial
+  runs up to about 16 minutes fast or 14 minutes slow over the year (the "equation of time"). The
+  real Moon can be about 6° ahead of or behind its average position. Schwilgué corrects both with
+  the cams in the "equations" vitrine, so his main dial shows the *true* Sun and Moon.
+
+  **The choice:**
+  - **(a) Corrections in the first working version.** The main dial is right from day one, but
+    the first working clock arrives later, because the equations vitrine (M3) must be designed and
+    printed first.
+  - **(b) Steady (average) speeds first.** The first working version has the Sun and Moon hands
+    moving at steady speeds. The main dial is built from the start with the slots for the
+    corrections, and the equations vitrine is added in v1.5 without rebuilding anything. The
+    first working clock comes sooner.
+
+  **Recommendation: (b).** Which do you prefer?
 
 ---
 
@@ -349,11 +383,20 @@ current one (reference-notes, Phase 0 additions).
 
 The choice can then wait until case design (Phase 2) without blocking anything.
 
+**Paul's input (PR #1 comment, 31 Oct 2026):** "1:8th scale is not a problem." Wall dimensions
+to follow.
+
+- **Status: Accepted. The scale is fixed at 1:8.** Option C (1:9) is dropped.
+- The case width will be 962.5 mm or 1075 mm, whichever the primary source supports.
+- Scale stays a parameter in `spec/clock.yaml` for tidiness, but no module needs to allow for
+  another scale.
+
 ---
 
 ## Blockers (not decisions, but they need Paul)
 
 **1. Network access for research.** This session could reach only package registries and GitHub.
+Only Paul can change this, in the environment settings; a PR comment or chat message cannot.
 The fix is in the cloud environment settings: environment menu → Edit → Network access, either a
 broader level or these hosts added under *Allowed domains*, with "Allow package managers" left
 ticked. Docs: https://code.claude.com/docs/en/cloud-environments#network-access.
