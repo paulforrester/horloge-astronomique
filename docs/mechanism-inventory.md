@@ -166,7 +166,8 @@ Scale aids [D]:
     equator (±9.9 min, half year) [D], account for most of the equation of time. With two terms
     the residual is under about 1 min (estimated from the neglected terms of MEEUS eq. 28.3; to
     confirm in Phase 1). A third term brings the residual down further.
-  - In v1 the differential's third member is locked, so the hand shows mean solar time.
+  - In v1 the differential's third member is locked by a removable key, so the hand shows mean
+    solar time. The upgrade path is in architecture §13 (D5 accepted: steady speeds first).
 - **Difficulty:** 3.
 - **Depends on:** M3; the tropical/anomalistic-year arbor; D5.
 
@@ -198,7 +199,8 @@ Scale aids [D]:
   - True Moon: a second differential fed by the M3 lunar-correction output.
   - Amplitudes the replica needs (standard lunar theory, MEEUS ch. 47; to be confirmed in Phase 1):
     equation of centre ≈ 6.3°, evection ≈ 1.3°, variation ≈ 0.7°.
-  - In v1 the Moon hand shows the mean Moon.
+  - In v1 the Moon hand shows the mean Moon, through the same keyed-differential provision
+    (architecture §13).
 - **Difficulty:** 4, because of coaxial density on the main dial.
 - **Depends on:** M3; I5; I3 (shared tube stack).
 

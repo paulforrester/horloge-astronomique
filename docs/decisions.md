@@ -13,7 +13,7 @@ the trade-offs and a recommendation. Status is **Proposed** until Paul approves;
 | D2 | Strasbourg-faithful vs Bordeaux-localized | **Accepted: Strasbourg time** (noon show at 12:29 CET / 13:29 CEST) **plus Bordeaux sky** (horizon 44.83° N, globe on Bordeaux sidereal time). One sub-question on the horizon offset. | v1.5 (sky parts) |
 | D3 | Controller, drivers, RTC, event motors | **ESP32-S3 + TMC2209 (UART)** for the clock *and* the test rig, all bought new; DC gearmotors for events | Phase 2 test rig / Phase 3 |
 | D4 | Tooth profile, module, arbors, tubes, bearings | **Involute 20°**, module 1.0 / 0.8 as parameters; Ø3/5/8 ground rod; 0.45 mm-wall brass tubes in 1 mm steps; small standard bearing set | Phase 1 |
-| D5 | Scope of v1 vs deferred | **v1** time, main dial (steady-speed Sun and Moon), calendar, planets, Moon globe, sidereal globe, all automata; **v1.5** equations, eclipses, sunrise/sunset; **v2** computus. The question is rephrased in the D5 record. | Phase 1 |
+| D5 | Scope of v1 vs deferred | **Accepted (b)**: v1 has steady-speed Sun and Moon, full Gregorian calendar, planets, Moon globe, sidereal globe and all automata; **v1.5** equations, eclipses, sunrise/sunset; **v2** computus. **Upgrade path required** (architecture §13). | Phase 1 |
 | D6 | Case construction and mounting | **Aluminium-extrusion module rack inside a birch-ply/MDF case**, printed ornament, hinged glazing; **floor-bearing plinth plus wall restraint** | Phase 2 |
 | D7 | Computus: faithful vs own design | Defer to v2. **Faithful now looks feasible**: Ungerer (ELS i4–i5) describes the epact snail and the great rack | v2 |
 | D8 | Sound | **Real small bells struck mechanically**; **rooster: copy Schwilgué's bellows and paper-reed crow** (fully described by Ungerer), with a speaker as fallback | Phase 2 (E-modules) |
@@ -285,6 +285,23 @@ and keeps the calendar correct beyond 2100 without the computus.
     first working clock comes sooner.
 
   **Recommendation: (b).** Which do you prefer?
+
+**Paul's decision (chat, 31 Oct 2026): (b), steady speeds first,** "but ensure that the design
+allows for the module to be adapted without scrapping too much to add more precision later".
+
+**Status: Accepted, with a binding upgrade-path requirement.** The v1 design must meet the
+provisions in `architecture.md` §13. In short:
+
+1. Both main-dial hands are driven through their **differentials from day one**. In v1 the
+   correction input is locked at zero by a removable key.
+2. The **correction-input interface is fixed now**: shaft size, coupling, location and gain. M3 can
+   then be designed or redesigned later without touching M2.
+3. The **space, rails, wiring and driver channel for M3 are reserved** in the case and the
+   electronics.
+4. M3 is designed as **stacks with spare cam positions**, so more terms can be added later without
+   rebuilding.
+5. **Internal gear trains are swappable cassettes** behind fixed module interfaces, so any train
+   can later be replaced by a more precise one without rebuilding the module.
 
 ---
 

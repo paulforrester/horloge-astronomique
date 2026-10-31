@@ -45,6 +45,12 @@ taken as given. This architecture adds five working principles:
   - Rates, ratios, sensor positions and setting data are kept in one machine-readable file
     (`spec/clock.yaml`, created in Phase 1).
   - The ratio tool, CAD, firmware and simulator all read it, so they cannot disagree.
+- **P6 — Upgrade-ready modules** (D5, Paul's requirement).
+  - Each module's *boundary* is fixed and versioned: plates, mounting, input arbor, output tubes,
+    couplings and connector.
+  - Everything behind the boundary can be replaced. A later, more precise train or an added
+    correction must never force a rebuild of the neighbouring modules or of the dial.
+  - Section 13 lists the concrete provisions.
 
 ## 2. Modules
 
@@ -314,3 +320,69 @@ export/                  generated STL/3MF/DAE/PNG (git-ignored except released 
 firmware/                PlatformIO project (ESP32-S3) + board-independent motion core
 sim/                     accelerated-time simulator, ephemeris validation, setting-sheet generator
 ```
+
+## 13. Upgrade path: adding precision later without rebuilding (D5)
+
+v1 shows steady (mean) motion for the Sun and Moon. These provisions let the equations (v1.5)
+and any later refinement be added by **adding** parts, not by scrapping v1 parts.
+
+**1. Differentials in place from day one (M2).**
+- The Sun hand and the Moon hand are each driven through a differential in v1 (inventory I3, I4).
+- The third member, the correction input, is held at its zero position by a **removable locking
+  key**. It has an engraved index mark and a witness flag.
+- In v1.5 the key comes out and the M3 shaft goes in. The hands, tubes, trains and dial do not
+  change.
+
+**2. A fixed correction-input interface (M2 ← M3), defined now.**
+
+| Parameter | Value | Note |
+|---|---|---|
+| Shaft | Ø5 ground rod | |
+| Coupling | single-dog keyed coupling at the module boundary | so phase cannot be lost (P4) |
+| Location | one Sun and one Moon input on the M2 rear plate, on the side facing the equations bay | coordinates fixed in the Phase 2 main-dial study |
+| Gain | **at least 1 turn of the correction shaft per 1° at the hand** | exact value set in Phase 1 |
+
+- The large gain makes shaft backlash negligible: 0.3° of backlash becomes under 0.001° at the
+  hand [D].
+- It also lets M3 use any cam scale behind its own output gearing. For example, it can keep
+  Schwilgué's 6 mm per degree [S: ELS] rather than a 1:8 cam, which would lose precision.
+- The gain is recorded in `spec/clock.yaml`. M2 never needs to know how M3 makes the correction.
+
+**3. A reserved bay and services for M3.**
+- The equations bay (bottom right, envelope §2) gets its mounting rails, its connector, a pre-run
+  harness (stepper plus witness sensors) and the shaft route to M2 in v1.
+- The controller keeps a free TMC2209 channel and pins for M3 (the 6-driver carrier in D3/BOM).
+- The firmware has an M3 module slot following the same time law (P1).
+
+**4. M3 built to grow.**
+- The cam stacks follow Schwilgué's principle: each cam rests on the crossbar below, and the top
+  crossbar gives the sum [S: LEF].
+- Each stack is designed with **spare positions**, e.g. two above the planned terms, behind a
+  common cam-cassette standard (same drive interface and footprint). Later terms can be added on
+  top without rebuilding the stack:
+  - a third solar term;
+  - lunar terms beyond Schwilgué's five, such as the next largest terms of MEEUS Table 47.A.
+- Cam profiles come from the simulator (P5). A refined profile is a reprint of one cam, not a
+  redesign.
+
+**5. Swappable gear trains everywhere.**
+- Each module's internal trains are mounted as **cassettes** between plates with a standard
+  arbor-position pattern and fixed input and output arbors.
+- A later, more precise ratio (Phase 1 reports each train's error) replaces only its cassette.
+
+**6. The main-dial stack reserves v1.5 / v2 positions.**
+- The Phase 2 main-dial study allocates tubes and space for:
+  - the eclipse arm and node cam (I5);
+  - the Moon-phase ball (I4b);
+  - the sunrise/sunset hands and yearly cam (I7);
+  - the feasts circle (I9).
+- v1 fits blank spacers where those parts will go, so nothing has to be dismantled later beyond the
+  dial front.
+
+**7. Setting and verification carry over.**
+- The simulator's setting sheet already includes the correction-input phase, which is zero in v1.
+- The witness sensors planned for M3 slot into the existing sensor scheme (§6).
+
+**Why the cost is low.** Most of these are definitions, not extra parts: the two differentials, a
+locking key, a reserved bay and spare stack positions. Without them, adding the equations later
+would mean rebuilding the main dial's hand drive, the module most packed with parts.
