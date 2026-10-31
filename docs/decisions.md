@@ -5,27 +5,32 @@ the trade-offs and a recommendation. Status is **Proposed** until Paul approves;
 **Accepted** with the date, and the record is kept, never deleted. Tags as in
 `docs/reference-notes.md`.
 
+**As of 31 Oct 2026 every decision D1–D11 is Accepted.** D2, D5 and D11 were decided point by point;
+the rest were approved as recommended.
+
 ## Summary
 
-| ID | Decision | Recommendation | Needed before |
-|---|---|---|---|
-| D1 | CAD toolchain | **build123d** (Python, pinned), own gear library; OpenSCAD + BOSL2 as fallback | Phase 2 |
-| D2 | Strasbourg-faithful vs Bordeaux-localized | **Accepted: Strasbourg time** (noon show at 12:29 CET / 13:29 CEST) **plus Bordeaux sky** (horizon 44.83° N, globe on Bordeaux sidereal time). One sub-question on the horizon offset. | v1.5 (sky parts) |
-| D3 | Controller, drivers, RTC, event motors | **ESP32-S3 + TMC2209 (UART)** for the clock *and* the test rig, all bought new; DC gearmotors for events | Phase 2 test rig / Phase 3 |
-| D4 | Tooth profile, module, arbors, tubes, bearings | **Involute 20°**, module 1.0 / 0.8 as parameters; Ø3/5/8 ground rod; 0.45 mm-wall brass tubes in 1 mm steps; small standard bearing set | Phase 1 |
-| D5 | Scope of v1 vs deferred | **Accepted (b)**: v1 has steady-speed Sun and Moon, full Gregorian calendar, planets, Moon globe, sidereal globe and all automata; **v1.5** equations, eclipses, sunrise/sunset; **v2** computus. **Upgrade path required** (architecture §13). | Phase 1 |
-| D6 | Case construction and mounting | **Aluminium-extrusion module rack inside a birch-ply/MDF case**, printed ornament, hinged glazing; **floor-bearing plinth plus wall restraint** | Phase 2 |
-| D7 | Computus: faithful vs own design | Defer to v2. **Faithful now looks feasible**: Ungerer (ELS i4–i5) describes the epact snail and the great rack | v2 |
-| D8 | Sound | **Real small bells struck mechanically**; **rooster: copy Schwilgué's bellows and paper-reed crow** (fully described by Ungerer), with a speaker as fallback | Phase 2 (E-modules) |
-| D9 | Legal-time hands and summer time | **Separately driven legal-time hands that follow CET/CEST** (M1b) | Phase 2 (M1) |
-| D10 | Night silence | **Quiet hours in firmware** (skip sound shows). The original already silences the four ages at night [S: DA]. | Phase 3 |
-| D11 | Case width (7.70 vs 8.60 m) and wall space | **1:8 accepted (PR #1)**. **Width resolved: 7.70 m → 962.5 mm** [S: ELS, Ungerer 1920]. Wall dimensions to follow from Paul | Phase 2 (case) |
+| ID | Decision | Recommendation / decision | Status | Needed before |
+|---|---|---|---|---|
+| D1 | CAD toolchain | **build123d** (Python, pinned), own gear library; OpenSCAD + BOSL2 as fallback | **Accepted** 31 Oct 2026 | Phase 2 |
+| D2 | Strasbourg-faithful vs Bordeaux-localized | **Accepted: Strasbourg time** (noon show at 12:29 CET / 13:29 CEST) **plus Bordeaux sky** (horizon 44.83° N, globe on Bordeaux sidereal time). One sub-question on the horizon offset. | **Accepted** 31 Oct 2026 | v1.5 (sky parts) |
+| D3 | Controller, drivers, RTC, event motors | **ESP32-S3 + TMC2209 (UART)** for the clock *and* the test rig, all bought new; DC gearmotors for events | **Accepted** 31 Oct 2026 | Phase 2 test rig / Phase 3 |
+| D4 | Tooth profile, module, arbors, tubes, bearings | **Involute 20°**, module 1.0 / 0.8 as parameters; Ø3/5/8 ground rod; 0.45 mm-wall brass tubes in 1 mm steps; small standard bearing set | **Accepted** 31 Oct 2026 | Phase 1 |
+| D5 | Scope of v1 vs deferred | **Accepted (b)**: v1 has steady-speed Sun and Moon, full Gregorian calendar, planets, Moon globe, sidereal globe and all automata; **v1.5** equations, eclipses, sunrise/sunset; **v2** computus. **Upgrade path required** (architecture §13). | **Accepted** 31 Oct 2026 | Phase 1 |
+| D6 | Case construction and mounting | **Aluminium-extrusion module rack inside a birch-ply/MDF case**, printed ornament, hinged glazing; **floor-bearing plinth plus wall restraint** | **Accepted** 31 Oct 2026 | Phase 2 |
+| D7 | Computus: faithful vs own design | Defer to v2. **Faithful now looks feasible**: Ungerer (ELS i4–i5) describes the epact snail and the great rack | **Accepted** 31 Oct 2026 | v2 |
+| D8 | Sound | **Real small bells struck mechanically**; **rooster: copy Schwilgué's bellows and paper-reed crow** (fully described by Ungerer), with a speaker as fallback | **Accepted** 31 Oct 2026 | Phase 2 (E-modules) |
+| D9 | Legal-time hands and summer time | **Separately driven legal-time hands that follow CET/CEST** (M1b) | **Accepted** 31 Oct 2026 | Phase 2 (M1) |
+| D10 | Night silence | **Quiet hours in firmware** (skip sound shows). The original already silences the four ages at night [S: DA]. | **Accepted** 31 Oct 2026 | Phase 3 |
+| D11 | Case width (7.70 vs 8.60 m) and wall space | **1:8 accepted (PR #1)**. **Width resolved: 7.70 m → 962.5 mm** [S: ELS, Ungerer 1920]. Wall dimensions to follow from Paul | **Accepted** 31 Oct 2026 | Phase 2 (case) |
 
 Plus **Blockers** at the end: the network allowlist and the documents to obtain.
 
 ---
 
 ## D1 — CAD toolchain
+
+**Status: Accepted** (Paul, chat, 31 Oct 2026: "I approve D1, D3, D4 and D6–D10"). The recommendation below is the decision.
 
 **Context.** CAD must be code-based and parametric, run headless in the cloud, export STL/3MF for
 Bambu Studio, and produce something SketchUp can open (Paul's trimesh/pycollada → `.dae`
@@ -135,6 +140,8 @@ point."
 
 ## D3 — Controller platform, stepper drivers, RTC, event motors
 
+**Status: Accepted** (Paul, chat, 31 Oct 2026: "I approve D1, D3, D4 and D6–D10"). The recommendation below is the decision.
+
 **Context.**
 
 - 4 steppers in v1, up to 6 later (architecture §3).
@@ -175,6 +182,8 @@ Step rates are very low (about 1 Hz running, a few kHz catching up).
 ---
 
 ## D4 — Gear tooth profile, default module, arbors, coaxial tubes, bearings
+
+**Status: Accepted** (Paul, chat, 31 Oct 2026: "I approve D1, D3, D4 and D6–D10"). The recommendation below is the decision.
 
 **Tooth profile.**
 
@@ -307,6 +316,8 @@ provisions in `architecture.md` §13. In short:
 
 ## D6 — Case construction and mounting
 
+**Status: Accepted** (Paul, chat, 31 Oct 2026: "I approve D1, D3, D4 and D6–D10"). The recommendation below is the decision. Wall material and dimensions are still to come from Paul; the fixing design follows them.
+
 **Context.**
 
 - Estimated envelope 2.25 × ~1.0 × ~0.25 m. Depth TBD: at least 200 mm interior planned
@@ -342,6 +353,8 @@ provisions in `architecture.md` §13. In short:
 
 ## D7 — Computus: faithful reconstruction vs our own mechanical design
 
+**Status: Accepted** (Paul, chat, 31 Oct 2026: "I approve D1, D3, D4 and D6–D10"). The recommendation below is the decision.
+
 **Context.**
 
 - Schwilgué's computus is an enlarged version of his 1821 prototype [S: RGL]. The prototype is
@@ -376,6 +389,8 @@ So **option A (faithful) is now realistic for v2**, filling any gaps from Flores
 
 ## D8 — Sound
 
+**Status: Accepted** (Paul, chat, 31 Oct 2026: "I approve D1, D3, D4 and D6–D10"). The recommendation below is the decision.
+
 **Context.** The original strikes real bells, and the rooster is mechanical and pneumatic
 [S: CLEA]. The replica is in a living space.
 
@@ -406,6 +421,8 @@ Quiet hours apply to both (D10).
 
 ## D9 — Legal-time hands and summer time
 
+**Status: Accepted** (Paul, chat, 31 Oct 2026: "I approve D1, D3, D4 and D6–D10"). The recommendation below is the decision.
+
 **Context.** The original's silver hands show CET [S: WIKI]. Whether they follow summer time is
 unresolved [?]. A forward-only drive can still follow summer time: +1 h in spring, +11 h in autumn
 on a 12 h dial, run at catch-up speed in seconds.
@@ -425,6 +442,8 @@ design.
 ---
 
 ## D10 — Night silence
+
+**Status: Accepted** (Paul, chat, 31 Oct 2026: "I approve D1, D3, D4 and D6–D10"). The recommendation below is the decision.
 
 | Option | For | Against |
 |---|---|---|
