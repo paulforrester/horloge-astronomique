@@ -62,7 +62,7 @@ taken as given. This architecture adds five working principles:
 | M2 | Main dial | I3 Sun; I4 Moon; I5 eclipse arm; I6 shadow; I7 sunrise/sunset; I8 calendar ring; I9 feasts arc and leap gate; I10 dominical-letter dial; year-end trigger | lower centre | stepper, 1 rev/mean day | v1 (v1.5 parts provisioned) |
 | M3 | Equations | I13 solar and lunar cam stacks; two correction output shafts | base, right | stepper, 1 rev/mean day | v1.5 |
 | M4 | Computus | I12; transfer to I9 and I10 | base, left | event motor E5 | v2 |
-| M5 | Planets and Moon phase | I14 planetary dial; I15 Moon globe | upper centre | stepper. The original's planetarium input turns once per hour (Earth train 9/156 · 10/188 · 10/269 = year in hours [S: LEF; D]), so M5 takes a **1 rev/h** input to keep Schwilgué's ratios unchanged | v1 |
+| M5 | Planets and Moon phase | I14 planetary dial; I15 Moon globe | upper centre | stepper, **1 rev/mean day** (accepted in Phase 1, `docs/gear-trains.md` §7). The original's planetarium input turns once per hour (Earth train 9/156 · 10/188 · 10/269 = year in hours [S: LEF; D]). That train needs a 9-tooth pinion and a 269-tooth wheel, so M5 uses the shared year train from a daily arbor instead | v1 |
 | M6 | Celestial globe | I16 sidereal rotation; I17 precession | floor level, front | stepper, 1 rev/mean day | v1 |
 | M7 | Weekday carousel | I11 | above the main dial | shaft from M2 (7:1 in M7) | v1 |
 | E1 | Angels | A1 bell, A2 hourglass | either side of the mean-time dial | event motor(s) | v1 |
@@ -185,7 +185,7 @@ Forward-only trains cannot be homed by driving them to an end stop. The slow out
 | M2 calendar ring | opto on the 1 January sector | yearly | witness |
 | M2 mean-Moon arbor (inside the module) | Hall | once per synodic month (mean new moon) | witness |
 | M2 node arbor | Hall | once per 18.6 yr cycle (or a finer flag set) | witness (optional) |
-| M3 each cam arbor | Hall | once per period | witness (optional; recommended on the two largest terms) |
+| M3 each cam arbor | Hall | once per cam turn (two periods of its term, convention B) | witness (optional; recommended on the two largest terms) |
 | M5 input arbor | Hall | daily | index |
 | M5 Earth arm | Hall | at a reference longitude | witness |
 | M6 input arbor | Hall | daily | index |
@@ -366,6 +366,8 @@ and any later refinement be added by **adding** parts, not by scrapping v1 parts
 **4. M3 built to grow.**
 - The cam stacks follow Schwilgué's principle: each cam rests on the crossbar below, and the top
   crossbar gives the sum [S: LEF].
+- Each cylinder carries two periods of its term so that its crossbar stays level (convention B,
+  accepted in Phase 1: `docs/gear-trains.md` §6).
 - Each stack is designed with **spare positions**, e.g. two above the planned terms, behind a
   common cam-cassette standard (same drive interface and footprint). Later terms can be added on
   top without rebuilding the stack:

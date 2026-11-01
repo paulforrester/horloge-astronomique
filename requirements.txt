@@ -1,0 +1,6 @@
+# Phase 1 tools (tools/ratios) and tests
+numpy>=1.26
+pyyaml>=6
+pytest>=8
+# CAD (Phase 2, D1): see tools/toolchain-check/README.md
+# build123d, bd_warehouse, trimesh, pycollada

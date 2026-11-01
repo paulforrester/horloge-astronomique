@@ -787,3 +787,99 @@ this pair of hands.
 - Figure heights (18 in vs about 0.70 m [?]) and the rooster's size.
 - The three solar equation terms by name.
 - Positions measured from a photo, to cross-check the plate estimates (Wikimedia rate-limited).
+
+## Phase 1 review additions (1 Nov 2026)
+
+Added while answering Paul's PR #3 review. Used in `spec/clock.yaml` and `docs/gear-trains.md`
+§4F and §5.
+
+### Planet mean motions [S: JPL]
+
+- **Source.** E. M. Standish, *Keplerian Elements for Approximate Positions of the Major
+  Planets*, NASA/JPL Solar System Dynamics: https://ssd.jpl.nasa.gov/planets/approx_pos.html
+  (retrieved 2026-11-01).
+  - Table 1 is fitted to 1800–2050 AD; Table 2a to 3000 BC – 3000 AD.
+  - Elements are referred to the mean ecliptic and equinox of J2000, so the mean-longitude rates
+    L̇ are sidereal.
+- **Table 2a L̇, degrees per Julian century:**
+
+| Body | L̇ |
+|---|---|
+| Mercury | 149472.67486623 |
+| Venus | 58517.81560260 |
+| Earth–Moon barycentre | 35999.37306329 |
+| Mars | 19140.29934243 |
+| Jupiter | 3034.90371757 |
+| Saturn | 1222.11494724 |
+
+- **General precession in longitude:** 5028.796195″ per Julian century (Capitaine et al. 2003,
+  adopted by the IAU in 2006), via https://en.wikipedia.org/wiki/Axial_precession
+  (retrieved 2026-11-01).
+- **Tropical period [D]:** P = 360 × 36525 / (L̇ + 5028.796195/3600) days.
+  - Mercury 87.968434 d; Venus 224.695437 d; Mars 686.929718 d; Jupiter 4330.598880 d;
+    Saturn 10746.933232 d.
+  - The Earth–Moon rate gives 365.2421884 d, against the sourced mean tropical year 365.24219 d
+    (a 2 × 10⁻⁶ d check).
+- **Uncertainty [E]:** the difference between the Table 1 and Table 2a periods, in days.
+  - Mercury 4 × 10⁻⁷; Venus 1 × 10⁻⁶; Mars 1.2 × 10⁻⁴; Jupiter 0.22; Saturn 3.3.
+  - Jupiter and Saturn are large because their mutual perturbation (the "great inequality") makes
+    the mean rate depend on the span fitted.
+
+### Correction: NASA fact-sheet tropical period of Mars [?]
+
+- The Phase 1 draft took planet targets from NASA's fact sheets and concluded that Schwilgué's Mars
+  target was off by +1.18°/century. **That was wrong.**
+- The Mars fact sheet gives a sidereal period of 686.980 d and a tropical period of 686.972 d. The
+  tropical value is marked "\* Mean value - the tropical orbit period for Mars can vary from this
+  by up to 0.004 days depending on the initial point of the orbit":
+  https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html (retrieved 2026-11-01).
+- **Check [D].** A mean tropical period is shorter than the sidereal one by about
+  P²/P_precession: 686.980² / (25,771.6 × 365.24219) = 0.050 d, giving 686.930 d.
+  - The fact sheets' Mercury row passes: 87.969 → 87.968.
+  - So does the Jupiter row: 4,332.589 → 4,330.595, a difference of 1.994 d.
+  - The Mars row does not: its difference is 0.008 d.
+- **Schwilgué's Mars** (LEF: 686 d 22 h 18 min 43.87 s = 686.929674 d) is within 0.001°/century of
+  the JPL-derived 686.929718 d.
+
+### Tooth strength and motor inputs
+
+- **Lewis form factor Y** for 20° full-depth teeth: Shigley, *Mechanical Engineering Design*,
+  Table 14-2, as reproduced in KSU lecture notes, ch. 14, p. 8:
+  https://faculty.ksu.edu.sa/sites/default/files/chapter14-spur_and_helical-esam-revise-part1.pdf
+  (retrieved 2026-11-01). Examples: 12 teeth 0.245, 17 teeth 0.303, 50 teeth 0.409, 150 teeth 0.460.
+- **PLA strength.** Bambu Lab PLA Basic TDS v2.0, tensile strength 39 ± 2 MPa (X-Y):
+  https://www.additive-x.com/shop/mpattachments/file/viewonline/id/494/product_id/2236 (retrieved
+  2026-11-01).
+  - The allowable root stress of 9.75 MPa is this divided by 4 [E].
+  - The local strength test replaces it.
+- **Motor.** 17HS19-2004S1 (NEMA 17): holding torque 0.59 N·m at 2.0 A rated current:
+  https://static.maritex.eu/file/display/5sXxpHH1SP-JwnhJEZ0lhfX-xdYKZRi3/17HS19-2004S1_Full_Datasheet.pdf
+  (retrieved 2026-11-01).
+
+### Equation cylinders: rates and scale [S: ELS]
+
+Ungerer, *L'Astronomie* 1921 (ELS; private copy). Quotes are from the OCR text, which has no page
+numbers.
+
+- **Every equation arbor makes a half turn per period**, so each cylinder carries two periods of
+  its curve. This confirms LEF's "deux périodes … deux points diamétralement opposés soient à la
+  même hauteur".
+
+| Term | Arbor | Half turn in | Total travel |
+|---|---|---|---|
+| Sun's equation of centre | K | 365 d 6 h 13 min 56 s | 23 mm |
+| Sun's reduction to the equator | L | 365 d 5 h 48 min 48 s ("répétée 4 fois sur le pourtour") | 29.6 mm |
+| Moon's reduction to the ecliptic (max 7′) | R | 27 d 5 h 5 min 35.8 s | 1.4 mm |
+| Moon's annual equation (max 11′) | EA | 365 d 6 h 13 min 56 s | 2.2 mm |
+| Moon's variation, with the parallactic inequality | V | 29 d 12 h 44 min 2.9 s | 7.4 mm (full-Moon side), 6.8 mm (new-Moon side) |
+| Moon's evection (max 1°20.5′) | Ev | 31 d 19 h 29 min 11 s | 16.1 mm |
+| Moon's equation of centre, 6°18′ sin M′ + 13′ sin 2M′ | A | 27 d 13 h 18 min 33.3 s | 75.6 mm |
+
+- **Scale:** "l'échelle adoptée par Schwilgué est de 6mm de déplacement vertical pour un degré de
+  correction".
+- **Slopes:** the steepest curve (the Moon's equation of centre) has a maximum slope of 30°12′,
+  "notablement inférieure à 45°, limite qu'il s'était imposée".
+- **Total:** the five lunar terms sum to 102.7 mm of travel.
+- **Stack order:** the lunar stack runs from the bottom in increasing amplitude (reduction,
+  annual equation, variation, evection, centre; the reduction's arbor R is "le mobile inférieur"), "pour que chacun des mobiles ait le plus petit
+  déplacement vertical possible".

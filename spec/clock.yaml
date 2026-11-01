@@ -1,0 +1,423 @@
+# Single source of truth for the clock's rates, targets and gear trains (architecture P5).
+# Read by tools/ratios (check, report), and later by CAD, firmware and the simulator.
+# Verify:     python -m tools.ratios check
+# Regenerate: python -m tools.ratios report --write docs/gear-trains.md
+#
+# Units: days unless stated. A train's ratio is output turns per input turn.
+# Tags: [S] sourced (with link), [D] derived (expression shown), [E] estimate.
+version: 1
+
+time_base:
+  day_seconds: 86400
+  note: >-
+    The controller follows UTC (RTC + NTP), so one "day" is 86 400 SI seconds. Mean solar
+    days differ by milliseconds, which is negligible here. For example, the tropical year is
+    365.24219 ephemeris days or 365.24217 mean solar days [S: Wikipedia, Tropical year]: a
+    5.5e-8 relative difference, far below every accuracy target below.
+
+targets:
+  tropical_year:
+    value: 365.24219
+    precision: 0.000005   # half a unit of the last quoted digit
+    unit: d
+    tag: S
+    source: "Mean tropical year 2000, Wikipedia 'Tropical year', https://en.wikipedia.org/wiki/Tropical_year (retrieved 2026-11-01)"
+  anomalistic_year:
+    value: 365.259636
+    precision: 0.0000005   # half a unit of the last quoted digit
+    unit: d
+    tag: S
+    source: "Epoch J2011.0, Wikipedia 'Year', https://en.wikipedia.org/wiki/Year (retrieved 2026-11-01)"
+  synodic_month:
+    value: 29.5305888531
+    precision: 0.00000000005   # half a unit of the last quoted digit
+    unit: d
+    tag: S
+    source: "Mean synodic month at J2000 (Chapront-Touzé & Chapront 1988), via Wikipedia 'Lunar month', https://en.wikipedia.org/wiki/Lunar_month (retrieved 2026-11-01)"
+  anomalistic_month:
+    value: 27.554551
+    precision: 0.0000005   # half a unit of the last quoted digit
+    unit: d
+    tag: S
+    source: "Wikipedia 'Lunar month', https://en.wikipedia.org/wiki/Lunar_month (retrieved 2026-11-01)"
+  draconic_month:
+    value: 27.212220
+    precision: 0.0000005   # half a unit of the last quoted digit
+    unit: d
+    tag: S
+    source: "Wikipedia 'Lunar month', https://en.wikipedia.org/wiki/Lunar_month (retrieved 2026-11-01)"
+  nodal_period_years:
+    value: 18.612958
+    precision: 0.0000005   # half a unit of the last quoted digit
+    unit: tropical years
+    tag: S
+    source: "Revolution of the lunar nodes relative to the equinox, Wikipedia 'Lunar node', https://en.wikipedia.org/wiki/Lunar_node (retrieved 2026-11-01)"
+  precession_years:
+    value: 25771.57534
+    precision: 0.000005   # half a unit of the last quoted digit
+    unit: years
+    tag: S
+    source: "5028.796195″/century (Capitaine et al. 2003), via Wikipedia 'Axial precession', https://en.wikipedia.org/wiki/Axial_precession (retrieved 2026-11-01)"
+  jpl_ldot_mercury:
+    value: 149472.67486623
+    precision: 0.000000005
+    unit: deg/century
+    tag: S
+    source: "Mean-longitude rate, J2000 ecliptic and equinox, 3000 BC-3000 AD (Table 2a), E. M. Standish, 'Keplerian Elements for Approximate Positions of the Major Planets', NASA/JPL SSD, https://ssd.jpl.nasa.gov/planets/approx_pos.html (retrieved 2026-11-01)"
+  jpl_ldot_venus:
+    value: 58517.81560260
+    precision: 0.000000005
+    unit: deg/century
+    tag: S
+    source: "Mean-longitude rate, J2000 ecliptic and equinox, 3000 BC-3000 AD (Table 2a), E. M. Standish, 'Keplerian Elements for Approximate Positions of the Major Planets', NASA/JPL SSD, https://ssd.jpl.nasa.gov/planets/approx_pos.html (retrieved 2026-11-01)"
+  jpl_ldot_mars:
+    value: 19140.29934243
+    precision: 0.000000005
+    unit: deg/century
+    tag: S
+    source: "Mean-longitude rate, J2000 ecliptic and equinox, 3000 BC-3000 AD (Table 2a), E. M. Standish, 'Keplerian Elements for Approximate Positions of the Major Planets', NASA/JPL SSD, https://ssd.jpl.nasa.gov/planets/approx_pos.html (retrieved 2026-11-01)"
+  jpl_ldot_jupiter:
+    value: 3034.90371757
+    precision: 0.000000005
+    unit: deg/century
+    tag: S
+    source: "Mean-longitude rate, J2000 ecliptic and equinox, 3000 BC-3000 AD (Table 2a), E. M. Standish, 'Keplerian Elements for Approximate Positions of the Major Planets', NASA/JPL SSD, https://ssd.jpl.nasa.gov/planets/approx_pos.html (retrieved 2026-11-01)"
+  jpl_ldot_saturn:
+    value: 1222.11494724
+    precision: 0.000000005
+    unit: deg/century
+    tag: S
+    source: "Mean-longitude rate, J2000 ecliptic and equinox, 3000 BC-3000 AD (Table 2a), E. M. Standish, 'Keplerian Elements for Approximate Positions of the Major Planets', NASA/JPL SSD, https://ssd.jpl.nasa.gov/planets/approx_pos.html (retrieved 2026-11-01)"
+  jpl_ldot_earth_moon:
+    value: 35999.37306329
+    precision: 0.000000005
+    unit: deg/century
+    tag: S
+    source: "Mean-longitude rate, J2000 ecliptic and equinox, 3000 BC-3000 AD (Table 2a), E. M. Standish, 'Keplerian Elements for Approximate Positions of the Major Planets', NASA/JPL SSD, https://ssd.jpl.nasa.gov/planets/approx_pos.html (retrieved 2026-11-01)"
+  precession_arcsec_per_century:
+    value: 5028.796195
+    precision: 0.0000005
+    unit: arcsec/century
+    tag: S
+    source: "General precession in longitude (Capitaine et al. 2003, IAU 2006), via Wikipedia 'Axial precession', https://en.wikipedia.org/wiki/Axial_precession (retrieved 2026-11-01)"
+
+derived:
+  mercury_tropical:
+    expr: "360 * 36525 / (jpl_ldot_mercury + precession_arcsec_per_century / 3600)"
+    unit: d
+    uncertainty: 4e-07
+    note: "Tropical period = 360°/(sidereal rate + precession rate). Uncertainty = difference between JPL Table 1 (1800-2050 fit) and Table 2a (long-term) [E]"
+  venus_tropical:
+    expr: "360 * 36525 / (jpl_ldot_venus + precession_arcsec_per_century / 3600)"
+    unit: d
+    uncertainty: 1e-06
+    note: "Tropical period = 360°/(sidereal rate + precession rate). Uncertainty = difference between JPL Table 1 (1800-2050 fit) and Table 2a (long-term) [E]"
+  mars_tropical:
+    expr: "360 * 36525 / (jpl_ldot_mars + precession_arcsec_per_century / 3600)"
+    unit: d
+    uncertainty: 0.00012
+    note: "Tropical period = 360°/(sidereal rate + precession rate). Uncertainty = difference between JPL Table 1 (1800-2050 fit) and Table 2a (long-term) [E]"
+  jupiter_tropical:
+    expr: "360 * 36525 / (jpl_ldot_jupiter + precession_arcsec_per_century / 3600)"
+    unit: d
+    uncertainty: 0.224778
+    note: "Tropical period = 360°/(sidereal rate + precession rate). Uncertainty = difference between JPL Table 1 (1800-2050 fit) and Table 2a (long-term) [E]"
+  saturn_tropical:
+    expr: "360 * 36525 / (jpl_ldot_saturn + precession_arcsec_per_century / 3600)"
+    unit: d
+    uncertainty: 3.325128
+    note: "Tropical period = 360°/(sidereal rate + precession rate). Uncertainty = difference between JPL Table 1 (1800-2050 fit) and Table 2a (long-term) [E]"
+  tropical_year_jpl:
+    expr: "360 * 36525 / (jpl_ldot_earth_moon + precession_arcsec_per_century / 3600)"
+    unit: d
+    note: "Cross-check only: reproduces the sourced tropical_year to 2e-6 d"
+  lunar_day:
+    expr: "1 / (1 - 1/synodic_month)"
+    unit: d
+    note: "Moon returns to the meridian; the main-dial Moon hand's period"
+  sidereal_day:
+    expr: "tropical_year / (tropical_year + 1)"
+    unit: d
+    note: "rotation relative to the equinox (sidereal time)"
+  evection_period:
+    expr: "1 / (2/synodic_month - 1/anomalistic_month)"
+    unit: d
+    note: "argument 2D - M'"
+  eclipse_year:
+    expr: "1 / (1/tropical_year + 1/(nodal_period_years * tropical_year))"
+    unit: d
+    note: "Sun returns to the same lunar node"
+
+defaults:
+  module: 1.0           # D4: a parameter; module 0.8 (0.2 mm nozzle) scales every diameter by 0.8
+  zmin: 12              # D4: smallest printed pinion (profile-shifted below 17)
+  zmax: 160             # default largest wheel: 162 mm tip at module 1.0
+  max_stage_ratio: 10   # largest step-up or step-down in one mesh
+
+
+strength:
+  face_width_mm: 4                 # D4 default face width (6 mm in the motor reductions); a train may set its own
+  allowable_stress_mpa: 9.75
+  min_safety_factor: 4             # running stress must stay below allowable / 4 (so below 1/16 of tensile)
+  allowable_note: "Bambu Lab PLA Basic X-Y tensile strength 39 ± 2 MPa (TDS v2.0, https://www.additive-x.com/shop/mpattachments/file/viewonline/id/494/product_id/2236) ÷ safety factor 4 [E]: print variability, creep under years of sustained load, fatigue, root stress concentration"
+  running_output_load_nm: 0.01
+  running_load_note: "[E] friction at an output hub: mu 0.3 x 1 N x 5 mm = 1.5 N·mm, rounded up about 6x to 10 N·mm for downstream trains and margin. Phase 2 recomputes it from CAD masses"
+  mesh_efficiency: 0.9             # [E] printed spur mesh, used only for the motor torque budget
+  input_friction_nm: 0.005         # [E] friction of a module's own input arbor and first meshes
+motor:
+  model: "17HS19-2004S1 (NEMA 17, 1.8°)"
+  holding_torque_nm: 0.59
+  rated_current_a: 2.0
+  source: "Manufacturer datasheet, https://static.maritex.eu/file/display/5sXxpHH1SP-JwnhJEZ0lhfX-xdYKZRi3/17HS19-2004S1_Full_Datasheet.pdf (retrieved 2026-11-01)"
+  run_current_a: 0.5               # proposed TMC2209 run current (quiet, cool); torque scales ~ linearly with current [E]
+  reduction:                       # fixed printed reduction between motor and module input arbor
+    M1: 1
+    M1b: 1
+    M2: 24
+    M3: 24
+    M5: 24
+    M6: 24
+
+modules:
+  M1: {input: "minute arbor", input_period: "1/24", stepper: "1 rev/h"}
+  M1b: {input: "legal-time minute arbor", input_period: "1/24", stepper: "1 rev/h"}
+  M2: {input: "daily arbor", input_period: "1", stepper: "1 rev per mean day"}
+  M3: {input: "daily arbor", input_period: "1", stepper: "1 rev per mean day (v1.5)"}
+  M5: {input: "daily arbor", input_period: "1", stepper: "1 rev per mean day (accepted, PR #3; Schwilgué used 1 rev/h)"}
+  M6: {input: "daily arbor", input_period: "1", stepper: "1 rev per mean day"}
+
+trains:
+  # ---------------- M1: time and release ----------------
+  - id: M1.hour_hand
+    indication: I1
+    version: v1
+    input_period: "1/24"
+    output_period: "1/2"
+    stages: [[12, 48], [15, 45]]
+    coaxial: true
+    accuracy: {exact: true}
+    note: "Motion work, reverted (both meshes 30 mm centres) so the hour tube is coaxial with the minute arbor"
+  - id: M1.noon_cam
+    indication: A5 trigger
+    version: v1
+    input_period: "1/24"
+    output_period: "1"
+    stages: [[12, 54], [12, 64]]
+    accuracy: {exact: true}
+    note: "24 h arbor carrying the noon release cam and the hour snail's companion flags"
+  - id: M1b.legal_hour_hand
+    indication: I2
+    version: v1
+    input_period: "1/24"
+    output_period: "1/2"
+    stages: [[12, 48], [15, 45]]
+    coaxial: true
+    accuracy: {exact: true}
+    note: "Same motion work as M1, on the legal-time stepper (D9)"
+
+  # ---------------- M2: main dial ----------------
+  - id: M2.moon_hand
+    indication: I4
+    version: v1
+    input_period: "1"
+    output_period: "lunar_day"
+    stages: [[154, 169], [88, 83]]
+    zmax: 200
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Mean Moon (lunar day). The equation differential (architecture §13) sits after this train"
+  - id: M2.year
+    indication: I7 / I5 / year arbor
+    version: v1
+    input_period: "1"
+    output_period: "tropical_year"
+    stages: [[15, 99], [13, 97], [12, 89]]
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Continuous tropical-year arbor: sunrise/sunset cam (v1.5), eclipse frame (v1.5). Same train as M5.earth and M3.year"
+  - id: M2.weekday
+    indication: I11 (M7)
+    version: v1
+    input_period: "1"
+    output_period: "7"
+    stages: [[12, 84]]
+    accuracy: {exact: true}
+    note: "Drive to the weekday carousel (M7)"
+  - id: M2.node_cam
+    indication: I5
+    version: v1.5
+    input_period: "1"
+    output_period: "eclipse_year"
+    stages: [[15, 109], [12, 81], [15, 106]]
+    accuracy: {max_drift_deg_per_century: 2.0}
+    note: "Node cam relative to the Sun-hand frame (inventory I5 option b): one turn per eclipse year"
+
+  # ---------------- M3: equations (v1.5; one cam turn per period) ----------------
+  - id: M3.year
+    indication: I13 tropical-year arbor
+    version: v1.5
+    input_period: "1"
+    output_period: "tropical_year"
+    stages: [[15, 99], [13, 97], [12, 89]]
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Same train as M2.year; drives the reduction cam through M3.solar_reduction"
+  - id: M3.solar_reduction
+    indication: I13 Sun's reduction to the equator
+    version: v1.5
+    via: M3.year
+    input_period: "tropical_year"
+    output_period: "2 * tropical_year"
+    stages: [[20, 40]]
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "One turn per two tropical years; the cylinder carries the annual curve twice (its 2L sinusoid four times) [S: ELS: 'demi-tour en 365 jours 5 heures 48 minutes 48 secondes', 'répétée 4 fois sur le pourtour']. Convention B (gear-trains.md §6): the cylinder carries two periods of its term, so the argument drifts twice as fast as the cam; 1°/century here is 2°/century in the argument"
+  - id: M3.anomalistic_year
+    indication: I13 solar centre + lunar annual equation
+    version: v1.5
+    input_period: "1"
+    output_period: "2 * anomalistic_year"
+    stages: [[12, 110], [12, 111], [13, 112]]
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Sun's equation of centre and the Moon's annual equation (argument M) share this arbor: one turn per two anomalistic years. Schwilgué's cam arbor makes a half turn per period [S: ELS]. Convention B (gear-trains.md §6): the cylinder carries two periods of its term, so the argument drifts twice as fast as the cam; 1°/century here is 2°/century in the argument"
+  - id: M3.lunar_anomaly
+    indication: I13 lunar centre
+    version: v1.5
+    input_period: "1"
+    output_period: "2 * anomalistic_month"
+    stages: [[19, 137], [14, 107]]
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Moon's equation of centre (argument M'): one turn per two anomalistic months. Schwilgué's cam arbor makes a half turn per period [S: ELS]. Convention B (gear-trains.md §6): the cylinder carries two periods of its term, so the argument drifts twice as fast as the cam; 1°/century here is 2°/century in the argument"
+  - id: M3.evection
+    indication: I13
+    version: v1.5
+    input_period: "1"
+    output_period: "2 * evection_period"
+    stages: [[37, 82], [12, 78], [12, 53]]
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Evection (argument 2D - M'): one turn per two evection periods. Three meshes keep wheels under 85 mm; two meshes would need a 178-tooth wheel. Schwilgué's cam arbor makes a half turn per period [S: ELS]. Convention B (gear-trains.md §6): the cylinder carries two periods of its term, so the argument drifts twice as fast as the cam; 1°/century here is 2°/century in the argument"
+  - id: M3.variation
+    indication: I13
+    version: v1.5
+    input_period: "1"
+    output_period: "2 * synodic_month"
+    stages: [[37, 91], [12, 38], [12, 91]]
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Variation plus the parallactic inequality in one curve of period one synodic month [S: ELS]; one turn per two synodic months. Schwilgué's cam arbor makes a half turn per period [S: ELS]. Convention B (gear-trains.md §6): the cylinder carries two periods of its term, so the argument drifts twice as fast as the cam; 1°/century here is 2°/century in the argument"
+  - id: M3.lunar_node
+    indication: I13 reduction / latitude
+    version: v1.5
+    input_period: "1"
+    output_period: "2 * draconic_month"
+    stages: [[23, 152], [17, 140]]
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Moon's reduction to the ecliptic, period one draconic month as Schwilgué drew it [S: ELS]; one turn per two draconic months. Schwilgué's cam arbor makes a half turn per period [S: ELS]. Convention B (gear-trains.md §6): the cylinder carries two periods of its term, so the argument drifts twice as fast as the cam; 1°/century here is 2°/century in the argument"
+
+  # ---------------- M5: planetarium and Moon globe ----------------
+  - id: M5.earth
+    indication: I14 Earth arm
+    version: v1
+    input_period: "1"
+    output_period: "tropical_year"
+    stages: [[15, 99], [13, 97], [12, 89]]
+    face_width_mm: 8
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Central Earth tube; every planet train starts here (Schwilgué's arrangement). Same teeth as the other year trains, but 8 mm faces: it carries the whole planetarium (gear-trains.md §5)"
+  - id: M5.mercury
+    indication: I14
+    version: v1
+    via: M5.earth
+    input_period: "tropical_year"
+    output_period: "mercury_tropical"
+    stages: [[135, 67], [136, 66]]
+    coaxial: true
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Reverted pair from the Earth tube; intermediate arbor at 101 mm radius"
+  - id: M5.venus
+    indication: I14
+    version: v1
+    via: M5.earth
+    input_period: "tropical_year"
+    output_period: "venus_tropical"
+    stages: [[70, 63], [79, 54]]
+    coaxial: true
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Intermediate arbor at 66.5 mm radius"
+  - id: M5.mars
+    indication: I14
+    version: v1
+    via: M5.earth
+    input_period: "tropical_year"
+    output_period: "mars_tropical"
+    stages: [[35, 48], [35, 48]]
+    coaxial: true
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Intermediate arbor at 41.5 mm radius"
+  - id: M5.jupiter
+    indication: I14
+    version: v1
+    via: M5.earth
+    input_period: "tropical_year"
+    output_period: "jupiter_tropical"
+    stages: [[15, 56], [17, 54]]
+    coaxial: true
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Intermediate arbor at 35.5 mm radius"
+  - id: M5.saturn
+    indication: I14
+    version: v1
+    via: M5.earth
+    input_period: "tropical_year"
+    output_period: "saturn_tropical"
+    stages: [[17, 75], [12, 80]]
+    coaxial: true
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Intermediate arbor at 46 mm radius"
+  - id: M5.moon_arm
+    indication: I14 Moon around Earth
+    version: v1
+    via: M5.earth
+    input_period: "tropical_year"
+    target_ratio: "tropical_year / synodic_month"
+    stages: [[78, 23], [62, 17]]
+    epicyclic: true
+    face_width_mm: 8
+    running_output_load_nm: 0.003
+    running_load_note: "[E] balanced arm with no train behind it: hub friction 1.5 N·mm (as the default) x 2 margin. The default's extra margin is for downstream trains, which this arm has none of"
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Epicyclic: fixed 78-tooth sun wheel, compound planet 23/62 on the Earth arm, 17-tooth pinion on the Moon arm. Rate is relative to the Earth arm, so the drift is in the Moon's phase angle"
+  - id: M5.moon_globe
+    indication: I15
+    version: v1
+    input_period: "1"
+    output_period: "synodic_month"
+    stages: [[19, 83], [25, 169]]
+    zmax: 200
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Phase globe; 169-tooth wheel (171 mm at m 1.0, 137 mm at m 0.8)"
+
+  # ---------------- M6: celestial globe ----------------
+  - id: M6.sidereal
+    indication: I16
+    version: v1
+    input_period: "1"
+    output_period: "sidereal_day"
+    stages: [[34, 37], [44, 39], [59, 61]]
+    accuracy: {max_drift_deg_per_century: 0.25}
+    note: "Plain compound train; no epicyclic needed (Schwilgué used one). 0.25°/century = 1 min of sidereal time"
+  - id: M6.year
+    indication: I17 drive
+    version: v2
+    input_period: "1"
+    output_period: "tropical_year"
+    stages: [[15, 99], [13, 97], [12, 89]]
+    accuracy: {max_drift_deg_per_century: 2.0}
+    note: "Feeds the precession worms; same train as M2.year"
+  - id: M6.precession
+    indication: I17
+    version: v2
+    via: M6.year
+    input_period: "tropical_year"
+    output_period: "precession_years * tropical_year"
+    stages: [[1, 160], [1, 161]]
+    zmin: 1
+    zmax: 161
+    max_stage_ratio: 161
+    accuracy: {max_drift_deg_per_century: 0.002}
+    note: "Two single-start worms (driver 1 = worm). 1/25760 per year vs 1/25771.6: 0.045 % fast, i.e. about 0.0006°/century"
