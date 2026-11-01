@@ -84,6 +84,20 @@ ordering.
 | Wood glue, finish | PVA / hide glue; finish per D12 question 2 | TBD | D12 | TBD |
 | Hinges, catches | for the glazed doors and the service doors | TBD | D6 / D12 | TBD |
 | Glazing | 3 mm acrylic, about 2.25 m² | TBD | D6 | TBD |
+
+### Batch 2 — M2 rows from the feasibility layout [E]
+
+Quantities from `cad/modules/m2_main_dial/feasibility.py`. The M2 detailed design refines them.
+They count towards the "ground rod, brass tube, bearings" row above.
+
+| Item | Spec | Qty [E] | How the quantity was counted | Supplier |
+|---|---|---|---|---|
+| Brass tube, 0.45 mm wall | OD 4, 5, 6, 7, 8, 9 mm | 1 length (≈ 300 mm) of each | centre stack: shadow, Moon, cam, Sun, sunrise, sunset tubes (`docs/main-dial-feasibility.md` §2) | as Batch 1 |
+| Ground rod Ø3 | DIN 175 h9 | 0.1 m | fixed centre arbor | as Batch 1 |
+| Ground rod Ø5 | DIN 175 h9 | 1 m | 8 lay shafts × ≈ 85 mm, plus the M3 input and weekday shafts | as Batch 1 |
+| Bearing 688ZZ | 8 × 16 × 5 | 6 | calendar-ring rollers | as Batch 1 |
+| Bearing MR85ZZ (or bronze bushes) | 5 × 8 × 2.5 | 16 | 8 lay shafts × 2 seats | as Batch 1 |
+| NEMA 17 + TMC2209 | as above | (already counted) | the M2 stepper | — |
 | Wall restraint brackets + anchors for stone | per fixing design | TBD | D6; wall material TBD | TBD |
 | Clock oil | horological | 1 | brass tube stacks | TBD |
 | Filament | PLA (gears, display), PETG (structure) | TBD | from slicer estimates per module | TBD |

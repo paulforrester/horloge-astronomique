@@ -36,8 +36,8 @@ adding precision later without rebuilding, is in
 | Phase | Content | Status |
 |---|---|---|
 | 0 | Specification, research, decisions | **Done** (PR #1, PR #2). D1–D12 all accepted, including D12: a wooden case |
-| 1 | Ratio engineering and tooth-strength check: `tools/ratios/`, tests, `spec/clock.yaml`, `docs/gear-trains.md` | **In review** (Phase 1 PR; first review answered) |
-| 2 | Parametric CAD: shared library, main-dial feasibility, test rig, then every module and the case | — |
+| 1 | Ratio engineering and tooth-strength check: `tools/ratios/`, tests, `spec/clock.yaml`, `docs/gear-trains.md` | **Done** (PR #3) |
+| 2 | Parametric CAD: shared library, main-dial feasibility, test rig, then every module and the case | **In progress**: library and main-dial feasibility in review |
 | 3 | Electronics, firmware skeleton, accelerated-time simulator validated against an ephemeris | — |
 | Local | Tolerance tests, printing, woodworking, bring-up | Later |
 
@@ -52,6 +52,7 @@ adding precision later without rebuilding, is in
 | [`docs/decisions.md`](docs/decisions.md) | Decision records, with options, trade-offs and status |
 | [`docs/bom.md`](docs/bom.md) | One running hardware list, in purchase batches |
 | [`docs/gear-trains.md`](docs/gear-trains.md) | The chosen gear train for every indication, with errors and accuracy targets (generated from `spec/clock.yaml`) |
+| [`docs/main-dial-feasibility.md`](docs/main-dial-feasibility.md) | Phase 2: does everything fit behind the 287.5 mm main dial? Layout, checks, eclipse-display options |
 
 ## Tools
 
@@ -75,6 +76,16 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 python3 tools/envelope/plate_measurements.py # stage heights estimated from the lithograph
 ```
 
+CAD (build123d, its own venv; see [`cad/README.md`](cad/README.md)):
+
+```bash
+python3 -m venv .venv-cad && .venv-cad/bin/pip install -r cad/requirements.txt
+```
+
+```bash
+.venv-cad/bin/python -m pytest cad
+```
+
 CAD toolchain check (build123d; see [`tools/toolchain-check/README.md`](tools/toolchain-check/README.md)):
 
 ```bash
@@ -96,7 +107,7 @@ tools/envelope/          lithograph scaling
 tools/toolchain-check/   CAD smoke tests
 tools/ratios/            gear-ratio search, strength check and tests (Phase 1)
 spec/clock.yaml          single source of truth for rates, ratios and sensors (Phase 1)
-cad/lib/, cad/modules/   parametric CAD, build123d (Phase 2)
+cad/lib/, cad/modules/   parametric CAD, build123d (Phase 2; see cad/README.md)
 cad/case/                parametric wooden case: joinery, cut lists (Phase 2)
 firmware/                ESP32-S3 controller (Phase 3)
 sim/                     accelerated-time simulator and ephemeris validation (Phase 3)
