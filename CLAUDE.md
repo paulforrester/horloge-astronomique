@@ -47,6 +47,10 @@ at the base). Depth is not yet known — see the open items in `docs/reference-n
   hardwood are both acceptable (Paul, 1 Nov 2026). 3D printing stays for the internal mechanism
   and for selected visible parts such as ornament and figures. The wood holds the modules but
   never sets gear geometry; see `docs/decisions.md` D12.
+  - Finish: painted to resemble the original.
+  - Species: one species from a single movement class (D12 R3).
+  - **Metal frame elements are hidden where possible**; the exception is the computus (Easter
+    calculator), which gets a visible metal frame.
 - **Hardware must be sourceable in France/EU in metric sizes** (rods, tubes, bearings, fasteners,
   springs). Avoid US-only parts and imperial sizes.
 - **Units: millimetres.**
@@ -86,8 +90,10 @@ at the base). Depth is not yet known — see the open items in `docs/reference-n
 - OpenSCAD experience (a 3D-printed French word clock).
 - Electronics: ESP32, Raspberry Pi, Arduino Mega + RAMPS 1.4 + TMC2209 stepper drivers, NEMA17
   steppers, Arduino IDE. Home Assistant and MQTT at home.
-- Woodworking: wants fine woodworking for the case (1 Nov 2026). Workshop tools TBD (D12
-  question 1).
+- Woodworking: fine woodworking for the case. Workshop: table saw, track saw, drill press,
+  planer, drum sander, mitre saw, hand tools and chisels. **No router, jointer, bandsaw, CNC or
+  lathe.** Design joinery and mouldings for these tools (D12 R1). Ornament and finials are
+  3D-printed. Hardwood is sourced from local vendors in Bordeaux.
 
 ## Repo layout (refined in Phase 0; see README.md and docs/architecture.md §12)
 

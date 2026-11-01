@@ -304,6 +304,8 @@ PlatformIO; Paul knows it), with **TMC2209 stepsticks in UART mode** on a carrie
   - Seasonal wood movement cannot load the module plates.
   - The shafts that cross module boundaries (§4) use keyed couplings with radial and angular
     float.
+  - Metal frame elements are hidden where possible. The computus (M4) is the exception: a
+    visible metal frame, as the original's computus train is on view [S: ELS i1] (D12 R4).
 - **One connector per module.** Locking, keyed connectors such as JST-XH or Micro-Fit. All the
   module's motor, sensor and switch wires go through it, so a module unplugs in one action.
 - **Wiring route.** Wiring runs in a riser in the staircase tower, with channels behind each stage.

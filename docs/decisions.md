@@ -6,7 +6,7 @@ the trade-offs and a recommendation. Status is **Proposed** until Paul approves;
 `docs/reference-notes.md`.
 
 **As of 31 Oct 2026 every decision D1–D11 is Accepted.** D2, D5 and D11 were decided point by point;
-the rest were approved as recommended. **D12** (wooden case, 1 Nov 2026) is Proposed.
+the rest were approved as recommended. **D12** (wooden case) was accepted on 1 Nov 2026.
 
 ## Summary
 
@@ -22,7 +22,7 @@ the rest were approved as recommended. **D12** (wooden case, 1 Nov 2026) is Prop
 | D8 | Sound | **Real small bells struck mechanically**; **rooster: copy Schwilgué's bellows and paper-reed crow** (fully described by Ungerer), with a speaker as fallback | **Accepted** 31 Oct 2026 | Phase 2 (E-modules) |
 | D9 | Legal-time hands and summer time | **Separately driven legal-time hands that follow CET/CEST** (M1b) | **Accepted** 31 Oct 2026 | Phase 2 (M1) |
 | D10 | Night silence | **Quiet hours in firmware** (skip sound shows). The original already silences the four ages at night [S: DA]. | **Accepted** 31 Oct 2026 | Phase 3 |
-| D12 | Case and frame in wood (fine woodworking); revises D6's structure | **Plywood carcass as the structure + hardwood framing and mouldings**; modules on adjustable three-point mounts; misalignment-tolerant couplings between modules; ornament printed or carved | **Proposed** 1 Nov 2026 | Phase 2 (case) |
+| D12 | Case and frame in wood (fine woodworking); revises D6's structure | **Option B**: plywood carcass + hardwood framing; joinery for the table saw, track saw and drill press (no router); MDF for painted surfaces; one species from the low or moderate class (tulipier, sapelli or sipo preferred); metal hidden except the computus frame | **Accepted** 1 Nov 2026 | Phase 2 (case) |
 | D11 | Case width (7.70 vs 8.60 m) and wall space | **1:8 accepted (PR #1)**. **Width resolved: 7.70 m → 962.5 mm** [S: ELS, Ungerer 1920]. Wall dimensions to follow from Paul | **Accepted** 31 Oct 2026 | Phase 2 (case) |
 
 Plus **Blockers** at the end: the network allowlist and the documents to obtain.
@@ -501,7 +501,7 @@ Ungerer]. **The width is 962.5 mm at 1:8**, as `CLAUDE.md` assumed.
 
 ## D12 — Case and frame in wood (fine woodworking)
 
-**Status: Proposed** (1 Nov 2026). It revises the structure part of D6.
+**Status: Accepted, option B** (Paul, PR #2 comment, 1 Nov 2026). It revises the structure part of D6. The answers to the questions and the resulting refinements are in "Decision and refinements" at the end of this record.
 
 **Context.**
 
@@ -573,6 +573,99 @@ Ungerer]. **The width is 962.5 mm at 1:8**, as `CLAUDE.md` assumed.
    weight and how well fine detail can be routed.
 4. Under B the aluminium rack disappears entirely. Is that what you want, or would you keep a
    hidden metal sub-frame behind the main dial only?
+
+### Decision and refinements (Paul, PR #2 comment, 1 Nov 2026)
+
+Paul's answers (quoted, with typos corrected):
+
+1. "I accept the D12 recommendation for option B."
+2. Workshop: "tablesaw, tracksaw, drill press, planer, drum sander, miter saw and hand tools and
+   chisels".
+3. Finish: "painted and finished to resemble original".
+4. Species: "any of the species are acceptable so long as they have similar expansion qualities.
+   I'll be sourcing hardwoods in Bordeaux, so species should be available from local vendors."
+5. Metal: "keep the metal frame elements hidden where possible. The exception being the Easter
+   calculator."
+
+**Revised rules.** They replace rules 4 and 7 above where the two differ; the other rules stand.
+
+**R1 — Joinery for the workshop as it is.** There is no router, jointer, bandsaw, CNC or lathe.
+
+| Task | How |
+|---|---|
+| Stock | Buy planed all round ("raboté 4 faces"), or straighten edges with a track-saw or table-saw jig and then thickness on the planer. The drum sander handles stock thinner than the planer allows. |
+| Carcass | Birch plywood broken down with the track saw; dadoes and rabbets cut on the table saw in several passes. Check whether the saw takes a dado stack (many European saws do not). Glue and screw. |
+| Frames | Mortise-and-tenon: tenons on the table saw; mortises bored on the drill press with Forstner bits and squared with chisels. Dowelled joints using printed drilling jigs are an alternative. Bridle joints on the table saw. Mitres on the mitre saw. |
+| Frame-and-panel | Grooves on the table saw. Panels are flat MDF or plywood (painted), or table-saw-bevelled raised panels where one is wanted. |
+| Mouldings (no router) | Built up from simple table-saw profiles (rips, bevels, coves cut by passing across the blade at an angle), laminated and stacked. Supplemented by stock mouldings from the merchant. Complex Gothic profiles are 3D-printed and painted. |
+| Ornament | 3D-printed and painted or gilded: tracery, crockets, pinnacles, finials (no lathe), figures. Chisel carving is optional for a few details, in lime (see R3). |
+| Precision holes | The module mounts (rule 2) are drilled on the drill press through **3D-printed drilling templates generated from the case CAD**, so every insert and locating pin lands where the model says. |
+
+**R2 — Finish: painted to resemble the original.** The original case is dressed stone with painted
+panels [S: ELS i1; DA].
+
+- Use **MDF for most flat painted surfaces**: it is stable and paints well.
+- Use hardwood where edges and joints need strength, and where moving parts or doors bear on the
+  wood.
+- Prime every surface. Open-grained or tannin-rich woods such as oak need grain filling and a
+  stain-blocking primer before a smooth painted finish.
+- The decorative painting itself (faux stone, Stimmer-style panels) is local work and outside the
+  cloud sessions (`CLAUDE.md`).
+
+**R3 — Species: one movement class, from local stock.** Movement across the width is driven
+mostly by tangential shrinkage (T), and distortion by the T/R ratio.
+
+Sourced values, green to oven-dry, from The Wood Database, which compiles them from cited
+references [S, secondary]. Retrieved 1 Nov 2026 from `https://www.wood-database.com/<species>/`.
+
+| Class | Species (French name) | Radial % | Tangential % | T/R | Density at 12 % MC, kg/m³ |
+|---|---|---|---|---|---|
+| **Low movement** | utile / sipo (*Entandrophragma utile*) | 4.9 | 6.9 | 1.4 | 635 |
+| | sapele / sapelli (*E. cylindricum*) | 5.2 | 7.2 | 1.4 | 665 |
+| | lime / tilleul (*Tilia* spp.) | 5.0 | 7.5 | 1.5 | 535 |
+| | walnut / noyer (*Juglans regia*) | 5.5 | 7.5 | 1.4 | 640 |
+| **Moderate** | yellow-poplar / tulipier (*Liriodendron tulipifera*) | 4.6 | 8.2 | 1.8 | 455 |
+| | aspen / tremble (*Populus tremula*) | 4.8 | 8.3 | 1.7 | 450 |
+| | pedunculate oak / chêne pédonculé (*Quercus robur*) | 4.7 | 8.4 | 1.8 | 675 |
+| **Higher, or uneven** | black poplar / peuplier noir (*Populus nigra*) | 4.0 | 9.3 | 2.3 | 385 |
+| | ash / frêne (*Fraxinus excelsior*) | 5.7 | 9.6 | 1.7 | 680 |
+| | sessile oak / chêne rouvre (*Quercus petraea*) | 4.5 | 9.7 | 2.2 | 710 |
+| | hornbeam / charme (*Carpinus betulus*) | 6.8 | 11.5 | 1.7 | 735 |
+| | beech / hêtre (*Fagus sylvatica*) | 5.8 | 11.7 | 2.0 | 710 |
+
+**Rule.**
+
+- Use **one species** for all structural hardwood. If two species are glued together, take both
+  from the same class.
+- **First choice (paint-grade, low or moderate movement, machines well): tulipier, sapelli or sipo,
+  whichever a Bordeaux merchant stocks planed.**
+- Oak (chêne) is acceptable if that is what is available, but needs the grain and tannin
+  preparation in R2.
+- **Avoid beech, hornbeam, ash and black poplar** for frames and wide parts.
+- Lime is the carving wood, for any chisel-carved details.
+- Local availability is **TBD** (Paul sourcing in Bordeaux). An initial search found Gironde
+  merchants but no confirmed stock list for any species [Sn].
+
+**In-service movement estimate [E].** Width change ≈ W × T × ΔMC / FSP, where FSP ≈ 28 % is the
+fibre saturation point. This is the standard linear approximation; verify against the Wood
+Handbook (USDA FPL GTR-282, ch. 4).
+
+- Assume moisture content varies by ±2 % in the climate-controlled room (an estimate, to be
+  confirmed with a hygrometer in the room).
+- Then a 100 mm flat-sawn board moves about ±0.5 mm in sapelli, ±0.6 mm in tulipier or pedunculate
+  oak, and ±0.8 mm in beech.
+- Hence the floating panels, and the slotted third fixing on every module mount (rule 2).
+
+**R4 — Metal: hidden where possible; the computus is the exception.**
+
+- Hidden metal is allowed where wood or print is not enough: for example a flat-bar stiffener
+  behind the main dial, inserts, pins and brackets.
+- **The computus (M4) gets a visible metal frame**, brass or steel plates and pillars, displayed in
+  its vitrine. The original's computus train is on view: "Dans celle de gauche, on aperçoit le
+  rouage du comput ecclésiastique" [S: ELS i1].
+- Its gears remain printed (rule 1 in `CLAUDE.md`). Their finish, for example brass-toned, is a v2
+  choice.
+- The aluminium-extrusion rack of D6 option B is **not used**.
 
 ---
 

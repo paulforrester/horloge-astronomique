@@ -23,8 +23,9 @@ The replica follows the original's logic, with modern parts where they help:
 - **The automata are events.** A cam on the time train releases a show, and a small motor powers
   it, like a striking train. The shows are the ages and Death, the Apostles before Christ, the
   rooster, the genies, and the calendar's midnight advance.
-- **The case is woodwork**: a sheet-goods structure with hardwood framing (proposed in
-  [D12](docs/decisions.md)), 3D-printed ornament where it suits, and a glazed front.
+- **The case is woodwork**: a birch-plywood structure with hardwood framing, painted to resemble
+  the original, with 3D-printed ornament and a glazed front ([D12](docs/decisions.md)). Metal is
+  hidden, except the computus's visible frame.
 
 The full rules are in [`CLAUDE.md`](CLAUDE.md). The architecture, including the upgrade path for
 adding precision later without rebuilding, is in
@@ -34,7 +35,7 @@ adding precision later without rebuilding, is in
 
 | Phase | Content | Status |
 |---|---|---|
-| 0 | Specification, research, decisions | **Done** (PR #1). All of D1–D11 accepted; D12 (wooden case) proposed |
+| 0 | Specification, research, decisions | **Done** (PR #1, PR #2). D1–D12 all accepted, including D12: a wooden case |
 | 1 | Ratio engineering: `tools/ratios/`, tests, `docs/gear-trains.md` | Next |
 | 2 | Parametric CAD: shared library, main-dial feasibility, test rig, then every module and the case | — |
 | 3 | Electronics, firmware skeleton, accelerated-time simulator validated against an ephemeris | — |

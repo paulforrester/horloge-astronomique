@@ -418,6 +418,9 @@ Scale aids [D]:
     model this rack carries the Easter hand. It matches Roegel's "grand râteau".
   - The full description (more figures and counts) is in ELS i4–i5. **Use it as the v2 design
     basis**, so that D7 can be "faithful" after all.
+- **Presentation (D12 R4, Paul):** a **visible metal frame** (brass or steel plates and pillars)
+  in the left vitrine, as on the original, where "on aperçoit le rouage du comput ecclésiastique"
+  [S: ELS i1]. Its gears stay printed.
 - **Replica (v2):**
   - Design our own mechanical Gregorian computus from count wheels:
     - 28-, 19- and 15-position wheels stepped once a year;

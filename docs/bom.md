@@ -76,7 +76,9 @@ ordering.
 | Aluminium extrusion | 20 × 20 / 20 × 40 metric slot profile | **only if D12 option A** | module rack (D6, under revision) | TBD |
 | Birch plywood (contreplaqué bouleau) | structural carcass, shelves, plinth; thicknesses from the case design (e.g. 12 / 18 mm) | TBD | case design (D12) | local timber merchant (négoce bois) or a panel supplier |
 | MDF | painted flat parts, routed profiles | TBD | D12 | as above |
-| Hardwood | face frame, pilasters, mouldings, door frames, frame-and-panel; species per D12 question 3; quarter- or rift-sawn where width matters | TBD (cut list from `cad/case/`) | D12 | local timber merchant or sawmill |
+| Hardwood | face frame, pilasters, door frames, frame-and-panel. **One species** from D12 R3: tulipier, sapelli or sipo preferred; oak acceptable. Planed all round ("raboté 4 faces") if available; quarter- or rift-sawn where width matters | TBD (cut list from `cad/case/`) | D12 | Bordeaux timber merchant (Paul to confirm stock) |
+| Stock mouldings | simple profiles to combine with table-saw-made ones (no router) | TBD | D12 R1 | timber merchant / DIY store |
+| Lime (tilleul) | only if any details are carved by hand | small | D12 R3 | timber merchant |
 | Threaded inserts for wood | M4 / M5, for the module mounts and removable panels | TBD | D12 rule 2 | TBD |
 | Locating pins | Ø4 / Ø5 dowel pins, round and slotted mounts | TBD | D12 rule 2 | TBD |
 | Wood glue, finish | PVA / hide glue; finish per D12 question 2 | TBD | D12 | TBD |
@@ -93,3 +95,4 @@ ordering.
 | NEMA 17 + TMC2209 for M3 (equations) | 1 + 1 | D5 v1.5 |
 | DC gearmotor + H-bridge channel for E5 (computus) | 1 | D5 v2 |
 | Sensors for M3 / M4 witnesses and locks | ~6 | — |
+| Computus visible frame: brass or steel plate and pillars, metric | TBD | D12 R4. v2. Plates cut and drilled to drawings from `cad/modules/M4`. |
