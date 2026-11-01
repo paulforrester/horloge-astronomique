@@ -85,3 +85,20 @@ def test_rack_meshes_with_pinion():
     assert (r & pin).volume < 1e-6
     pin_low = spur_gear(g, 3).rotate(bd.Axis.Z, -90).moved(bd.Location((3 * p, g.pitch_radius - 0.5, 0)))
     assert (r & pin_low).volume > 0.1
+
+
+@pytest.mark.parametrize("z1, z2, theta, rot1", [(12, 54, -20.0, 0.0), (12, 64, 10.0, 13.0), (48, 48, 20.0, 3.3),
+                                                 (15, 45, 270.0, 0.0), (20, 37, 133.0, 41.0)])
+def test_mesh_rotation_meshes_at_any_angle(z1, z2, theta, rot1):
+    from cad.lib.gears import mesh_rotation
+    x1, x2 = pair_shifts(z1, z2)
+    g1, g2 = Gear(z1, shift=x1), Gear(z2, shift=x2)
+    a = centre_distance(g1, g2)
+    p1 = spur_gear(g1, 3).rotate(bd.Axis.Z, rot1)
+    r2 = mesh_rotation(g1, g2, theta, rot1)
+
+    def placed(cd):
+        x, y = cd * math.cos(math.radians(theta)), cd * math.sin(math.radians(theta))
+        return spur_gear(g2, 3).rotate(bd.Axis.Z, r2).moved(bd.Location((x, y, 0)))
+    assert (p1 & placed(a)).volume < 1e-6
+    assert (p1 & placed(a - 0.4)).volume > 0.05       # engaged: 0.4 mm closer collides

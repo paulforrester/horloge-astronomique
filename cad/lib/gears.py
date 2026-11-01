@@ -215,6 +215,19 @@ def mesh_phase(driver: Gear, driven: Gear) -> float:
     return 180.0 + 180.0 / driven.teeth
 
 
+def mesh_rotation(driver: Gear, driven: Gear, theta: float, driver_rot: float = 0.0) -> float:
+    """Rotation (degrees) for ``driven`` placed at polar angle ``theta`` (degrees) from ``driver``'s
+    centre, when the driver is rotated by ``driver_rot`` degrees (tooth 0 on +X at rotation 0).
+
+    External pairs only. Generalises ``mesh_phase`` (which is the case theta = 0, driver_rot = 0).
+    """
+    if driver.internal or driven.internal:
+        raise ValueError("mesh_rotation handles external pairs")
+    pitch1 = 360.0 / driver.teeth
+    delta = ((driver_rot - theta + pitch1 / 2) % pitch1) - pitch1 / 2   # driver offset from tooth-on-line
+    return theta + 180.0 + 180.0 / driven.teeth - delta * driver.teeth / driven.teeth
+
+
 # --- solids (build123d) ---------------------------------------------------------------------------
 
 def _face_from_points(points: np.ndarray):

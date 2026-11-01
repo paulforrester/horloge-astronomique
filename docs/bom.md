@@ -53,6 +53,9 @@ ordering.
 | Wave / disc spring washers | for slip-clutch tests on Ø3, Ø5, Ø8 | assortment | Accu FR | https://accu-components.com/fr/shop/composants-de-precision/rondelles-et-entretoises/rondelles-a-ressorts/rondelles-ondulees | Setting mechanism (architecture §7) |
 | Hook-up wire, Dupont / JST-XH kit, crimper | — | 1 kit | — | — | |
 | Multimeter | basic | 1 | — | — | Only if Paul has none dedicated to this project |
+| Flexible shaft coupling **(test rig)** | 5 mm to 5 mm, jaw or bellows, ≈ Ø19 × 25 mm | 1 + 1 spare | 3D-printer parts sellers (3DJake, RS FR) | — | Motor to minute arbor (`docs/test-rig.md` §5) |
+| Shaft collar **(test rig)** | Ø5 bore, with grub screw | 2 | RS FR / Accu | — | Clutch preload behind the cannon pinion |
+| Standoffs **(test rig)** | M3 × 30 mm, female-female | 4 | RS FR / Accu | — | NEMA 17 behind the back plate |
 
 ## Batch 2 — v1 clock (quantities from the architecture; refine per module)
 

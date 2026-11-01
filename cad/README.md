@@ -39,12 +39,15 @@ python3 -m venv .venv-cad && .venv-cad/bin/pip install -r cad/requirements.txt
 - `cad/tests/test_parts_assembly.py`: tube stacks, bearings, cams, assembly checks, export, render.
 - `cad/tests/test_m2_feasibility.py`: the main-dial layout's checks, plus Schwilgué's latitude-cam
   design point.
+- `cad/tests/test_test_rig.py`: the rig's checks, every mesh engaged, the coupon matrix.
+- `cad/tests/test_sketchup_export.py`: every model writes a `.dae` with named nodes.
 
 ## Modules (`cad/modules`)
 
 | Module | Status |
 |---|---|
 | `m2_main_dial/feasibility.py` | Layout study, accepted: [`docs/main-dial-feasibility.md`](../docs/main-dial-feasibility.md) |
+| `test_rig/rig.py`, `test_rig/coupons.py` | Test rig and tolerance coupons, proposed: [`docs/test-rig.md`](../docs/test-rig.md). `python -m cad.modules.test_rig.rig` writes the 3MF print files to `export/test_rig/` |
 
 ## SketchUp files
 
@@ -63,5 +66,7 @@ Paul asked for SketchUp files of every CAD model (PR #4).
 |---|---|
 | `export/sketchup/cad_lib_samples.dae` | Library showcase with real teeth: shifted 12/89 pair, 25/169 pair, internal 60/18, rack and pinion, cam, tube stack, bearings |
 | `export/sketchup/m2_main_dial_feasibility.dae` | The main-dial layout model (gears as blanks) |
+| `export/sketchup/test_rig.dae` | The test rig, real teeth |
+| `export/sketchup/tolerance_coupons.dae` | Fit, bearing-seat and gear coupons |
 
 Other generated files go to `export/` (git-ignored). Released STL/3MF are added deliberately.

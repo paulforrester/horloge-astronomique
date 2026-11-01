@@ -118,9 +118,9 @@ class Assembly:
     # --- render -------------------------------------------------------------------------------
     def render(self, path: str | Path, exploded: bool = False, elev: float = 22, azim: float = -58,
                tolerance: float = 0.25, title: str | None = None, hide: tuple = (), size=(9, 8),
-               xlim=None, ylim=None, zlim=None):
+               xlim=None, ylim=None, zlim=None, up: str = "z"):
         render(self, path, exploded=exploded, elev=elev, azim=azim, tolerance=tolerance,
-               title=title, hide=hide, size=size, xlim=xlim, ylim=ylim, zlim=zlim)
+               title=title, hide=hide, size=size, xlim=xlim, ylim=ylim, zlim=zlim, up=up)
 
 
 def _mesh(shape, tolerance):
@@ -161,7 +161,9 @@ def write_dae(asm: Assembly, path: Path):
 
 
 def render(asm: Assembly, path, exploded=False, elev=22, azim=-58, tolerance=0.25, title=None,
-           hide=(), size=(9, 8), xlim=None, ylim=None, zlim=None):
+           hide=(), size=(9, 8), xlim=None, ylim=None, zlim=None, up="z"):
+    """PNG view. ``up="y"`` draws the model's +Y as the vertical (a wall-mounted dial standing up,
+    +Z towards the viewer at azim = -90, elev = 0)."""
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -180,6 +182,8 @@ def render(asm: Assembly, path, exploded=False, elev=22, azim=-58, tolerance=0.2
             continue
         if exploded:
             v = v + np.array(i.explode, float)
+        if up == "y":
+            v = np.column_stack([v[:, 0], -v[:, 2], v[:, 1]])
         tri = v[t]
         n = np.cross(tri[:, 1] - tri[:, 0], tri[:, 2] - tri[:, 0])
         n /= np.maximum(np.linalg.norm(n, axis=1, keepdims=True), 1e-12)
@@ -198,8 +202,8 @@ def render(asm: Assembly, path, exploded=False, elev=22, azim=-58, tolerance=0.2
     ax.set_box_aspect((1, 1, 1))
     ax.view_init(elev=elev, azim=azim)
     ax.set_xlabel("x (mm)")
-    ax.set_ylabel("y (mm)")
-    ax.set_zlabel("z (mm)")
+    ax.set_ylabel("depth, -z (mm)" if up == "y" else "y (mm)")
+    ax.set_zlabel("y (mm)" if up == "y" else "z (mm)")
     ax.set_title(title or (asm.name + (" (exploded)" if exploded else "")))
     fig.tight_layout()
     fig.savefig(str(path))

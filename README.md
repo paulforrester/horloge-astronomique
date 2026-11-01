@@ -37,7 +37,7 @@ adding precision later without rebuilding, is in
 |---|---|---|
 | 0 | Specification, research, decisions | **Done** (PR #1, PR #2). D1–D12 all accepted, including D12: a wooden case |
 | 1 | Ratio engineering and tooth-strength check: `tools/ratios/`, tests, `spec/clock.yaml`, `docs/gear-trains.md` | **Done** (PR #3) |
-| 2 | Parametric CAD: shared library, main-dial feasibility, test rig, then every module and the case | **In progress**: library and main-dial feasibility in review |
+| 2 | Parametric CAD: shared library, main-dial feasibility, test rig, then every module and the case | **In progress**: library and main-dial feasibility done (PR #4); test rig in review |
 | 3 | Electronics, firmware skeleton, accelerated-time simulator validated against an ephemeris | — |
 | Local | Tolerance tests, printing, woodworking, bring-up | Later |
 
@@ -53,6 +53,7 @@ adding precision later without rebuilding, is in
 | [`docs/bom.md`](docs/bom.md) | One running hardware list, in purchase batches |
 | [`docs/gear-trains.md`](docs/gear-trains.md) | The chosen gear train for every indication, with errors and accuracy targets (generated from `spec/clock.yaml`) |
 | [`docs/main-dial-feasibility.md`](docs/main-dial-feasibility.md) | Phase 2: does everything fit behind the 287.5 mm main dial? Layout, checks, eclipse-display options |
+| [`docs/test-rig.md`](docs/test-rig.md) | Phase 2: the first print. One stepper driving the M1 motion work and a 24 h two-tube drive, with tolerance coupons |
 
 ## Tools
 
@@ -109,7 +110,7 @@ tools/ratios/            gear-ratio search, strength check and tests (Phase 1)
 spec/clock.yaml          single source of truth for rates, ratios and sensors (Phase 1)
 cad/lib/, cad/modules/   parametric CAD, build123d (Phase 2; see cad/README.md)
 cad/case/                parametric wooden case: joinery, cut lists (Phase 2)
-firmware/                ESP32-S3 controller (Phase 3)
+firmware/                ESP32-S3 controller (Phase 3); firmware/test_rig/ is the rig sketch
 sim/                     accelerated-time simulator and ephemeris validation (Phase 3)
 export/                  generated STL/3MF/DAE (git-ignored except releases)
 ```

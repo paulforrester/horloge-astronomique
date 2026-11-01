@@ -13,10 +13,13 @@ from pathlib import Path
 from cad.lib import samples
 from cad.lib.assembly import write_dae
 from cad.modules.m2_main_dial import feasibility
+from cad.modules.test_rig import coupons, rig
 
 MODELS = {
     "cad_lib_samples": lambda: samples.build(),
     "m2_main_dial_feasibility": lambda: feasibility.build()[0],
+    "test_rig": lambda: rig.build()[0],
+    "tolerance_coupons": lambda: coupons.build(),
 }
 
 
