@@ -50,6 +50,17 @@ SHADOW_DISC = 24.3 / 8 * K_DISC
 LAT_EXCURSION = 40.4 / 8            # R - r of Schwilgué's latitude cam at true 1:8 (5.05 mm) [S: ELS]
 CAM_MEAN_R = 16.75                  # 134 mm / 8: his mean radius keeps the slope at 5/6 x 45° [S: ELS]
 LEVER = K_DISC                      # lever on the Moon hand multiplies the cam motion by k
+HEMI_H = 5.0                        # shallow printed dome (Paul, PR #4); a painted disc is the fallback [E]
+
+
+def shallow_dome(diameter: float, height: float, z0: float):
+    """Spherical cap of the given base diameter and height, base on z = z0, with a 1 mm skirt."""
+    a_, h = diameter / 2, height - 1.0
+    rs = (a_ ** 2 + h ** 2) / (2 * h)
+    cap = bd.Sphere(rs).moved(bd.Location((0, 0, z0 + 1.0 + h - rs)))
+    keep = bd.Cylinder(a_, height, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)).moved(
+        bd.Location((0, 0, z0 + 1.0)))
+    return (cap & keep) + parts.disc(diameter, 1.0, z0=z0)
 
 
 def blank(teeth: int, face: float = FACE, z_back: float = 0.0, bore: float = 5.0):
@@ -113,10 +124,10 @@ def build() -> tuple[Assembly, Report]:
         z = z0 + thickness[n]
     hemi_z0 = z + LEVEL_GAP
     hemi_d = 2 * (CAM_MEAN_R + LAT_EXCURSION / 2 + 4)               # hides the cam, as in the original
-    a.add("hemisphere", parts.disc(hemi_d, 3.0, z0=hemi_z0), material="silver", group="front")
-    rep.front_levels.append({"level": "hemisphere", "z_from": round(hemi_z0, 1), "z_to": round(hemi_z0 + 3, 1),
-                             "diameter": round(hemi_d, 1)})
-    front_depth = hemi_z0 + 3.0
+    a.add("hemisphere", shallow_dome(hemi_d, HEMI_H, hemi_z0), material="silver", group="front")
+    rep.front_levels.append({"level": "hemisphere", "z_from": round(hemi_z0, 1), "z_to": round(hemi_z0 + HEMI_H, 1),
+                             "diameter": round(hemi_d, 1), "dome_height": HEMI_H})
+    front_depth = hemi_z0 + HEMI_H
 
     # rear: movement front plate, then one wheel level per tube (outermost first), then a bridge
     FP = (-15.0, -11.0)
@@ -352,6 +363,8 @@ def main(out_dir="export/m2_main_dial_feasibility"):
     (out / "feasibility.json").write_text(json.dumps(res, indent=2))
     print(json.dumps({k: v for k, v in res.items() if k != "report"}, indent=2))
     renders(a, out)
+    from cad.lib.assembly import write_dae
+    write_dae(a, out / f"{a.name}.dae")
     return a, res
 
 

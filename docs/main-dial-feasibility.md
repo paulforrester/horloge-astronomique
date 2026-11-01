@@ -13,7 +13,7 @@ at 1:8 before going further."
   (`feasibility.json`) and the renders.
 - Tags as in `docs/reference-notes.md`.
 
-**Status: Proposed** (Phase 2 gate). The decisions needed are in §8.
+**Status: Accepted** (Paul, PR #4, 1 Nov 2026). The decisions are recorded in §8.
 
 ## 1. Answer
 
@@ -26,7 +26,7 @@ and v2 provisions (D5). Module 0.8 is not needed here.
 | Rotating hands: any two parts that turn relative to each other could touch at some angle (swept annuli, Moon ball including its eclipse excursion) | **0** conflicts |
 | Bed fit (H2D 325 × 320; dual-nozzle 300 × 320) | Every printed part fits except the **calendar ring**, which was already planned in 4 segments (envelope §5). The back plate is 289 × 200 mm. |
 | Inside the M2 bay [E: 464 × 430 mm, the central body from the floor to the weekday rail] | Yes: x −177 … +171, y −194 … +171 mm |
-| Depth, hemisphere face to motor rear | **169 mm** [D]: 21.8 mm in front of the dial face and 147 mm behind it. Within the 200 mm interior planned in envelope §1. |
+| Depth, dome apex to motor rear | **171 mm** [D]: 23.8 mm in front of the dial face and 147 mm behind it. Within the 200 mm interior planned in envelope §1. |
 | Coaxial tubes at the centre | 6 brass tubes, OD 4–9 mm, on a fixed Ø3 arbor. D4 allows 7. |
 | Motor torque (M2) | About 2.7 mN·m at the motor, a **≈ 55×** margin at 0.5 A [E, §6] |
 
@@ -58,13 +58,13 @@ terrestre" [S: ELS].
 | Latitude cam (v1.5) | 7.7–9.7 | OD 6 | Schwilgué's geometry at 1:8: mean radius 16.75 mm, R − r = 5.05 mm [S: ELS] |
 | Moon hand + Moon ball + eclipse slide | 10.5–15.6 | OD 5 | this level is deep enough for a ball centred on the hand (the v1.5 phase ball, I4b) |
 | Earth-shadow arm + disc | 16.4–17.9 | OD 4 | in front of the Moon, opposite the Sun |
-| Hemisphere (fixed) | 18.8–21.8 | fixed Ø3 arbor | Ø 46.5 mm [D: hides the cam]; flat in the model, a shallow dome is possible |
+| Hemisphere (fixed) | 18.8–23.8 | fixed Ø3 arbor | Ø 46.5 mm [D: hides the cam]. A **shallow printed dome**, 5 mm high [E] (Paul); a painted disc is the fallback |
 
 - **The Sun therefore needs two tubes** (OD 7 for the hand and disc, OD 4 for the shadow arm). The
   Moon tube runs between them.
   - Both tubes are driven 1:1 from one lay shaft (S) through equal 48/48 pairs, so they stay in step.
   - Their relative error is only the backlash of two printed meshes. To be checked on the test rig.
-- **Glazing:** the front parts reach 21.8 mm in front of the dial face. Leave at least 30 mm to the
+- **Glazing:** the front parts reach 23.8 mm in front of the dial face. Leave at least 30 mm to the
   glass [E].
 - The dial-to-ring radial gap is only 0.75 mm [D] (dial Ø 287.5; ring inner Ø 289).
   - So the v2 feasts arc must ride *on* the ring, in a groove at its inner edge. It cannot run
@@ -163,25 +163,22 @@ Tooth-level meshes are checked by the gear tests, not here.
 - **Print orientation:**
   - dial, ring segments, plates and hands flat;
   - gears flat with the hub up;
-  - hemisphere dome up;
+  - hemisphere dome up (a shallow dome prints without supports);
   - latitude cam flat (its working edge is the outline).
 - **Part count of the layout:** 67 items, 42 of them printed. The detailed M2 design will add bushes,
   couplings and the differential internals.
 - **BOM rows** are added to [`bom.md`](bom.md), Batch 2, "M2 from the feasibility layout".
 
-## 8. Decisions needed from Paul
+## 8. Decisions (Paul, PR #4, 1 Nov 2026)
 
-1. **Eclipse display scale k** (§4).
-   - Options: 1 (true scale, invisible), **4 (recommended)** or 8 (the original's absolute sizes:
-     big, and the Moon swings ±20 mm on a 125 mm hand).
-   - Whichever k you choose, use a k:1 lever on the Moon hand so the cam stays Schwilgué's size,
-     hidden under the hemisphere.
-2. **Accept this layout as the basis for the M2 design:**
-   - the two Sun tubes;
-   - the fixed centre arbor on a bridge, with the big-wheel level behind it;
-   - the M3 inputs on the right;
-   - module 1.0 throughout.
-3. **Hemisphere:** a flat painted disc or a shallow printed dome, about Ø 47 mm. The original's
-   size is not in our sources; Ø 47 is the smallest that hides the cam.
-4. **Go-ahead for step 3, the test rig**: one stepper driving hour/day motion work, the first thing
-   printed. It would also test the two-tube Sun drive and a printed slip clutch.
+| # | Decision | Status |
+|---|---|---|
+| 1 | Eclipse display scale (§4) | **k = 4**: discs 4.7 / 4.5 / 12.2 mm; the Moon swings ±10.1 mm; a 4:1 lever on the Moon hand, so the cam stays at Schwilgué's size under the hemisphere |
+| 2 | This layout as the basis for the M2 design: two Sun tubes, the fixed centre arbor on a bridge with the big wheels behind it, the M3 inputs on the right, module 1.0 | **Accepted** |
+| 3 | Hemisphere | **Shallow printed dome**, about Ø 47 mm and 5 mm high; a painted disc is the fallback |
+| 4 | Step 3, the test rig | **Go-ahead**. It comes as its own PR. |
+
+Paul also asked for **SketchUp files of every CAD model**:
+- `python -m cad.export_sketchup` writes them to `export/sketchup/` (COLLADA `.dae`, one named node
+  per part, millimetres, Z up).
+- They are committed with the PR. In SketchUp, open them with File > Import.

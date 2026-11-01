@@ -44,6 +44,24 @@ python3 -m venv .venv-cad && .venv-cad/bin/pip install -r cad/requirements.txt
 
 | Module | Status |
 |---|---|
-| `m2_main_dial/feasibility.py` | Layout study: [`docs/main-dial-feasibility.md`](../docs/main-dial-feasibility.md) |
+| `m2_main_dial/feasibility.py` | Layout study, accepted: [`docs/main-dial-feasibility.md`](../docs/main-dial-feasibility.md) |
 
-Generated files go to `export/` (git-ignored). Released STL/3MF are added deliberately.
+## SketchUp files
+
+Paul asked for SketchUp files of every CAD model (PR #4).
+
+```bash
+.venv-cad/bin/python -m cad.export_sketchup
+```
+
+- It writes one COLLADA file per model to `export/sketchup/`: one named node per part, millimetres,
+  Z up. In SketchUp, use File > Import > COLLADA (*.dae).
+- Every new module is added to `MODELS` in `cad/export_sketchup.py`.
+- The files are committed with each PR (`git add -f`).
+
+| File | Contents |
+|---|---|
+| `export/sketchup/cad_lib_samples.dae` | Library showcase with real teeth: shifted 12/89 pair, 25/169 pair, internal 60/18, rack and pinion, cam, tube stack, bearings |
+| `export/sketchup/m2_main_dial_feasibility.dae` | The main-dial layout model (gears as blanks) |
+
+Other generated files go to `export/` (git-ignored). Released STL/3MF are added deliberately.
