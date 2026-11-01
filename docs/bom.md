@@ -73,8 +73,16 @@ ordering.
 | Thin-section bearings | 61806 (30×42×7), 61808 (40×52×7) | TBD | large coaxial outputs | Rubix, RS: https://ie.rs-online.com/web/p/ball-bearings/2076966 |
 | Ground rod, brass tube, bearings, fasteners | as Batch 1 | TBD per module | summed from each module's BOM rows (Phase 2) | as Batch 1 |
 | Adjustable friction clutch | Huco Vari-Tork, 6 mm bore | only if printed clutches fail | — | RS BE-FR: https://befr.rs-online.com/web/p/friction-clutches/8903033 |
-| Aluminium extrusion | 20 × 20 / 20 × 40 metric slot profile, cut to length + brackets and T-nuts | TBD | module rack (D6) | TBD |
-| Case panels | birch ply 12 mm, MDF | TBD | case design (Phase 2) | local timber merchant |
+| Aluminium extrusion | 20 × 20 / 20 × 40 metric slot profile | **only if D12 option A** | module rack (D6, under revision) | TBD |
+| Birch plywood (contreplaqué bouleau) | structural carcass, shelves, plinth; thicknesses from the case design (e.g. 12 / 18 mm) | TBD | case design (D12) | local timber merchant (négoce bois) or a panel supplier |
+| MDF | painted flat parts, routed profiles | TBD | D12 | as above |
+| Hardwood | face frame, pilasters, door frames, frame-and-panel. **One species** from D12 R3: tulipier, sapelli or sipo preferred; oak acceptable. Planed all round ("raboté 4 faces") if available; quarter- or rift-sawn where width matters | TBD (cut list from `cad/case/`) | D12 | Bordeaux timber merchant (Paul to confirm stock) |
+| Stock mouldings | simple profiles to combine with table-saw-made ones (no router) | TBD | D12 R1 | timber merchant / DIY store |
+| Lime (tilleul) | only if any details are carved by hand | small | D12 R3 | timber merchant |
+| Threaded inserts for wood | M4 / M5, for the module mounts and removable panels | TBD | D12 rule 2 | TBD |
+| Locating pins | Ø4 / Ø5 dowel pins, round and slotted mounts | TBD | D12 rule 2 | TBD |
+| Wood glue, finish | PVA / hide glue; finish per D12 question 2 | TBD | D12 | TBD |
+| Hinges, catches | for the glazed doors and the service doors | TBD | D6 / D12 | TBD |
 | Glazing | 3 mm acrylic, about 2.25 m² | TBD | D6 | TBD |
 | Wall restraint brackets + anchors for stone | per fixing design | TBD | D6; wall material TBD | TBD |
 | Clock oil | horological | 1 | brass tube stacks | TBD |
@@ -87,3 +95,4 @@ ordering.
 | NEMA 17 + TMC2209 for M3 (equations) | 1 + 1 | D5 v1.5 |
 | DC gearmotor + H-bridge channel for E5 (computus) | 1 | D5 v2 |
 | Sensors for M3 / M4 witnesses and locks | ~6 | — |
+| Computus visible frame: brass or steel plate and pillars, metric | TBD | D12 R4. v2. Plates cut and drilled to drawings from `cad/modules/M4`. |

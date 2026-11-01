@@ -43,6 +43,14 @@ at the base). Depth is not yet known — see the open items in `docs/reference-n
 - **Materials:** PLA by default for gears and display parts; PETG for structural or clamped parts;
   nylon optional for the fastest, highest-wear gears near the motors. The room is climate
   controlled, so no UV or weather design is needed. Plan a glazed front to keep dust out.
+- **Wood (fine woodworking) for the case and frame.** Sheet goods (birch plywood, MDF) and
+  hardwood are both acceptable (Paul, 1 Nov 2026). 3D printing stays for the internal mechanism
+  and for selected visible parts such as ornament and figures. The wood holds the modules but
+  never sets gear geometry; see `docs/decisions.md` D12.
+  - Finish: painted to resemble the original.
+  - Species: one species from a single movement class (D12 R3).
+  - **Metal frame elements are hidden where possible**; the exception is the computus (Easter
+    calculator), which gets a visible metal frame.
 - **Hardware must be sourceable in France/EU in metric sizes** (rods, tubes, bearings, fasteners,
   springs). Avoid US-only parts and imperial sizes.
 - **Units: millimetres.**
@@ -66,10 +74,11 @@ at the base). Depth is not yet known — see the open items in `docs/reference-n
 
 - GitHub PR-based. One feature branch per phase or module. Each PR has a summary, what changed,
   open questions, and the decisions needed from Paul. Do not merge; Paul reviews, merges and pulls.
-- **Cloud sessions:** research, specification, ratio engineering, parametric CAD, simulation,
-  electronics architecture and firmware skeletons.
+- **Cloud sessions:** research, specification, ratio engineering, parametric CAD (including the
+  wooden case: joinery, cut lists, sheet layouts, templates), simulation, electronics architecture
+  and firmware skeletons.
 - **Local sessions (later):** anything that needs physical measurement — gear tolerance tests,
-  print calibration, hardware bring-up, flashing, tuning, case woodworking.
+  print calibration, hardware bring-up, flashing, tuning, building the wooden case.
 - CAD source is code (parametric). Generated exports go in `export/`. Don't commit large binaries
   except released STL/3MF files.
 
@@ -81,16 +90,22 @@ at the base). Depth is not yet known — see the open items in `docs/reference-n
 - OpenSCAD experience (a 3D-printed French word clock).
 - Electronics: ESP32, Raspberry Pi, Arduino Mega + RAMPS 1.4 + TMC2209 stepper drivers, NEMA17
   steppers, Arduino IDE. Home Assistant and MQTT at home.
+- Woodworking: fine woodworking for the case. Workshop: table saw, track saw, drill press,
+  planer, drum sander, mitre saw, hand tools and chisels. **No router, jointer, bandsaw, CNC or
+  lathe.** Design joinery and mouldings for these tools (D12 R1). Ornament and finials are
+  3D-printed. Hardwood is sourced from local vendors in Bordeaux.
 
-## Repo layout (proposed — refine in Phase 0)
+## Repo layout (refined in Phase 0; see README.md and docs/architecture.md §12)
 
 ```
 CLAUDE.md
-KICKOFF_PROMPT.md       first cloud-session prompt
+README.md               project overview
 docs/                   reference-notes, spec, inventory, envelope, architecture, decisions, gear-trains
 tools/ratios/           gear-ratio search tool + tests
+spec/clock.yaml         single source of truth for rates, ratios, sensors (Phase 1)
 cad/lib/                shared parametric parts (gears, arbors, bearing seats, tube stacks, cams)
 cad/modules/<module>/   one folder per mechanism module
+cad/case/               parametric wooden case: joinery, cut lists, sheet layouts
 export/                 STL/3MF/DAE and renders
 firmware/               controller code
 sim/                    accelerated-time simulator and validation against an ephemeris
@@ -99,5 +114,7 @@ sim/                    accelerated-time simulator and validation against an eph
 ## Key references
 
 - `docs/reference-notes.md` — every fact gathered so far, with sources and confidence. Start here.
+- Primary sources read in Phase 0: Ch. Schwilgué, *Description abrégée* (1844, public domain), and
+  A. Ungerer's 1920 lecture (*L'Astronomie* 1921; private copy, not in the repo).
 - Primary technical books still to obtain: Ungerer & Ungerer (1922, later editions 1949/1954);
   Bach, Rieb & Wilhelm, *Les trois horloges astronomiques de la cathédrale de Strasbourg* (1992).
