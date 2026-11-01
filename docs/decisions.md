@@ -6,7 +6,7 @@ the trade-offs and a recommendation. Status is **Proposed** until Paul approves;
 `docs/reference-notes.md`.
 
 **As of 31 Oct 2026 every decision D1–D11 is Accepted.** D2, D5 and D11 were decided point by point;
-the rest were approved as recommended.
+the rest were approved as recommended. **D12** (wooden case, 1 Nov 2026) is Proposed.
 
 ## Summary
 
@@ -22,6 +22,7 @@ the rest were approved as recommended.
 | D8 | Sound | **Real small bells struck mechanically**; **rooster: copy Schwilgué's bellows and paper-reed crow** (fully described by Ungerer), with a speaker as fallback | **Accepted** 31 Oct 2026 | Phase 2 (E-modules) |
 | D9 | Legal-time hands and summer time | **Separately driven legal-time hands that follow CET/CEST** (M1b) | **Accepted** 31 Oct 2026 | Phase 2 (M1) |
 | D10 | Night silence | **Quiet hours in firmware** (skip sound shows). The original already silences the four ages at night [S: DA]. | **Accepted** 31 Oct 2026 | Phase 3 |
+| D12 | Case and frame in wood (fine woodworking); revises D6's structure | **Plywood carcass as the structure + hardwood framing and mouldings**; modules on adjustable three-point mounts; misalignment-tolerant couplings between modules; ornament printed or carved | **Proposed** 1 Nov 2026 | Phase 2 (case) |
 | D11 | Case width (7.70 vs 8.60 m) and wall space | **1:8 accepted (PR #1)**. **Width resolved: 7.70 m → 962.5 mm** [S: ELS, Ungerer 1920]. Wall dimensions to follow from Paul | **Accepted** 31 Oct 2026 | Phase 2 (case) |
 
 Plus **Blockers** at the end: the network allowlist and the documents to obtain.
@@ -318,6 +319,10 @@ provisions in `architecture.md` §13. In short:
 
 **Status: Accepted** (Paul, chat, 31 Oct 2026: "I approve D1, D3, D4 and D6–D10"). The recommendation below is the decision. Wall material and dimensions are still to come from Paul; the fixing design follows them.
 
+**Revision proposed (1 Nov 2026):** Paul wants the frame built in wood (fine woodworking), so the
+*structure* part of this decision (option B, the aluminium-extrusion rack) is reopened in **D12**.
+The *mounting* part (floor plinth plus wall restraint) and the glazing stand until D12 is decided.
+
 **Context.**
 
 - Estimated envelope 2.25 × ~1.0 × ~0.25 m. Depth TBD: at least 200 mm interior planned
@@ -491,6 +496,83 @@ Ungerer]. **The width is 962.5 mm at 1:8**, as `CLAUDE.md` assumed.
 - The case width will be 962.5 mm or 1075 mm, whichever the primary source supports.
 - Scale stays a parameter in `spec/clock.yaml` for tidiness, but no module needs to allow for
   another scale.
+
+---
+
+## D12 — Case and frame in wood (fine woodworking)
+
+**Status: Proposed** (1 Nov 2026). It revises the structure part of D6.
+
+**Context.**
+
+- Paul (1 Nov 2026): "I like the idea of 3d printing parts internally and for some visible parts,
+  but I'd like to also look at building the frame out of wood (both sheet goods and hardwood are
+  acceptable materials for this)."
+- The original case is dressed stone: "l'ancien édifice, construit en pierres de taille"
+  [S: ELS i1]. It is decorated with Tobias Stimmer's paintings and carved figures [S: DA p. 29,
+  48, 61]. A wooden case is therefore an interpretation, chosen for the room and the maker.
+- The gear meshes must stay precise. The wood must never set gear centre distances.
+
+**Options.**
+
+| Option | For | Against |
+|---|---|---|
+| A. Keep D6 as accepted: aluminium-extrusion module rack inside a decorative wooden case | Most precise and adjustable; wood purely decorative | Two structures; metal where Paul wants wood; least "fine woodworking" |
+| **B. Plywood carcass as the structure, with hardwood framing, mouldings and doors** | Birch plywood is cross-laminated and stays flat and square, so it carries the modules. Hardwood goes where it shows: face frame, pilasters, cornices, frame-and-panel sides, door frames. A real woodworking project with predictable behaviour. | Module mounts must be adjustable (see design rules). More design work than A. |
+| C. Solid-hardwood post-and-beam frame and panels throughout | The most "fine furniture" | Solid wood moves with humidity across its width. The most work and the most care needed to keep module mounts true. Heavier. |
+
+**Recommendation: B.** Design rules:
+
+1. **Precision stays inside the modules** (P4, P6). Each module is self-contained between its own
+   printed or metal plates. The wood only *holds* modules; it never forms part of a gear train.
+2. **Three-point adjustable mounts.** Each module sits on two locating pins, one round and one
+   slotted, plus a third clamped fixing in a slot. The fixings go into threaded inserts set in the
+   plywood shelves. So:
+   - a module drops back into exactly the same place after servicing;
+   - seasonal wood movement cannot strain it.
+3. **Couplings between modules tolerate misalignment.** The shafts that cross module boundaries
+   (M3→M2, M2→M7, M1→E2; architecture §4) use keyed, single-position couplings that also allow
+   radial and angular float. Phase 2 sets the float, with a design target of about ±1 mm.
+4. **Wood-movement rules for the hardwood parts.**
+   - Frame-and-panel construction for every wide surface, with the panels floating in grooves.
+   - No hardwood glued cross-grain to plywood over a wide span.
+   - Quarter-sawn or rift-sawn stock where width matters.
+   - The climate-controlled room helps, but these rules still apply.
+5. **Sheet goods.** Birch plywood for the carcass, shelves and torsion-box plinth; MDF only for
+   painted flat parts or routed profiles.
+6. **Serviceability** (`CLAUDE.md`):
+   - removable back panels on every stage;
+   - hinged glazed front doors;
+   - the wiring riser in the staircase tower, with channels routed in the carcass;
+   - the electronics bay in the weight tower, ventilated, with a removable door.
+7. **Ornament.**
+   - **Routed or moulded hardwood** for cornices, pilasters and mouldings.
+   - **3D-printed** (then painted or gilded) for Gothic tracery, pinnacles, finials, crockets and
+     small figures.
+   - Carved or CNC wood is optional for larger ornaments, depending on the tools available (see
+     questions).
+8. **Mounting.** D6 (ii) stands: a floor-bearing plinth plus a wall restraint. The mass will be
+   re-estimated from the case model, since hardwood is heavier than the earlier ply-only estimate.
+9. **Deliverables (cloud sessions).** A parametric case model in build123d (`cad/case/`), with:
+   - joinery details;
+   - cut lists and plywood sheet layouts;
+   - DXF/SVG profiles for templates or CNC;
+   - STEP files.
+
+   The physical woodworking is done locally.
+
+**Questions for Paul.**
+
+1. **Workshop.** Which tools do you have? For example: table saw or track saw, router and router
+   table, planer-thicknesser, jointer, bandsaw, CNC router, lathe for finials. The answer sets the
+   joinery, and how much ornament is wood versus printed.
+2. **Finish.** Natural hardwood (a cabinetmaker's interpretation), or painted to evoke the
+   original's stone and painted panels, or a mix such as a natural frame with painted panels?
+3. **Species.** Any preference among hardwoods readily found in France? For example oak (chêne),
+   walnut (noyer), cherry (merisier), beech (hêtre), ash (frêne). The answer affects colour,
+   weight and how well fine detail can be routed.
+4. Under B the aluminium rack disappears entirely. Is that what you want, or would you keep a
+   hidden metal sub-frame behind the main dial only?
 
 ---
 

@@ -204,3 +204,5 @@ plus ±10 px reading error (±0.12 m, i.e. ±15 mm at 1:8). The pixel data and t
   acrylic about 8 kg [D]. See D6.
 - **Mass:** about 78–103 kg in total [E: panel areas × density + glazing + prints + metal; ±40 %].
   See D6.
+  It assumes a ply-only case. Re-estimate it from the case model if D12 (hardwood framing) is
+  accepted.

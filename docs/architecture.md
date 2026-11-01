@@ -297,6 +297,13 @@ PlatformIO; Paul knows it), with **TMC2209 stepsticks in UART mode** on a carrie
   - 24 V supply sized in Phase 3. Candidate: Mean Well LRS-100-24, 24 V 4.5 A [Sn].
   - The steppers run at low hold current (TMC2209 IHOLD) in StealthChop: quiet and cool.
   - A 5 V buck regulator feeds logic, sensors and the event motors.
+- **Module mounting in a wooden case (D12, proposed).**
+  - Each module sits on two locating pins, one round and one slotted, plus a third clamped
+    fixing. All three go into threaded inserts in the plywood shelves.
+  - A module goes back exactly where it was after servicing.
+  - Seasonal wood movement cannot load the module plates.
+  - The shafts that cross module boundaries (§4) use keyed couplings with radial and angular
+    float.
 - **One connector per module.** Locking, keyed connectors such as JST-XH or Micro-Fit. All the
   module's motor, sensor and switch wires go through it, so a module unplugs in one action.
 - **Wiring route.** Wiring runs in a riser in the staircase tower, with channels behind each stage.
