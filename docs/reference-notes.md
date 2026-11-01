@@ -855,3 +855,31 @@ Added while answering Paul's PR #3 review. Used in `spec/clock.yaml` and `docs/g
 - **Motor.** 17HS19-2004S1 (NEMA 17): holding torque 0.59 N·m at 2.0 A rated current:
   https://static.maritex.eu/file/display/5sXxpHH1SP-JwnhJEZ0lhfX-xdYKZRi3/17HS19-2004S1_Full_Datasheet.pdf
   (retrieved 2026-11-01).
+
+### Equation cylinders: rates and scale [S: ELS]
+
+Ungerer, *L'Astronomie* 1921 (ELS; private copy). Quotes are from the OCR text, which has no page
+numbers.
+
+- **Every equation arbor makes a half turn per period**, so each cylinder carries two periods of
+  its curve. This confirms LEF's "deux périodes … deux points diamétralement opposés soient à la
+  même hauteur".
+
+| Term | Arbor | Half turn in | Total travel |
+|---|---|---|---|
+| Sun's equation of centre | K | 365 d 6 h 13 min 56 s | 23 mm |
+| Sun's reduction to the equator | L | 365 d 5 h 48 min 48 s ("répétée 4 fois sur le pourtour") | 29.6 mm |
+| Moon's reduction to the ecliptic (max 7′) | R | 27 d 5 h 5 min 35.8 s | 1.4 mm |
+| Moon's annual equation (max 11′) | EA | 365 d 6 h 13 min 56 s | 2.2 mm |
+| Moon's variation, with the parallactic inequality | V | 29 d 12 h 44 min 2.9 s | 7.4 mm (full-Moon side), 6.8 mm (new-Moon side) |
+| Moon's evection (max 1°20.5′) | Ev | 31 d 19 h 29 min 11 s | 16.1 mm |
+| Moon's equation of centre, 6°18′ sin M′ + 13′ sin 2M′ | A | 27 d 13 h 18 min 33.3 s | 75.6 mm |
+
+- **Scale:** "l'échelle adoptée par Schwilgué est de 6mm de déplacement vertical pour un degré de
+  correction".
+- **Slopes:** the steepest curve (the Moon's equation of centre) has a maximum slope of 30°12′,
+  "notablement inférieure à 45°, limite qu'il s'était imposée".
+- **Total:** the five lunar terms sum to 102.7 mm of travel.
+- **Stack order:** the lunar stack runs from the bottom in increasing amplitude (reduction,
+  annual equation, variation, evection, centre; the reduction's arbor R is "le mobile inférieur"), "pour que chacun des mobiles ait le plus petit
+  déplacement vertical possible".

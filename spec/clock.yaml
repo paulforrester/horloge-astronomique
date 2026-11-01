@@ -183,7 +183,7 @@ modules:
   M1b: {input: "legal-time minute arbor", input_period: "1/24", stepper: "1 rev/h"}
   M2: {input: "daily arbor", input_period: "1", stepper: "1 rev per mean day"}
   M3: {input: "daily arbor", input_period: "1", stepper: "1 rev per mean day (v1.5)"}
-  M5: {input: "daily arbor", input_period: "1", stepper: "1 rev per mean day (Phase 1 proposal; was 1 rev/h)"}
+  M5: {input: "daily arbor", input_period: "1", stepper: "1 rev per mean day (accepted, PR #3; Schwilgué used 1 rev/h)"}
   M6: {input: "daily arbor", input_period: "1", stepper: "1 rev per mean day"}
 
 trains:
@@ -252,50 +252,62 @@ trains:
 
   # ---------------- M3: equations (v1.5; one cam turn per period) ----------------
   - id: M3.year
-    indication: I13 solar reduction
+    indication: I13 tropical-year arbor
     version: v1.5
     input_period: "1"
     output_period: "tropical_year"
     stages: [[15, 99], [13, 97], [12, 89]]
-    accuracy: {max_drift_deg_per_century: 2.0}
-    note: "Carries the 2-per-year reduction-to-the-equator cam; same train as M2.year"
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Same train as M2.year; drives the reduction cam through M3.solar_reduction"
+  - id: M3.solar_reduction
+    indication: I13 Sun's reduction to the equator
+    version: v1.5
+    via: M3.year
+    input_period: "tropical_year"
+    output_period: "2 * tropical_year"
+    stages: [[20, 40]]
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "One turn per two tropical years; the cylinder carries the annual curve twice (its 2L sinusoid four times) [S: ELS: 'demi-tour en 365 jours 5 heures 48 minutes 48 secondes', 'répétée 4 fois sur le pourtour']. Convention B (gear-trains.md §6): the cylinder carries two periods of its term, so the argument drifts twice as fast as the cam; 1°/century here is 2°/century in the argument"
   - id: M3.anomalistic_year
     indication: I13 solar centre + lunar annual equation
     version: v1.5
     input_period: "1"
-    output_period: "anomalistic_year"
-    stages: [[13, 96], [14, 108], [17, 109]]
-    accuracy: {max_drift_deg_per_century: 2.0}
-    note: "Sun's equation of centre and the Moon's annual equation share this arbor"
+    output_period: "2 * anomalistic_year"
+    stages: [[12, 110], [12, 111], [13, 112]]
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Sun's equation of centre and the Moon's annual equation (argument M) share this arbor: one turn per two anomalistic years. Schwilgué's cam arbor makes a half turn per period [S: ELS]. Convention B (gear-trains.md §6): the cylinder carries two periods of its term, so the argument drifts twice as fast as the cam; 1°/century here is 2°/century in the argument"
   - id: M3.lunar_anomaly
     indication: I13 lunar centre
     version: v1.5
     input_period: "1"
-    output_period: "anomalistic_month"
-    stages: [[13, 82], [19, 83]]
-    accuracy: {max_drift_deg_per_century: 2.0}
+    output_period: "2 * anomalistic_month"
+    stages: [[19, 137], [14, 107]]
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Moon's equation of centre (argument M'): one turn per two anomalistic months. Schwilgué's cam arbor makes a half turn per period [S: ELS]. Convention B (gear-trains.md §6): the cylinder carries two periods of its term, so the argument drifts twice as fast as the cam; 1°/century here is 2°/century in the argument"
   - id: M3.evection
     indication: I13
     version: v1.5
     input_period: "1"
-    output_period: "evection_period"
-    stages: [[31, 122], [12, 97]]
-    accuracy: {max_drift_deg_per_century: 2.0}
+    output_period: "2 * evection_period"
+    stages: [[37, 82], [12, 78], [12, 53]]
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Evection (argument 2D - M'): one turn per two evection periods. Three meshes keep wheels under 85 mm; two meshes would need a 178-tooth wheel. Schwilgué's cam arbor makes a half turn per period [S: ELS]. Convention B (gear-trains.md §6): the cylinder carries two periods of its term, so the argument drifts twice as fast as the cam; 1°/century here is 2°/century in the argument"
   - id: M3.variation
     indication: I13
     version: v1.5
     input_period: "1"
-    output_period: "synodic_month"
-    stages: [[25, 113], [15, 98]]
-    accuracy: {max_drift_deg_per_century: 2.0}
-    note: "Variation has two cycles per synodic month: the cam carries two lobes (Schwilgué traced two periods)"
+    output_period: "2 * synodic_month"
+    stages: [[37, 91], [12, 38], [12, 91]]
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Variation plus the parallactic inequality in one curve of period one synodic month [S: ELS]; one turn per two synodic months. Schwilgué's cam arbor makes a half turn per period [S: ELS]. Convention B (gear-trains.md §6): the cylinder carries two periods of its term, so the argument drifts twice as fast as the cam; 1°/century here is 2°/century in the argument"
   - id: M3.lunar_node
     indication: I13 reduction / latitude
     version: v1.5
     input_period: "1"
-    output_period: "draconic_month"
-    stages: [[23, 112], [17, 95]]
-    accuracy: {max_drift_deg_per_century: 2.0}
+    output_period: "2 * draconic_month"
+    stages: [[23, 152], [17, 140]]
+    accuracy: {max_drift_deg_per_century: 1.0}
+    note: "Moon's reduction to the ecliptic, period one draconic month as Schwilgué drew it [S: ELS]; one turn per two draconic months. Schwilgué's cam arbor makes a half turn per period [S: ELS]. Convention B (gear-trains.md §6): the cylinder carries two periods of its term, so the argument drifts twice as fast as the cam; 1°/century here is 2°/century in the argument"
 
   # ---------------- M5: planetarium and Moon globe ----------------
   - id: M5.earth

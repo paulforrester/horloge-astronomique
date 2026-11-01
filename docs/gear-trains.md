@@ -9,15 +9,15 @@ accuracy target that justifies it, and the tooth-strength and motor-torque check
   apart.
 - Tags as in `docs/reference-notes.md`.
 
-**Status: in review** (Phase 1 gate). Paul's first review (PR #3, 1 Nov 2026) is answered here:
+**Status: in review** (Phase 1 gate). Every decision in §9 is now taken (Paul, PR #3, 1 Nov
+2026):
 
 - accuracy targets accepted (§3);
-- planets now designed on NASA/JPL data (§4F);
-- torque and tooth strength verified (§5);
-- M3 cam options explained (§6);
+- planets designed on NASA/JPL data, all five (§4F; no tooth counts changed);
+- torque and tooth strength verified, strength rules accepted (§5);
+- M3 cam convention B planned, and the M3 trains re-run for it, following Schwilgué's half turn per period (§6);
+- M5 input at 1 rev per mean day accepted (§7);
 - 169-tooth wheels kept at module 1.0 (§9).
-
-The decisions still open are in §9.
 
 ## 1. How to read the numbers
 
@@ -60,7 +60,7 @@ Worms (driver = 1) are used only for the v2 precession drive.
 | Clock and calendar functions | **exact** | hour hands, 24 h cam, weekday | Integer ratios exist, so there is no reason to accept any error |
 | Displayed astronomical angles | **≤ 1° per century** | year arbor, main-dial Moon, planets, Moon arm, Moon globe | 1° is the smallest readable unit at 1:8 (2.2 mm at the Sun-hand tip; 2.4 mm at the 137.5 mm planetary radius). Under 1° per century is invisible in a lifetime, and the setting mechanism (architecture §7) can always re-zero. |
 | Sidereal globe | **≤ 0.25° per century** | M6 | Its hour circle *reads* sidereal time: 0.25° is 1 minute. |
-| Correction-cam arguments (v1.5) | **≤ 2° per century** | equation cams, eclipse node cam | A phase error φ in a cam of amplitude A gives about A·φ (rad). For the largest lunar term (6.3°) and φ = 2°, that is 0.2° after a full century. |
+| Correction-cam arguments (v1.5) | **≤ 2° per century** in the argument | equation cams, eclipse node cam | A phase error φ in a cam of amplitude A gives about A·φ (rad). For the largest lunar term (6.3°) and φ = 2°, that is 0.2° after a full century. With convention B (§6) a cam turn is two periods, so the M3 trains are held to ≤ 1° per century of cam turn. |
 | Precession (v2) | ≤ 0.002° per century (about 0.05 % in rate) | M6 | It moves about 1.4° per century in total [D]. Any rate within 1 % is invisible. |
 
 ## 4. What the search found
@@ -157,6 +157,23 @@ the LEF gear table, his year 365 d 5 h 48 min 48 s]:
     recommended: both errors are far below the 1° target.
 - The planet trains are no longer Schwilgué's tooth counts (they could not be: his use 240- and
   9-tooth wheels). Only his arrangement is kept: reverted pairs from the Earth tube.
+- **Effect on the trains already computed** (Paul's follow-up question): **no tooth count
+  changed.**
+  - All five planet trains already met ≤ 1°/century against the JPL targets.
+  - Re-running the chooser against the JPL targets (fewest stages, then smallest wheels) returns
+    the same five pairs [D: `tools/ratios`].
+  - Only the reported drifts moved, because the targets moved:
+
+| Planet | Train (from the Earth tube) | Drift vs NASA fact sheet (first draft) | Drift vs JPL (now) |
+|---|---|---|---|
+| Mercury | 135/67 × 136/66 | −0.83°/century (±0.85 from the 3-decimal value) | −0.096°/century |
+| Venus | 70/63 × 79/54 | +0.42°/century | +0.54°/century |
+| Mars | 35/48 × 35/48 | +0.51°/century | −0.67°/century |
+| Jupiter | 15/56 × 17/54 | −0.53°/century | −0.52°/century |
+| Saturn | 17/75 × 12/80 | +0.51°/century | +0.51°/century |
+
+- The Earth train, the Moon trains, the sidereal globe and every non-planet train do not depend on
+  the planet targets, so they are unchanged.
 
 ## 5. Torque and tooth strength (review point 2)
 
@@ -232,7 +249,7 @@ design.
 **5. Two changes made by this check** (decision 5 in §9).
 - **`M5.earth` gets 8 mm faces** instead of 4 mm. It carries 139 N·mm against 10 N·mm elsewhere
   (Mercury alone reflects 51 N·mm because it turns 4.15× faster than the Earth tube). At 4 mm its
-  safety factor would be 3, below the proposed minimum of 4. The tooth counts are unchanged.
+  safety factor would be 3, below the minimum of 4. The tooth counts are unchanged.
 - **`M5.moon_arm` gets 8 mm faces.** It is a step-up: the Moon arm turns 13.4× faster than the
   Earth arm, and its driven gears are small pinions (23 and 17 teeth). At 4 mm it has the lowest
   capacity in the clock (41 N·mm). At 8 mm its clutch window is 9–41 N·mm instead of 9–20.
@@ -276,14 +293,19 @@ the cam sizes; nothing else in the clock depends on it.
 | Faithful to the visible vitrine (I13) | partly: cylinders yes, crossbars no | **yes** | no |
 | Depth and height | a tall stack with slide guides | a tall stack, as the original | compact |
 
-**Cam size, worked example** [E: assumptions stated].
-- Assume the summing scale is 1 mm of crossbar travel per degree of correction. The largest lunar
-  term, 6.3°, then needs an amplitude A = 6.3 mm.
-- The steepest slope of a curve with n periods per turn at radius R is A·n/R. Keeping the pressure
-  angle under 30° needs R ≥ A·n / tan 30°.
-- A: R ≥ 11 mm (22 mm diameter). B: R ≥ 22 mm (44 mm diameter).
-- Both are small. The real scale is set in Phase 2, together with the vitrine size, which is still
-  TBD (reference-notes, open items).
+**Cam size** [S: ELS for Schwilgué's figures; D for the scaling].
+- Schwilgué's scale was 6 mm of crossbar travel per degree of correction.
+  - His steepest curve is the Moon's equation of centre: 75.6 mm of total travel, steepest slope
+    30°12′.
+  - He set himself a limit of 45° for the slopes.
+- Scaled uniformly to 1:8, every slope stays the same, so B at 1:8 is exactly his geometry.
+- But the travel becomes 0.75 mm per degree, and his smallest term (the Moon's reduction, 1.4 mm
+  in total) shrinks to 0.18 mm, which is below print precision.
+- So M3 keeps a larger cam scale behind its output gearing (architecture §13). The cylinder
+  diameters then follow from that scale and the 45° slope limit.
+- For the same scale and slope, B needs about twice A's diameter: the steepest slope of a curve
+  with n periods per turn is about A·n/R.
+- Phase 2 sets the scale together with the vitrine size, which is still TBD.
 
 **Recommendation: B, Schwilgué's convention.**
 - The equations vitrine is one of the few places where the mechanism itself is on show, and the
@@ -292,20 +314,57 @@ the cam sizes; nothing else in the clock depends on it.
   followers.
 - The cost is cams about twice the diameter and halved ratios, both cheap at this stage.
 
-**What is needed from you:** choose A, B or C. There is no hurry: it is needed only before the
-Phase 2 M3 design (v1.5). If you choose B, the six M3 trains are re-run at half rate in that
-phase.
+**Decision: B** (Paul, PR #3, 1 Nov 2026): "Lets plan on that for now and revisit if it becomes
+difficult to implement."
 
-## 7. Proposed changes to earlier documents
+**The M3 trains re-run for B.**
+- **Rule, now sourced.** Ungerer (1921) gives every equation arbor of the original as making **a
+  half turn per period** [S: ELS]:
+  - Sun's equation of centre, "demi-tour en 365 jours 6 heures 13 minutes 56 secondes";
+  - Sun's reduction to the equator, "demi-tour en 365 jours 5 heures 48 minutes 48 secondes",
+    with the sinusoid "répétée 4 fois sur le pourtour";
+  - the Moon's reduction to the ecliptic, annual equation, variation, evection and equation of
+    centre, each "fait un demi-tour" in its period.
+  - So each cylinder turns once per **two** periods.
+  - This also settles the LEF table: it lists the periods themselves, and each cylinder turns at
+    half that rate.
+- **Accuracy.** Because one cam turn is two periods, an angle error on the cam counts twice in the
+  argument. So all M3 cam trains are held to ≤ 1°/century of cam angle, which keeps ≤ 2°/century
+  in the argument (§3).
+- **Changes.** All six cams now turn at half their former rate:
+  - the Sun's reduction gets one exact 20/40 mesh after the shared year train (new train
+    `M3.solar_reduction`);
+  - the others were re-chosen with the standing rule (fewest meshes, then smallest wheels).
 
-- **M5 input: 1 rev per mean day instead of 1 rev/h** (architecture §2). Decision 2 in §9; torque
-  answered in §5.
+| Train | Term (Schwilgué's period) | Cam turns once per | Before | Now (§8) |
+|---|---|---|---|---|
+| `M3.solar_reduction` (new) | Sun's reduction to the equator (tropical year) | **2 tropical years** | on `M3.year`, 1 turn per year | `M3.year` × 20/40, −0.006°/century |
+| `M3.anomalistic_year` | Sun's centre and Moon's annual equation (anomalistic year) | **2 anomalistic years** | 13/96 × 14/108 × 17/109 | 12/110 × 12/111 × 13/112, +0.16°/century |
+| `M3.lunar_anomaly` | Moon's centre (anomalistic month) | **2 anomalistic months** | 13/82 × 19/83 | 19/137 × 14/107, +0.34°/century |
+| `M3.evection` | evection (31.8 d) | **2 evection periods** | 31/122 × 12/97 | 37/82 × 12/78 × 12/53, +0.018°/century |
+| `M3.variation` | variation with the parallactic inequality (synodic month) | **2 synodic months** | 25/113 × 15/98 | 37/91 × 12/38 × 12/91, −0.032°/century |
+| `M3.lunar_node` | Moon's reduction to the ecliptic (draconic month) | **2 draconic months** | 23/112 × 17/95 | 23/152 × 17/140, −0.50°/century |
+
+- **Wheel sizes.** Evection has a two-mesh solution, but it needs a 178-tooth wheel (180 mm). M3 is
+  a dense stack in a vitrine of unknown size, so the default limit of 160 teeth is kept and a third
+  mesh used instead. The largest M3 wheel is now 154 mm.
+- **For the cam profiles (Phase 2)** [S: ELS]:
+  - the variation curve includes the parallactic inequality, so its period is one synodic month,
+    not half;
+  - the Moon's equation of centre carries its second harmonic (13′ sin 2M′) as well as the main
+    term.
+
+## 7. Changes to earlier documents
+
+- **M5 input: 1 rev per mean day instead of 1 rev/h.** **Accepted** (decision 2 in §9; torque in
+  §5). Architecture §2 is updated.
   - The hourly input was chosen to keep Schwilgué's Earth train 9/156 × 10/188 × 10/269.
   - Its 9-tooth pinion is below our printable minimum, and the 269-tooth wheel is 271 mm at
     module 1.0.
   - From a daily arbor the shared year train (A) does the job in 3 small stages, and every
     stepper module except M1 then runs at the same rate.
-- **M3 cams:** see §6.
+- **M3 cams:** convention B, applied in §6. Architecture §6 (witness sensors) and §13 are
+  updated.
 
 ## 8. Generated tables
 
@@ -353,12 +412,13 @@ Errors are against the target value. Drift is the accumulated error of the displ
 | `M2.year` | v1 | 15/99 × 13/97 × 12/89 | 3 | 260/94963 | 365 d 5 h 48 min 45.22 s | +10.169 s | -0.0116 | ±0.0005 | ≤ 1.0°/c | 101 mm (m 1) | OK |
 | `M2.weekday` | v1 | 12/84 | 1 | 1/7 | 7 d 0 h 0 min 0.00 s | 0 | 0 | — | exact | 86 mm (m 1) | OK |
 | `M2.node_cam` | v1.5 | 15/109 × 12/81 × 15/106 | 3 | 50/17331 | 346 d 14 h 52 min 21.75 s | +26.254 s | -0.0333 | — | ≤ 2.0°/c | 111 mm (m 1) | OK |
-| `M3.year` | v1.5 | 15/99 × 13/97 × 12/89 | 3 | 260/94963 | 365 d 5 h 48 min 45.22 s | +10.169 s | -0.0116 | ±0.0005 | ≤ 2.0°/c | 101 mm (m 1) | OK |
-| `M3.anomalistic_year` | v1.5 | 13/96 × 14/108 × 17/109 | 3 | 1547/565056 | 365 d 6 h 13 min 52.55 s | -36.687 s | +0.0418 | ±0.0000 | ≤ 2.0°/c | 111 mm (m 1) | OK |
-| `M3.lunar_anomaly` | v1.5 | 13/82 × 19/83 | 2 | 247/6806 | 27 d 13 h 18 min 33.21 s | +9.061 s | -1.8162 | ±0.0087 | ≤ 2.0°/c | 85 mm (m 1) | OK |
-| `M3.evection` | v1.5 | 31/122 × 12/97 | 2 | 186/5917 | 31 d 19 h 29 min 11.59 s | -9.650 s | +1.4513 | — | ≤ 2.0°/c | 124 mm (m 1) | OK |
-| `M3.variation` | v1.5 | 25/113 × 15/98 | 2 | 375/11074 | 29 d 12 h 44 min 2.88 s | +6.723 s | -1.1733 | ±0.0000 | ≤ 2.0°/c | 115 mm (m 1) | OK |
-| `M3.lunar_node` | v1.5 | 23/112 × 17/95 | 2 | 391/10640 | 27 d 5 h 5 min 35.81 s | +4.857 s | -0.9982 | ±0.0089 | ≤ 2.0°/c | 114 mm (m 1) | OK |
+| `M3.year` | v1.5 | 15/99 × 13/97 × 12/89 | 3 | 260/94963 | 365 d 5 h 48 min 45.22 s | +10.169 s | -0.0116 | ±0.0005 | ≤ 1.0°/c | 101 mm (m 1) | OK |
+| `M3.solar_reduction` | v1.5 | [`M3.year`] × 20/40 | 1 | 130/94963 | 730 d 11 h 37 min 30.43 s | +20.337 s | -0.0058 | — | ≤ 1.0°/c | 42 mm (m 1) | OK |
+| `M3.anomalistic_year` | v1.5 | 12/110 × 12/111 × 13/112 | 3 | 39/28490 | 730 d 12 h 27 min 45.10 s | -9.29 min | +0.1590 | — | ≤ 1.0°/c | 114 mm (m 1) | OK |
+| `M3.lunar_anomaly` | v1.5 | 19/137 × 14/107 | 2 | 266/14659 | 55 d 2 h 37 min 6.41 s | -6.864 s | +0.3440 | — | ≤ 1.0°/c | 139 mm (m 1) | OK |
+| `M3.evection` | v1.5 | 37/82 × 12/78 × 12/53 | 3 | 444/28249 | 63 d 14 h 58 min 23.17 s | -0.469 s | +0.0176 | — | ≤ 1.0°/c | 84 mm (m 1) | OK |
+| `M3.variation` | v1.5 | 37/91 × 12/38 × 12/91 | 3 | 2664/157339 | 59 d 1 h 28 min 5.75 s | +0.733 s | -0.0320 | — | ≤ 1.0°/c | 93 mm (m 1) | OK |
+| `M3.lunar_node` | v1.5 | 23/152 × 17/140 | 2 | 391/21280 | 54 d 10 h 11 min 11.62 s | +9.714 s | -0.4991 | — | ≤ 1.0°/c | 154 mm (m 1) | OK |
 | `M5.earth` | v1 | 15/99 × 13/97 × 12/89 | 3 | 260/94963 | 365 d 5 h 48 min 45.22 s | +10.169 s | -0.0116 | ±0.0005 | ≤ 1.0°/c | 101 mm (m 1) | OK |
 | `M5.mercury` | v1 | [`M5.earth`] × 135/67 × 136/66 | 2 | 795600/69987731 | 87 d 23 h 14 min 32.69 s | +4.886 s | -0.0961 | ±0.0007 | ≤ 1.0°/c | 138 mm (m 1) | OK |
 | `M5.venus` | v1 | [`M5.earth`] × 70/63 × 79/54 | 2 | 102700/23076009 | 224 d 16 h 41 min 25.72 s | -2.98 min | +0.5385 | ±0.0003 | ≤ 1.0°/c | 81 mm (m 1) | OK |
@@ -389,12 +449,13 @@ Allowable root stress 9.75 MPa; face width 4 mm unless the train sets its own; r
 | `M2.year` | 4 mm | 12/89 | 425 N·mm | 10.0 N·mm | 0.23 MPa | 43 | 30 … 213 N·mm |
 | `M2.weekday` | 4 mm | 12/84 | 401 N·mm | 10.0 N·mm | 0.24 MPa | 40 | 30 … 201 N·mm |
 | `M2.node_cam` | 4 mm | 15/106 | 599 N·mm | 10.0 N·mm | 0.16 MPa | 60 | 30 … 300 N·mm |
-| `M3.year` | 4 mm | 12/89 | 425 N·mm | 10.0 N·mm | 0.23 MPa | 43 | 30 … 213 N·mm |
-| `M3.anomalistic_year` | 4 mm | 17/109 | 644 N·mm | 10.0 N·mm | 0.15 MPa | 64 | 30 … 322 N·mm |
-| `M3.lunar_anomaly` | 4 mm | 19/83 | 508 N·mm | 10.0 N·mm | 0.19 MPa | 51 | 30 … 254 N·mm |
-| `M3.evection` | 4 mm | 12/97 | 463 N·mm | 10.0 N·mm | 0.21 MPa | 46 | 30 … 232 N·mm |
-| `M3.variation` | 4 mm | 15/98 | 554 N·mm | 10.0 N·mm | 0.18 MPa | 55 | 30 … 277 N·mm |
-| `M3.lunar_node` | 4 mm | 17/95 | 561 N·mm | 10.0 N·mm | 0.17 MPa | 56 | 30 … 281 N·mm |
+| `M3.year` | 4 mm | 12/89 | 425 N·mm | 15.6 N·mm | 0.36 MPa | 27 | 30 … 213 N·mm |
+| `M3.solar_reduction` | 4 mm | 20/40 | 251 N·mm | 10.0 N·mm | 0.39 MPa | 25 | 30 … 126 N·mm |
+| `M3.anomalistic_year` | 4 mm | 13/112 | 570 N·mm | 10.0 N·mm | 0.17 MPa | 57 | 30 … 285 N·mm |
+| `M3.lunar_anomaly` | 4 mm | 14/107 | 578 N·mm | 10.0 N·mm | 0.17 MPa | 58 | 30 … 289 N·mm |
+| `M3.evection` | 4 mm | 12/53 | 253 N·mm | 10.0 N·mm | 0.39 MPa | 25 | 30 … 127 N·mm |
+| `M3.variation` | 4 mm | 12/91 | 435 N·mm | 10.0 N·mm | 0.22 MPa | 43 | 30 … 217 N·mm |
+| `M3.lunar_node` | 4 mm | 17/140 | 827 N·mm | 10.0 N·mm | 0.12 MPa | 83 | 30 … 414 N·mm |
 | `M5.earth` | 8 mm | 12/89 | 850 N·mm | 138.9 N·mm | 1.59 MPa | 6 | 179 … 425 N·mm |
 | `M5.mercury` | 4 mm | 135/67 | 271 N·mm | 10.0 N·mm | 0.36 MPa | 27 | 30 … 136 N·mm |
 | `M5.venus` | 4 mm | 70/63 | 357 N·mm | 10.0 N·mm | 0.27 MPa | 36 | 30 … 178 N·mm |
@@ -415,7 +476,7 @@ Motor 17HS19-2004S1 (NEMA 17, 1.8°): holding torque 0.59 N·m at 2.0 A [S: data
 | M1 | 1:1 | 6.54 mN·m | 6.543 mN·m | 23× |
 | M1b | 1:1 | 6.03 mN·m | 6.029 mN·m | 24× |
 | M2 | 24:1 | 18.59 mN·m | 0.956 mN·m | 154× |
-| M3 | 24:1 | 6.78 mN·m | 0.349 mN·m | 423× |
+| M3 | 24:1 | 5.98 mN·m | 0.307 mN·m | 480× |
 | M5 | 24:1 | 5.94 mN·m | 0.306 mN·m | 483× |
 | M6 | 24:1 | 18.79 mN·m | 0.967 mN·m | 153× |
 
@@ -426,11 +487,11 @@ Motor 17HS19-2004S1 (NEMA 17, 1.8°): holding torque 0.59 N·m at 2.0 A [S: data
 | # | Decision | Status |
 |---|---|---|
 | 1 | Accuracy targets (§3) | **Accepted** (Paul, PR #3 review, 1 Nov 2026) |
-| 2 | M5 input at 1 rev/day (§7). It updates architecture §2/§3. Torque verified in §5 | **Open**: accept? |
+| 2 | M5 input at 1 rev/day (§7). Torque verified in §5 | **Accepted** (Paul, PR #3). Architecture §2 updated |
 | 3 | Large wheels: keep the 169-tooth wheels at module 1.0 (171 mm) on the main-dial Moon and Moon-globe trains. The module stays a parameter and the ratio is unchanged | **Accepted** (Paul, PR #3 review) |
-| 4 | M3 cam convention (§6): A, B or C. Recommendation B | **Open**; can wait until the Phase 2 M3 design |
-| 5 | Strength rules (§5): running safety factor ≥ 4; a clutch window (3× load … ½ capacity) on every output; 8 mm faces on `M5.earth` and `M5.moon_arm`; Moon-arm load 3 N·mm | **Open**: accept? |
-| 6 | Planet targets from NASA/JPL mean elements, all five planets (§4F) | Done as instructed (Paul: "use NASA Mercury data"); confirm that all five should follow |
+| 4 | M3 cam convention (§6): A, B or C | **B planned** (Paul, PR #3): revisit if it proves difficult to build. M3 trains re-run for B |
+| 5 | Strength rules (§5): running safety factor ≥ 4; a clutch window (3× load … ½ capacity) on every output; 8 mm faces on `M5.earth` and `M5.moon_arm`; Moon-arm load 3 N·mm | **Accepted** (Paul, PR #3). To revisit if the Earth-arm torque proves too high in practice or its clutch slips too readily; Phase 2 recomputes the loads from CAD masses |
+| 6 | Planet targets from NASA/JPL mean elements, all five planets (§4F) | **Accepted** (Paul, PR #3). No tooth counts changed (§4F) |
 
 ## 10. Reproduce
 
