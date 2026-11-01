@@ -36,7 +36,7 @@ adding precision later without rebuilding, is in
 | Phase | Content | Status |
 |---|---|---|
 | 0 | Specification, research, decisions | **Done** (PR #1, PR #2). D1–D12 all accepted, including D12: a wooden case |
-| 1 | Ratio engineering: `tools/ratios/`, tests, `docs/gear-trains.md` | Next |
+| 1 | Ratio engineering: `tools/ratios/`, tests, `spec/clock.yaml`, `docs/gear-trains.md` | **In review** (Phase 1 PR) |
 | 2 | Parametric CAD: shared library, main-dial feasibility, test rig, then every module and the case | — |
 | 3 | Electronics, firmware skeleton, accelerated-time simulator validated against an ephemeris | — |
 | Local | Tolerance tests, printing, woodworking, bring-up | Later |
@@ -51,6 +51,7 @@ adding precision later without rebuilding, is in
 | [`docs/architecture.md`](docs/architecture.md) | Modules, stepper rates, events, sensors, setting, power-cut catch-up, electronics, upgrade path |
 | [`docs/decisions.md`](docs/decisions.md) | Decision records, with options, trade-offs and status |
 | [`docs/bom.md`](docs/bom.md) | One running hardware list, in purchase batches |
+| [`docs/gear-trains.md`](docs/gear-trains.md) | The chosen gear train for every indication, with errors and accuracy targets (generated from `spec/clock.yaml`) |
 
 ## Tools
 
@@ -58,6 +59,16 @@ All are headless and reproducible. Python 3.11+.
 
 ```bash
 python3 tools/phase0/derivations.py          # every [D] number in the docs
+```
+
+Gear trains (Phase 1; see [`tools/ratios/README.md`](tools/ratios/README.md)):
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+```
+
+```bash
+.venv/bin/python -m pytest && .venv/bin/python -m tools.ratios check
 ```
 
 ```bash
