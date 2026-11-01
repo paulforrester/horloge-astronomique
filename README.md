@@ -36,7 +36,7 @@ adding precision later without rebuilding, is in
 | Phase | Content | Status |
 |---|---|---|
 | 0 | Specification, research, decisions | **Done** (PR #1, PR #2). D1–D12 all accepted, including D12: a wooden case |
-| 1 | Ratio engineering: `tools/ratios/`, tests, `spec/clock.yaml`, `docs/gear-trains.md` | **In review** (Phase 1 PR) |
+| 1 | Ratio engineering and tooth-strength check: `tools/ratios/`, tests, `spec/clock.yaml`, `docs/gear-trains.md` | **In review** (Phase 1 PR; first review answered) |
 | 2 | Parametric CAD: shared library, main-dial feasibility, test rig, then every module and the case | — |
 | 3 | Electronics, firmware skeleton, accelerated-time simulator validated against an ephemeris | — |
 | Local | Tolerance tests, printing, woodworking, bring-up | Later |
@@ -94,7 +94,7 @@ docs/img/                small reference images (public domain)
 tools/phase0/            derivations behind the docs
 tools/envelope/          lithograph scaling
 tools/toolchain-check/   CAD smoke tests
-tools/ratios/            gear-ratio search and tests (Phase 1)
+tools/ratios/            gear-ratio search, strength check and tests (Phase 1)
 spec/clock.yaml          single source of truth for rates, ratios and sensors (Phase 1)
 cad/lib/, cad/modules/   parametric CAD, build123d (Phase 2)
 cad/case/                parametric wooden case: joinery, cut lists (Phase 2)

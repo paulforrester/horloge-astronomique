@@ -27,6 +27,8 @@ from .core import Stage, Train, evaluate, format_period
 
 REPO = Path(__file__).resolve().parents[2]
 DEFAULT_SPEC = REPO / "spec" / "clock.yaml"
+BEGIN = "<!-- BEGIN GENERATED: python -m tools.ratios report --write docs/gear-trains.md -->"
+END = "<!-- END GENERATED -->"
 BED_MM = 320.0   # H2D single-nozzle limiting axis (CLAUDE.md)
 
 _OPS = {ast.Add: operator.add, ast.Sub: operator.sub, ast.Mult: operator.mul,
@@ -138,7 +140,11 @@ def evaluate_spec(spec: dict) -> dict[str, TrainResult]:
 
 
 def check_spec(spec: dict) -> list[str]:
-    return [f"{r.id}: {p}" for r in evaluate_spec(spec).values() for p in r.problems]
+    res = evaluate_spec(spec)
+    out = [f"{r.id}: {p}" for r in res.values() for p in r.problems]
+    if "strength" in spec:
+        out += strength_problems(spec, res)
+    return out
 
 
 def _fmt_err_s(x: float) -> str:
@@ -161,9 +167,12 @@ def source_drift(spec: dict, r: "TrainResult") -> str:
     """
     name = str(r.spec.get("output_period", "")).strip()
     tgt = spec.get("targets", {}).get(name)
-    if not tgt or "precision" not in tgt:
+    if tgt and "precision" in tgt:
+        rel = float(tgt["precision"]) / float(tgt["value"])
+    elif name in spec.get("derived", {}) and "uncertainty" in spec["derived"][name]:
+        rel = float(spec["derived"][name]["uncertainty"]) / names_of(spec)[name]
+    else:
         return "—"
-    rel = float(tgt["precision"]) / float(tgt["value"])
     turns_per_century = 36525.0 / r.output_period_target
     return f"±{360.0 * turns_per_century * rel:.4f}"
 
@@ -214,8 +223,176 @@ def report_markdown(spec: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-BEGIN = "<!-- BEGIN GENERATED: python -m tools.ratios report --write docs/gear-trains.md -->"
-END = "<!-- END GENERATED -->"
+def output_loads(spec: dict, res: dict) -> dict:
+    """Running torque (N·m) at each train's output: its own hub load plus the loads of every
+    train driven from it, reflected through their ratios and mesh losses.
+
+    A child's load T at its output reaches the parent's output as T * ratio / eta**stages. For an
+    epicyclic child (a fixed sun wheel, the parent's output as carrier) the output's absolute
+    speed is (1 + ratio) times the carrier's, so the factor is (1 + ratio).
+    """
+    return _loads(spec, res)[0]
+
+
+def _loads(spec: dict, res: dict) -> tuple[dict, dict]:
+    """(total load at each output, load behind each output's slip clutch), both in N·m.
+
+    Trains driven from a shared output take off from its tube *before* the output's own clutch,
+    except an epicyclic child, which rides on the output (the Moon arm on the Earth arm) and so
+    loads that clutch too.
+    """
+    st = spec["strength"]
+    eta = float(st["mesh_efficiency"])
+    default = float(st["running_output_load_nm"])
+    total = {rid: float(r.spec.get("running_output_load_nm", default)) for rid, r in res.items()}
+    clutch = dict(total)
+    for rid in reversed(list(res)):            # spec lists parents before children
+        r = res[rid]
+        if "via" in r.spec:
+            ratio = abs(float(r.train.ratio))
+            factor = (1 + ratio) if r.spec.get("epicyclic") else ratio
+            reflected = total[rid] * factor / eta ** r.train.n_stages
+            total[r.spec["via"]] += reflected
+            if r.spec.get("epicyclic"):
+                clutch[r.spec["via"]] += reflected
+    return total, clutch
+
+
+@dataclass
+class StrengthRow:
+    id: str
+    face_mm: float
+    weakest: str                 # "driver/driven" of the mesh that limits the output torque
+    capacity_nm: float           # output torque that brings that mesh to the allowable stress
+    load_nm: float               # running torque carried at the output (children included)
+    clutch_load_nm: float        # the part of it behind the output's own slip clutch
+    shared: bool                 # other trains are driven from this output
+    stress_mpa: float            # highest running root stress in the train
+    safety: float                # allowable / highest running stress
+    window: tuple | None         # slip-clutch window (3 x clutch load, capacity / 2) in N·m, or None
+
+
+def strength_rows(spec: dict, res: dict | None = None) -> list[StrengthRow]:
+    """Lewis check of each train's own meshes at the load its output carries."""
+    from .strength import train_strength
+    st = spec["strength"]
+    sigma = float(st["allowable_stress_mpa"])
+    res = res or evaluate_spec(spec)
+    loads, clutch = _loads(spec, res)
+    parents = {r.spec["via"] for r in res.values() if "via" in r.spec}
+    rows = []
+    for r in res.values():
+        face = float(r.spec.get("face_width_mm", st["face_width_mm"]))
+        checks = train_strength(r.train.stages, face=face, sigma=sigma, output_load_nm=loads[r.id])
+        if not checks:
+            continue
+        weakest = min(checks, key=lambda c: c.output_torque_capacity_nm)
+        worst = max(checks, key=lambda c: c.running_stress_mpa)
+        cap = weakest.output_torque_capacity_nm
+        low, high = 3 * clutch[r.id], cap / 2
+        rows.append(StrengthRow(r.id, face, f"{weakest.driver}/{weakest.driven}", cap, loads[r.id],
+                                clutch[r.id], r.id in parents, worst.running_stress_mpa,
+                                sigma / worst.running_stress_mpa, (low, high) if low < high else None))
+    return rows
+
+
+def strength_problems(spec: dict, res: dict | None = None) -> list[str]:
+    """Trains below the minimum running safety factor, or with no slip-clutch window."""
+    need = float(spec["strength"].get("min_safety_factor", 1))
+    out = []
+    for row in strength_rows(spec, res):
+        if row.safety < need:
+            out.append(f"{row.id}: running safety factor {row.safety:.1f} < {need:g}")
+        if row.window is None:
+            out.append(f"{row.id}: no slip-clutch window (3 x clutch load {3 * row.clutch_load_nm * 1000:.0f}"
+                       f" N·mm >= half capacity {row.capacity_nm / 2 * 1000:.0f} N·mm)")
+        if row.shared and 3 * row.load_nm >= row.capacity_nm:
+            out.append(f"{row.id}: every clutch driven from it slipping at once (3 x {row.load_nm * 1000:.0f}"
+                       f" N·mm) would exceed its capacity {row.capacity_nm * 1000:.0f} N·mm")
+    return out
+
+
+def motor_budget(spec: dict, res: dict | None = None) -> list[tuple]:
+    """(module, reduction, torque at input arbor, torque at motor, margin) per module, in N·m."""
+    st, mot = spec["strength"], spec["motor"]
+    eta = float(st["mesh_efficiency"])
+    res = res or evaluate_spec(spec)
+    loads = output_loads(spec, res)
+    t_motor = float(mot["holding_torque_nm"]) * float(mot["run_current_a"]) / float(mot["rated_current_a"])
+    per_module: dict = {}
+    for r in res.values():
+        mod = r.id.split(".")[0]
+        per_module.setdefault(mod, float(st["input_friction_nm"]))
+        if "via" not in r.spec:                 # children are already inside their root's load
+            per_module[mod] += loads[r.id] * abs(float(r.train.ratio)) / eta ** r.train.n_stages
+    rows = []
+    for mod, t_in in per_module.items():
+        red = float(mot["reduction"].get(mod, 1))
+        t_m = t_in / (red * eta ** (2 if red > 1 else 0))     # a printed 24:1 is two meshes
+        rows.append((mod, red, t_in, t_m, t_motor / t_m))
+    return rows
+
+
+def strength_markdown(spec: dict) -> str:
+    st, mot = spec["strength"], spec["motor"]
+    sigma = float(st["allowable_stress_mpa"])
+    eta = float(st["mesh_efficiency"])
+    res = evaluate_spec(spec)
+    t_motor = float(mot["holding_torque_nm"]) * float(mot["run_current_a"]) / float(mot["rated_current_a"])
+    lines = [
+        "### Tooth strength (Lewis)",
+        "",
+        f"Allowable root stress {sigma:g} MPa; face width {float(st['face_width_mm']):g} mm unless "
+        f"the train sets its own; running load {float(st['running_output_load_nm']) * 1000:g} N·mm "
+        "at each output unless the train sets its own (parameters in `spec/clock.yaml` → "
+        "`strength`).",
+        "",
+        "- **Output capacity**: the torque at the train's output that brings its weakest tooth to "
+        "the allowable stress.",
+        "- **Running load**: the output's own load plus, for a shared train such as `M5.earth`, the "
+        "loads of every train driven from it, reflected through their ratios. The epicyclic "
+        "`M5.moon_arm` reflects (1 + ratio) times its load onto the Earth arm.",
+        "- **Clutch window**: a slip clutch at the output must hold 3× the load behind it and slip "
+        "below half the capacity. On a shared train the planet trains take off from the tube "
+        "before the Earth arm's clutch, so that clutch carries only the Earth arm and the Moon arm "
+        "riding on it. The shared train must also survive every clutch on it slipping at once "
+        "(capacity above 3× the running load); `check` enforces both, and a running safety factor "
+        f"of at least {float(st.get('min_safety_factor', 1)):g}.",
+        "- Worm meshes are not Lewis meshes and are skipped.",
+        "",
+        "| Train | Face | Weakest mesh | Output capacity | Running load | Highest running stress | "
+        "Safety factor | Clutch window |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
+    for row in strength_rows(spec, res):
+        win = (f"{row.window[0] * 1000:.0f} … {row.window[1] * 1000:.0f} N·mm" if row.window
+               else "**none**")
+        lines.append(f"| `{row.id}` | {row.face_mm:g} mm | {row.weakest} | {row.capacity_nm * 1000:.0f} N·mm | "
+                     f"{row.load_nm * 1000:.1f} N·mm | {row.stress_mpa:.2f} MPa | {row.safety:.0f} | {win} |")
+    lines += [
+        "",
+        "### Motor torque budget",
+        "",
+        f"Motor {mot['model']}: holding torque {mot['holding_torque_nm']} N·m at "
+        f"{mot['rated_current_a']} A [S: datasheet]. At the proposed run current of "
+        f"{mot['run_current_a']} A it gives about **{t_motor * 1000:.0f} mN·m** [E: torque roughly "
+        "proportional to current]. The required torque is the module's own input friction plus "
+        "every output's running load reflected back through its ratio, with mesh efficiency "
+        f"{eta:g} per mesh [E].",
+        "",
+        "| Module | Motor → input reduction | Torque needed at input arbor | Torque needed at motor | Margin at run current |",
+        "|---|---|---|---|---|",
+    ]
+    for mod, red, t_in, t_m, margin in motor_budget(spec, res):
+        lines.append(f"| {mod} | {red:g}:1 | {t_in * 1000:.2f} mN·m | {t_m * 1000:.3f} mN·m | {margin:,.0f}× |")
+    return "\n".join(lines) + "\n"
+
+
+def full_report(spec: dict) -> str:
+    out = report_markdown(spec)
+    if "strength" in spec and "motor" in spec:
+        out += "\n" + strength_markdown(spec)
+    return out
 
 
 def write_report(doc_path, spec: dict) -> bool:
@@ -223,7 +400,7 @@ def write_report(doc_path, spec: dict) -> bool:
     p = Path(doc_path)
     text = p.read_text(encoding="utf-8")
     i, j = text.index(BEGIN), text.index(END)
-    new = text[:i] + BEGIN + "\n\n" + report_markdown(spec) + "\n" + text[j:]
+    new = text[:i] + BEGIN + "\n\n" + full_report(spec) + "\n" + text[j:]
     if new != text:
         p.write_text(new, encoding="utf-8")
         return True

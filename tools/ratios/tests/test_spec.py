@@ -1,7 +1,7 @@
 """spec/clock.yaml: every train meets its constraints and accuracy target; docs stay in sync."""
 from pathlib import Path
 
-from tools.ratios.spec import BEGIN, END, REPO, check_spec, evaluate_spec, load_spec, report_markdown
+from tools.ratios.spec import BEGIN, END, REPO, check_spec, evaluate_spec, full_report, load_spec
 
 SPEC = load_spec()
 
@@ -28,5 +28,5 @@ def test_v1_trains_present():
 def test_gear_trains_doc_is_in_sync():
     doc = (REPO / "docs" / "gear-trains.md").read_text(encoding="utf-8")
     i, j = doc.index(BEGIN) + len(BEGIN), doc.index(END)
-    assert doc[i:j].strip() == report_markdown(SPEC).strip(), (
+    assert doc[i:j].strip() == full_report(SPEC).strip(), (
         "docs/gear-trains.md is stale: run python -m tools.ratios report --write docs/gear-trains.md")

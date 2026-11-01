@@ -58,38 +58,79 @@ targets:
     unit: years
     tag: S
     source: "5028.796195″/century (Capitaine et al. 2003), via Wikipedia 'Axial precession', https://en.wikipedia.org/wiki/Axial_precession (retrieved 2026-11-01)"
-  mercury_tropical:
-    value: 87.968
-    precision: 0.0005   # half a unit of the last quoted digit
-    unit: d
+  jpl_ldot_mercury:
+    value: 149472.67486623
+    precision: 0.000000005
+    unit: deg/century
     tag: S
-    source: "Tropical orbit period, NASA Mercury fact sheet, https://nssdc.gsfc.nasa.gov/planetary/factsheet/mercuryfact.html (retrieved 2026-11-01)"
-  venus_tropical:
-    value: 224.695
-    precision: 0.0005   # half a unit of the last quoted digit
-    unit: d
+    source: "Mean-longitude rate, J2000 ecliptic and equinox, 3000 BC-3000 AD (Table 2a), E. M. Standish, 'Keplerian Elements for Approximate Positions of the Major Planets', NASA/JPL SSD, https://ssd.jpl.nasa.gov/planets/approx_pos.html (retrieved 2026-11-01)"
+  jpl_ldot_venus:
+    value: 58517.81560260
+    precision: 0.000000005
+    unit: deg/century
     tag: S
-    source: "Tropical orbit period, NASA Venus fact sheet, https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html (retrieved 2026-11-01)"
-  mars_tropical:
-    value: 686.972
-    precision: 0.0005   # half a unit of the last quoted digit
-    unit: d
+    source: "Mean-longitude rate, J2000 ecliptic and equinox, 3000 BC-3000 AD (Table 2a), E. M. Standish, 'Keplerian Elements for Approximate Positions of the Major Planets', NASA/JPL SSD, https://ssd.jpl.nasa.gov/planets/approx_pos.html (retrieved 2026-11-01)"
+  jpl_ldot_mars:
+    value: 19140.29934243
+    precision: 0.000000005
+    unit: deg/century
     tag: S
-    source: "Tropical orbit period, NASA Mars fact sheet, https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html (retrieved 2026-11-01)"
-  jupiter_tropical:
-    value: 4330.595
-    precision: 0.0005   # half a unit of the last quoted digit
-    unit: d
+    source: "Mean-longitude rate, J2000 ecliptic and equinox, 3000 BC-3000 AD (Table 2a), E. M. Standish, 'Keplerian Elements for Approximate Positions of the Major Planets', NASA/JPL SSD, https://ssd.jpl.nasa.gov/planets/approx_pos.html (retrieved 2026-11-01)"
+  jpl_ldot_jupiter:
+    value: 3034.90371757
+    precision: 0.000000005
+    unit: deg/century
     tag: S
-    source: "Tropical orbit period, NASA Jupiter fact sheet, https://nssdc.gsfc.nasa.gov/planetary/factsheet/jupiterfact.html (retrieved 2026-11-01)"
-  saturn_tropical:
-    value: 10746.940
-    precision: 0.0005   # half a unit of the last quoted digit
-    unit: d
+    source: "Mean-longitude rate, J2000 ecliptic and equinox, 3000 BC-3000 AD (Table 2a), E. M. Standish, 'Keplerian Elements for Approximate Positions of the Major Planets', NASA/JPL SSD, https://ssd.jpl.nasa.gov/planets/approx_pos.html (retrieved 2026-11-01)"
+  jpl_ldot_saturn:
+    value: 1222.11494724
+    precision: 0.000000005
+    unit: deg/century
     tag: S
-    source: "Tropical orbit period, NASA Saturn fact sheet, https://nssdc.gsfc.nasa.gov/planetary/factsheet/saturnfact.html (retrieved 2026-11-01)"
+    source: "Mean-longitude rate, J2000 ecliptic and equinox, 3000 BC-3000 AD (Table 2a), E. M. Standish, 'Keplerian Elements for Approximate Positions of the Major Planets', NASA/JPL SSD, https://ssd.jpl.nasa.gov/planets/approx_pos.html (retrieved 2026-11-01)"
+  jpl_ldot_earth_moon:
+    value: 35999.37306329
+    precision: 0.000000005
+    unit: deg/century
+    tag: S
+    source: "Mean-longitude rate, J2000 ecliptic and equinox, 3000 BC-3000 AD (Table 2a), E. M. Standish, 'Keplerian Elements for Approximate Positions of the Major Planets', NASA/JPL SSD, https://ssd.jpl.nasa.gov/planets/approx_pos.html (retrieved 2026-11-01)"
+  precession_arcsec_per_century:
+    value: 5028.796195
+    precision: 0.0000005
+    unit: arcsec/century
+    tag: S
+    source: "General precession in longitude (Capitaine et al. 2003, IAU 2006), via Wikipedia 'Axial precession', https://en.wikipedia.org/wiki/Axial_precession (retrieved 2026-11-01)"
 
 derived:
+  mercury_tropical:
+    expr: "360 * 36525 / (jpl_ldot_mercury + precession_arcsec_per_century / 3600)"
+    unit: d
+    uncertainty: 4e-07
+    note: "Tropical period = 360°/(sidereal rate + precession rate). Uncertainty = difference between JPL Table 1 (1800-2050 fit) and Table 2a (long-term) [E]"
+  venus_tropical:
+    expr: "360 * 36525 / (jpl_ldot_venus + precession_arcsec_per_century / 3600)"
+    unit: d
+    uncertainty: 1e-06
+    note: "Tropical period = 360°/(sidereal rate + precession rate). Uncertainty = difference between JPL Table 1 (1800-2050 fit) and Table 2a (long-term) [E]"
+  mars_tropical:
+    expr: "360 * 36525 / (jpl_ldot_mars + precession_arcsec_per_century / 3600)"
+    unit: d
+    uncertainty: 0.00012
+    note: "Tropical period = 360°/(sidereal rate + precession rate). Uncertainty = difference between JPL Table 1 (1800-2050 fit) and Table 2a (long-term) [E]"
+  jupiter_tropical:
+    expr: "360 * 36525 / (jpl_ldot_jupiter + precession_arcsec_per_century / 3600)"
+    unit: d
+    uncertainty: 0.224778
+    note: "Tropical period = 360°/(sidereal rate + precession rate). Uncertainty = difference between JPL Table 1 (1800-2050 fit) and Table 2a (long-term) [E]"
+  saturn_tropical:
+    expr: "360 * 36525 / (jpl_ldot_saturn + precession_arcsec_per_century / 3600)"
+    unit: d
+    uncertainty: 3.325128
+    note: "Tropical period = 360°/(sidereal rate + precession rate). Uncertainty = difference between JPL Table 1 (1800-2050 fit) and Table 2a (long-term) [E]"
+  tropical_year_jpl:
+    expr: "360 * 36525 / (jpl_ldot_earth_moon + precession_arcsec_per_century / 3600)"
+    unit: d
+    note: "Cross-check only: reproduces the sourced tropical_year to 2e-6 d"
   lunar_day:
     expr: "1 / (1 - 1/synodic_month)"
     unit: d
@@ -112,6 +153,30 @@ defaults:
   zmin: 12              # D4: smallest printed pinion (profile-shifted below 17)
   zmax: 160             # default largest wheel: 162 mm tip at module 1.0
   max_stage_ratio: 10   # largest step-up or step-down in one mesh
+
+
+strength:
+  face_width_mm: 4                 # D4 default face width (6 mm in the motor reductions); a train may set its own
+  allowable_stress_mpa: 9.75
+  min_safety_factor: 4             # running stress must stay below allowable / 4 (so below 1/16 of tensile)
+  allowable_note: "Bambu Lab PLA Basic X-Y tensile strength 39 ± 2 MPa (TDS v2.0, https://www.additive-x.com/shop/mpattachments/file/viewonline/id/494/product_id/2236) ÷ safety factor 4 [E]: print variability, creep under years of sustained load, fatigue, root stress concentration"
+  running_output_load_nm: 0.01
+  running_load_note: "[E] friction at an output hub: mu 0.3 x 1 N x 5 mm = 1.5 N·mm, rounded up about 6x to 10 N·mm for downstream trains and margin. Phase 2 recomputes it from CAD masses"
+  mesh_efficiency: 0.9             # [E] printed spur mesh, used only for the motor torque budget
+  input_friction_nm: 0.005         # [E] friction of a module's own input arbor and first meshes
+motor:
+  model: "17HS19-2004S1 (NEMA 17, 1.8°)"
+  holding_torque_nm: 0.59
+  rated_current_a: 2.0
+  source: "Manufacturer datasheet, https://static.maritex.eu/file/display/5sXxpHH1SP-JwnhJEZ0lhfX-xdYKZRi3/17HS19-2004S1_Full_Datasheet.pdf (retrieved 2026-11-01)"
+  run_current_a: 0.5               # proposed TMC2209 run current (quiet, cool); torque scales ~ linearly with current [E]
+  reduction:                       # fixed printed reduction between motor and module input arbor
+    M1: 1
+    M1b: 1
+    M2: 24
+    M3: 24
+    M5: 24
+    M6: 24
 
 modules:
   M1: {input: "minute arbor", input_period: "1/24", stepper: "1 rev/h"}
@@ -239,8 +304,9 @@ trains:
     input_period: "1"
     output_period: "tropical_year"
     stages: [[15, 99], [13, 97], [12, 89]]
+    face_width_mm: 8
     accuracy: {max_drift_deg_per_century: 1.0}
-    note: "Central Earth tube; every planet train starts here (Schwilgué's arrangement)"
+    note: "Central Earth tube; every planet train starts here (Schwilgué's arrangement). Same teeth as the other year trains, but 8 mm faces: it carries the whole planetarium (gear-trains.md §5)"
   - id: M5.mercury
     indication: I14
     version: v1
@@ -298,6 +364,10 @@ trains:
     input_period: "tropical_year"
     target_ratio: "tropical_year / synodic_month"
     stages: [[78, 23], [62, 17]]
+    epicyclic: true
+    face_width_mm: 8
+    running_output_load_nm: 0.003
+    running_load_note: "[E] balanced arm with no train behind it: hub friction 1.5 N·mm (as the default) x 2 margin. The default's extra margin is for downstream trains, which this arm has none of"
     accuracy: {max_drift_deg_per_century: 1.0}
     note: "Epicyclic: fixed 78-tooth sun wheel, compound planet 23/62 on the Earth arm, 17-tooth pinion on the Moon arm. Rate is relative to the Earth arm, so the drift is in the Moon's phase angle"
   - id: M5.moon_globe

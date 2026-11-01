@@ -23,7 +23,7 @@ import argparse
 import sys
 
 from .search import search_coaxial, search_compound, search_differential
-from .spec import DEFAULT_SPEC, check_spec, load_spec, report_markdown, safe_eval, write_report
+from .spec import DEFAULT_SPEC, check_spec, full_report, load_spec, safe_eval, write_report
 
 
 def _cmd_search(a) -> int:
@@ -92,7 +92,7 @@ def main(argv=None) -> int:
         changed = write_report(a.write, spec)
         print(("updated " if changed else "unchanged ") + a.write)
     else:
-        print(report_markdown(spec))
+        print(full_report(spec))
     return 0
 
 

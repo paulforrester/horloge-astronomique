@@ -13,6 +13,8 @@ tables in [`docs/gear-trains.md`](../../docs/gear-trains.md).
 | `search_differential(target, base, coef, stages, ...)` | Differential or epicyclic form `base + coef·X`. Near-unity targets get very accurate, because the error of X is scaled down. |
 | `choose_train(target, max_drift_deg_per_century=..., ...)` | The simplest train meeting an accuracy target: fewest stages, then smallest wheels. |
 | `epicyclic.schwilgue_sidereal`, `schwilgue_lunar_turns_per_year` | Schwilgué's two epicyclic and differential relations (LEF, CLEA). |
+| `strength.train_strength(stages, face=, sigma=, output_load_nm=)` | Lewis tooth-bending check: per mesh, the output torque that brings it to the allowable stress, and the running stress at a given output load (Shigley Table 14-2 form factors). |
+| `spec.strength_rows`, `spec.motor_budget` | The same check for every train in the spec, with loads reflected through shared trains (`via`, `epicyclic`), slip-clutch windows, and the motor torque margin per module. `check` fails on a train below `strength.min_safety_factor` or with no clutch window. |
 
 **Constraints** (all keyword arguments):
 - `zmin`, `zmax`, or an explicit `allowed` set of tooth counts;
@@ -48,7 +50,8 @@ Reverted planet train with intermediate arbors on a 133-tooth-sum circle:
 python -m tools.ratios search --ratio "365.24219/224.695" --coaxial --tooth-sum 133
 ```
 
-Check every train in `spec/clock.yaml` (exit code 1 on any failure):
+Check every train in `spec/clock.yaml`: ratio, constraints, accuracy and tooth strength (exit code 1
+on any failure):
 
 ```bash
 python -m tools.ratios check
