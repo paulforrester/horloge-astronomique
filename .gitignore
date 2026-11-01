@@ -8,3 +8,4 @@ venv*/
 
 # test caches
 .pytest_cache/
+.venv-cad/

@@ -1,0 +1,9 @@
+# CAD stack (D1: build123d, pinned). Install in its OWN venv: never together with CadQuery (OCP conflict).
+#   python3 -m venv .venv-cad && .venv-cad/bin/pip install -r cad/requirements.txt
+build123d==0.13.0
+cadquery-ocp-novtk==8.0.1.1.0
+pycollada==0.9.3
+matplotlib==3.11.2
+numpy>=1.26
+pyyaml>=6
+pytest>=8
