@@ -7,6 +7,7 @@ the trade-offs and a recommendation. Status is **Proposed** until Paul approves;
 
 **As of 31 Oct 2026 every decision D1–D11 is Accepted.** D2, D5 and D11 were decided point by point;
 the rest were approved as recommended. **D12** (wooden case) was accepted on 1 Nov 2026.
+**D13** (steel springs) was accepted on 3 Nov 2026.
 
 ## Summary
 
@@ -24,6 +25,7 @@ the rest were approved as recommended. **D12** (wooden case) was accepted on 1 N
 | D10 | Night silence | **Quiet hours in firmware** (skip sound shows). The original already silences the four ages at night [S: DA]. | **Accepted** 31 Oct 2026 | Phase 3 |
 | D12 | Case and frame in wood (fine woodworking); revises D6's structure | **Option B**: plywood carcass + hardwood framing; joinery for the table saw, track saw and drill press (no router); MDF for painted surfaces; one species from the low or moderate class (tulipier, sapelli or sipo preferred); metal hidden except the computus frame | **Accepted** 1 Nov 2026 | Phase 2 (case) |
 | D11 | Case width (7.70 vs 8.60 m) and wall space | **1:8 accepted (PR #1)**. **Width resolved: 7.70 m → 962.5 mm** [S: ELS, Ungerer 1920]. Wall dimensions to follow from Paul | **Accepted** 31 Oct 2026 | Phase 2 (case) |
+| D13 | Springs: steel or printed; catalogue springs in inch-based sizes | **Steel for every spring**; Sodemann's stainless catalogue springs accepted although their sizes are inch-based | **Accepted** 3 Nov 2026 (PR #8) | Phase 2 (M2 purchase) |
 
 Plus **Blockers** at the end: the network allowlist and the documents to obtain.
 
@@ -689,6 +691,31 @@ grade plywood."
 - **Files.** Every printed part gets an STL or 3MF that Bambu Studio imports, in its print pose
   (`cad/export_print.py`, `export/print/`). Every SketchUp model also gets an exploded copy where
   that is meaningful (`cad/export_sketchup.py`).
+
+## D13 — Springs: steel, and an exception to the metric rule for catalogue springs
+
+**Status: Accepted, 3 Nov 2026** (Paul, PR #8).
+
+**Context.** The M2 setter and year counter need several small springs (`docs/m2-design.md` §6,
+*Steel springs*). The first design printed some of them as plastic leaves: the rocker detent, wheel
+C's jumper and the ring jumper. Printed plastic relaxes under a constant load over the years.
+
+**Decision 1: every spring is steel.** Paul: "I'd rather go with steel springs. Please source and
+spec the springs that you recommend."
+- Catalogue springs where a coil spring fits: the set-ramp plunger and the counting-lever return.
+- Straight spring wire (EN 10270-1 DH, Ø0.4 and Ø0.5) for the detents and the click, glued into
+  printed blocks.
+- A flexure that is unloaded at rest may stay printed: the counting lever's hook flexes once a
+  year and is free the rest of the time.
+
+**Decision 2: inch-based catalogue springs accepted.** Paul: "accept the sodemann springs".
+- The two catalogue springs are Sodemann stock (Denmark, sold and shipped to France). They are
+  listed in mm, but their sizes are inch-based (for example De 4.57 mm = 0.180").
+- `CLAUDE.md` asks for metric sizes. Paul accepts this exception because no standard part mates
+  with a spring, so nothing else in the design depends on its size.
+- The metric alternatives, Gutekunst VD-011Y and RZ-020I, could not be verified from the cloud
+  session.
+- **Scope:** springs only. Rods, tubes, bearings and fasteners stay metric.
 
 ---
 

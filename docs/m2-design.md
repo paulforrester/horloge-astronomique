@@ -356,7 +356,8 @@ the counter is steel. Two are catalogue parts; three are cut from straight sprin
 - **Sodemann** (Denmark, French shop): ships to France by UPS in 4–5 working days, €8.00 (business)
   or €9.60 (private) up to 1 kg [S: [shipping](https://www.ressorts-sodemann.fr/expedition)].
   - Its sizes are inch-based but quoted in mm. No standard part mates with them, so that causes no
-    interface problem.
+    interface problem. **Accepted by Paul** as an exception to the metric rule ("accept the
+    sodemann springs"; decisions D13).
   - Pack sizes and prices are not readable without the shop's pop-up: confirm them when ordering.
   - Check on the drawing that the extension spring's L0 is measured inside the hooks. The anchor
     pin's position (`ANCHOR_XY`) is set from it.
