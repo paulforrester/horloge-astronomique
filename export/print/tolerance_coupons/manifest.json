@@ -1,0 +1,440 @@
+{
+ "model": "tolerance_coupons",
+ "unique_parts": 24,
+ "printed_parts": 24,
+ "sets": {},
+ "parts": [
+  {
+   "names": [
+    "fit_coupon"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    106.0,
+    50.0,
+    6.0
+   ],
+   "note": "",
+   "file": "fit_coupon.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "bearing_coupon"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    140.0,
+    56.0,
+    7.0
+   ],
+   "note": "",
+   "file": "bearing_coupon.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_board"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    192.0,
+    132.0,
+    5.0
+   ],
+   "note": "",
+   "file": "gear_board.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m1_b0p10_15"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    17.1,
+    17.2,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m1_b0p10_15.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m1_b0p10_30"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    31.6,
+    31.8,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m1_b0p10_30.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m1_b0p15_15"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    17.1,
+    17.2,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m1_b0p15_15.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m1_b0p15_30"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    31.6,
+    31.8,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m1_b0p15_30.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m1_b0p20_15"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    17.1,
+    17.2,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m1_b0p20_15.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m1_b0p20_30"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    31.6,
+    31.8,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m1_b0p20_30.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m0p8_b0p10_15"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    13.7,
+    13.8,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m0p8_b0p10_15.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m0p8_b0p10_30"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    25.3,
+    25.4,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m0p8_b0p10_30.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m0p8_b0p15_15"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    13.7,
+    13.8,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m0p8_b0p15_15.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m0p8_b0p15_30"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    25.3,
+    25.4,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m0p8_b0p15_30.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m0p8_b0p20_15"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    13.7,
+    13.8,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m0p8_b0p20_15.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m0p8_b0p20_30"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    25.3,
+    25.4,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m0p8_b0p20_30.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m0p6_b0p10_15"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    10.3,
+    10.3,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m0p6_b0p10_15.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m0p6_b0p10_30"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    19.0,
+    19.1,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m0p6_b0p10_30.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m0p6_b0p15_15"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    10.3,
+    10.3,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m0p6_b0p15_15.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m0p6_b0p15_30"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    19.0,
+    19.1,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m0p6_b0p15_30.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m0p6_b0p20_15"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    10.3,
+    10.3,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m0p6_b0p20_15.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "gear_m0p6_b0p20_30"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    19.0,
+    19.1,
+    4.0
+   ],
+   "note": "",
+   "file": "gear_m0p6_b0p20_30.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "worm_cradle"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    48.0,
+    35.0,
+    18.0
+   ],
+   "note": "\u00d83 pin pressed in; \u00d85 rod through the uprights",
+   "file": "worm_cradle.stl",
+   "overhang_mm2": 32.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "worm_wheel_20"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    18.8,
+    18.8,
+    6.0
+   ],
+   "note": "turns on the \u00d83 pin",
+   "file": "worm_wheel_20.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "worm_test"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    14.0,
+    14.0,
+    24.0
+   ],
+   "note": "print axis vertical, 0.1 mm layers; glue or pin to the \u00d85 rod",
+   "file": "worm_test.stl",
+   "overhang_mm2": 952.0,
+   "fits_single": true,
+   "fits_dual": true
+  }
+ ]
+}

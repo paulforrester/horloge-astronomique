@@ -178,6 +178,16 @@ motor:
     M5: 24
     M6: 24
 
+interfaces:
+  M3_to_M2_correction:          # architecture §13; Paul, 3 Nov 2026: 60:1 worm on each differential carrier
+    worm: {module: 1.0, pitch_diameter: 12.0, starts: 1, lead_angle_deg: 4.76, self_locking: true}
+    worm_wheel_teeth: 60
+    differential: "spur planet-pair, output = 2 x carrier - input"
+    sun_gain_deg_per_turn: 12.0                  # 1 worm turn = 6° of carrier = 12° at the Sun hand (1:1 to the tube)
+    moon_gain_deg_per_turn: "12.0 * 88 / 83"     # 12.72° at the Moon hand
+    shaft: "Ø5 ground rod along +X at z -60 mm, keyed dog coupling at x = 135 mm (M2 frame)"
+    note: "Backlash: 0.3° of play on the M3 shaft is 0.01° at the hand [D: 0.3/360 x 12]"
+
 modules:
   M1: {input: "minute arbor", input_period: "1/24", stepper: "1 rev/h"}
   M1b: {input: "legal-time minute arbor", input_period: "1/24", stepper: "1 rev/h"}
@@ -245,10 +255,10 @@ trains:
     indication: I5
     version: v1.5
     input_period: "1"
-    output_period: "eclipse_year"
-    stages: [[15, 109], [12, 81], [15, 106]]
+    target_ratio: "1 + 1/eclipse_year"
+    stages: [[98, 99], [71, 79], [62, 55]]
     accuracy: {max_drift_deg_per_century: 2.0}
-    note: "Node cam relative to the Sun-hand frame (inventory I5 option b): one turn per eclipse year"
+    note: "Latitude cam in the dial frame (inventory I5 option a), driven directly from the mean-time daily arbor: 1 + 1/eclipse year turns per mean day. Changed in the M2 design (docs/m2-design.md §3): referencing the cam to the Sun hand would add the equation of time once the Sun is corrected in v1.5, and a direct train removes a third differential"
 
   # ---------------- M3: equations (v1.5; one cam turn per period) ----------------
   - id: M3.year

@@ -9,6 +9,11 @@ They turn the [E] allowances in ``cad/lib/parts.py`` (FITS) and the working modu
 3. ``gear_board`` + its gears: 15/30 pairs at module 1.0, 0.8 and 0.6 × backlash 0.10, 0.15 and
    0.20 mm, on Ø3 pins at the nominal centre distance. Turn each pair by hand: note binding, play,
    noise.
+4. ``worm_cradle`` + ``worm_test`` + ``worm_wheel_20``: the M2 worm (module 1, single start, printed
+   axis vertical like the M2 worms) meshing a 20-tooth throated wheel at the true centre distance.
+   Check the thread's lower flank (a 70° overhang), the fit on a Ø5 rod, smooth turning from the
+   worm, and that the wheel cannot drive the worm backwards (self-locking: the v1 lock of the M2
+   differentials). Added in PR #5.
 
 Orientation marks: every coupon has its low-allowance end at the chamfered corner (bottom left as
 modelled), and allowances rise to the right. Rows run bottom to top in the order listed.
@@ -94,4 +99,29 @@ def build() -> Assembly:
         rot = 0.0 if k % 2 == 0 else mesh_phase(gears[k - 1][1], g)
         a.add(name, part.rotate(bd.Axis.Z, rot).moved(bd.Location((p[0] + off[0], p[1] + off[1], 5.5))),
               explode=(0, 0, 25))
+    _worm_test(a, (150.0, 75.0))
     return a
+
+
+def _worm_test(a: Assembly, at: tuple):
+    """Worm, 20-tooth worm wheel and a cradle holding them at the M2 centre distance."""
+    from cad.lib.worm import place_worm, worm_centre_distance, worm_solid, worm_wheel
+    from cad.modules.m2_main_dial.mechanism import WORM
+    teeth, face, z_wheel = 20, 6.0, 9.0                            # worm tip 1 mm above the base
+    cd = worm_centre_distance(teeth, WORM)                         # 16 mm
+    loc = bd.Location((at[0], at[1], 0))
+    base = bd.Box(48.0, 34.0, 4.0, align=(bd.Align.CENTER, bd.Align.MIN, bd.Align.MIN)).moved(bd.Location((0, -14, 0)))
+    z_axis = z_wheel + face / 2
+    for x in (-16.0, 16.0):                                        # uprights carrying the worm's Ø5 rod
+        up = bd.Box(4.0, 10.0, z_axis + 6.0, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)).moved(
+            bd.Location((x, cd, 0)))
+        base = base + up
+    base -= bd.Cylinder((5.0 + parts.FITS.running) / 2, 60).rotate(bd.Axis.Y, 90).moved(bd.Location((0, cd, z_axis)))
+    base = base + parts.disc(8.0, z_wheel - 0.3 - 4.0, z0=4.0)         # boss the wheel rests on
+    base -= parts.disc(3.0 + parts.FITS.press, 20, z0=-1)            # the wheel's Ø3 pin, pressed in
+    a.add("worm_cradle", base.moved(loc), material="PETG", note="Ø3 pin pressed in; Ø5 rod through the uprights")
+    wheel = worm_wheel(teeth, WORM, face, bore=3.0 + parts.FITS.running).moved(bd.Location((0, 0, z_wheel)))
+    a.add("worm_wheel_20", wheel.moved(loc), note="turns on the Ø3 pin")
+    worm = worm_solid(WORM, 24.0, bore=5.0).moved(bd.Location((0, 0, -12)))
+    a.add("worm_test", place_worm(worm, teeth, WORM, face, z0=z_wheel, side_angle=90.0).moved(loc),
+          print_up=(1, 0, 0), nozzle=0.2, note="print axis vertical, 0.1 mm layers; glue or pin to the Ø5 rod")

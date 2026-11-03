@@ -230,11 +230,15 @@ Scale aids [D]:
 - **Replica:**
   - A node cam on its own coaxial arbor, with a follower on a radial slide in the Moon arm.
   - The arm length becomes f(Moon longitude − node longitude).
-  - Two kinematic options for Phase 2:
+  - Two kinematic options were considered:
     - (a) the cam rotates in the dial frame at sidereal rate minus regression;
     - (b) the cam is carried on the Sun-hand frame and turns relative to it once per eclipse year.
-  - Option (b) needs one fewer full-speed coaxial tube [D, kinematics]. Choose in the Phase 2
-    main-dial feasibility study.
+  - **Chosen in the M2 design: (a)**, driven directly from the mean-time daily arbor by
+    98/99 × 71/79 × 62/55 (+0.004°/century) [D: `tools/ratios`]. The node's place on the dial
+    follows sidereal time, so (b) would wrongly add the equation of time once the Sun hand is
+    corrected (v1.5). See `docs/m2-design.md` §3.
+  - Display: discs and latitude enlarged ×4 with a 4:1 lever on the Moon hand
+    (`main-dial-feasibility.md` §4, accepted).
 - **Difficulty:** 4.
 - **Depends on:** I3, I4; ratio for the node regression (Phase 1).
 - **Validation:** the simulator compares indicated eclipses against an ephemeris (Phase 3).
@@ -280,9 +284,13 @@ Scale aids [D]:
   passé 9 mètres, porte, sur un fond doré, toutes les indications d'un calendrier perpétuel: le
   mois, les quantièmes, les lettres dominicales, les noms des Saints et des Saintes, ainsi que les
   fêtes fixes" [S: DA p. 27; width and circumference checked on the page image].
-  - **Apollo points**: he stands to the right of the calendar and shows the day "avec une flèche".
+  - **Apollo points**: he stands "à la droite du calendrier" and shows the day "avec une flèche".
     Diana is on the other side "seulement pour servir de pendant" (only as a counterpart)
     [S: DA p. 27]. This resolves the Apollo/Diana conflict.
+  - **Side: the viewer's left.** "À la droite du calendrier" is the calendar's own right; DA says "à
+    la droite du spectateur" when it means the viewer's right. ELS i4 agrees: "le jour qui commence
+    venant alors sur la gauche de l'anneau, en face de la flèche". The M2 pointer is at 9 o'clock
+    (corrected 3 Nov 2026; `docs/m2-design.md` §6).
 - **Periods:** the civil year, 365 or 366 days.
 - **Original:**
   - **It jumps daily at midnight:** "Cet anneau, qui est mobile, avance chaque jour d'une

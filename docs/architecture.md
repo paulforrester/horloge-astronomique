@@ -103,9 +103,9 @@ goes through a switch and the controller. A link that carries an angle is a shaf
 
 | From → To | What | Link | Coupling at the module boundary |
 |---|---|---|---|
-| M3 → M2 | Solar correction (Sun differential, third member) | Rotating shaft Ø5, rack-and-pinion output in M3 | Keyed single-dog coupling (position-carrying) |
-| M3 → M2 | Lunar correction (Moon differential, third member) | Rotating shaft Ø5 | Keyed single-dog coupling |
-| M2 → M7 | Daily rotation for the weekday carousel | Vertical shaft Ø5, 1 rev/day | Keyed single-dog coupling |
+| M3 → M2 | Solar correction (Sun differential, third member) | Rotating shaft Ø5, rack-and-pinion output in M3; in M2 it turns a self-locking 60:1 worm on the differential carrier, 12° at the hand per turn (`docs/m2-design.md` §4) | Keyed single-dog coupling (position-carrying) |
+| M3 → M2 | Lunar correction (Moon differential, third member) | Rotating shaft Ø5; 60:1 worm in M2, 12.72° at the hand per turn | Keyed single-dog coupling |
+| M2 → M7 | Weekday carousel drive | Ø5 output arbor W, **1 rev per 7 days** (12/84 in M2, exact), leaving M2's back plate horizontally at (−75.5, 57.9). M7 carries it up about 240 mm with a 1:1 link: spur or belt if the carousel's axis is parallel, a right-angle pair if it is vertical (axis TBD; `docs/m2-design.md` §3 item 2) | Keyed single-dog coupling |
 | M2 → M4 | Year-end trigger | Switch on the M2 year train → controller | Connector |
 | M4 → M2 | Easter position (feasts arc), dominical letter, century leap exception (v2) | Push-rod or rack, or a shaft. **TBD** in the v2 design; the original's transfer is unknown | Keyed |
 | M1 → E1, E2, E3 | Quarter, hour and noon releases | Switches on M1 cams → controller → event motors | Connector |
@@ -182,8 +182,8 @@ Forward-only trains cannot be homed by driving them to an end stop. The slow out
 | M1 minute arbor | Hall | each hour at :00 local mean time | index |
 | M1 hour train (12 h) | Hall | 12:00 | witness (checks the hand clutch) |
 | M2 input arbor | Hall | local mean midnight | index |
-| M2 calendar ring | opto on the 1 January sector | yearly | witness |
-| M2 mean-Moon arbor (inside the module) | Hall | once per synodic month (mean new moon) | witness |
+| M2 calendar ring | reflective opto at the pointer, flag on 1 March (fixed part of the ring) | yearly | witness |
+| M2 Moon tube wheel | Hall | once per lunar day; with the M2 index it gives the synodic phase | witness |
 | M2 node arbor | Hall | once per 18.6 yr cycle (or a finer flag set) | witness (optional) |
 | M3 each cam arbor | Hall | once per cam turn (two periods of its term, convention B) | witness (optional; recommended on the two largest terms) |
 | M5 input arbor | Hall | daily | index |
@@ -337,9 +337,10 @@ and any later refinement be added by **adding** parts, not by scrapping v1 parts
 
 **1. Differentials in place from day one (M2).**
 - The Sun hand and the Moon hand are each driven through a differential in v1 (inventory I3, I4).
-- The third member, the correction input, is held at its zero position by a **removable locking
-  key**. It has an engraved index mark and a witness flag.
-- In v1.5 the key comes out and the M3 shaft goes in. The hands, tubes, trains and dial do not
+- The third member, the correction input, is the differential's carrier, turned by a **self-locking
+  60:1 worm** (Paul, 3 Nov 2026). In v1 the worm simply stays still: it is the lock. It has an
+  engraved index mark and a witness flag.
+- In v1.5 the M3 shaft is coupled to the worm shaft. The hands, tubes, trains and dial do not
   change.
 
 **2. A fixed correction-input interface (M2 ← M3), defined now.**
@@ -348,8 +349,8 @@ and any later refinement be added by **adding** parts, not by scrapping v1 parts
 |---|---|---|
 | Shaft | Ø5 ground rod | |
 | Coupling | single-dog keyed coupling at the module boundary | so phase cannot be lost (P4) |
-| Location | one Sun and one Moon input on the M2 rear plate, on the side facing the equations bay | coordinates fixed in the Phase 2 main-dial study |
-| Gain | **at least 1 turn of the correction shaft per 1° at the hand** | exact value set in Phase 1 |
+| Location | one Sun and one Moon input, Ø5 worm shafts running along +X towards the equations bay | at z −60 mm, y +60 (Sun) and y −78.8 (Moon), couplings at x = 135 mm in the M2 frame (`docs/m2-design.md` §4) |
+| Gain | **12° at the Sun hand and 12.72° at the Moon hand per turn** of the correction shaft (60:1 worm, differential ×2) | Paul chose this over 1 turn per 1° (3 Nov 2026). 0.3° of shaft play is 0.01° at the hand [D] |
 
 - The large gain makes shaft backlash negligible: 0.3° of backlash becomes under 0.001° at the
   hand [D].

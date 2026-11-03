@@ -8,7 +8,11 @@ the first thing printed."
 - **Checks:** [`cad/tests/test_test_rig.py`](../cad/tests/test_test_rig.py).
 - **Firmware:** [`firmware/test_rig/test_rig.ino`](../firmware/test_rig/test_rig.ino). It is
   **untested**: written before the hardware exists.
-- **Print files:** `export/test_rig/test_rig.3mf` and `export/test_rig/tolerance_coupons.3mf`.
+- **Print files:** `export/print/test_rig/` and `export/print/tolerance_coupons/`: one STL per part in its
+  print pose, with a manifest `README.md` (PR #5; they replace the as-modelled 3MFs of PR #4).
+- **Worm test (added in PR #5):** the coupons now include the M2 worm, a 20-tooth throated wheel
+  and a cradle at the true centre distance. They check the worm's print quality, its fit on the
+  Ø5 rod and its self-locking before M2 is printed.
 - **SketchUp:** `export/sketchup/test_rig.dae` and `export/sketchup/tolerance_coupons.dae`.
 
 **Status: Proposed** (Phase 2 gate). The decisions needed are in §9.

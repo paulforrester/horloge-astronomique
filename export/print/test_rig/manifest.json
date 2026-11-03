@@ -1,0 +1,427 @@
+{
+ "model": "test_rig",
+ "unique_parts": 23,
+ "printed_parts": 28,
+ "sets": {},
+ "parts": [
+  {
+   "names": [
+    "cannon_pinion_12"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    14.6,
+    14.6,
+    3.0
+   ],
+   "note": "",
+   "file": "cannon_pinion_12.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "minute_wheel_48_15"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    49.3,
+    49.3,
+    6.5
+   ],
+   "note": "",
+   "file": "minute_wheel_48_15.stl",
+   "overhang_mm2": 61.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "hour_wheel_45"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    46.7,
+    46.7,
+    3.0
+   ],
+   "note": "",
+   "file": "hour_wheel_45.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "clutch_front_collet"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    9.0,
+    9.0,
+    2.3
+   ],
+   "note": "printed collet with an M3 grub screw in a heat-set insert; holds the stack",
+   "file": "clutch_front_collet.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "noon_pinion_12_A"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    14.6,
+    14.6,
+    7.0
+   ],
+   "note": "",
+   "file": "noon_pinion_12_A.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "noon_wheel_54_12_X"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    55.4,
+    55.4,
+    10.0
+   ],
+   "note": "",
+   "file": "noon_wheel_54_12_X.stl",
+   "overhang_mm2": 39.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "day_wheel_64_B"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    65.4,
+    65.4,
+    4.0
+   ],
+   "note": "",
+   "file": "day_wheel_64_B.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "sun_drive_48_B",
+    "shadow_drive_48_B"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    50.0,
+    50.0,
+    6.0
+   ],
+   "note": "",
+   "file": "sun_drive_48_B.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "sun_wheel_48_C"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    50.0,
+    50.0,
+    4.0
+   ],
+   "note": "",
+   "file": "sun_wheel_48_C.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "shadow_wheel_48_C"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    50.0,
+    50.0,
+    4.0
+   ],
+   "note": "",
+   "file": "shadow_wheel_48_C.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "index_flag_A"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    22.0,
+    22.0,
+    2.5
+   ],
+   "note": "",
+   "file": "index_flag_A.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "front_plate"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    237.5,
+    165.3,
+    4.0
+   ],
+   "note": "",
+   "file": "front_plate.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "back_plate"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    237.5,
+    165.3,
+    4.0
+   ],
+   "note": "",
+   "file": "back_plate.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "pillar_0",
+    "pillar_1",
+    "pillar_2",
+    "pillar_3"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    8.0,
+    8.0,
+    24.0
+   ],
+   "note": "",
+   "file": "pillar_0.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "foot_0",
+    "foot_1"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    14.0,
+    6.0,
+    90.0
+   ],
+   "note": "",
+   "file": "foot_0.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "dial_12h"
+   ],
+   "material": "silver",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    112.0,
+    112.0,
+    2.0
+   ],
+   "note": "",
+   "file": "dial_12h.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "dial_24h"
+   ],
+   "material": "dial",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    100.0,
+    100.0,
+    2.0
+   ],
+   "note": "",
+   "file": "dial_24h.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "hand_hour"
+   ],
+   "material": "black",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    23.5,
+    36.4,
+    1.5
+   ],
+   "note": "",
+   "file": "hand_hour.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "hand_minute"
+   ],
+   "material": "black",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    49.7,
+    30.6,
+    1.5
+   ],
+   "note": "",
+   "file": "hand_minute.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "hand_sun"
+   ],
+   "material": "red",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    28.6,
+    46.3,
+    1.5
+   ],
+   "note": "",
+   "file": "hand_sun.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "hand_middle"
+   ],
+   "material": "silver",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    46.0,
+    19.9,
+    1.5
+   ],
+   "note": "",
+   "file": "hand_middle.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "arm_shadow"
+   ],
+   "material": "black",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    28.2,
+    46.3,
+    1.5
+   ],
+   "note": "",
+   "file": "arm_shadow.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "electronics_tray"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    150.0,
+    6.0,
+    90.0
+   ],
+   "note": "ESP32-S3 DevKitC-1, TMC2209 breakout, buck 24->5 V, terminals",
+   "file": "electronics_tray.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  }
+ ]
+}
