@@ -35,14 +35,14 @@ New Year station.
 
 | Check | Result |
 |---|---|
-| Interference, all 160 parts, exact B-rep (the 5 date inlays are checked as part of their own parts: `Item.inside`) | **0** |
+| Interference, all 165 parts, exact B-rep (the 5 date inlays are checked as part of their own parts: `Item.inside`) | **0** |
 | Fixed parts inside the path of the turning calendar ring (other than its designed readers) | **0** |
 | Movable sector against the ring, common and leap positions | **0** overlap (`test_calendar_ring.py`) |
 | Rotating hands: any two parts on different tubes that could touch at some angle | 0 (feasibility study; same front stack) |
 | Calendar logic, day by day, 2026–2426, five different start dates | **0 wrong days**. Every New Year jump is 4 divisions (common) or 3 (leap), including 2100, 2200, 2300 and 2400. |
 | Bed fit, single and dual nozzle | every printed part fits in its print pose. The largest are the dial (Ø 287.5) and the plates (281 × 232). |
 | Envelope | x −196 … +184, y −195 … +192, z −162 … +24 mm: inside the M2 bay. Nothing comes within about 18 mm of the floor. **Depth 185 mm.** |
-| Parts | 160 in the model: 98 printed (including 5 date inlays), 60 bought (plus 2 v1.5 space claims) |
+| Parts | 165 in the model: 99 printed (including 5 date inlays), 64 bought (plus 2 v1.5 space claims) |
 | Motor torque | ≈ 2.9 mN·m at the motor, **≈ 50×** margin at 0.5 A [E, §9] |
 
 <p align="center"><img src="img/m2/m2_front.png" width="420" alt="M2 front"> <img src="img/m2/m2_three_quarter.png" width="420" alt="M2 three-quarter"></p>
@@ -460,7 +460,7 @@ possible, otherwise use model grade plywood"; decisions D12).
 - a `README.md` manifest with quantity, material, nozzle, size, bed fit, down-facing area, and
   whether the part meshes closed and manifold (lib3mf's check, as Bambu Studio expects).
 
-For M2 that is 54 STLs and 6 two-colour 3MFs (the dial, the four ring segments, the sector) for 98 prints. The press, slide and bearing fits still wait for the
+For M2 that is 55 STLs and 6 two-colour 3MFs (the dial, the four ring segments, the sector) for 99 prints. The press, slide and bearing fits still wait for the
 tolerance coupons, so these are design-stage files.
 
 **Print poses.** Each part records which way is up (`Item.print_up`). Where it does not, the
