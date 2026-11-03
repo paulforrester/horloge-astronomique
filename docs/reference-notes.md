@@ -710,7 +710,11 @@ this pair of hands.
   gauche de l'anneau, en face de la flèche**" (it rests on two rollers and advances one division
   each midnight, driven by a special motor released by the mean-time train; the new day arrives on
   the **left** of the ring, facing the arrow).
-- Letters A–G, with A on 1 January.
+- Letters A–G, with A on 1 January: "les lettres se succédant dans leur ordre naturel, et se
+  répétant 52 fois dans l'année. Au 1er janvier correspond la lettre A."
+- **29 February carries F** on the original (Paul, PR #6 comment, 3 Nov 2026). ELS does not say. It
+  agrees with the traditional reckoning, in which the intercalated day is a doubled 24 February,
+  letter F [D: 24 Feb is day 55 and (55 − 1) mod 7 = 5, which is F].
 
 **Leap day [i4]** (the most original part, per ELS):
 - 1 January – 28 February are painted on a movable sector that can advance or retreat one division.

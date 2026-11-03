@@ -16,8 +16,9 @@ parts, at 1:8 [S: ELS i4: Ø 2.73 m outer, 21 cm wide, 368 divisions → Ø 341,
   letter then day number, 2.2 mm capitals (≈ 9 pt); month names 4 mm (≈ 16 pt) round the inner edge,
   reading clockwise; "COMMENCEMENT", "DE L'ANNÉE", "COMMUNE" on divisions 0–2 [S: ELS i4] and "29" on
   d = 61, both on the recess floor where the sector uncovers them. Letters A … G from A on
-  1 January [S: ELS i4: "Au 1er janvier correspond la lettre A"]; 29 February carries no letter
-  [TBD: ELS does not say; check fig. 143 or a photo]. All flush two-colour inlays, 0.4 mm deep,
+  1 January [S: ELS i4: "Au 1er janvier correspond la lettre A"]; 29 February carries F, as on the
+  original (Paul, PR #6), the letter of the Roman bissextile day (the doubled 24 February). All
+  flush two-colour inlays, 0.4 mm deep,
   black on gold ("sur un fond doré" [S: DA p. 27]; the letter colour is [E]).
 - **Carrier** (4 printed segments) holding the rollers, with openings where readers reach the band:
   the **stop lever** and the **witness opto** at the pointer (9 o'clock), and the **station** at
@@ -78,6 +79,7 @@ MONTH_R = 147.6                        # month-name baseline
 MONTHS = ("JANVIER", "FÉVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET", "AOÛT", "SEPTEMBRE", "OCTOBRE",
           "NOVEMBRE", "DÉCEMBRE")
 MONTH_DAYS = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+FEB29_LETTER = "F"                     # as on the original (Paul, PR #6): the Roman bissextile day's letter
 RIM_SPAN = (-55.0, 150.0)      # rim where the carrier overhangs the M2 front plate (world angles, CCW)
 RIM_BACK_Z = -40.0             # L-section depth
 CARRIER_BOLTS = (165.0, 195.0, 225.0)     # countersunk M3 into the M2 front plate, where they overlap
@@ -204,9 +206,11 @@ def date_inlays(pointer: int, sector_leap: bool):
     h, w, sp = WORD_TEXT
     for d, word, group in ((0, "COMMENCEMENT", "face"), (1, "DE L'ANNÉE", "face"), (2, "COMMUNE", "floor")):
         groups[group].append((T.radial(word, world_angle(d, pointer), DAY_R0, h, w, sp), w))
-    h, w, sp = DAY_TEXT                                    # 29 Feb: number only (letter TBD)
-    _, l_len, _ = T.layout("A", h, w, sp)
-    groups["floor"].append((T.radial("29", world_angle(L.FEB29, pointer), DAY_R0 - l_len - DAY_GAP, h, w, sp), w))
+    h, w, sp = DAY_TEXT                                    # 29 Feb: F, as on the original (Paul, PR #6)
+    _, l_len, _ = T.layout(FEB29_LETTER, h, w, sp)
+    th = world_angle(L.FEB29, pointer)
+    groups["floor"].append((T.radial(FEB29_LETTER, th, DAY_R0, h, w, sp), w))
+    groups["floor"].append((T.radial("29", th, DAY_R0 - l_len - DAY_GAP, h, w, sp), w))
     h, w, sp = MONTH_TEXT
     n0 = 1
     for m, (name, days) in enumerate(zip(MONTHS, MONTH_DAYS)):
@@ -295,7 +299,7 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
                      "ideally with a support-interface filament on the second nozzle")
         if dates:
             seg, text = with_inlay(seg, geoms["face"], FACE_Z[1])
-            if k == 0:                                     # "COMMUNE" and "29" on the recess floor
+            if k == 0:                                     # "COMMUNE" and "F 29" on the recess floor
                 from cad.lib import lettering as T
                 floor_in = bd.extrude(bd.Compound(T.faces(geoms["floor"], FACE_Z[1] - 2.4)), amount=TEXT_DEPTH,
                                       dir=(0, 0, -1))

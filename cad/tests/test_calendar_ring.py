@@ -50,6 +50,18 @@ def test_first_of_january_is_A_and_the_pointer_reads_left_to_right():
     assert max(xs) < -CAL.DAY_R0 + 2.0 and min(xs) >= -CAL.DAY_R0 - 1e-6
 
 
+def test_29_february_carries_F():
+    # Paul, PR #6: "dominical letter 29 February should be F as is used in the original"
+    assert CAL.FEB29_LETTER == "F"
+    g = CAL.date_inlays(0, False)["floor"]
+    th = math.radians(CAL.world_angle(L.FEB29, 0))
+    u = (math.cos(th), math.sin(th))
+    # the letter sits at the outer end of division 61, where every other day's letter sits
+    near = [p for p in getattr(g, "geoms", [g]) if p.distance(
+        __import__("shapely.geometry", fromlist=["Point"]).Point(u[0] * (CAL.DAY_R0 - 0.6), u[1] * (CAL.DAY_R0 - 0.6))) < 0.5]
+    assert near
+
+
 def test_inlays_are_cut_from_their_own_part():
     # base + inlay = the part without dates: the inlay is carved out of its own part, nothing more
     a, _ = CAL.build()

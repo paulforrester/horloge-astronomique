@@ -196,8 +196,11 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
   180°.
 - **Direction [D].** The year reads clockwise round the ring as seen from the front: today at the
   left, early April at the top when the pointer is on 1 January. To bring tomorrow to the pointer, the
-  ring turns **counter-clockwise**. Confirm on a photo [TBD]; if it is the other way, mirror the
-  ring again (one line in `calendar.py`).
+  ring turns **counter-clockwise**, so tomorrow sits just above the arrow. Confirm on a photo [TBD].
+  If it is the other way (tomorrow just below the arrow), the ring is mirrored again and the New Year
+  station, which acts 92 divisions after the pointer *in the direction of travel*, moves or has its
+  offset re-verified by the logic simulation. The change stays inside `calendar.py` and
+  `calendar_logic.py`.
 - The station stays at 6 o'clock, still 92 divisions after the pointer.
 - The pointer's readers (stop lever, stop switch, 1 March witness) reach back through a window in
   the M2 front plate at 168°–192°, r 140–177 mm.
@@ -428,9 +431,10 @@ What fits on the ring [D]:
   FÉVRIER are on the sector.
 - **Divisions 0–2:** "COMMENCEMENT", "DE L'ANNÉE", "COMMUNE" at 1.6 mm, the longest words that fit
   one division radially [S: ELS i4 for the words].
-- **On the recess floor:** "COMMUNE" (d = 2) and "29" (d = 61) sit on the floor, where the sector
+- **On the recess floor:** "COMMUNE" (d = 2) and "F 29" (d = 61) sit on the floor, where the sector
   uncovers them.
-- **29 February carries no dominical letter** [TBD: ELS does not say; check fig. 143 or a photo].
+- **29 February carries F**, as on the original (Paul, PR #6). F is the letter of the Roman
+  bissextile day, the doubled 24 February, so the letters from 1 March on are unchanged.
 - **Language and colour.** The language is French, as in the sources' quotations of the ring. The
   black letter colour is [E]; DA gives only the gold ground.
 
