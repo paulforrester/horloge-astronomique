@@ -442,9 +442,10 @@ What fits on the ring [D]:
   tops outward, as on the original. JANVIER and FÉVRIER are on the sector.
   - At the bottom of the ring they read upside down, as on any ring.
   - Accents (FÉVRIER, AOÛT, DÉCEMBRE) stay inside the sector's edge.
-- **Not copied (yet):** on the original the dominical letters are light on a dark column. That
-  would be an easy variant of the two-colour inlay (a black stripe with the letters left gold); see
-  §11.
+- **The letter column is a black stripe with the letters left gold**, as on the original (light
+  letters on a dark column; Paul, PR #6). The stripe runs the length of each part's days, r 155.9–158.4,
+  0.4 mm wider than the letters and 0.5 mm clear of the day numbers. It is part of the same black
+  inlay, so there are no extra parts.
 - **Divisions 0–2:** "COMMENCEMENT", "DE L'ANNÉE", "COMMUNE" at 1.6 mm, the longest words that fit
   one division radially [S: ELS i4 for the words].
 - **On the recess floor:** "COMMUNE" (d = 2) and "F 29" (d = 61) sit on the floor, where the sector
@@ -459,7 +460,7 @@ What fits on the ring [D]:
 **Settled from Paul's photograph (PR #6):** the ring turns clockwise (tomorrow below the arrow),
 and the layout across the band is month, day, letter.
 
-**Option, Paul's call:** dominical letters light on a dark column, as on the original, instead of
-black letters on gold. It costs no extra parts, and the letter column stays legible.
+**Settled (Paul, PR #6):** dominical letters light on a dark column, as on the original: a black
+stripe with the letters left gold.
 
 **Still to confirm on a photo, not a decision:** the weekday carousel's axis (§3 item 2; M7 design).

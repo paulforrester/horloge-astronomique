@@ -16,12 +16,13 @@ parts, at 1:8 [S: ELS i4: Ø 2.73 m outer, 21 cm wide, 368 divisions → Ø 341,
   day reads inwards along its division, day number then dominical letter, 2.2 mm capitals (≈ 9 pt),
   the letters in one straight column; month names 4 mm (≈ 16 pt) round the outer edge, reading
   clockwise with their tops outwards; "COMMENCEMENT", "DE L'ANNÉE", "COMMUNE" on divisions 0–2
-  [S: ELS i4] and "29" on
+  [S: ELS i4] and "29 F" on
   d = 61, both on the recess floor where the sector uncovers them. Letters A … G from A on
   1 January [S: ELS i4: "Au 1er janvier correspond la lettre A"]; 29 February carries F, as on the
   original (Paul, PR #6), the letter of the Roman bissextile day (the doubled 24 February). All
   flush two-colour inlays, 0.4 mm deep,
-  black on gold ("sur un fond doré" [S: DA p. 27]; the letter colour is [E]).
+  black on gold ("sur un fond doré" [S: DA p. 27]; the letter colour is [E]), except the dominical
+  letters, which are gold in a black column, as on the original (Paul's photograph; Paul, PR #6).
 - **Carrier** (4 printed segments) holding the rollers, with openings where readers reach the band:
   the **stop lever** and the **witness opto** at the pointer (9 o'clock), and the **station** at
   6 o'clock: E6 gearmotor + crank + pawl, jumper, 10-point counter star, wheel C (100 T) with its
@@ -84,6 +85,8 @@ LETTER_R0 = 158.0                      # dominical letters: one straight column,
 DAY_GAP = 0.9                          # between a day number and its letter
 NUMBER_END = LETTER_R0 + DAY_GAP       # day numbers end here (right-aligned on the letter column)
 WORD_R0 = 168.6                        # "COMMENCEMENT" … start at the outer edge (no month name there)
+STRIPE_PAD = 0.4                       # the letter column is a black stripe this much wider than the letters,
+                                       # with the letters left gold, as on the original (Paul, PR #6)
 MONTHS = ("JANVIER", "FÉVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET", "AOÛT", "SEPTEMBRE", "OCTOBRE",
           "NOVEMBRE", "DÉCEMBRE")
 MONTH_DAYS = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
@@ -198,13 +201,14 @@ def date_inlays(pointer: int, sector_leap: bool):
     from cad.lib import lettering as T
     sector_start = L.SECTOR_COMMON_START - (1 if sector_leap else 0)
     groups = {"face": [], "floor": [], "sector": []}
+    letters = {"face": [], "floor": [], "sector": []}       # cut out of the black stripe: they stay gold
 
     def entry(group, d, number, letter):                   # day number, then its dominical letter
         th = world_angle(d, pointer)
         h, w, sp = DAY_TEXT
         _, n_len, _ = T.layout(number, h, w, sp)
         groups[group].append((T.radial(number, th, NUMBER_END + n_len, h, w, sp), w))
-        groups[group].append((T.radial(letter, th, LETTER_R0, h, w, sp), w))
+        letters[group].append((T.radial(letter, th, LETTER_R0, h, w, sp), w))
 
     def day(group, d, n):
         entry(group, d, str(_day_of_month(n)), "ABCDEFG"[(n - 1) % 7])
@@ -226,7 +230,25 @@ def date_inlays(pointer: int, sector_leap: bool):
             (T.along_arc(name, world_angle(d_mid, pointer), MONTH_R, h, w, sp, clockwise=True), w))
         n0 += days
 
-    return {g: T.clean(T.merge([T.outline(lines, w) for lines, w in items])) for g, items in groups.items()}
+    # the letter column: a black stripe over the days of each part, the letters cut out of it
+    from shapely.geometry import Polygon
+    h, w, sp = DAY_TEXT
+    l_len = max(T.layout(c, h, w, sp)[1] for c in "ABCDEFG")
+    r0, r1 = LETTER_R0 - l_len - STRIPE_PAD, LETTER_R0 + STRIPE_PAD
+
+    def stripe(d0, d1):
+        a = np.radians(np.linspace(world_angle(d0, pointer), world_angle(d1, pointer), max(8, int((d1 - d0) * 4))))
+        return Polygon([(r1 * math.cos(t), r1 * math.sin(t)) for t in a] +
+                       [(r0 * math.cos(t), r0 * math.sin(t)) for t in a[::-1]])
+
+    stripes = {"face": stripe(L.MARCH1 - 0.5, L.N - 0.5),                      # 1 Mar … 31 Dec
+               "sector": stripe(sector_start - 0.5, sector_start + L.SECTOR_DAYS - 0.5),
+               "floor": stripe(L.FEB29 - 0.48, L.FEB29 + 0.48)}                # 29 Feb, inside the recess
+    out = {}
+    for g, items in groups.items():
+        cut = stripes[g].difference(T.merge([T.outline(lines, w_) for lines, w_ in letters[g]]))
+        out[g] = T.clean(T.merge([T.outline(lines, w_) for lines, w_ in items] + [cut]))
+    return out
 
 
 def _top_polygon(face):
