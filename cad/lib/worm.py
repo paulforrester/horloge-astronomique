@@ -59,7 +59,7 @@ class Worm:
     def self_locking(self, mu: float = 0.2) -> bool:
         return math.tan(math.radians(self.lead_angle)) < mu
 
-    def section(self, samples: int = 180) -> np.ndarray:
+    def section(self, samples: int = 96) -> np.ndarray:
         """Transverse section at z = 0 as an (N, 2) outline: radius as a function of angle."""
         a = math.radians(self.pressure_angle)
         rp, ra, rf = self.pitch_diameter / 2, self.tip_radius, self.root_radius

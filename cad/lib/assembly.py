@@ -129,8 +129,11 @@ def _mesh(shape, tolerance):
     return v, np.array(tris, int)
 
 
-def write_dae(asm: Assembly, path: Path):
-    """COLLADA with one named node per part, millimetres, Z up (SketchUp import)."""
+def write_dae(asm: Assembly, path: Path, tolerance: float = 0.1):
+    """COLLADA with one named node per part, millimetres, Z up (SketchUp import).
+
+    ``tolerance`` is the tessellation chord error (mm); coarser keeps big models light in SketchUp.
+    """
     from collada import Collada, asset, geometry, material, scene, source
     dae = Collada()
     dae.assetInfo.unitname, dae.assetInfo.unitmeter = "millimeter", 0.001
@@ -144,10 +147,10 @@ def write_dae(asm: Assembly, path: Path):
             dae.effects.append(eff)
             dae.materials.append(mat)
             mats[i.material] = mat
-        v, t = _mesh(i.shape, 0.1)
+        v, t = _mesh(i.shape, tolerance)
         if not len(t):
             continue
-        vs = source.FloatSource(f"{i.name}-v", v.ravel(), ("X", "Y", "Z"))
+        vs = source.FloatSource(f"{i.name}-v", np.round(v, 3).ravel(), ("X", "Y", "Z"))   # 1 µm: smaller file
         g = geometry.Geometry(dae, f"{i.name}-geom", i.name, [vs])
         il = source.InputList()
         il.addInput(0, "VERTEX", f"#{i.name}-v")

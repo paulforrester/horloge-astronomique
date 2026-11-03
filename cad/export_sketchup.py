@@ -23,6 +23,7 @@ MODELS = {
     "test_rig": lambda: rig.build()[0],
     "tolerance_coupons": lambda: coupons.build(),
 }
+TOLERANCE = {"m2_main_dial": 0.3}      # mm chord error; the whole module is large
 
 
 def main(out_dir: str = "export/sketchup") -> list[Path]:
@@ -31,7 +32,7 @@ def main(out_dir: str = "export/sketchup") -> list[Path]:
     written = []
     for name, make in MODELS.items():
         path = out / f"{name}.dae"
-        write_dae(make(), path)
+        write_dae(make(), path, tolerance=TOLERANCE.get(name, 0.1))
         written.append(path)
         print(f"{path}  {path.stat().st_size / 1e6:.2f} MB")
     return written
