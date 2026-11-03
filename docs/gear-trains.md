@@ -411,7 +411,7 @@ Errors are against the target value. Drift is the accumulated error of the displ
 | `M2.moon_hand` | v1 | 154/169 × 88/83 | 2 | 13552/14027 | 1 d 0 h 50 min 28.33 s | +0.007 s | -0.9429 | — | ≤ 1.0°/c | 171 mm (m 1) | OK |
 | `M2.year` | v1 | 15/99 × 13/97 × 12/89 | 3 | 260/94963 | 365 d 5 h 48 min 45.22 s | +10.169 s | -0.0116 | ±0.0005 | ≤ 1.0°/c | 101 mm (m 1) | OK |
 | `M2.weekday` | v1 | 12/84 | 1 | 1/7 | 7 d 0 h 0 min 0.00 s | 0 | 0 | — | exact | 86 mm (m 1) | OK |
-| `M2.node_cam` | v1.5 | 15/109 × 12/81 × 15/106 | 3 | 50/17331 | 346 d 14 h 52 min 21.75 s | +26.254 s | -0.0333 | — | ≤ 2.0°/c | 111 mm (m 1) | OK |
+| `M2.node_cam` | v1.5 | 98/99 × 71/79 × 62/55 | 3 | 431396/430155 | 0 d 23 h 55 min 51.45 s | -2.47e-05 s | +0.0038 | — | ≤ 2.0°/c | 101 mm (m 1) | OK |
 | `M3.year` | v1.5 | 15/99 × 13/97 × 12/89 | 3 | 260/94963 | 365 d 5 h 48 min 45.22 s | +10.169 s | -0.0116 | ±0.0005 | ≤ 1.0°/c | 101 mm (m 1) | OK |
 | `M3.solar_reduction` | v1.5 | [`M3.year`] × 20/40 | 1 | 130/94963 | 730 d 11 h 37 min 30.43 s | +20.337 s | -0.0058 | — | ≤ 1.0°/c | 42 mm (m 1) | OK |
 | `M3.anomalistic_year` | v1.5 | 12/110 × 12/111 × 13/112 | 3 | 39/28490 | 730 d 12 h 27 min 45.10 s | -9.29 min | +0.1590 | — | ≤ 1.0°/c | 114 mm (m 1) | OK |
@@ -448,7 +448,7 @@ Allowable root stress 9.75 MPa; face width 4 mm unless the train sets its own; r
 | `M2.moon_hand` | 4 mm | 88/83 | 710 N·mm | 10.0 N·mm | 0.14 MPa | 71 | 30 … 355 N·mm |
 | `M2.year` | 4 mm | 12/89 | 425 N·mm | 10.0 N·mm | 0.23 MPa | 43 | 30 … 213 N·mm |
 | `M2.weekday` | 4 mm | 12/84 | 401 N·mm | 10.0 N·mm | 0.24 MPa | 40 | 30 … 201 N·mm |
-| `M2.node_cam` | 4 mm | 15/106 | 599 N·mm | 10.0 N·mm | 0.16 MPa | 60 | 30 … 300 N·mm |
+| `M2.node_cam` | 4 mm | 62/55 | 446 N·mm | 10.0 N·mm | 0.22 MPa | 45 | 30 … 223 N·mm |
 | `M3.year` | 4 mm | 12/89 | 425 N·mm | 15.6 N·mm | 0.36 MPa | 27 | 30 … 213 N·mm |
 | `M3.solar_reduction` | 4 mm | 20/40 | 251 N·mm | 10.0 N·mm | 0.39 MPa | 25 | 30 … 126 N·mm |
 | `M3.anomalistic_year` | 4 mm | 13/112 | 570 N·mm | 10.0 N·mm | 0.17 MPa | 57 | 30 … 285 N·mm |
@@ -475,7 +475,7 @@ Motor 17HS19-2004S1 (NEMA 17, 1.8°): holding torque 0.59 N·m at 2.0 A [S: data
 |---|---|---|---|---|
 | M1 | 1:1 | 6.54 mN·m | 6.543 mN·m | 23× |
 | M1b | 1:1 | 6.03 mN·m | 6.029 mN·m | 24× |
-| M2 | 24:1 | 18.59 mN·m | 0.956 mN·m | 154× |
+| M2 | 24:1 | 32.31 mN·m | 1.662 mN·m | 89× |
 | M3 | 24:1 | 5.98 mN·m | 0.307 mN·m | 480× |
 | M5 | 24:1 | 5.94 mN·m | 0.306 mN·m | 483× |
 | M6 | 24:1 | 18.79 mN·m | 0.967 mN·m | 153× |

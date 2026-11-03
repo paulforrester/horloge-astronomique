@@ -19,6 +19,7 @@ python3 -m venv .venv-cad && .venv-cad/bin/pip install -r cad/requirements.txt
 
 | Module | Contents |
 |---|---|
+| `worm.py`, `differential.py` | Self-locking worm and throated helical worm wheel; spur planet-pair differential (output = 2 × carrier − input) |
 | `gears.py` | Involute spur gears (20°, ISO 53 rack). **Backlash** is a parameter: the total gap of a mesh, applied as tooth thinning split between the mates (D4). **Profile shift**: `auto_shift` (no undercut) and `pair_shifts` (keeps the standard centre distance). Internal gears, racks, operating centre distance for shifted pairs, mesh phasing. Module is always a parameter. Flanks are B-splines (4 edges per tooth), so a 169-tooth wheel builds in about a second. |
 | `hardware.py` | Bought parts from D4: Ø3/5/8 rods, 0.45 mm-wall brass tubes in 1 mm steps (`tube_stack` telescopes them with 0.10 mm clearance), the bearing set, M2–M5 screws and heat-set inserts. Nominal sizes until the parts are measured. |
 | `parts.py` | Rods, tubes, bearings, hubs, gears on hubs, bearing-seat cuts, plates, discs, standoffs, hands, radial cams and cam pressure angle. Printed fits live in one place (`FITS`, [E] until the tolerance test). |
@@ -41,12 +42,14 @@ python3 -m venv .venv-cad && .venv-cad/bin/pip install -r cad/requirements.txt
   design point.
 - `cad/tests/test_test_rig.py`: the rig's checks, every mesh engaged, the coupon matrix.
 - `cad/tests/test_sketchup_export.py`: every model writes a `.dae` with named nodes.
+- `cad/tests/test_worm_diff.py`, `test_m2_design.py`, `test_calendar_logic.py`: worm and differential meshing, the whole M2 module, and the calendar logic over four centuries.
 
 ## Modules (`cad/modules`)
 
 | Module | Status |
 |---|---|
 | `m2_main_dial/feasibility.py` | Layout study, accepted: [`docs/main-dial-feasibility.md`](../docs/main-dial-feasibility.md) |
+| `m2_main_dial/mechanism.py`, `calendar.py`, `calendar_logic.py`, `dial.py`, `full.py` | M2 detailed design, proposed: [`docs/m2-design.md`](../docs/m2-design.md). `python -m cad.modules.m2_main_dial.full` checks the whole module |
 | `test_rig/rig.py`, `test_rig/coupons.py` | Test rig and tolerance coupons, proposed: [`docs/test-rig.md`](../docs/test-rig.md). `python -m cad.modules.test_rig.rig` writes the 3MF print files to `export/test_rig/` |
 
 ## SketchUp files
@@ -68,5 +71,6 @@ Paul asked for SketchUp files of every CAD model (PR #4).
 | `export/sketchup/m2_main_dial_feasibility.dae` | The main-dial layout model (gears as blanks) |
 | `export/sketchup/test_rig.dae` | The test rig, real teeth |
 | `export/sketchup/tolerance_coupons.dae` | Fit, bearing-seat and gear coupons |
+| `export/sketchup/m2_main_dial.dae` | The M2 module: mechanism, calendar ring and station, two-colour dial |
 
 Other generated files go to `export/` (git-ignored). Released STL/3MF are added deliberately.

@@ -230,11 +230,15 @@ Scale aids [D]:
 - **Replica:**
   - A node cam on its own coaxial arbor, with a follower on a radial slide in the Moon arm.
   - The arm length becomes f(Moon longitude − node longitude).
-  - Two kinematic options for Phase 2:
+  - Two kinematic options were considered:
     - (a) the cam rotates in the dial frame at sidereal rate minus regression;
     - (b) the cam is carried on the Sun-hand frame and turns relative to it once per eclipse year.
-  - Option (b) needs one fewer full-speed coaxial tube [D, kinematics]. Choose in the Phase 2
-    main-dial feasibility study.
+  - **Chosen in the M2 design: (a)**, driven directly from the mean-time daily arbor by
+    98/99 × 71/79 × 62/55 (+0.004°/century) [D: `tools/ratios`]. The node's place on the dial
+    follows sidereal time, so (b) would wrongly add the equation of time once the Sun hand is
+    corrected (v1.5). See `docs/m2-design.md` §3.
+  - Display: discs and latitude enlarged ×4 with a 4:1 lever on the Moon hand
+    (`main-dial-feasibility.md` §4, accepted).
 - **Difficulty:** 4.
 - **Depends on:** I3, I4; ratio for the node regression (Phase 1).
 - **Validation:** the simulator compares indicated eclipses against an ephemeris (Phase 3).
