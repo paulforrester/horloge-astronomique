@@ -74,6 +74,18 @@ def test_29_february_carries_F():
     assert near
 
 
+def test_dominical_letters_are_gold_in_a_black_column():
+    # Paul, PR #6: "light letters on a dark column", as on the original
+    from shapely.geometry import Point
+    g = CAL.date_inlays(0, False)
+    for name, d in (("face", 100), ("sector", L.SECTOR_COMMON_START + 10), ("floor", L.FEB29)):
+        th = math.radians(CAL.world_angle(d, 0))
+        r = CAL.LETTER_R0 + CAL.STRIPE_PAD / 2              # inside the stripe, beside the letter
+        pt = Point(r * math.cos(th), r * math.sin(th))
+        stripe = [p for p in getattr(g[name], "geoms", [g[name]]) if p.distance(pt) < 1e-6]
+        assert stripe and len(stripe[0].interiors) >= 1, name   # black there, with the letter(s) as holes
+
+
 def test_inlays_are_cut_from_their_own_part():
     # base + inlay = the part without dates: the inlay is carved out of its own part, nothing more
     a, _ = CAL.build()
