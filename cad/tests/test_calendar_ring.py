@@ -39,15 +39,27 @@ def test_dates_stay_on_the_face_and_in_their_bands():
     h, w, _ = CAL.DAY_TEXT
     assert h == 2.2 and CAL.MONTH_TEXT[0] == 4.0           # the approved sizes
     # each day's entry fits its division: glyph height plus stroke under the division width
-    assert h + w < 2 * math.pi * (CAL.DAY_R0 - 6.0) / L.N
+    assert h + w < 2 * math.pi * (CAL.LETTER_R0 - 2.0) / L.N
 
 
 def test_first_of_january_is_A_and_the_pointer_reads_left_to_right():
     # ELS i4: "Au 1er janvier correspond la lettre A"; the day at the pointer (viewer's left) reads
     # inwards, i.e. left to right
-    lines = T.radial("A", CAL.world_angle(L.SECTOR_COMMON_START, L.SECTOR_COMMON_START), CAL.DAY_R0, 2.2, 0.35, 0.35)
+    lines = T.radial("A", CAL.world_angle(L.SECTOR_COMMON_START, L.SECTOR_COMMON_START), CAL.LETTER_R0, 2.2, 0.35, 0.35)
     xs = [x for line in lines for x, _ in line]
-    assert max(xs) < -CAL.DAY_R0 + 2.0 and min(xs) >= -CAL.DAY_R0 - 1e-6
+    assert max(xs) < -CAL.LETTER_R0 + 2.0 and min(xs) >= -CAL.LETTER_R0 - 1e-6
+
+
+def test_tomorrow_is_below_the_arrow_and_the_station_at_six():
+    # Paul's photograph of the original (PR #6): the year runs counter-clockwise round the ring, which
+    # turns clockwise, so tomorrow is just below Apollo's arrow (pattern B)
+    p = 100
+    assert CAL.world_angle(p, p) == pytest.approx(180.0)
+    assert math.sin(math.radians(CAL.world_angle(p + 1, p))) < 0           # tomorrow: below the arrow
+    assert math.sin(math.radians(CAL.world_angle(p - 1, p))) > 0           # yesterday: above it
+    # the station at 6 o'clock sees the division 92 days ahead of the pointer
+    assert CAL.world_angle(p + L.STATION_OFFSET, p) % 360 == pytest.approx(CAL.STATION_ANGLE % 360)
+    assert CAL.STATION_ANGLE == pytest.approx(-90.0)
 
 
 def test_29_february_carries_F():
@@ -56,9 +68,9 @@ def test_29_february_carries_F():
     g = CAL.date_inlays(0, False)["floor"]
     th = math.radians(CAL.world_angle(L.FEB29, 0))
     u = (math.cos(th), math.sin(th))
-    # the letter sits at the outer end of division 61, where every other day's letter sits
+    # the letter sits in the letter column of division 61, like every other day's letter
     near = [p for p in getattr(g, "geoms", [g]) if p.distance(
-        __import__("shapely.geometry", fromlist=["Point"]).Point(u[0] * (CAL.DAY_R0 - 0.6), u[1] * (CAL.DAY_R0 - 0.6))) < 0.5]
+        __import__("shapely.geometry", fromlist=["Point"]).Point(u[0] * (CAL.LETTER_R0 - 0.6), u[1] * (CAL.LETTER_R0 - 0.6))) < 0.5]
     assert near
 
 

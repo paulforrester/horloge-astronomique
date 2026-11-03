@@ -192,16 +192,20 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
   the viewer's left: DA writes "à la droite du spectateur" when it means the viewer's right.
 - ELS confirms it: "le jour qui commence venant alors sur la gauche de l'anneau, en face de la
   flèche" [S: ELS i4].
-- The first draft had the pointer on the right. The model is now mirrored, so the pointer is at
-  180°.
-- **Direction [D].** The year reads clockwise round the ring as seen from the front: today at the
-  left, early April at the top when the pointer is on 1 January. To bring tomorrow to the pointer, the
-  ring turns **counter-clockwise**, so tomorrow sits just above the arrow. Confirm on a photo [TBD].
-  If it is the other way (tomorrow just below the arrow), the ring is mirrored again and the New Year
-  station, which acts 92 divisions after the pointer *in the direction of travel*, moves or has its
-  offset re-verified by the logic simulation. The change stays inside `calendar.py` and
-  `calendar_logic.py`.
-- The station stays at 6 o'clock, still 92 divisions after the pointer.
+- The first draft had the pointer on the right. It is now at 180°.
+- **Direction: the ring turns clockwise** [S: Paul's photograph of the original, PR #6].
+  - Down the left side, the photograph shows the dates running from late September through
+    October into November. Apollo's hand is at about 1 November.
+  - So the year runs **counter-clockwise** round the ring, and **tomorrow is just below the
+    arrow**.
+  - The first draft of PR #6 had it the other way [D, unsourced]. The model is now built in its
+    canonical frame and turned 180°.
+  - The crop is `docs/img/m2/original_calendar_band.jpg`.
+- **The station stays at 6 o'clock.** With the ring turning clockwise, a division leaving the arrow
+  reaches it three quarters of a turn later. So the station sees the division **92 days ahead of
+  the pointer** (`STATION_OFFSET = +92`), and the year counter and setter act in October (below).
+- **E6's pawl** is unchanged in place; with the ratchet now driven clockwise, it pulls the tooth
+  instead of pushing it.
 - The pointer's readers (stop lever, stop switch, 1 March witness) reach back through a window in
   the M2 front plate at 168°–192°, r 140–177 mm.
 
@@ -241,15 +245,16 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
        (`cad/tests/test_calendar_ring.py`).
 
 **Year counter (station at 6 o'clock, fixed on the carrier):**
-- **Wheel C** (100 positions, one per year; 100-tooth gear at module 0.8) is advanced each April by
-  a pin on the ring at d = 0. The pin pushes a 10-point star, and a 10-tooth pinion on the star's
+- **Wheel C** (100 positions, one per year; 100-tooth gear at module 0.8) is advanced each year on
+  1 October by a pin on the ring at d = 0. The pin pushes a 10-point star, and a 10-tooth pinion on the star's
   arbor turns C. This is Ungerer's star-and-rake principle with a fixed counter.
 - **24 leap bumps** sit at positions 4 … 96.
 - **A 4-position satellite**, turned a quarter turn per century by a pin on C, supplies the leap
   bump at x00 when x00 is divisible by 400.
 - **The follower** reads C and the satellite.
-- **In May the sector's tab passes the setter**, a railway-switch guide steered by the follower. It
-  puts the sector in the leap or common position for the coming year.
+- **On 30 or 31 October the sector's tab passes the setter**, a railway-switch guide steered by the
+  follower. It puts the sector in the leap or common position for the coming year, two months
+  before it reaches the arrow.
 - Everything acts between 1 March and 31 December, so it never disturbs a date being shown (the
   test checks the timing).
 
@@ -262,7 +267,8 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
 | Counter pin | 156.25 | full depth | 10-point star at the station (deep layer) |
 | Sector tab | 159–162 | shallow layer only | setter at the station. It passes over the star. |
 
-- **Station position.** The station sits 92 divisions (90°) after the pointer. It and wheel C are
+- **Station position.** The station sits at 6 o'clock and sees the division 92 days ahead of the
+  pointer. It and wheel C are
   kept at least 195 mm below the dial centre, about 18 mm above the floor [E].
 - **Setting** (architecture §7): turn the ring to the date (lift the jumper), set the sector, and
   set wheel C and the satellite to the year, as `calendar_logic.initial_state` does.
@@ -424,11 +430,21 @@ What fits on the ring [D]:
   same on every machine.
 - **Inlay.** Black on gold, flush, 0.4 mm deep. Each ring segment and the sector is a two-body
   print (`ring_<k>.3mf`, `sector.3mf`), face down, 0.2 mm nozzle.
-- **Each day:** the dominical letter, then the day number, reading inwards along its division at
-  2.2 mm (stroke 0.35 mm). The letters run A … G from A on 1 January [S: ELS i4: "Au 1er janvier
-  correspond la lettre A"].
-- **Months:** names at 4 mm (stroke 0.6 mm) round the inner edge, reading clockwise. JANVIER and
-  FÉVRIER are on the sector.
+- **Layout across the band, outside in, as on the original** [S: Paul's photograph, PR #6]: month
+  name, day number, dominical letter. The saints' names that follow on the original are left out at
+  1:8.
+- **Each day:** the day number, then its dominical letter, reading inwards along its division at
+  2.2 mm (stroke 0.35 mm). The letters form one straight column (r 158.0 inwards) and the numbers
+  are right-aligned on it.
+  - The letters run A … G from A on 1 January [S: ELS i4: "Au 1er janvier correspond la lettre A"].
+    The photograph agrees: 15 Oct = A, 22 Oct = A.
+- **Months:** names at 4 mm (stroke 0.6 mm) round the **outer edge**, reading clockwise with their
+  tops outward, as on the original. JANVIER and FÉVRIER are on the sector.
+  - At the bottom of the ring they read upside down, as on any ring.
+  - Accents (FÉVRIER, AOÛT, DÉCEMBRE) stay inside the sector's edge.
+- **Not copied (yet):** on the original the dominical letters are light on a dark column. That
+  would be an easy variant of the two-colour inlay (a black stripe with the letters left gold); see
+  §11.
 - **Divisions 0–2:** "COMMENCEMENT", "DE L'ANNÉE", "COMMUNE" at 1.6 mm, the longest words that fit
   one division radially [S: ELS i4 for the words].
 - **On the recess floor:** "COMMUNE" (d = 2) and "F 29" (d = 61) sit on the floor, where the sector
@@ -438,8 +454,12 @@ What fits on the ring [D]:
 - **Language and colour.** The language is French, as in the sources' quotations of the ring. The
   black letter colour is [E]; DA gives only the gold ground.
 
-<p align="center"><img src="img/m2/calendar_dates.png" width="760" alt="Dates at the pointer (3 Nov) and at the start of the year: black on the ring face, red on the recess floor, blue on the sector"></p>
+<p align="center"><img src="img/m2/calendar_dates.png" width="700" alt="Model: dates at the pointer (3 Nov) and at the start of the year: black on the ring face, red on the recess floor, blue on the sector"> <img src="img/m2/original_calendar_band.jpg" width="200" alt="The original beside Apollo (Paul's photograph, about 1 Nov 2026): dates run downward past the arrow"></p>
 
-**Small checks that need a photo, not a decision:**
-- which way the ring turns (§6 [D]: counter-clockwise);
-- the weekday carousel's axis (§3 item 2; M7 design).
+**Settled from Paul's photograph (PR #6):** the ring turns clockwise (tomorrow below the arrow),
+and the layout across the band is month, day, letter.
+
+**Option, Paul's call:** dominical letters light on a dark column, as on the original, instead of
+black letters on gold. It costs no extra parts, and the letter column stays legible.
+
+**Still to confirm on a photo, not a decision:** the weekday carousel's axis (§3 item 2; M7 design).

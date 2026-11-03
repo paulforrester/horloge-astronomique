@@ -716,6 +716,26 @@ this pair of hands.
   agrees with the traditional reckoning, in which the intercalated day is a doubled 24 February,
   letter F [D: 24 Feb is day 55 and (55 − 1) mod 7 = 5, which is F].
 
+**Calendar ring as seen today** [S: Paul's photograph of the original, IMG_9952, taken about
+1 November 2026, shared in PR #6; crop in `docs/img/m2/original_calendar_band.jpg`]
+- **Direction.** Down the left side the dates run from late September (N.D. de la Merci, s. Cyprien,
+  s. Michel) through OCTOBRE to mid-November (Toussaint, Les Trépassés, s. Martin, s. Elisabeth).
+  Apollo's hand is at about 1 November, the day of the photograph.
+  - So the year runs **counter-clockwise** round the ring, the ring **turns clockwise**, and
+    tomorrow is **just below** the arrow.
+  - This settles the question ELS and DA leave open.
+- **Layout across the band, outside in:**
+  1. the month name, along the outer edge, reading clockwise with its tops outward (OCTOBRE,
+     SEPTEMBRE);
+  2. the day number, reading inwards;
+  3. the dominical letter, light letters in a dark column;
+  4. the saint's name.
+  Fixed and movable feasts are labelled in small black boxes (for example "Quatre Temps").
+- **Dominical letters** read 15 Oct = A, 22 Oct = A, … This agrees with A on 1 January [ELS i4]
+  [D: 15 Oct is day 288 of a common year, and (288 − 1) mod 7 = 0, which is A].
+- **Main dial:** XII at the top, numerals rising clockwise; "TEMPS APPARENT" in gold near the top;
+  the sunrise and sunset hands are labelled "LEVER DU SOLEIL" (left) and "COUCHER DU SOLEIL" (right).
+
 **Leap day [i4]** (the most original part, per ELS):
 - 1 January – 28 February are painted on a movable sector that can advance or retreat one division.
 - Three divisions after 31 December read "COMMENCEMENT DE L'ANNÉE commune". In leap years the

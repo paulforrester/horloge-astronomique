@@ -17,12 +17,16 @@ pointer is held up (Ungerer's projection S):
     common position (so the New Year jump is 4 divisions), at d = 1 when it is in its leap position
     (the jump is 3). The sector's position alone decides 3 or 4: no separate cam is needed.
 
-The **station** at the bottom of the ring sees the division ``pointer + STATION_OFFSET``:
+The **station** at the bottom of the ring sees the division ``pointer + STATION_OFFSET``. The ring
+turns clockwise seen from the front (Paul's photograph of the original, PR #6: tomorrow's date is
+just below Apollo's arrow), so a division leaving the arrow at 9 o'clock reaches the station at
+6 o'clock three quarters of a turn later: the station sees the division that will reach the arrow
+in 92 days.
   - a pin on the ring at d = COUNTER_PIN advances the year counter, wheel C (100 positions, one per
-    year), once per turn, in April. A pin on C advances the satellite (4 positions, one per
+    year), once per turn, on 1 October. A pin on C advances the satellite (4 positions, one per
     century) when C passes from 99 to 0;
-  - later in the same turn (May), the sector's tab passes the setter finger, which puts the sector
-    in the leap or common position for the year to come, read from C and the satellite.
+  - later in the same turn (30 or 31 October), the sector's tab passes the setter finger, which puts
+    the sector in the leap or common position for the year to come, read from C and the satellite.
 
 ``simulate`` runs the mechanism day by day and reports every day on which the ring shows the wrong
 date. The test runs 2026–2426, which covers 2100, 2200, 2300 (not leap) and 2400 (leap).
@@ -38,7 +42,7 @@ SECTOR_COMMON_START = 3
 SECTOR_DAYS = 59
 FEB29 = 61
 MARCH1 = 62
-STATION_OFFSET = -92          # the station is about a quarter turn (90°) after the pointer
+STATION_OFFSET = 92           # the station (6 o'clock) sees the division 92 days ahead of the pointer
 COUNTER_PIN = 0               # ring division carrying the counter pin
 SECTOR_TAB = 30               # sector division carrying the setter tab (mid-sector)
 S_BUMPS = (0, 1)              # fixed projection S
@@ -121,7 +125,7 @@ def initial_state(date: dt.date) -> Mechanism:
         d = start + (date - dt.date(y, 1, 1)).days if not (date.month == 2 and date.day == 29) else FEB29
     else:
         d = MARCH1 + (date - dt.date(y, 3, 1)).days
-    # wheel C shows the year the sector will next be set for: this year until the April advance
+    # wheel C shows the year the sector will next be set for: this year until the October advance
     # has happened (pin seen when the pointer reaches COUNTER_PIN - STATION_OFFSET), then next year
     pin_pointer = (COUNTER_PIN - STATION_OFFSET) % N
     target = y + 1 if d >= pin_pointer else y

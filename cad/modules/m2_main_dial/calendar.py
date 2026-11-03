@@ -12,9 +12,11 @@ parts, at 1:8 [S: ELS i4: Ø 2.73 m outer, 21 cm wide, 368 divisions → Ø 341,
 - **Movable sector** (1 Jan … 28 Feb), sliding one division in a recess of the face. Its foot goes
   through a slot under its first day; behind the face, a short arm carries the lug one division
   back (where the logic wants it), on a 45°-ish chamfer so the face-down print needs no support.
-- **Dates** (Paul, PR #5: sizes approved): each day reads inwards along its division, dominical
-  letter then day number, 2.2 mm capitals (≈ 9 pt); month names 4 mm (≈ 16 pt) round the inner edge,
-  reading clockwise; "COMMENCEMENT", "DE L'ANNÉE", "COMMUNE" on divisions 0–2 [S: ELS i4] and "29" on
+- **Dates** (Paul, PR #5: sizes approved; layout from Paul's photograph of the original, PR #6): each
+  day reads inwards along its division, day number then dominical letter, 2.2 mm capitals (≈ 9 pt),
+  the letters in one straight column; month names 4 mm (≈ 16 pt) round the outer edge, reading
+  clockwise with their tops outwards; "COMMENCEMENT", "DE L'ANNÉE", "COMMUNE" on divisions 0–2
+  [S: ELS i4] and "29" on
   d = 61, both on the recess floor where the sector uncovers them. Letters A … G from A on
   1 January [S: ELS i4: "Au 1er janvier correspond la lettre A"]; 29 February carries F, as on the
   original (Paul, PR #6), the letter of the Roman bissextile day (the doubled 24 February). All
@@ -27,10 +29,11 @@ parts, at 1:8 [S: ELS i4: Ø 2.73 m outer, 21 cm wide, 368 divisions → Ø 341,
 
 **Pointer on the viewer's left** [S: ELS i4: "le jour qui commence venant alors sur la gauche de
 l'anneau, en face de la flèche"; DA p. 27: Apollo "se tient à la droite du calendrier", the
-calendar's own right, i.e. the viewer's left]. The ring turns counter-clockwise seen from the front;
-ring division d sits at world angle 180° - (d - pointer) x 360/368, and the station (pointer - 92)
-is at 270°, the bottom. The geometry is built in a canonical frame (pointer at 0°, clockwise) and
-mirrored about the vertical plane, which gives exactly that mapping.
+calendar's own right, i.e. the viewer's left]. **The ring turns clockwise** seen from the front, so
+the year runs counter-clockwise round it and tomorrow sits just below the arrow (Paul's photograph of
+the original, PR #6). Ring division d sits at world angle 180° + (d - pointer) x 360/368, and the
+station (pointer + 92) is at 270°, the bottom. The geometry is built in a canonical frame (pointer at
+0°, ring turning clockwise) and turned 180° about the dial axis, which gives exactly that mapping.
 """
 from __future__ import annotations
 
@@ -65,17 +68,22 @@ LAYER_B = (-8.3, -6.0)                                        # deep: star, leve
 RIM_Z = -6.5                                                  # S-track rim face; bumps reach -8.3
 CARRIER = (133.0, 178.0, -10.9, -8.8)                        # r_in, r_out, z0, z1 (in front of the M2 front plate)
 ROLLER_R = SKIRT[0] - BEARINGS["688ZZ"].od / 2               # 136.5
-STATION_ANGLE = L.STATION_OFFSET * DIV                       # -90° (unchanged by the mirror)
-POINTER_ANGLE = 180.0                                        # after the mirror: the viewer's left
+STATION_ANGLE_C = L.STATION_OFFSET * DIV                     # +90° in the canonical frame
+STATION_ANGLE = STATION_ANGLE_C + 180.0 - 360.0              # -90° in the world: 6 o'clock
+POINTER_ANGLE = 180.0                                        # the viewer's left (canonical 0° turned 180°)
 M_C = 0.8                                                    # wheel C module (hidden, light load)
 # dates (flush inlays, depth TEXT_DEPTH): (cap height, stroke, letter spacing) in mm
 TEXT_DEPTH = 0.4
 DAY_TEXT = (2.2, 0.35, 0.35)           # dominical letters and day numbers (Paul, PR #5)
 MONTH_TEXT = (4.0, 0.6, 0.8)           # month names (Paul, PR #5)
 WORD_TEXT = (1.6, 0.3, 0.3)            # "COMMENCEMENT", "DE L'ANNÉE", "COMMUNE": long words in one division
-DAY_R0 = 168.6                         # each day's entry starts here and reads inwards
-DAY_GAP = 0.9                          # between the letter and the number
-MONTH_R = 147.6                        # month-name baseline
+# across the band, outside in, as on the original (Paul's photograph, PR #6): month name, day number,
+# dominical letter (then the saints, left out at 1:8)
+MONTH_R = 163.7                        # month-name baseline, tops outward: capitals to 168.0, accents to 169.0
+LETTER_R0 = 158.0                      # dominical letters: one straight column, reading inwards from here
+DAY_GAP = 0.9                          # between a day number and its letter
+NUMBER_END = LETTER_R0 + DAY_GAP       # day numbers end here (right-aligned on the letter column)
+WORD_R0 = 168.6                        # "COMMENCEMENT" … start at the outer edge (no month name there)
 MONTHS = ("JANVIER", "FÉVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET", "AOÛT", "SEPTEMBRE", "OCTOBRE",
           "NOVEMBRE", "DÉCEMBRE")
 MONTH_DAYS = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
@@ -173,8 +181,8 @@ def ring_and_sector(pointer: int, sector_leap: bool):
 
 
 def world_angle(d: float, pointer: int) -> float:
-    """Angle (degrees, world frame after the mirror) of division d's centre line."""
-    return 180.0 - ring_angle(d, pointer)
+    """Angle (degrees, world frame) of division d's centre line: canonical turned by 180°."""
+    return 180.0 + ring_angle(d, pointer)
 
 
 def _day_of_month(n: int) -> int:
@@ -191,13 +199,15 @@ def date_inlays(pointer: int, sector_leap: bool):
     sector_start = L.SECTOR_COMMON_START - (1 if sector_leap else 0)
     groups = {"face": [], "floor": [], "sector": []}
 
-    def day(group, d, n):                                  # dominical letter, then the day number
+    def entry(group, d, number, letter):                   # day number, then its dominical letter
         th = world_angle(d, pointer)
         h, w, sp = DAY_TEXT
-        letter = "ABCDEFG"[(n - 1) % 7]
-        _, l_len, _ = T.layout(letter, h, w, sp)
-        groups[group].append((T.radial(letter, th, DAY_R0, h, w, sp), w))
-        groups[group].append((T.radial(str(_day_of_month(n)), th, DAY_R0 - l_len - DAY_GAP, h, w, sp), w))
+        _, n_len, _ = T.layout(number, h, w, sp)
+        groups[group].append((T.radial(number, th, NUMBER_END + n_len, h, w, sp), w))
+        groups[group].append((T.radial(letter, th, LETTER_R0, h, w, sp), w))
+
+    def day(group, d, n):
+        entry(group, d, str(_day_of_month(n)), "ABCDEFG"[(n - 1) % 7])
 
     for j in range(L.SECTOR_DAYS):                         # 1 Jan … 28 Feb on the sector
         day("sector", sector_start + j, j + 1)
@@ -205,12 +215,8 @@ def date_inlays(pointer: int, sector_leap: bool):
         day("face", d, d - L.MARCH1 + 60)
     h, w, sp = WORD_TEXT
     for d, word, group in ((0, "COMMENCEMENT", "face"), (1, "DE L'ANNÉE", "face"), (2, "COMMUNE", "floor")):
-        groups[group].append((T.radial(word, world_angle(d, pointer), DAY_R0, h, w, sp), w))
-    h, w, sp = DAY_TEXT                                    # 29 Feb: F, as on the original (Paul, PR #6)
-    _, l_len, _ = T.layout(FEB29_LETTER, h, w, sp)
-    th = world_angle(L.FEB29, pointer)
-    groups["floor"].append((T.radial(FEB29_LETTER, th, DAY_R0, h, w, sp), w))
-    groups["floor"].append((T.radial("29", th, DAY_R0 - l_len - DAY_GAP, h, w, sp), w))
+        groups[group].append((T.radial(word, world_angle(d, pointer), WORD_R0, h, w, sp), w))
+    entry("floor", L.FEB29, "29", FEB29_LETTER)            # 29 Feb: F, as on the original (Paul, PR #6)
     h, w, sp = MONTH_TEXT
     n0 = 1
     for m, (name, days) in enumerate(zip(MONTHS, MONTH_DAYS)):
@@ -287,7 +293,7 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
         pointer = L.initial_state(dt.date(2026, 11, 3)).pointer
     a = Assembly("m2_calendar")
     ring, sector, feats = ring_and_sector(pointer, sector_leap)
-    mirror = lambda shp: shp.mirror(bd.Plane.YZ)          # canonical (pointer at 0°, CW) -> pointer at 180°, CCW
+    mirror = lambda shp: shp.rotate(bd.Axis.Z, 180.0)     # canonical (pointer at 0°) -> world (pointer at 180°)
     sector = mirror(sector)
     feats = {k: mirror(v) for k, v in feats.items()}
     geoms = date_inlays(pointer, sector_leap) if dates else None
@@ -329,11 +335,11 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
             a.allow(f"ring_segment_{k}", f"ring_segment_{j}")
     # carrier with openings at the pointer and the station
     carrier = _wedge(0, 360, CARRIER[0], CARRIER[1], CARRIER[2], CARRIER[3], n=180)
-    for ang_ in (0.0, STATION_ANGLE):
+    for ang_ in (0.0, STATION_ANGLE_C):
         carrier -= _wedge(ang_ - 6, ang_ + 6, BAND[0] - 1, CARRIER[1] + 1, CARRIER[2] - 1, CARRIER[3] + 1, n=8)
-    station_ext = _wedge(STATION_ANGLE - 22, STATION_ANGLE + 22, CARRIER[1] - 2, STATION_R_MAX, CARRIER[2], CARRIER[3],
+    station_ext = _wedge(STATION_ANGLE_C - 22, STATION_ANGLE_C + 22, CARRIER[1] - 2, STATION_R_MAX, CARRIER[2], CARRIER[3],
                          n=24)
-    carrier = carrier + station_ext - _wedge(STATION_ANGLE - 6, STATION_ANGLE + 6, BAND[0] - 1, 190.0,
+    carrier = carrier + station_ext - _wedge(STATION_ANGLE_C - 6, STATION_ANGLE_C + 6, BAND[0] - 1, 190.0,
                                              CARRIER[2] - 1, CARRIER[3] + 1, n=8)
     carrier = mirror(carrier)
     # --- a self-supporting printed frame (Paul, PR #5: the works are printed and independent of the
@@ -452,7 +458,8 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
         return bd.Box(L_, w, t, align=(bd.Align.MIN, bd.Align.CENTER, bd.Align.MIN)).rotate(bd.Axis.Z, ang_).moved(
             bd.Location((p0[0], p0[1], z0)))
     pawl = link(P(184.0, -7.0), P(171.0, -2.5))
-    a.add("E6_pawl", pawl, group="station", note="one crank turn = one ratchet tooth = one division")
+    a.add("E6_pawl", pawl, group="station",
+          note="pulls the ring clockwise: one crank turn = one ratchet tooth = one division")
     jumper = link(P(184.0, 8.0), P(171.0, 3.5))
     a.add("ring_jumper", jumper, group="station", note="detent between strokes")
     for nm in ("E6_pawl", "ring_jumper"):          # they rest in the ratchet's tooth gaps by design
@@ -467,7 +474,7 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
         for k in range(4):
             a.allow(nm, f"carrier_segment_{k}")
 
-    # ---------------------------------------------------------------- pointer side (9 o'clock: built at 0°, mirrored)
+    # ---------------------------------------------------------------- pointer side (9 o'clock: built at 0°, turned 180°)
     lever = bd.Box(3.0, 20.0, RIM_Z - (CARRIER[2] - 3.0), align=(bd.Align.CENTER, bd.Align.MIN, bd.Align.MIN)).moved(
         bd.Location(((TRACK_S[0] + TRACK_S[1]) / 2, -2.0, CARRIER[2] - 3.0)))
     a.add("stop_lever", mirror(lever), group="pointer", print_up=(1, 0, 0),
