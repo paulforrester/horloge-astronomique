@@ -7,7 +7,18 @@ parts, at 1:8 [S: ELS i4: Ø 2.73 m outer, 21 cm wide, 368 divisions → Ø 341,
   riding on 6 rollers (688ZZ), and a thin rear lip with 368 ratchet teeth (one per division).
 - **Feature band** behind the face (r 148 … 162, z -8.3 … -5.8): fixed bumps S at d = 0, 1; the
   sector's lug and tab (through slots); the counter pin at d = 0; the 1 March witness flag.
-- **Movable sector** (1 Jan … 28 Feb), sliding one division in a recess of the face.
+  The stop-lever track is split in two halves read by the one lever: the fixed bumps on the inner
+  half, the sector's lug on the outer half, so the lug never meets a bump in either position.
+- **Movable sector** (1 Jan … 28 Feb), sliding one division in a recess of the face. Its foot goes
+  through a slot under its first day; behind the face, a short arm carries the lug one division
+  back (where the logic wants it), on a 45°-ish chamfer so the face-down print needs no support.
+- **Dates** (Paul, PR #5: sizes approved): each day reads inwards along its division, dominical
+  letter then day number, 2.2 mm capitals (≈ 9 pt); month names 4 mm (≈ 16 pt) round the inner edge,
+  reading clockwise; "COMMENCEMENT", "DE L'ANNÉE", "COMMUNE" on divisions 0–2 [S: ELS i4] and "29" on
+  d = 61, both on the recess floor where the sector uncovers them. Letters A … G from A on
+  1 January [S: ELS i4: "Au 1er janvier correspond la lettre A"]; 29 February carries no letter
+  [TBD: ELS does not say; check fig. 143 or a photo]. All flush two-colour inlays, 0.4 mm deep,
+  black on gold ("sur un fond doré" [S: DA p. 27]; the letter colour is [E]).
 - **Carrier** (4 printed segments) holding the rollers, with openings where readers reach the band:
   the **stop lever** and the **witness opto** at the pointer (9 o'clock), and the **station** at
   6 o'clock: E6 gearmotor + crank + pawl, jumper, 10-point counter star, wheel C (100 T) with its
@@ -43,6 +54,9 @@ BAND = (148.0, 162.0, -8.3, -5.8)                            # feature band behi
 # radial tracks in the band (each is read by one reader only) and the two depth layers
 TRACK_WITNESS = (148.0, 149.5)                                # 1 March flag, opto at the pointer
 TRACK_S = (150.0, 154.0)                                      # rim + bumps + sector lug, stop lever
+S_INNER = (150.2, 151.8)                                      # its inner half: the fixed bumps S
+S_OUTER = (152.2, 153.8)                                      # its outer half: the sector's lug, arm, foot
+ARM_Z = (-6.3, -5.5)                                          # the lug's arm: in front of the lever's plane
 R_PIN = 156.25                                                # counter pin, star at the station
 TRACK_TAB = (159.0, 162.0)                                    # sector tab, setter at the station
 LAYER_A = (-5.8, -3.0)                                        # shallow: tab
@@ -53,6 +67,17 @@ ROLLER_R = SKIRT[0] - BEARINGS["688ZZ"].od / 2               # 136.5
 STATION_ANGLE = L.STATION_OFFSET * DIV                       # -90° (unchanged by the mirror)
 POINTER_ANGLE = 180.0                                        # after the mirror: the viewer's left
 M_C = 0.8                                                    # wheel C module (hidden, light load)
+# dates (flush inlays, depth TEXT_DEPTH): (cap height, stroke, letter spacing) in mm
+TEXT_DEPTH = 0.4
+DAY_TEXT = (2.2, 0.35, 0.35)           # dominical letters and day numbers (Paul, PR #5)
+MONTH_TEXT = (4.0, 0.6, 0.8)           # month names (Paul, PR #5)
+WORD_TEXT = (1.6, 0.3, 0.3)            # "COMMENCEMENT", "DE L'ANNÉE", "COMMUNE": long words in one division
+DAY_R0 = 168.6                         # each day's entry starts here and reads inwards
+DAY_GAP = 0.9                          # between the letter and the number
+MONTH_R = 147.6                        # month-name baseline
+MONTHS = ("JANVIER", "FÉVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET", "AOÛT", "SEPTEMBRE", "OCTOBRE",
+          "NOVEMBRE", "DÉCEMBRE")
+MONTH_DAYS = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 RIM_SPAN = (-55.0, 150.0)      # rim where the carrier overhangs the M2 front plate (world angles, CCW)
 RIM_BACK_Z = -40.0             # L-section depth
 CARRIER_BOLTS = (165.0, 195.0, 225.0)     # countersunk M3 into the M2 front plate, where they overlap
@@ -95,22 +120,23 @@ def ring_and_sector(pointer: int, sector_leap: bool):
     recess = _wedge(a_sec0, a_sec1, R_IN + 1.0, R_OUT - 1.0, FACE_Z[1] - 2.4, FACE_Z[1] + 1, n=40)
     ring = face - recess
     ring = ring + _wedge(0, 360, SKIRT[0], SKIRT[1], SKIRT[2], FACE_Z[0], n=368) + _ratchet_lip(pointer)
-    # slots for the sector's lug (S track) and tab, two divisions long
-    lug_slot_r = ((TRACK_S[0] + TRACK_S[1]) / 2, 1.6)
-    tab_slot_r = ((TRACK_TAB[0] + TRACK_TAB[1]) / 2, 1.6)
-    for d_, (r_mid, hw) in ((L.SECTOR_COMMON_START - 1, lug_slot_r),
-                            (L.SECTOR_TAB + L.SECTOR_COMMON_START - 1, tab_slot_r)):
-        a = ring_angle(d_, pointer)
-        ring -= _wedge(a - DIV / 2, a + DIV * 1.5, r_mid - hw, r_mid + hw, FACE_Z[0] - 1, FACE_Z[1] - 2.0, n=6)
-    # S track rim (continuous, the stop lever rests on its face at RIM_Z), except under the lug slot
+    # slots through the recess floor, each over its part's travel (common position and one division
+    # back): the sector's foot (under its first day, outer half of the S track) and its tab
+    for d0, d1, r0, r1 in ((L.SECTOR_COMMON_START - 1, L.SECTOR_COMMON_START, S_OUTER[0] - 0.2, S_OUTER[1] + 0.2),
+                           (L.SECTOR_TAB - 1, L.SECTOR_TAB, TRACK_TAB[0] - 0.6, TRACK_TAB[1] + 0.1)):
+        ring -= _wedge(ring_angle(d0, pointer) - DIV / 2, ring_angle(d1, pointer) + DIV / 2, r0, r1,
+                       FACE_Z[0] - 1, FACE_Z[1] - 2.0, n=6)
+    # S track rim: the stop lever rests on its face at RIM_Z. Its outer half is cut away where the
+    # sector's lug and arm travel (d 0.5 … 3.5); the inner half stays continuous under the lever.
     rim = _wedge(0, 360, TRACK_S[0], TRACK_S[1], RIM_Z, FACE_Z[0], n=368)
-    a = ring_angle(L.SECTOR_COMMON_START - 1, pointer)
-    rim -= _wedge(a - DIV / 2, a + DIV * 1.5, TRACK_S[0] - 1, TRACK_S[1] + 1, RIM_Z - 1, FACE_Z[0] + 1, n=6)
+    rim -= _wedge(ring_angle(L.SECTOR_COMMON_START - 2, pointer) - DIV / 2,
+                  ring_angle(L.SECTOR_COMMON_START, pointer) + DIV / 2,
+                  S_OUTER[0] - 0.2, TRACK_S[1] + 1.0, RIM_Z - 1, FACE_Z[0] + 0.5, n=8)
     ring = ring + rim
     feats = {}
-    for d_ in L.S_BUMPS:                                                       # fixed projection S
+    for d_ in L.S_BUMPS:                                       # fixed projection S, inner half of the track
         a = ring_angle(d_, pointer)
-        feats[f"S_bump_{d_}"] = _wedge(a - DIV * 0.45, a + DIV * 0.45, TRACK_S[0], TRACK_S[1], BAND[2], RIM_Z, n=4)
+        feats[f"S_bump_{d_}"] = _wedge(a - DIV * 0.45, a + DIV * 0.45, S_INNER[0], S_INNER[1], BAND[2], RIM_Z, n=4)
     a = ring_angle(L.COUNTER_PIN, pointer)
     feats["counter_pin"] = parts.rod(2.5, FACE_Z[0] - BAND[2]).moved(
         bd.Location((R_PIN * math.cos(math.radians(a)), R_PIN * math.sin(math.radians(a)), BAND[2])))
@@ -121,13 +147,118 @@ def ring_and_sector(pointer: int, sector_leap: bool):
     s0 = ring_angle(sector_start, pointer) - DIV / 2
     s1 = ring_angle(sector_start + L.SECTOR_DAYS - 1, pointer) + DIV / 2
     sector = _wedge(s0 + 0.05, s1 - 0.05, R_IN + 1.2, R_OUT - 1.2, FACE_Z[1] - 2.3, FACE_Z[1] - 0.1, n=40)
-    a_lug = ring_angle(sector_start - 1, pointer)
-    sector += _wedge(a_lug - DIV * 0.4, a_lug + DIV * 0.4, TRACK_S[0] + 0.5, TRACK_S[1] - 0.5, BAND[2],
-                     FACE_Z[1] - 2.2, n=4)
+    # foot under the first day, through the floor slot; arm back one division; the lug on its end
+    a_foot = ring_angle(sector_start, pointer)
+    sector += _wedge(a_foot - DIV * 0.4, a_foot + DIV * 0.4, S_OUTER[0], S_OUTER[1], ARM_Z[0], FACE_Z[1] - 2.2, n=4)
+    sector += _wedge(a_foot - DIV * 1.4, a_foot, S_OUTER[0], S_OUTER[1], ARM_Z[0], ARM_Z[1], n=6)
+    sector += _wedge(a_foot - DIV * 1.4, a_foot - DIV * 0.6, S_OUTER[0], S_OUTER[1], BAND[2], ARM_Z[1], n=4)
+    r_m = (S_OUTER[0] + S_OUTER[1]) / 2                    # chamfer under the arm (prints face down unsupported)
+    t0, t1 = -0.4 * math.radians(DIV) * r_m, -1.4 * math.radians(DIV) * r_m
+    tri = bd.Face(bd.Wire.make_polygon([bd.Vector(S_OUTER[0], y_, z_) for y_, z_ in (
+        (t0 + 0.05, FACE_Z[0] - 0.3), (t0 + 0.05, ARM_Z[1] - 0.01), (t1, ARM_Z[1] - 0.01))], close=True))
+    sector += bd.extrude(tri, amount=S_OUTER[1] - S_OUTER[0], dir=(1, 0, 0)).rotate(bd.Axis.Z, a_foot)
     a_tab = ring_angle(L.SECTOR_TAB + sector_start - L.SECTOR_COMMON_START, pointer)
     sector += _wedge(a_tab - DIV * 0.4, a_tab + DIV * 0.4, TRACK_TAB[0] + 0.5, TRACK_TAB[1] - 0.5, LAYER_A[0],
                      FACE_Z[1] - 2.2, n=4)
     return ring, sector, feats
+
+
+def world_angle(d: float, pointer: int) -> float:
+    """Angle (degrees, world frame after the mirror) of division d's centre line."""
+    return 180.0 - ring_angle(d, pointer)
+
+
+def _day_of_month(n: int) -> int:
+    for m, days in enumerate(MONTH_DAYS):
+        if n <= days:
+            return n
+        n -= days
+    raise ValueError(n)
+
+
+def date_inlays(pointer: int, sector_leap: bool):
+    """The dates as inlay solids in the world frame: (ring face, recess floor, sector face)."""
+    from cad.lib import lettering as T
+    sector_start = L.SECTOR_COMMON_START - (1 if sector_leap else 0)
+    groups = {"face": [], "floor": [], "sector": []}
+
+    def day(group, d, n):                                  # dominical letter, then the day number
+        th = world_angle(d, pointer)
+        h, w, sp = DAY_TEXT
+        letter = "ABCDEFG"[(n - 1) % 7]
+        _, l_len, _ = T.layout(letter, h, w, sp)
+        groups[group].append((T.radial(letter, th, DAY_R0, h, w, sp), w))
+        groups[group].append((T.radial(str(_day_of_month(n)), th, DAY_R0 - l_len - DAY_GAP, h, w, sp), w))
+
+    for j in range(L.SECTOR_DAYS):                         # 1 Jan … 28 Feb on the sector
+        day("sector", sector_start + j, j + 1)
+    for d in range(L.MARCH1, L.N):                         # 1 Mar … 31 Dec on the ring
+        day("face", d, d - L.MARCH1 + 60)
+    h, w, sp = WORD_TEXT
+    for d, word, group in ((0, "COMMENCEMENT", "face"), (1, "DE L'ANNÉE", "face"), (2, "COMMUNE", "floor")):
+        groups[group].append((T.radial(word, world_angle(d, pointer), DAY_R0, h, w, sp), w))
+    h, w, sp = DAY_TEXT                                    # 29 Feb: number only (letter TBD)
+    _, l_len, _ = T.layout("A", h, w, sp)
+    groups["floor"].append((T.radial("29", world_angle(L.FEB29, pointer), DAY_R0 - l_len - DAY_GAP, h, w, sp), w))
+    h, w, sp = MONTH_TEXT
+    n0 = 1
+    for m, (name, days) in enumerate(zip(MONTHS, MONTH_DAYS)):
+        n_mid = n0 + (days - 1) / 2
+        d_mid = sector_start + n_mid - 1 if m < 2 else L.MARCH1 + n_mid - 60
+        groups["sector" if m < 2 else "face"].append(
+            (T.along_arc(name, world_angle(d_mid, pointer), MONTH_R, h, w, sp, clockwise=True), w))
+        n0 += days
+
+    from shapely.ops import unary_union
+    return {g: unary_union([T.outline(lines, w) for lines, w in items]) for g, items in groups.items()}
+
+
+def _top_polygon(face):
+    """Shapely polygon of a planar build123d face (outer wire and holes), sampling curved edges."""
+    from shapely.geometry import Polygon
+
+    def ring(wire):
+        pts = []
+        for e in wire.order_edges():
+            n = 1 if e.geom_type == bd.GeomType.LINE else 12
+            pts += [(v.X, v.Y) for v in (e.position_at(t / n) for t in range(n))]
+        return pts
+    return Polygon(ring(face.outer_wire()), [ring(w) for w in face.inner_wires()])
+
+
+def _glue(a, b):
+    """Fuse two solids that only touch on (partly) coinciding faces: OCCT's glue mode skips the
+    face-face intersections that make a plain boolean with thousands of glyph edges so slow."""
+    from OCP.BOPAlgo import BOPAlgo_GlueShift
+    from OCP.BRepAlgoAPI import BRepAlgoAPI_Fuse
+    from OCP.collections import List_TopoDS_Shape as _List
+    args, tools = _List(), _List()
+    args.Append(a.wrapped)
+    tools.Append(b.wrapped)
+    op = BRepAlgoAPI_Fuse()
+    op.SetArguments(args)
+    op.SetTools(tools)
+    op.SetGlue(BOPAlgo_GlueShift)
+    op.Build()
+    if not op.IsDone():
+        raise RuntimeError("glue fuse failed")
+    return bd.Part(bd.Shape.cast(op.Shape()))
+
+
+def with_inlay(body, text_geom, z_top: float):
+    """(base, text): ``body`` with a flush inlay ``text_geom`` (Shapely, plane XY) sunk TEXT_DEPTH
+    into its top face at ``z_top``. The top layer is rebuilt in 2D and glued back, so no boolean
+    ever meets the glyphs."""
+    from cad.lib import lettering as T
+    cut = bd.Box(1000, 1000, 50, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)).moved(
+        bd.Location((0, 0, z_top - TEXT_DEPTH)))
+    layer = body & cut
+    top = max((f for f in layer.faces() if abs(f.center().Z - z_top) < 1e-6 and abs(f.normal_at().Z) > 0.999),
+              key=lambda f: f.area)
+    poly = _top_polygon(top)
+    gold, ink = poly.difference(text_geom), poly.intersection(text_geom)
+    ext = lambda g: bd.extrude(bd.Compound(T.faces(g, z_top)), amount=TEXT_DEPTH, dir=(0, 0, -1))
+    return _glue(body - cut, ext(gold)), ext(ink)
 
 
 def segments(ring, pointer: int, n: int = 4):
@@ -140,7 +271,7 @@ def segments(ring, pointer: int, n: int = 4):
     return out
 
 
-def build(pointer: int | None = None, sector_leap: bool = False):
+def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = True):
     import datetime as dt
     if pointer is None:                                   # 3 Nov 2026
         pointer = L.initial_state(dt.date(2026, 11, 3)).pointer
@@ -149,21 +280,41 @@ def build(pointer: int | None = None, sector_leap: bool = False):
     mirror = lambda shp: shp.mirror(bd.Plane.YZ)          # canonical (pointer at 0°, CW) -> pointer at 180°, CCW
     sector = mirror(sector)
     feats = {k: mirror(v) for k, v in feats.items()}
+    geoms = date_inlays(pointer, sector_leap) if dates else None
     for k, seg in enumerate(mirror(sg) for sg in segments(ring, pointer)):
+        note = "gold, face down: the dates are a flush black inlay on the bed side (0.2 mm nozzle)"
+        if k == 0:
+            note += ("; the Jan-Feb sector's seat is a pocket open to the bed: support from the bed inside it, "
+                     "ideally with a support-interface filament on the second nozzle")
+        if dates:
+            seg, text = with_inlay(seg, geoms["face"], FACE_Z[1])
+            if k == 0:                                     # "COMMUNE" and "29" on the recess floor
+                from cad.lib import lettering as T
+                floor_in = bd.extrude(bd.Compound(T.faces(geoms["floor"], FACE_Z[1] - 2.4)), amount=TEXT_DEPTH,
+                                      dir=(0, 0, -1))
+                text = text + (seg & floor_in)
+                seg = seg - floor_in
+            a.add(f"ring_text_{k}", text, material="black", group="ring", print_up=(0, 0, -1), print_set=f"ring_{k}",
+                  nozzle=0.2, inside=f"ring_segment_{k}", note=f"dates, second filament of ring_{k}.3mf")
+            a.allow(f"ring_text_{k}", f"ring_segment_{k}")
         a.add(f"ring_segment_{k}", seg, material="PLA", group="ring", print_up=(0, 0, -1), nozzle=0.2,
-              note="face down, so dates can be a flush two-colour inlay on the bed side" + (
-                  "; the Jan-Feb sector's seat is a pocket open to the bed: support from the bed inside it, "
-                  "ideally with a support-interface filament on the second nozzle" if k == 0 else ""))
+              print_set=f"ring_{k}" if dates else "", note=note)
+    if dates:
+        sector, sector_text = with_inlay(sector, geoms["sector"], FACE_Z[1] - 0.1)
+        a.add("sector_text", sector_text, material="black", group="ring", print_up=(0, 0, -1),
+              print_set="sector", nozzle=0.2, inside="sector_jan_feb",
+              note="1 Jan … 28 Feb, second filament of sector.3mf")
+        a.allow("sector_text", "sector_jan_feb")
     a.add("sector_jan_feb", sector, material="PLA", group="ring", print_up=(0, 0, -1), nozzle=0.2,
-          note="slides one division: leap / common")
+          print_set="sector" if dates else "", note="slides one division: leap / common; foot, arm and lug grow up "
+          "from the face-down plate on a chamfer, no support")
     for nm, shp in feats.items():
         a.add(nm, shp, material="PLA" if "pin" not in nm else "steel", printed="pin" not in nm, group="ring")
         for k in range(4):
             a.allow(nm, f"ring_segment_{k}")
-    for k in range(4):
+    for k in range(4):                     # the segments touch at their joints; the sector clears the ring
         for j in range(k + 1, 4):
             a.allow(f"ring_segment_{k}", f"ring_segment_{j}")
-        a.allow(f"ring_segment_{k}", "sector_jan_feb")
     # carrier with openings at the pointer and the station
     carrier = _wedge(0, 360, CARRIER[0], CARRIER[1], CARRIER[2], CARRIER[3], n=180)
     for ang_ in (0.0, STATION_ANGLE):

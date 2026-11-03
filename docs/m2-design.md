@@ -223,6 +223,18 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
    - **a lug on the sector**, one division before its first day. It sits at d = 2 in common years
      (jump 4) and at d = 1 in leap years (jump 3).
    - So **the sector's position alone decides 3 or 4**. Ungerer's separate cam E is not needed.
+   - **How the lug is carried (corrected after PR #5).**
+     - The sector's **foot** passes through a floor slot under its first day.
+     - Behind the face, an **arm** reaches one division back to the **lug**. The arm sits on a
+       chamfer, so the face-down print needs no support.
+     - The stop-lever track is split: the fixed bumps run on its inner half and the lug on its
+       outer half. In leap years the lug lands on d = 1, where a bump already is, so it needs its
+       own half. The one lever spans both halves.
+     - **The PR #5 model was wrong here.** It had the lug in the solid face in the leap position,
+       unconnected to the sector, and the tab slot two divisions off. A blanket ring-sector contact
+       allowance hid both.
+     - Now the sector clears the ring in both positions, and a test checks it
+       (`cad/tests/test_calendar_ring.py`).
 
 **Year counter (station at 6 o'clock, fixed on the carrier):**
 - **Wheel C** (100 positions, one per year; 100-tooth gear at module 0.8) is advanced each April by
@@ -242,7 +254,7 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
 | Track | r (mm) | Depth | Reader |
 |---|---|---|---|
 | 1 March witness flag | 148–149.5 | deep | reflective opto at the pointer (architecture §6, updated) |
-| Stop-lever track: rim, bumps S, sector lug | 150–154 | rim at −6.5, bumps to −8.3 | stop lever at the pointer |
+| Stop-lever track: rim; bumps S (inner half, 150.2–151.8); sector lug (outer half, 152.2–153.8) | 150–154 | rim at −6.5, bumps and lug to −8.3; the lug's arm stays in front of −6.3 | stop lever at the pointer, spanning both halves |
 | Counter pin | 156.25 | full depth | 10-point star at the station (deep layer) |
 | Sector tab | 159–162 | shallow layer only | setter at the station. It passes over the star. |
 
@@ -298,8 +310,9 @@ tolerance coupons, so these are design-stage files.
 
 **Print poses.** Each part records which way is up (`Item.print_up`). Where it does not, the
 exporter tries both faces down and keeps the one with less to support.
-- **Face down:** ring segments and sector (dates become a flush inlay on the bed side), the dial
-  (two bodies), and the carrier segments (rim and tabs grow upward; the tab gussets are 45°).
+- **Face down:** ring segments and sector, each a two-body print (gold base, black dates as a flush
+  inlay on the bed side: `ring_0.3mf` … `ring_3.3mf`, `sector.3mf`); the dial (two bodies,
+  `dial.3mf`); and the carrier segments (rim and tabs grow upward; the tab gussets are 45°).
 - **Flat:** gears, plates, hands and links lie flat, on whichever face needs less support.
 - **Worm: axis vertical.** The thread's lower flank is a 70° overhang, 2 mm deep. An earlier draft
   said the 4.76° lead made this "fine"; that was wrong, because the lead angle is not the
@@ -359,7 +372,6 @@ These are reserved or simplified:
   ball);
 - the setter switch's guide profile and the follower geometry (they are blocks in the model; the
   logic is proven in `calendar_logic.py`);
-- the ring's printed dates (sizes: §11 decision 5);
 - the dominical-letter dial (I10: set by hand in v1);
 - the v2 feasts arc;
 - Apollo's figure.
@@ -398,12 +410,27 @@ What fits on the ring [D]:
   division.
 - A month spans 28–31 divisions, about 85 mm of arc, so its name can be much larger.
 
-**Still open: decision 5, the text sizes.** Recommended:
+**Decision 5: approved by Paul on 3 Nov 2026** ("Ring font face size approved"):
 - **day numbers and dominical letters at 2.2 mm (≈ 9 pt)**, the most a division allows;
 - **month names at 4 mm (≈ 16 pt)** along the circumference.
 
-Both are flush two-colour inlays on the face-down print, using the 0.2 mm nozzle. The dates go
-into the model once these sizes are confirmed.
+**As modelled** (`calendar.py`, `cad/lib/lettering.py`):
+- **Font.** Single-stroke capitals drawn in code, so no font file is needed and the result is the
+  same on every machine.
+- **Inlay.** Black on gold, flush, 0.4 mm deep. Each ring segment and the sector is a two-body
+  print (`ring_<k>.3mf`, `sector.3mf`), face down, 0.2 mm nozzle.
+- **Each day:** the dominical letter, then the day number, reading inwards along its division at
+  2.2 mm (stroke 0.35 mm). The letters run A … G from A on 1 January [S: ELS i4: "Au 1er janvier
+  correspond la lettre A"].
+- **Months:** names at 4 mm (stroke 0.6 mm) round the inner edge, reading clockwise. JANVIER and
+  FÉVRIER are on the sector.
+- **Divisions 0–2:** "COMMENCEMENT", "DE L'ANNÉE", "COMMUNE" at 1.6 mm, the longest words that fit
+  one division radially [S: ELS i4 for the words].
+- **On the recess floor:** "COMMUNE" (d = 2) and "29" (d = 61) sit on the floor, where the sector
+  uncovers them.
+- **29 February carries no dominical letter** [TBD: ELS does not say; check fig. 143 or a photo].
+- **Language and colour.** The language is French, as in the sources' quotations of the ring. The
+  black letter colour is [E]; DA gives only the gold ground.
 
 **Small checks that need a photo, not a decision:**
 - which way the ring turns (§6 [D]: counter-clockwise);
