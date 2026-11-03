@@ -20,7 +20,8 @@
    "file": "cannon_pinion_12.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -38,7 +39,8 @@
    "file": "minute_wheel_48_15.stl",
    "overhang_mm2": 61.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -56,7 +58,8 @@
    "file": "hour_wheel_45.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -74,7 +77,8 @@
    "file": "clutch_front_collet.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -92,7 +96,8 @@
    "file": "noon_pinion_12_A.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -110,7 +115,8 @@
    "file": "noon_wheel_54_12_X.stl",
    "overhang_mm2": 39.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -128,7 +134,8 @@
    "file": "day_wheel_64_B.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -147,7 +154,8 @@
    "file": "sun_drive_48_B.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -165,7 +173,8 @@
    "file": "sun_wheel_48_C.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -183,7 +192,8 @@
    "file": "shadow_wheel_48_C.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -201,7 +211,8 @@
    "file": "index_flag_A.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -219,7 +230,8 @@
    "file": "front_plate.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -237,7 +249,8 @@
    "file": "back_plate.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -258,7 +271,8 @@
    "file": "pillar_0.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -277,7 +291,8 @@
    "file": "foot_0.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -295,7 +310,8 @@
    "file": "dial_12h.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -313,7 +329,8 @@
    "file": "dial_24h.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -331,7 +348,8 @@
    "file": "hand_hour.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -349,7 +367,8 @@
    "file": "hand_minute.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -367,7 +386,8 @@
    "file": "hand_sun.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -385,7 +405,8 @@
    "file": "hand_middle.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -403,7 +424,8 @@
    "file": "arm_shadow.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -421,7 +443,8 @@
    "file": "electronics_tray.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   }
  ]
 }

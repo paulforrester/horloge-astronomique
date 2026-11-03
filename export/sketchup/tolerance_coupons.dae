@@ -1,7 +1,7 @@
 <COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
   <asset>
-    <created>2026-11-03T09:33:55.319390</created>
-    <modified>2026-11-03T09:33:55.319395</modified>
+    <created>2026-11-03T11:25:09.232220</created>
+    <modified>2026-11-03T11:25:09.232226</modified>
     <unit name="millimeter" meter="0.001"/>
     <up_axis>Z_UP</up_axis>
   </asset>

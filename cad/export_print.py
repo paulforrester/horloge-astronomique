@@ -3,11 +3,12 @@
 Paul, PR #5: "All 3d printer parts should include either a 3mf file or an STL file that can be
 imported into BambuStudio." Output, per model, in export/print/<model>/:
 
-- ``<part>.stl``: one per distinct printed part, in its print pose (the assembly direction in
+- ``<part>.stl``: one per distinct single-colour printed part, in its print pose (the assembly direction in
   ``Item.print_up`` faces up), centred on the origin and standing on z = 0, so it drops straight
   onto the plate. Identical parts (same volume, surface area, height and material) are written once
   and counted.
-- ``<set>.3mf``: the bodies of one multi-colour print (``Item.print_set``) in register. In Bambu
+- ``<set>.3mf``: the bodies of one multi-colour print (``Item.print_set``) in register, and only
+  there (no separate STLs, which would duplicate them). In Bambu
   Studio, open it, answer "Yes" to loading it as one object with several parts, then give each part
   its filament.
 - ``README.md``: the manifest. It lists quantity, material, nozzle, size on the bed, the fit on the
@@ -107,8 +108,11 @@ def export_model(name: str, asm, out_dir: Path) -> dict:
         else:
             rows.append(row)
     for r in rows:
-        r["file"] = f"{r['names'][0]}.stl"
-        bd.export_stl(r["shape"], str(out / r["file"]), tolerance=STL_TOLERANCE, angular_tolerance=STL_ANGULAR)
+        if r["set"]:                                # a multi-colour body ships inside its set's 3MF only
+            r["file"] = f"{r['set']}.3mf"
+        else:
+            r["file"] = f"{r['names'][0]}.stl"
+            bd.export_stl(r["shape"], str(out / r["file"]), tolerance=STL_TOLERANCE, angular_tolerance=STL_ANGULAR)
         r["overhang_mm2"] = round(set_overhang[r["set"]] if r["set"] else overhang_area(r["shape"]), 0)
         r["fits_single"] = _fits(r["size"], BED_SINGLE)
         r["fits_dual"] = _fits(r["size"], BED_DUAL)

@@ -302,12 +302,12 @@ possible, otherwise use model grade plywood"; decisions D12).
 ## 8. Print and parts notes
 
 **Print files** (Paul, PR #5): `python -m cad.export_print` writes `export/print/<model>/`:
-- one STL per distinct printed part, already in its print pose and standing on z = 0;
-- a 3MF for each multi-colour print;
+- one STL per distinct single-colour printed part, already in its print pose and standing on z = 0;
+- one 3MF per multi-colour print, holding its bodies in register (no separate STLs for them);
 - a `README.md` manifest with quantity, material, nozzle, size, bed fit, down-facing area, and
   whether the part meshes closed and manifold (lib3mf's check, as Bambu Studio expects).
 
-For M2 that is 57 files for 90 prints. The press, slide and bearing fits still wait for the
+For M2 that is 51 STLs and 6 two-colour 3MFs (the dial, the four ring segments, the sector) for 95 prints. The press, slide and bearing fits still wait for the
 tolerance coupons, so these are design-stage files.
 
 **Print poses.** Each part records which way is up (`Item.print_up`). Where it does not, the

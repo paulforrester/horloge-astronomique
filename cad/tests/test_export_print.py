@@ -58,7 +58,8 @@ def test_export_counts_identical_parts_once_and_writes_sets(tmp_path):
     face = [p for p in m["parts"] if p["set"] == "face"]
     assert all(p["overhang_mm2"] < 1.0 for p in face)              # the inlay supports the field
     assert (out / "face.3mf").stat().st_size > 0
-    assert sorted(f.name for f in out.glob("*.stl")) == ["face_field.stl", "face_inlay.stl", "gear_a.stl", "tee.stl"]
+    assert sorted(f.name for f in out.glob("*.stl")) == ["gear_a.stl", "tee.stl"]      # the set ships as face.3mf
+    assert {p["file"] for p in face} == {"face.3mf"}
     assert json.loads((out / "manifest.json").read_text())["sets"] == {"face": ["face_field", "face_inlay"]}
     readme = (out / "README.md").read_text()
     assert "| `gear_a.stl` | 2 | gear_b |" in readme and "face.3mf" in readme
