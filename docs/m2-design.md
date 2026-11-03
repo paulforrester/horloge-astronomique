@@ -258,6 +258,28 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
 - Everything acts between 1 March and 31 December, so it never disturbs a date being shown (the
   test checks the timing).
 
+**Setter and follower: concept approved by Paul (3 Nov 2026), detail design in progress.**
+
+<p align="center"><img src="img/m2/setter_concept.png" width="860" alt="Setter concept: flip-flop rocker on the ring, reset and set ramps at the station, follower on wheel C"></p>
+
+- **Why a rocker.** A fixed part at the station can hold the sector back while the ring moves on,
+  but it can never push the sector forward. Something on the ring must therefore turn the ring's
+  motion into a push in either direction.
+- **The rocker.** It is a small two-position rocker on the ring, beside the sector's tab, and its
+  two positions are the sector's two positions:
+  - common: the set arm is out;
+  - leap: the reset arm is out.
+- **At the station, each October, two ramps act on it:**
+  - the **reset ramp** is fixed and always present. It flips a leap rocker to common;
+  - the **set ramp** rides on a spring plunger that follows wheel C's bumps. It stands in the lane
+    only when the coming year is a leap year, and then flips the rocker to leap.
+- **Energy.** It all comes from the ring's own motion (E6). There is no extra motor, and the
+  counting stays purely mechanical (rule 2).
+- **The 400-year satellite** becomes Ungerer's planet wheel on C: a quarter turn per turn of C,
+  with its single bump in place only once in 400 years [S: ELS i4].
+- **Making room.** The counter star now fills the band where the rocker must pass, so it is moved
+  or replaced. The detail design follows below.
+
 **Radial tracks behind the ring.** Each track has one reader, so nothing triggers the wrong reader.
 
 | Track | r (mm) | Depth | Reader |
