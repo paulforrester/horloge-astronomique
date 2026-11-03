@@ -81,6 +81,9 @@ at the base). Depth is not yet known — see the open items in `docs/reference-n
   print calibration, hardware bring-up, flashing, tuning, building the wooden case.
 - CAD source is code (parametric). Generated exports go in `export/`. Don't commit large binaries
   except released STL/3MF files.
+- **SketchUp files for every CAD model** (Paul, PR #4): each model is listed in
+  `cad/export_sketchup.py` and its `.dae` (named nodes, mm, Z up) in `export/sketchup/` is committed
+  with the PR.
 
 ## Paul's tools and experience (for context)
 
