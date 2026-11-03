@@ -98,10 +98,24 @@ def outline(polylines: list, stroke: float, resolution: int = 3):
     return unary_union(geoms)
 
 
+def merge(geoms):
+    from shapely.ops import unary_union
+    return unary_union(geoms)
+
+
+def clean(geom, tolerance: float = 0.003, grid: float = 0.001):
+    """Drop the sub-micron edges that buffered arcs leave where they meet (they mesh into degenerate,
+    non-manifold triangles that 3MF rejects): simplify within ``tolerance`` and snap to ``grid`` mm,
+    both far below what a 0.2 mm nozzle resolves."""
+    import shapely
+    return shapely.set_precision(geom.simplify(tolerance, preserve_topology=True), grid)
+
+
 def faces(geom, z: float = 0.0) -> list:
     """build123d faces (with holes) from a Shapely Polygon / MultiPolygon, in the plane z."""
     import build123d as bd
-    polys = [geom] if geom.geom_type == "Polygon" else list(geom.geoms)
+    import shapely
+    polys = [g for g in shapely.get_parts(geom) if g.geom_type == "Polygon"]
     out = []
     for p in polys:
         if p.is_empty:

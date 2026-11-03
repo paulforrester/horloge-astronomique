@@ -60,3 +60,7 @@ def test_inlays_are_cut_from_their_own_part():
         assert a[ink].shape.volume > 50
         assert a[base].shape.volume + a[ink].shape.volume == pytest.approx(plain[base].shape.volume, abs=0.05)
         assert len(a[base].shape.solids()) == 1 and a[base].shape.is_valid
+    # every printed calendar part meshes closed and manifold (Bambu Studio / lib3mf); PR #5's full-turn
+    # wedges left a zero-width slit at the pointer that did not
+    from cad.export_print import mesh_ok
+    assert [i.name for i in a.items if i.printed and not mesh_ok(i.shape)] == []

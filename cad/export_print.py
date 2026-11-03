@@ -41,6 +41,17 @@ def _models():
     }
 
 
+def mesh_ok(shape) -> bool:
+    """True if the part meshes as a closed, manifold, oriented mesh (lib3mf's check, as Bambu Studio
+    expects); STL export alone never checks this."""
+    import build123d as bd
+    try:
+        bd.Mesher().add_shape(shape, linear_deflection=STL_TOLERANCE, angular_deflection=STL_ANGULAR)
+        return True
+    except RuntimeError:
+        return False
+
+
 def _fits(size, bed) -> bool:
     x, y, z = size
     return z <= bed[2] and ((x <= bed[0] and y <= bed[1]) or (y <= bed[0] and x <= bed[1]))
@@ -101,6 +112,7 @@ def export_model(name: str, asm, out_dir: Path) -> dict:
         r["overhang_mm2"] = round(set_overhang[r["set"]] if r["set"] else overhang_area(r["shape"]), 0)
         r["fits_single"] = _fits(r["size"], BED_SINGLE)
         r["fits_dual"] = _fits(r["size"], BED_DUAL)
+        r["mesh_ok"] = mesh_ok(r["shape"])
     sets = {}
     for s in sorted({r["set"] for r in rows if r["set"]}):
         mesher = bd.Mesher()
@@ -139,6 +151,7 @@ def _readme(name: str, m: dict) -> str:
         "- **Fit** is checked against the H2D build volume, single nozzle (325 × 320 × 325) and dual nozzle "
         "(300 × 320 × 325).",
         "- **Nozzle 0.2** marks parts with module 0.8 teeth or 2 mm lettering.",
+        "- **Mesh** is lib3mf's check that the part meshes closed and manifold, as Bambu Studio expects.",
         "- **Fits not final.** The press, slide and bearing fits wait for the tolerance coupons, so print "
         "`tolerance_coupons` first and regenerate after `FITS` is updated.",
         "",
@@ -146,14 +159,15 @@ def _readme(name: str, m: dict) -> str:
     for s, members in m["sets"].items():
         lines += [f"**Multi-colour print `{s}.3mf`**: {', '.join(members)}. Open it, answer *Yes* to loading it as "
                   "one object with several parts, then give each part its filament.", ""]
-    lines += ["| File | Qty | Also used as | Material | Nozzle | Size on bed (mm) | Fits | Down-facing (mm²) | Notes |",
-              "|---|---|---|---|---|---|---|---|---|"]
+    lines += ["| File | Qty | Also used as | Material | Nozzle | Size on bed (mm) | Fits | Down-facing (mm²) | Mesh | Notes |",
+              "|---|---|---|---|---|---|---|---|---|---|"]
     for p in m["parts"]:
         x, y, z = p["size"]
         fit = "both" if p["fits_dual"] else ("single only" if p["fits_single"] else "**no**")
         also = ", ".join(p["names"][1:]) or "—"
         lines.append(f"| `{p['file']}` | {len(p['names'])} | {also} | {p['material']} | {p['nozzle']} | "
-                     f"{x:.0f} × {y:.0f} × {z:.1f} | {fit} | {p['overhang_mm2']:.0f} | {p['note'] or ''} |")
+                     f"{x:.0f} × {y:.0f} × {z:.1f} | {fit} | {p['overhang_mm2']:.0f} | "
+                     f"{'ok' if p.get('mesh_ok', True) else '**bad**'} | {p['note'] or ''} |")
     return "\n".join(lines) + "\n"
 
 
@@ -164,7 +178,9 @@ def main(out_dir: str = "export/print", only: str | None = None) -> dict:
             continue
         m = export_model(name, make(), Path(out_dir))
         size = sum(f.stat().st_size for f in (Path(out_dir) / name).iterdir()) / 1e6
-        print(f"{name}: {m['unique_parts']} files for {m['printed_parts']} prints, {size:.1f} MB")
+        bad = [p["file"] for p in m["parts"] if not p["mesh_ok"]]
+        print(f"{name}: {m['unique_parts']} files for {m['printed_parts']} prints, {size:.1f} MB"
+              + (f"; MESH NOT MANIFOLD: {bad}" if bad else ""))
         res[name] = m
     return res
 

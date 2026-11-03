@@ -50,6 +50,7 @@ def test_export_counts_identical_parts_once_and_writes_sets(tmp_path):
     m = export_print.export_model("mini", a, tmp_path)
     out = tmp_path / "mini"
     assert m["printed_parts"] == 5 and m["unique_parts"] == 4
+    assert all(p["mesh_ok"] for p in m["parts"])
     gear = next(p for p in m["parts"] if p["names"][0] == "gear_a")
     assert gear["names"] == ["gear_a", "gear_b"]
     tee = next(p for p in m["parts"] if p["names"][0] == "tee")

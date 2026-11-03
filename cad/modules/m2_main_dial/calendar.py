@@ -91,10 +91,17 @@ def ring_angle(d: int, pointer: int) -> float:
 
 
 def _wedge(a0: float, a1: float, r0: float, r1: float, z0: float, z1: float, n: int = 24):
-    """Annular sector between angles a0..a1 (degrees)."""
-    th = np.radians(np.linspace(a0, a1, n))
-    pts = [(r1 * math.cos(t), r1 * math.sin(t)) for t in th] + [(r0 * math.cos(t), r0 * math.sin(t)) for t in th[::-1]]
-    face = bd.Face(bd.Wire.make_polygon([bd.Vector(x, y, 0) for x, y in pts], close=True))
+    """Annular sector between angles a0..a1 (degrees); a full turn is a true annulus (outer polygon
+    with an inner hole), not a polygon that runs out and back, whose zero-width slit leaves two
+    coincident faces in the solid and a non-manifold seam in its mesh."""
+    if a1 - a0 >= 360.0 - 1e-9:
+        th = np.radians(np.linspace(a0, a0 + 360.0, n, endpoint=False))
+        ring_ = lambda r: bd.Wire.make_polygon([bd.Vector(r * math.cos(t), r * math.sin(t), 0) for t in th], close=True)
+        face = bd.Face(ring_(r1), [ring_(r0)]) if r0 > 0 else bd.Face(ring_(r1))
+    else:
+        th = np.radians(np.linspace(a0, a1, n))
+        pts = [(r1 * math.cos(t), r1 * math.sin(t)) for t in th] + [(r0 * math.cos(t), r0 * math.sin(t)) for t in th[::-1]]
+        face = bd.Face(bd.Wire.make_polygon([bd.Vector(x, y, 0) for x, y in pts], close=True))
     return bd.extrude(face, amount=z1 - z0, dir=(0, 0, 1)).moved(bd.Location((0, 0, z0)))
 
 
@@ -209,8 +216,7 @@ def date_inlays(pointer: int, sector_leap: bool):
             (T.along_arc(name, world_angle(d_mid, pointer), MONTH_R, h, w, sp, clockwise=True), w))
         n0 += days
 
-    from shapely.ops import unary_union
-    return {g: unary_union([T.outline(lines, w) for lines, w in items]) for g, items in groups.items()}
+    return {g: T.clean(T.merge([T.outline(lines, w) for lines, w in items])) for g, items in groups.items()}
 
 
 def _top_polygon(face):
