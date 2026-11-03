@@ -439,26 +439,26 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
     # setter and year counter (setter.py): rocker on the ring, reset and set ramps, counting lever,
     # wheel C with its leap bumps and Ungerer's satellite, the plunger that carries the set ramp
     for nm, shp in S.rocker_parts(pointer, sector_leap).items():
-        a.add(nm, mirror(shp), material="steel" if nm.endswith("pivot") else ("PETG" if "spring" in nm else "PLA"),
-              printed=not nm.endswith("pivot"), group="ring",
-              note={"setter_rocker": "flip-flop: holds the sector's tab pin; its tip pins meet the station's ramps",
-                    "setter_rocker_pivot": "Ø2 pin pressed into the ratchet lip",
-                    "setter_detent_spring": "printed leaf glued under the lip: holds the rocker in either position"}[nm])
+        a.add(nm, mirror(shp), group="ring", **S.ROCKER_PART_INFO[nm])
     a.allow("setter_rocker", "setter_rocker_pivot")
-    a.allow("setter_rocker", "setter_detent_spring")
+    a.allow("setter_rocker", "setter_detent_spring")          # the wire rests in a notch, preloaded
+    a.allow("setter_detent_spring", "setter_detent_anchor")   # clamped (glued) in its block
     for k in range(4):
         a.allow("setter_rocker_pivot", f"ring_segment_{k}")
-        a.allow("setter_detent_spring", f"ring_segment_{k}")
+        a.allow("setter_detent_anchor", f"ring_segment_{k}")
     for nm, shp, kw in S.station_parts(c_now, sat_now, set_engaged):
         a.add(nm, shp, **kw)
     for x, y in (("wheel_C_100", "wheel_C_arbor"), ("wheel_C_100", "satellite_4"), ("wheel_C_100", "satellite_pin"),
                  ("satellite_4", "satellite_pin"), ("satellite_step_pin", "station_bracket"),
-                 ("wheel_C_100", "wheel_C_jumper"), ("wheel_C_jumper", "station_bracket"),
+                 ("wheel_C_click", "wheel_C_click_pivot"), ("wheel_C_click_pivot", "station_bracket"),
+                 ("wheel_C_click", "wheel_C_click_spring"), ("wheel_C_click_spring", "station_bracket"),
+                 ("satellite_4", "satellite_detent_spring"), ("satellite_detent_spring", "wheel_C_100"),
+                 ("setter_set_ramp", "setter_plunger"), ("setter_plunger", "setter_plunger_spring"),
+                 ("setter_plunger_spring", "station_bracket"),
                  ("counting_lever", "counting_lever_stud"), ("counting_lever", "counting_lever_pin"),
                  ("counting_lever", "counting_lever_stop"), ("counting_lever", "counting_lever_spring"),
                  ("counting_lever_spring", "counting_lever_spring_anchor"),
-                 ("setter_set_ramp", "wheel_C_100"), ("setter_set_ramp", "setter_plunger_spring"),
-                 ("setter_plunger_spring", "station_bracket"), ("setter_set_ramp", "satellite_4")):
+                 ("setter_plunger", "wheel_C_100"), ("setter_plunger", "satellite_4")):
         a.allow(x, y)
     for k in range(4):
         a.allow("setter_reset_ramp", f"carrier_segment_{k}")

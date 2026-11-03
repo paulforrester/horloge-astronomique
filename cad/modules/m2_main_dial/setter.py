@@ -54,10 +54,28 @@ ARM_A, ARM_T = 2.5, 7.7            # tip pins: radial offset (set out, reset in)
 PIN_D = 1.6
 BAR_Z = (-7.0, -5.6)               # the rocker's bars, under the lip (lip back at -5.5)
 PIN_Z = (-8.3, -7.0)               # tip pins hang down into the ramps' layer
-RAMP_TOP = -7.3                    # both ramps stay below the bars
+RAMP_TOP = -7.4                    # both ramps stay below the bars (0.4 mm)
 CARRIER_FRONT = -8.8
 HALF_DIV_AT_TAB = 0.5 * math.radians(DIV) * TAB_R
 THETA0 = math.degrees(math.asin(HALF_DIV_AT_TAB / RHO))     # rocker swing either side of centre
+HUB_R = 2.6
+DETENT_NOTCH = THETA0              # notches on the hub at ±THETA0: under the wire in either position
+DETENT_DEPTH, DETENT_FLANK = 0.3, 40.0             # notch depth (mm) and flank angle to the tangent (°)
+DETENT_WIRE_D, DETENT_WIRE_L, DETENT_PRELOAD = 0.4, 10.0, 0.65
+# the wire runs along the ring (local -y), just outside the hub; in a notch its centre is at
+# HUB_R - DETENT_DEPTH + d/2, which bends it DETENT_PRELOAD outward from its clamped line
+DETENT_CONTACT = (HUB_R - DETENT_DEPTH + DETENT_WIRE_D / 2, 0.0)
+DETENT_ANCHOR = (DETENT_CONTACT[0], -DETENT_WIRE_L)
+
+
+def _notch(a_deg):
+    """A V-notch in the hub's rim at angle a (rocker frame), DETENT_DEPTH deep."""
+    a = math.radians(a_deg)
+    w = (DETENT_DEPTH + 0.3) / math.tan(math.radians(DETENT_FLANK))     # half-width at HUB_R + 0.3
+    r_out, r_in = HUB_R + 0.3, HUB_R - DETENT_DEPTH
+    da = w / r_out
+    return [(r_in * math.cos(a), r_in * math.sin(a)), (r_out * math.cos(a - da), r_out * math.sin(a - da)),
+            (r_out * math.cos(a + da), r_out * math.sin(a + da))]
 
 
 def rocker_angle(leap: bool) -> float:
@@ -115,7 +133,7 @@ def rocker_parts(pointer: int, leap: bool) -> dict:
     from cad.lib import lettering as T
     a_p = (ROCKER_D - pointer) * DIV
     phi = rocker_angle(leap)
-    hub = Polygon(_circle((0, 0), 2.6))
+    hub = Polygon(_circle((0, 0), HUB_R, 48))
     stem = Polygon(_bar((0, 0), (0, ARM_T), 2.0))
     cross = Polygon(_bar((-ARM_A, ARM_T), (ARM_A, ARM_T), 2.0))
     ends = [Polygon(_circle((sx * ARM_A, ARM_T), 1.0)) for sx in (-1, 1)]
@@ -127,6 +145,8 @@ def rocker_parts(pointer: int, leap: bool) -> dict:
                     (-RHO + 1.3, TAB_PIN_D / 2 + 0.1), (-RHO - 2.5, TAB_PIN_D / 2 + 0.1)])
     body = unary_union([hub, stem, cross, fork_bar, fork_end] + ends).difference(slot)
     body = body.difference(Polygon(_circle((0, 0), 1.1)))                 # Ø2.2 bore for the Ø2 pin
+    for a_n in (DETENT_NOTCH, -DETENT_NOTCH):                             # the detent's two notches
+        body = body.difference(Polygon(_notch(a_n)))
     outline = [(_rot(x, y, phi)) for x, y in body.exterior.coords[:-1]]
     holes = [[_rot(x, y, phi) for x, y in r.coords[:-1]] for r in body.interiors]
     to3 = lambda pts, z: [bd.Vector(x, y, z) for x, y in _to_ring(pts, a_p)]
@@ -138,11 +158,22 @@ def rocker_parts(pointer: int, leap: bool) -> dict:
         rocker = rocker + parts.disc(PIN_D, PIN_Z[1] - PIN_Z[0] + 0.01, z0=PIN_Z[0]).moved(bd.Location((c[0], c[1], 0)))
     pc = _to_ring([(0, 0)], a_p)[0]
     pivot = parts.rod(2.0, -3.6 - BAR_Z[0]).moved(bd.Location((pc[0], pc[1], BAR_Z[0])))     # flush under the hub
-    # detent: a printed leaf from a block glued under the lip, its nose on the hub (two notches)
-    anchor = _prism(_to_ring([(3.3, -7.4), (5.0, -7.4), (5.0, -4.0), (3.3, -4.0)], a_p), BAR_Z[0], -5.5)
-    nose = (2.65 * math.cos(math.radians(-60.0)), 2.65 * math.sin(math.radians(-60.0)))     # on the hub
-    leaf = _prism(_to_ring(_bar((3.4, -5.6), nose, 0.7), a_p), BAR_Z[0], BAR_Z[1])
-    return {"setter_rocker": rocker, "setter_rocker_pivot": pivot, "setter_detent_spring": anchor + leaf}
+    # detent: a steel wire along the ring, clamped in a block glued under the lip; its free length
+    # presses on the hub's outer side, in the common notch or the leap notch
+    w0, w1 = _to_ring([DETENT_ANCHOR, DETENT_CONTACT], a_p)
+    anchor = _prism(_to_ring(_square(DETENT_ANCHOR, 3.0), a_p), BAR_Z[0], -5.5 + 0.01)
+    wire = _wire(w0, w1, DETENT_WIRE_D, (BAR_Z[0] + BAR_Z[1]) / 2, overrun=0.5)
+    return {"setter_rocker": rocker, "setter_rocker_pivot": pivot, "setter_detent_anchor": anchor,
+            "setter_detent_spring": wire}
+
+
+ROCKER_PART_INFO = {
+    "setter_rocker": dict(material="PLA", note="flip-flop: holds the sector's tab pin; its tip pins meet the station's ramps"),
+    "setter_rocker_pivot": dict(material="steel", printed=False, note="Ø2 pin pressed into the ratchet lip"),
+    "setter_detent_anchor": dict(material="PETG", note="glued under the lip: clamps the detent wire"),
+    "setter_detent_spring": dict(material="steel", printed=False,
+                                 note="Ø0.4 spring wire: holds the rocker, so the sector, in either position"),
+}
 
 
 def tab_pin(pointer: int, sector_start: int):
@@ -156,7 +187,18 @@ def tab_pin(pointer: int, sector_start: int):
 ST = -90.0                                        # station angle, world
 RESET_DELTA = (L.RESET_OFFSET - L.STATION_OFFSET) * DIV     # degrees beyond the station: about 18.6
 SET_DELTA = (L.SET_OFFSET - L.STATION_OFFSET) * DIV         # about 11.7
-STROKE = 1.8                                       # set-ramp lift = leap bump height
+STROKE = 1.4                                       # set-ramp lift = leap bump height: up, the ramp
+                                                   # overlaps the set pin by 0.9; down, it is 0.5 under it
+# a leap bump, along C's bump circle (s in mm, + = anticlockwise, the side that reaches the plunger
+# first): a ramp from the foot up to the top, a short top, then a sheer drop on the leaving side, so the
+# plunger climbs on only when C steps onto that year and drops off when it steps on
+BUMP_FOOT, BUMP_TOP0, BUMP_DROP = 1.5, 0.25, -0.35
+BUMP_HALF_W = 1.0                                  # radial half-width
+TIP_R = 0.4                                        # the plunger's ball tip
+COLLAR_D, COLLAR_T = 5.0, 0.8                      # the plunger's collar: the spring pushes it towards C
+POCKET_D, GUIDE_D = 5.4, 3.25                      # bracket: spring pocket (the collar slides in it), guide
+CEILING = -17.0                                    # the pocket's ceiling: the spring's fixed end
+PLUNGER_SPRING = dict(De=4.4, Di=3.6)              # envelope of the steel compression spring (docs §6)
 C_XY = (34.0, -140.0)                              # wheel C's centre (its stud is in the M2 front plate)
 C_Z = (-30.9, -27.9)
 C_TEETH, C_R_TIP, C_R_ROOT = 100, 31.5, 30.5      # ratchet teeth 1.0 deep
@@ -281,6 +323,58 @@ def position_angle(k: int, c_now: int) -> float:
     return read_angle() - 3.6 * (k - c_now)
 
 
+def bump_profile():
+    """A leap bump's section along the bump circle: [(s, height)], s anticlockwise from the bump's
+    centre (position k sits under the plunger when C stands at k)."""
+    return [(BUMP_FOOT, 0.0), (BUMP_TOP0, STROKE), (BUMP_DROP, STROKE), (BUMP_DROP, 0.0)]
+
+
+def _bump_height(x: float) -> float:
+    """Height of a bump's top surface at x (mm along the bump circle from its centre)."""
+    if x > BUMP_FOOT or x < BUMP_DROP:
+        return 0.0
+    if x <= BUMP_TOP0:
+        return STROKE
+    return STROKE * (BUMP_FOOT - x) / (BUMP_FOOT - BUMP_TOP0)
+
+
+def plunger_lift(offset: float) -> float:
+    """Lift of the plunger's ball tip (radius TIP_R) when the bump's centre is `offset` mm from the
+    plunger along the bump circle (+: the bump is anticlockwise of the plunger): the ball rests on
+    the highest point of the surface under it."""
+    n = 400
+    lift = 0.0
+    for i in range(n + 1):
+        u = -TIP_R + 2 * TIP_R * i / n                    # across the ball
+        sag = TIP_R - math.sqrt(max(TIP_R * TIP_R - u * u, 0.0))
+        lift = max(lift, _bump_height(u - offset) - sag)
+    return lift
+
+
+def pressure_angle() -> float:
+    """Slope of the bump's ramp (degrees): the plunger's pressure angle when C steps onto a bump."""
+    return math.degrees(math.atan2(STROKE, BUMP_FOOT - BUMP_TOP0))
+
+
+def _bump_solid(theta_deg, r_mid, profile, z0, length=None, r0=None):
+    """A bump: `profile` [(s, h)] across, extruded radially (r0 .. r0 + length about C's centre, or
+    r_mid ± BUMP_HALF_W), turned to `theta_deg`, in C's own frame (centre at the origin)."""
+    pts = [bd.Vector(0, x, z0 + h) for x, h in profile]
+    face = bd.Face(bd.Wire.make_polygon(pts, close=True))
+    if length is None:
+        r0, length = r_mid - BUMP_HALF_W, 2 * BUMP_HALF_W
+    sol = bd.extrude(face, amount=length, dir=(1, 0, 0)).moved(bd.Location((r0, 0, 0)))
+    return sol.rotate(bd.Axis.Z, theta_deg)
+
+
+def plunger_z(engaged: bool) -> dict:
+    """The plunger's heights: ball-tip bottom, collar, and the spring's installed length."""
+    tip = C_Z[1] + (STROKE if engaged else 0.0)
+    collar0 = C_Z[1] + STROKE + 0.3 + (STROKE if engaged else 0.0)     # clears the bumps by 0.3 at rest
+    return {"tip": tip, "collar": (collar0, collar0 + COLLAR_T), "spring": (collar0 + COLLAR_T, CEILING),
+            "boss_bottom": C_Z[1] + STROKE + 0.3}
+
+
 TAIL = 7.0                                         # the lever's spring tail, straight up from the pivot
 STOP_XY = (LEVER_PIVOT[0] - 1.3 - 0.75, LEVER_PIVOT[1] + 5.0)   # the tail rests on it (left side)
 ANCHOR_XY = (LEVER_PIVOT[0] - 13.0, LEVER_PIVOT[1] + TAIL)
@@ -346,10 +440,20 @@ def lever_outline():
     return list(body.exterior.coords)[:-1]
 
 
-JUMPER_LEAF = 11.0
+CLICK_ARM = 11.0                                   # click: nose to pivot
+CLICK_WIRE_D, CLICK_WIRE_L, CLICK_WIRE_TILT = 0.5, 18.0, 7.0     # its wire spring (mm, mm, degrees)
+SAT_WIRE_D, SAT_WIRE_L = 0.4, 10.0                 # the satellite's detent wire
+SAT_IN = 6.6                                       # satellite centre this far inside the bump circle
 
 
-def _jumper_frame():
+def _wire(p0, p1, d, z, overrun=0.8):
+    """A straight spring wire of diameter d from p0 (its clamped end) to just past p1 (its contact)."""
+    L_ = math.dist(p0, p1) + overrun
+    ang = math.degrees(math.atan2(p1[1] - p0[1], p1[0] - p0[0]))
+    return parts.rod(d, L_).rotate(bd.Axis.Y, 90).rotate(bd.Axis.Z, ang).moved(bd.Location((p0[0], p0[1], z)))
+
+
+def _click_frame():
     pitch = 360.0 / C_TEETH
     ph = tooth_phase()
     m = round((270.0 - ph) / pitch)
@@ -359,22 +463,90 @@ def _jumper_frame():
     t = math.radians(psi_n)
     tang = (-math.sin(t), math.cos(t))                       # anticlockwise along C's rim (+x here)
     s0 = _c_polar(psi_n, C_R_TIP + 1.1)
-    s1 = (s0[0] + JUMPER_LEAF * tang[0], s0[1] + JUMPER_LEAF * tang[1])
+    s1 = (s0[0] + CLICK_ARM * tang[0], s0[1] + CLICK_ARM * tang[1])
     return psi_n, s0, s1
 
 
-def jumper_outline():
+def click_geometry():
+    """The click's nose, arm end, pivot, and its wire spring (clamped end, contact on the arm)."""
+    psi_n, s0, s1 = _click_frame()
+    t = math.radians(psi_n)
+    tang, out = (-math.sin(t), math.cos(t)), (math.cos(t), math.sin(t))
+    q = (s0[0] + 1.5 * tang[0] + (0.7 + CLICK_WIRE_D / 2) * out[0],
+         s0[1] + 1.5 * tang[1] + (0.7 + CLICK_WIRE_D / 2) * out[1])      # wire centre at the contact
+    g = math.radians(CLICK_WIRE_TILT)
+    u = (tang[0] * math.cos(g) + out[0] * math.sin(g), tang[1] * math.cos(g) + out[1] * math.sin(g))
+    anchor = (q[0] + CLICK_WIRE_L * u[0], q[1] + CLICK_WIRE_L * u[1])
+    return {"nose": _c_polar(psi_n, C_R_ROOT + 0.72), "arm0": s0, "pivot": s1, "contact": q, "anchor": anchor}
+
+
+def click_outline():
+    """The click (world XY): nose in the gap, a 1.4 mm arm outside C's tips, hub on its pivot."""
     from shapely.geometry import Polygon
     from shapely.ops import unary_union
-    psi_n, s0, s1 = _jumper_frame()
-    nose = _c_polar(psi_n, C_R_ROOT + 0.72)                 # r 0.35: touches neither face nor flank
-    body = unary_union([Polygon(_circle(nose, 0.35, 16)), Polygon(_bar(nose, s0, 0.6)),
-                        Polygon(_bar(s0, s1, 0.7)), Polygon(_circle(s0, 0.35, 12))])
+    g = click_geometry()
+    body = unary_union([Polygon(_circle(g["nose"], 0.35, 16)), Polygon(_bar(g["nose"], g["arm0"], 0.6)),
+                        Polygon(_bar(g["arm0"], g["pivot"], 1.4)), Polygon(_circle(g["arm0"], 0.7, 12)),
+                        Polygon(_circle(g["pivot"], 1.5, 20))])
     return list(body.exterior.coords)[:-1]
 
 
-def _jumper_root():
-    return _jumper_frame()[2]
+def satellite_geometry(c_now: int, satellite: int) -> dict:
+    """Satellite centre (on C at position 0), its arm direction, and its detent wire (on C)."""
+    rb = bump_radius()
+    rs = rb - SAT_IN
+    t0 = math.radians(position_angle(0, c_now))
+    u_r, t_cw = (math.cos(t0), math.sin(t0)), (math.sin(t0), -math.cos(t0))
+    sc = (C_XY[0] + rs * u_r[0], C_XY[1] + rs * u_r[1])
+    contact = (sc[0] - (1.7 + SAT_WIRE_D / 2) * u_r[0], sc[1] - (1.7 + SAT_WIRE_D / 2) * u_r[1])
+    anchor = (contact[0] + SAT_WIRE_L * t_cw[0], contact[1] + SAT_WIRE_L * t_cw[1])
+    return {"rs": rs, "centre": sc, "arm_dir": t0 + math.radians(90.0 * satellite),
+            "wire": (anchor, contact), "anchor": anchor}
+
+
+# --- steel springs (Paul, PR #8: steel, not printed) ------------------------------------------------
+E_WIRE = 206000.0      # N/mm², patented-drawn spring steel wire EN 10270-1 (EN 13906-1)
+SECTOR_MASS = 0.0103   # kg: the Jan–Feb sector, 8268 mm³ of PLA at 1.24 g/cm³ (model volume)
+MU = 0.3               # printed PLA/PETG on steel or on itself [E]
+CLICK_F_NOSE0 = 0.30   # N at the click's nose, at rest: enough to settle C against its friction [E]
+WIRE_RM_MIN = {}       # {d: minimum tensile strength, MPa} from the chosen wire's supplier (sourcing pending)
+
+
+def _cantilever(d, L, delta):
+    """Straight round wire, clamped at one end, tip deflected by delta: (force N, bending stress MPa)."""
+    I = math.pi * d ** 4 / 64
+    return 3 * E_WIRE * I * delta / L ** 3, 3 * E_WIRE * d * delta / (2 * L * L)
+
+
+def wire_springs() -> dict:
+    """Forces and stresses of the three wire springs, at rest and at their largest deflection."""
+    out = {}
+    # rocker detent: in a notch (preload), on the rim between notches (+ notch depth)
+    d, L = DETENT_WIRE_D, DETENT_WIRE_L
+    f0, _ = _cantilever(d, L, DETENT_PRELOAD)
+    f1, s1 = _cantilever(d, L, DETENT_PRELOAD + DETENT_DEPTH)
+    r_c = HUB_R - DETENT_DEPTH / 2
+    hold = f0 * math.tan(math.radians(DETENT_FLANK) + math.atan(MU)) * r_c
+    need = SECTOR_MASS * 9.81 * RHO                    # sector's weight on the tab, ring at 3 or 9 o'clock
+    out["rocker_detent"] = dict(d=d, L=L, F_rest=f0, F_max=f1, stress_max=s1, hold_Nmm=hold, need_Nmm=need)
+    # click: contact 1.5 mm from the arm's nose end; the nose lifts one tooth depth
+    g = click_geometry()
+    arm_nose = math.dist(g["pivot"], g["nose"])
+    arm_c = math.dist(g["pivot"], g["arm0"]) - 1.5
+    d, L = CLICK_WIRE_D, CLICK_WIRE_L
+    f0_c = CLICK_F_NOSE0 * arm_nose / arm_c
+    k = _cantilever(d, L, 1.0)[0]
+    d0 = f0_c / k
+    lift = (C_R_TIP - C_R_ROOT) * arm_c / arm_nose
+    f1, s1 = _cantilever(d, L, d0 + lift)
+    out["click"] = dict(d=d, L=L, preload=d0, F_rest=f0_c, F_max=f1, F_nose_max=f1 * arm_c / arm_nose,
+                        stress_max=s1)
+    # satellite detent: on a flat (preload), on a corner of the square hub
+    d, L = SAT_WIRE_D, SAT_WIRE_L
+    f0, _ = _cantilever(d, L, 0.4)
+    f1, s1 = _cantilever(d, L, 0.4 + 1.7 * (math.sqrt(2) - 1))
+    out["satellite_detent"] = dict(d=d, L=L, preload=0.4, F_rest=f0, F_max=f1, stress_max=s1)
+    return out
 
 
 def station_parts(c_now: int, satellite: int, engaged: bool) -> list:
@@ -384,19 +556,45 @@ def station_parts(c_now: int, satellite: int, engaged: bool) -> list:
     out.append(("setter_reset_ramp", _prism(ro["reset"], CARRIER_FRONT, RAMP_TOP),
                 dict(material="PETG", group="station", note="fixed: puts the sector in its common position")))
     z_top = RAMP_TOP if engaged else RAMP_TOP - STROKE
-    ramp = _prism(ro["set"], z_top - 1.7, z_top)
     px, py = plunger_xy()
-    z_c = C_Z[1] + (STROKE if engaged else 0.0)                      # tip on a bump, or on C's face
-    plunger = parts.disc(PLUNGER_D, (z_top - 1.7) - z_c + 0.01, z0=z_c).moved(bd.Location((px, py, 0)))
-    out.append(("setter_set_ramp", ramp + plunger,
+    pz = plunger_z(engaged)
+    ramp = _prism(ro["set"], z_top - 1.7, z_top)
+    ramp -= parts.disc(2.2, 1.3, z0=z_top - 1.7 - 0.01).moved(bd.Location((px, py, 0)))       # socket
+    out.append(("setter_set_ramp", ramp,
                 dict(material="PETG", group="station", print_up=(0, 0, 1),
-                     note="set ramp and its plunger in one print; the plunger rides on wheel C")))
-    out.append(("setter_plunger_spring", parts.disc(4.4, 5.0, bore=3.4, z0=-16.4).moved(bd.Location((px, py, 0))),
-                dict(material="steel", printed=False, group="station", note="Ø4 compression spring, presses the plunger onto C")))
-    # bracket behind the carrier: plunger guide and the satellite's stepping pin
-    br = [(26.0, -175.5), (48.5, -175.5), (48.5, -157.0), (26.0, -157.0)]
-    bracket = _prism(br, -23.0, -10.9) - parts.disc(PLUNGER_D + 0.4, 20, z0=-30).moved(bd.Location((px, py, 0)))
-    bracket -= parts.disc(5.0, 7.0, z0=-17.0).moved(bd.Location((px, py, 0)))                  # spring seat
+                     note="glued on the plunger's peg; the carrier window keeps it square")))
+    # the plunger: ball tip on C, a collar the spring pushes towards C, a peg into the ramp
+    tip = pz["tip"]
+    plunger = bd.Sphere(TIP_R).moved(bd.Location((px, py, tip + TIP_R)))
+    k45 = TIP_R * math.sqrt(0.5)
+    cone_z0, cone_z1 = tip + TIP_R - k45, tip + TIP_R - k45 + (PLUNGER_D / 2 - k45)
+    plunger += bd.Cone(k45, PLUNGER_D / 2, cone_z1 - cone_z0, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)).moved(
+        bd.Location((px, py, cone_z0)))
+    plunger += parts.disc(PLUNGER_D, (z_top - 1.7) - cone_z1 + 0.01, z0=cone_z1 - 0.01).moved(bd.Location((px, py, 0)))
+    plunger += parts.disc(2.0, 1.2, z0=z_top - 1.7).moved(bd.Location((px, py, 0)))            # peg
+    plunger += parts.disc(COLLAR_D, COLLAR_T, z0=pz["collar"][0]).moved(bd.Location((px, py, 0)))
+    out.append(("setter_plunger", plunger,
+                dict(material="PETG", group="station", nozzle=0.2, print_up=(1, 0, 0),
+                     note="follower: ball tip on wheel C; printed lying down")))
+    sz = pz["spring"]
+    out.append(("setter_plunger_spring",
+                parts.disc(PLUNGER_SPRING["De"], sz[1] - sz[0], bore=PLUNGER_SPRING["Di"], z0=sz[0]).moved(
+                    bd.Location((px, py, 0))),
+                dict(material="steel", printed=False, group="station",
+                     note="compression spring: from the pocket's ceiling, pushes the collar, so the tip, onto C")))
+    # bracket behind the carrier: plunger guide and spring pocket (in a boss that hangs down to just
+    # above the bumps), click pivot and spring anchor, and the satellite's stepping pin
+    br = [(26.0, -177.0), (54.5, -177.0), (54.5, -157.0), (26.0, -157.0)]
+    bracket = _prism(br, -23.0, -10.9)
+    bracket += parts.disc(POCKET_D + 1.4, -23.0 - pz["boss_bottom"] + 0.01, z0=pz["boss_bottom"]).moved(
+        bd.Location((px, py, 0)))
+    bracket -= parts.disc(GUIDE_D, 20, z0=-30).moved(bd.Location((px, py, 0)))
+    bracket -= parts.disc(POCKET_D, CEILING - pz["boss_bottom"] + 0.01, z0=pz["boss_bottom"] - 0.01).moved(
+        bd.Location((px, py, 0)))
+    clk = click_geometry()
+    bracket += parts.disc(2.6, -23.0 - (C_Z[1] + 0.2) + 0.01, bore=1.5, z0=C_Z[1] + 0.2).moved(
+        bd.Location((clk["pivot"][0], clk["pivot"][1], 0)))                                     # sleeve over the pin
+    bracket += _prism(_square(clk["anchor"], 2.6), C_Z[0], -23.0 + 0.01)                          # wire anchor
     out.append(("station_bracket", bracket, dict(material="PETG", group="station",
                                                   note="screwed under the carrier's station extension")))
     # wheel C: a 100-tooth ratchet (radial drive faces, slightly undercut) with 24 leap bumps
@@ -404,20 +602,24 @@ def station_parts(c_now: int, satellite: int, engaged: bool) -> list:
     wheel -= parts.disc(3.3, 10, z0=C_Z[0] - 1)
     rb = bump_radius()
     for k in range(4, 100, 4):
-        t = math.radians(position_angle(k, c_now))
-        wheel += parts.disc(2.2, STROKE, z0=C_Z[1] - 0.01).moved(bd.Location((rb * math.cos(t), rb * math.sin(t), 0)))
+        wheel += _bump_solid(position_angle(k, c_now), rb, bump_profile(), C_Z[1] - 0.01)
+    sat_g = satellite_geometry(c_now, satellite)
+    sc = sat_g["centre"]
+    wheel += _prism(_square(sat_g["anchor"], 2.4), C_Z[1] - 0.01, C_Z[1] + STROKE).moved(
+        bd.Location((-C_XY[0], -C_XY[1], 0)))                                                    # detent wire's boss
     wheel = wheel.moved(bd.Location((C_XY[0], C_XY[1], 0)))
     out.append(("wheel_C_100", wheel, dict(group="station", nozzle=0.2,
                                            note="year in the century: 100-tooth ratchet, 24 leap bumps")))
     out.append(("wheel_C_arbor", parts.rod(3.0, -15.0 - (C_Z[0] - 1.0)).moved(bd.Location((C_XY[0], C_XY[1], C_Z[0] - 1.0))),
                 dict(material="steel", printed=False, group="station", note="stud pressed into the M2 front plate")))
-    # Ungerer's satellite on C at position 0: hub, one arm out to the bump circle when satellite == 0
-    t0 = math.radians(position_angle(0, c_now))
-    rs = rb - 5.6
-    sc = (C_XY[0] + rs * math.cos(t0), C_XY[1] + rs * math.sin(t0))
-    arm_dir = t0 + math.radians(90.0 * satellite)
-    tip = (sc[0] + 5.6 * math.cos(arm_dir), sc[1] + 5.6 * math.sin(arm_dir))
-    sat = _prism(_circle(sc, 2.0), C_Z[1], C_Z[1] + STROKE) + _prism(_bar(sc, tip, 2.2), C_Z[1], C_Z[1] + STROKE)
+    # Ungerer's satellite on C at position 0: a square hub (its detent), an arm that is a leap bump
+    # when it points out (satellite == 0), and a 4-point star that the step pin turns
+    arm_dir = sat_g["arm_dir"]
+    hub = [(sc[0] + 1.7 * math.sqrt(2) * math.cos(arm_dir + math.pi / 4 + k * math.pi / 2),
+            sc[1] + 1.7 * math.sqrt(2) * math.sin(arm_dir + math.pi / 4 + k * math.pi / 2)) for k in range(4)]
+    sat = _prism(hub, C_Z[1], C_Z[1] + STROKE)
+    arm = _bump_solid(math.degrees(arm_dir), 0.0, bump_profile(), C_Z[1], length=rb + BUMP_HALF_W - sat_g["rs"], r0=0.0)
+    sat += arm.moved(bd.Location((sc[0], sc[1], 0)))
     star = []
     for k in range(8):
         t = arm_dir + math.pi / 4 * k
@@ -427,10 +629,14 @@ def station_parts(c_now: int, satellite: int, engaged: bool) -> list:
     sat -= parts.disc(1.7, 10, z0=C_Z[0]).moved(bd.Location((sc[0], sc[1], 0)))
     out.append(("satellite_4", sat, dict(group="station", nozzle=0.2,
                                          note="Ungerer's satellite: ¼ turn per turn of C, one bump in 400 years")))
+    w0, w1 = sat_g["wire"]
+    out.append(("satellite_detent_spring", _wire(w0, w1, SAT_WIRE_D, C_Z[1] + STROKE / 2),
+                dict(material="steel", printed=False, group="station",
+                     note=f"Ø{SAT_WIRE_D} spring wire, glued in C's boss; presses a flat of the satellite's square hub")))
     out.append(("satellite_pin", parts.rod(1.5, C_Z[1] + STROKE + 1.5 - (C_Z[1] - 2.0)).moved(
         bd.Location((sc[0], sc[1], C_Z[1] - 2.0))), dict(material="steel", printed=False, group="station")))
     tq = math.radians(read_angle() - 6.0)
-    sp = (C_XY[0] + (rs - 1.6) * math.cos(tq), C_XY[1] + (rs - 1.6) * math.sin(tq))
+    sp = (C_XY[0] + (sat_g["rs"] - 1.6) * math.cos(tq), C_XY[1] + (sat_g["rs"] - 1.6) * math.sin(tq))
     out.append(("satellite_step_pin", parts.rod(1.5, -23.0 - (C_Z[1] + STROKE + 0.3)).moved(
         bd.Location((sp[0], sp[1], C_Z[1] + STROKE + 0.3))),
                 dict(material="steel", printed=False, group="station",
@@ -461,8 +667,16 @@ def station_parts(c_now: int, satellite: int, engaged: bool) -> list:
     spring = parts.rod(2.5, x1 - x0).rotate(bd.Axis.Y, 90).moved(bd.Location((x0, tail[1], z_mid)))
     out.append(("counting_lever_spring", spring, dict(material="steel", printed=False, group="station",
                                                       note="extension spring OD 2.5, hooks not modelled")))
-    # C's jumper (click): a printed leaf from the bracket, its nose in the tooth gap at C's bottom
-    out.append(("wheel_C_jumper", _prism(jumper_outline(), *C_Z) + _prism(_square(_jumper_root(), 3.0), C_Z[0], -23.0),
-                dict(material="PETG", group="station", nozzle=0.2,
-                     note="click: lets C turn forward, stops it turning back, sets each yearly step")))
+    # C's click: a printed click on a steel pivot pin, pressed into the tooth gap by a steel wire spring
+    clk = click_geometry()
+    click = _prism(click_outline(), *C_Z) - parts.disc(1.6, 10, z0=C_Z[0] - 1).moved(
+        bd.Location((clk["pivot"][0], clk["pivot"][1], 0)))
+    out.append(("wheel_C_click", click, dict(material="PETG", group="station", nozzle=0.2,
+                                             note="click: lets C turn forward, stops it turning back, sets each yearly step")))
+    out.append(("wheel_C_click_pivot", parts.rod(1.5, -23.0 - (C_Z[0] - 0.3)).moved(
+        bd.Location((clk["pivot"][0], clk["pivot"][1], C_Z[0] - 0.3))),
+                dict(material="steel", printed=False, group="station", note="Ø1.5 pin pressed into the bracket")))
+    out.append(("wheel_C_click_spring", _wire(clk["anchor"], clk["contact"], CLICK_WIRE_D, (C_Z[0] + C_Z[1]) / 2),
+                dict(material="steel", printed=False, group="station",
+                     note=f"Ø{CLICK_WIRE_D} spring wire, glued in the bracket; presses the click towards C")))
     return out

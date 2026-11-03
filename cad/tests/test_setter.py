@@ -85,10 +85,10 @@ def test_wheel_C_turns_the_way_the_hook_pulls_it_and_its_teeth_face_the_hook():
         r = S.C_R_ROOT + 0.5
         assert C.contains(Point(S._c_polar(S._face_psi(a, r) + 0.3, r)))
         assert not C.contains(Point(S._c_polar(S._face_psi(a, r) - 0.3, r)))
-    # 4. at rest the hook waits just behind a drive face, and the jumper's nose sits in a gap
-    lever, jumper = Polygon(S.lever_outline()), Polygon(S.jumper_outline())
+    # 4. at rest the hook waits just behind a drive face, and the click's nose sits in a gap
+    lever, click = Polygon(S.lever_outline()), Polygon(S.click_outline())
     assert 0.03 < lever.distance(C) < 0.15
-    assert jumper.intersection(C).area < 1e-3
+    assert click.intersection(C).area < 1e-3
 
 
 def test_counting_lever_steps_wheel_C_one_tooth_per_pass():
@@ -133,3 +133,58 @@ def test_follower_and_satellite_timing():
     # the satellite (position 0) passes its stepping pin, 6° before the reading point, between 97 and 99
     c_step = (-6.0 / 3.6) % 100
     assert 97 < c_step < 99.9
+
+
+def test_plunger_reads_only_its_own_year_and_can_climb():
+    # PR #8 review: the first bumps were sheer cylinders as tall as the stroke, so the plunger could
+    # not climb them. Now each is a ramp (on the side that reaches the plunger first) and a sheer drop.
+    pitch = 2 * math.pi * S.bump_radius() / S.C_TEETH
+    # a neighbour's bump may lift the plunger a little, as long as the lowered ramp stays 0.2 mm
+    # under the set pin
+    allowed = (S.PIN_Z[0] - (S.RAMP_TOP - S.STROKE)) - 0.2
+    for err in (-0.25, 0.0, 0.25):                                    # C's position tolerance (mm)
+        assert S.plunger_lift(err) == pytest.approx(S.STROKE, abs=0.01)        # its own year: fully up
+        assert S.plunger_lift(-pitch + err) < allowed                  # next year's bump (still to come)
+        assert S.plunger_lift(pitch + err) < allowed                   # last year's bump
+    assert S.pressure_angle() < 50.0
+    # a two-point guide (collar in the pocket, shank in the bore) does not jam at that angle:
+    # tan(a) < L / (mu (2 x + L)), x the tip's overhang below the collar
+    pz = S.plunger_z(False)
+    guide = (S.CEILING + (-10.9)) / 2 - (pz["collar"][0] + pz["collar"][1]) / 2
+    overhang = (pz["collar"][0] + pz["collar"][1]) / 2 - pz["tip"]
+    assert math.tan(math.radians(S.pressure_angle())) < guide / (S.MU * (2 * overhang + guide)) / 1.5
+
+
+def test_plunger_spring_pushes_the_plunger_onto_C():
+    # PR #8 review: the first spring sat in a counterbore under the ramp, which could only push the
+    # ramp away from C. Now it sits between the pocket's fixed ceiling and the plunger's collar.
+    for engaged in (False, True):
+        pz = S.plunger_z(engaged)
+        lo, hi = pz["spring"]
+        assert lo == pytest.approx(pz["collar"][1]) and hi == pytest.approx(S.CEILING)
+        assert pz["collar"][1] < S.CEILING                            # collar below the ceiling: pushes it towards C
+    assert S.plunger_z(False)["collar"][0] > S.C_Z[1] + S.STROKE + 0.2    # the collar clears every bump
+    assert S.plunger_z(False)["boss_bottom"] > S.C_Z[1] + S.STROKE + 0.2  # and so does the bracket's boss
+    assert S.PLUNGER_SPRING["Di"] > S.PLUNGER_D + 0.1 and S.PLUNGER_SPRING["De"] < S.POCKET_D - 0.3
+
+
+def test_wire_springs_hold_and_stay_elastic():
+    w = S.wire_springs()
+    assert w["rocker_detent"]["hold_Nmm"] > 3 * w["rocker_detent"]["need_Nmm"]   # the sector's own weight
+    assert w["click"]["F_nose_max"] < 0.6                            # light on the counting lever
+    if not S.WIRE_RM_MIN:
+        pytest.skip("the spring wire's tensile strength is not sourced yet")
+    for name, v in w.items():
+        assert v["stress_max"] < 0.7 * S.WIRE_RM_MIN[v["d"]], name    # EN 13906-1 style limit for bent wire
+
+
+def test_satellite_clears_the_plunger_boss_and_its_detent_holds_a_flat():
+    rb = S.bump_radius()
+    g = S.satellite_geometry(0, 0)
+    star_out = g["rs"] + 2.6
+    boss_in = rb - (S.POCKET_D + 1.4) / 2
+    assert star_out < boss_in - 0.3                                   # the star passes inside the boss
+    # the detent wire lies in the hub's layer, under the step pin, which sweeps a circle over C
+    wire_top = S.C_Z[1] + S.STROKE / 2 + S.SAT_WIRE_D / 2
+    step_pin_bottom = S.C_Z[1] + S.STROKE + 0.3
+    assert wire_top < step_pin_bottom - 0.5
