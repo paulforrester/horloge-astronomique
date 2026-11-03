@@ -252,10 +252,10 @@ def with_inlay(body, text_geom, z_top: float):
     from cad.lib import lettering as T
     cut = bd.Box(1000, 1000, 50, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)).moved(
         bd.Location((0, 0, z_top - TEXT_DEPTH)))
+    from shapely.ops import unary_union
     layer = body & cut
-    top = max((f for f in layer.faces() if abs(f.center().Z - z_top) < 1e-6 and abs(f.normal_at().Z) > 0.999),
-              key=lambda f: f.area)
-    poly = _top_polygon(top)
+    tops = [f for f in layer.faces() if abs(f.center().Z - z_top) < 1e-6 and abs(f.normal_at().Z) > 0.999]
+    poly = unary_union([_top_polygon(f) for f in tops])     # several faces where the ring's seam crosses
     gold, ink = poly.difference(text_geom), poly.intersection(text_geom)
     ext = lambda g: bd.extrude(bd.Compound(T.faces(g, z_top)), amount=TEXT_DEPTH, dir=(0, 0, -1))
     return _glue(body - cut, ext(gold)), ext(ink)
@@ -282,6 +282,7 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
     feats = {k: mirror(v) for k, v in feats.items()}
     geoms = date_inlays(pointer, sector_leap) if dates else None
     for k, seg in enumerate(mirror(sg) for sg in segments(ring, pointer)):
+        whole = seg
         note = "gold, face down: the dates are a flush black inlay on the bed side (0.2 mm nozzle)"
         if k == 0:
             note += ("; the Jan-Feb sector's seat is a pocket open to the bed: support from the bed inside it, "
@@ -298,7 +299,8 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
                   nozzle=0.2, inside=f"ring_segment_{k}", note=f"dates, second filament of ring_{k}.3mf")
             a.allow(f"ring_text_{k}", f"ring_segment_{k}")
         a.add(f"ring_segment_{k}", seg, material="PLA", group="ring", print_up=(0, 0, -1), nozzle=0.2,
-              print_set=f"ring_{k}" if dates else "", note=note)
+              print_set=f"ring_{k}" if dates else "", note=note, filled=whole if dates else None)
+    sector_whole = sector
     if dates:
         sector, sector_text = with_inlay(sector, geoms["sector"], FACE_Z[1] - 0.1)
         a.add("sector_text", sector_text, material="black", group="ring", print_up=(0, 0, -1),
@@ -306,7 +308,7 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
               note="1 Jan … 28 Feb, second filament of sector.3mf")
         a.allow("sector_text", "sector_jan_feb")
     a.add("sector_jan_feb", sector, material="PLA", group="ring", print_up=(0, 0, -1), nozzle=0.2,
-          print_set="sector" if dates else "", note="slides one division: leap / common; foot, arm and lug grow up "
+          print_set="sector" if dates else "", filled=sector_whole if dates else None, note="slides one division: leap / common; foot, arm and lug grow up "
           "from the face-down plate on a chamfer, no support")
     for nm, shp in feats.items():
         a.add(nm, shp, material="PLA" if "pin" not in nm else "steel", printed="pin" not in nm, group="ring")

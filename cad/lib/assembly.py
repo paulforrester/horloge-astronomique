@@ -46,6 +46,9 @@ class Item:
     # an inlay cut from another item's volume (e.g. dates sunk into a ring segment): it cannot reach
     # anything that item does not, so interference() skips it; its own test checks it stays inside
     inside: str = ""
+    # for a part with inlays: the same part with them filled in (the print's outer shape), so print
+    # checks can use it instead of fusing the part with thousands of glyph solids
+    filled: object = None
 
 
 @dataclass

@@ -89,10 +89,10 @@ def test_carrier_is_a_printed_frame(full):
 def test_print_poses_need_support_only_in_the_sector_seat(full):
     from cad.lib.assembly import overhang_area, print_pose
     a, _ = full
-    for k in (1, 2, 3):
+    for k in (1, 2, 3):                        # the two-colour print as a whole: gold with its dates in
         ring = a[f"ring_segment_{k}"]
-        assert overhang_area(print_pose([ring.shape], ring.print_up)[0]) < 1.0
-    assert overhang_area(print_pose([a["ring_segment_0"].shape], (0, 0, -1))[0]) > 1000   # documented
+        assert overhang_area(print_pose([ring.filled], ring.print_up)[0]) < 1.0
+    assert overhang_area(print_pose([a["ring_segment_0"].filled], (0, 0, -1))[0]) > 1000   # documented
     for k in range(4):
         seg = a[f"carrier_segment_{k}"]
         assert overhang_area(print_pose([seg.shape], seg.print_up)[0]) < 600   # bridges between tab gussets

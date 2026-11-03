@@ -61,16 +61,19 @@ def export_model(name: str, asm, out_dir: Path) -> dict:
         old.unlink()
     items = [i for i in asm.items if i.printed]
     posed = {}
+    set_overhang = {}
     for s in sorted({i.print_set for i in items if i.print_set}):          # multi-body prints, posed together
         members = [i for i in items if i.print_set == s]
-        for i, shp in zip(members, print_pose([m.shape for m in members], members[0].print_up)):
+        fill = next((m.filled for m in members if m.filled is not None), None)
+        shapes = print_pose([m.shape for m in members] + ([fill] if fill is not None else []), members[0].print_up)
+        for i, shp in zip(members, shapes):
             posed[i.name] = shp
-    set_overhang = {}
-    for s in sorted({i.print_set for i in items if i.print_set}):         # bodies support each other
-        bodies = [posed[i.name] for i in items if i.print_set == s]
-        union = bodies[0]
-        for b in bodies[1:]:
-            union = union + b
+        if fill is not None:                       # the bodies support each other: check the whole print
+            union = shapes[-1]
+        else:
+            union = shapes[0]
+            for b in shapes[1:len(members)]:
+                union = union + b
         set_overhang[s] = overhang_area(union)
     for i in items:
         if i.name in posed:
