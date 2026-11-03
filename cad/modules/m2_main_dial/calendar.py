@@ -25,7 +25,7 @@ parts, at 1:8 [S: ELS i4: Ø 2.73 m outer, 21 cm wide, 368 divisions → Ø 341,
   letters, which are gold in a black column, as on the original (Paul's photograph; Paul, PR #6).
 - **Carrier** (4 printed segments) holding the rollers, with openings where readers reach the band:
   the **stop lever** and the **witness opto** at the pointer (9 o'clock), and the **station** at
-  6 o'clock: E6 gearmotor + crank + pawl, jumper, 10-point counter star, wheel C (100 T) with its
+  6 o'clock: E6 gearmotor + crank + pawl, jumper, counting lever, wheel C (100 T) with its
   24 leap bumps, the satellite, the follower and the sector setter switch.
 
 **Pointer on the viewer's left** [S: ELS i4: "le jour qui commence venant alors sur la gauche de
@@ -49,6 +49,7 @@ from cad.lib.gears import Gear, centre_distance, mesh_rotation, pair_shifts, spu
 from cad.lib.hardware import BEARINGS
 from cad.modules.m2_main_dial import calendar_logic as L
 from cad.modules.m2_main_dial import feasibility as F
+from cad.modules.m2_main_dial import setter as S
 
 R_OUT, R_IN = F.RING_OD / 2, F.RING_OD / 2 - F.RING_W        # 170.5, 144.5
 DIV = 360.0 / L.N
@@ -62,10 +63,10 @@ TRACK_S = (150.0, 154.0)                                      # rim + bumps + se
 S_INNER = (150.2, 151.8)                                      # its inner half: the fixed bumps S
 S_OUTER = (152.2, 153.8)                                      # its outer half: the sector's lug, arm, foot
 ARM_Z = (-6.3, -5.5)                                          # the lug's arm: in front of the lever's plane
-R_PIN = 156.25                                                # counter pin, star at the station
+R_PIN = 156.25                                                # counter pin: the counting lever reads it
 TRACK_TAB = (159.0, 162.0)                                    # sector tab, setter at the station
 LAYER_A = (-5.8, -3.0)                                        # shallow: tab
-LAYER_B = (-8.3, -6.0)                                        # deep: star, lever tip, flag
+LAYER_B = (-8.3, -6.0)                                        # deep: counter pin, lever tip, flag
 RIM_Z = -6.5                                                  # S-track rim face; bumps reach -8.3
 CARRIER = (133.0, 178.0, -10.9, -8.8)                        # r_in, r_out, z0, z1 (in front of the M2 front plate)
 ROLLER_R = SKIRT[0] - BEARINGS["688ZZ"].od / 2               # 136.5
@@ -177,10 +178,13 @@ def ring_and_sector(pointer: int, sector_leap: bool):
     tri = bd.Face(bd.Wire.make_polygon([bd.Vector(S_OUTER[0], y_, z_) for y_, z_ in (
         (t0 + 0.05, FACE_Z[0] - 0.3), (t0 + 0.05, ARM_Z[1] - 0.01), (t1, ARM_Z[1] - 0.01))], close=True))
     sector += bd.extrude(tri, amount=S_OUTER[1] - S_OUTER[0], dir=(1, 0, 0)).rotate(bd.Axis.Z, a_foot)
-    a_tab = ring_angle(L.SECTOR_TAB + sector_start - L.SECTOR_COMMON_START, pointer)
-    sector += _wedge(a_tab - DIV * 0.4, a_tab + DIV * 0.4, TRACK_TAB[0] + 0.5, TRACK_TAB[1] - 0.5, LAYER_A[0],
-                     FACE_Z[1] - 2.2, n=4)
+    sector += S.tab_pin(pointer, sector_start)          # the tab: a pin the setter's rocker holds
     return ring, sector, feats
+
+
+def _grow(points, d):
+    from shapely.geometry import Polygon
+    return list(Polygon(points).buffer(d, join_style=2).exterior.coords)[:-1]
 
 
 def world_angle(d: float, pointer: int) -> float:
@@ -309,10 +313,15 @@ def segments(ring, pointer: int, n: int = 4):
     return out
 
 
-def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = True):
+def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = True,
+          set_engaged: bool | None = None):
     import datetime as dt
-    if pointer is None:                                   # 3 Nov 2026
-        pointer = L.initial_state(dt.date(2026, 11, 3)).pointer
+    m0 = L.initial_state(dt.date(2026, 11, 3))           # the model's date: 3 Nov 2026
+    if pointer is None:
+        pointer = m0.pointer
+    c_now, sat_now = m0.c, m0.satellite                 # wheel C already set for 2027
+    if set_engaged is None:
+        set_engaged = L.leap_from_counter(c_now, sat_now)
     a = Assembly("m2_calendar")
     ring, sector, feats = ring_and_sector(pointer, sector_leap)
     mirror = lambda shp: shp.rotate(bd.Axis.Z, 180.0)     # canonical (pointer at 0°) -> world (pointer at 180°)
@@ -364,6 +373,10 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
     carrier = carrier + station_ext - _wedge(STATION_ANGLE_C - 6, STATION_ANGLE_C + 6, BAND[0] - 1, 190.0,
                                              CARRIER[2] - 1, CARRIER[3] + 1, n=8)
     carrier = mirror(carrier)
+    window = bd.extrude(bd.Face(bd.Wire.make_polygon(
+        [bd.Vector(x, y, CARRIER[2] - 1) for x, y in _grow(S.ramp_outlines()["set"], 0.25)], close=True)),
+        amount=CARRIER[3] - CARRIER[2] + 2, dir=(0, 0, 1))
+    carrier = carrier - window                            # the set ramp drops into it when not needed
     # --- a self-supporting printed frame (Paul, PR #5: the works are printed and independent of the
     # case). Where the carrier overhangs the M2 front plate (top and right) a rear rim stiffens it
     # into an L-section; where it overlaps the plate, countersunk M3 screws bolt it to the plate.
@@ -423,51 +436,33 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
         t = math.radians(st + da)
         return (r * math.cos(t), r * math.sin(t))
     z_back = CARRIER[2]
-    # counter star: 10 points, its tips sweep the pin's circle (r 157)
-    star_c = P(R_PIN + 0.75 + 9.5)                       # star tips reach r 155.5, inside the pin's path
-    th = np.radians(np.arange(20) * 18.0)
-    star_pts = [((9.5 if k % 2 == 0 else 5.0) * math.cos(t), (9.5 if k % 2 == 0 else 5.0) * math.sin(t))
-                for k, t in enumerate(th)]
-    star = bd.extrude(bd.Face(bd.Wire.make_polygon([bd.Vector(x, y, 0) for x, y in star_pts], close=True)),
-                      amount=2.0, dir=(0, 0, 1)).moved(bd.Location((star_c[0], star_c[1], BAND[2] + 0.2)))
-    a.add("counter_star_10", star, group="station", note="one point per year (pin at d = 0)")
-    star_shaft_len = BAND[2] + 0.2 - (z_back - 22.0)
-    a.add("counter_star_shaft", parts.rod(3.0, star_shaft_len).moved(bd.Location((star_c[0], star_c[1], z_back - 22.0))),
-          material="steel", printed=False, group="station")
-    a.allow("counter_star_10", "counter_star_shaft")
-    # pinion 10 on the star shaft drives wheel C (100 T): one tooth per year
-    x10, x100 = pair_shifts(10, 100)
-    g10, g100 = Gear(10, M_C, shift=x10), Gear(100, M_C, shift=x100)
-    cd = centre_distance(g10, g100)
-    theta_c = math.degrees(math.asin(min(1.0, (C_CENTRE_Y - star_c[1]) / cd)))
-    c_xy = (star_c[0] + cd * math.cos(math.radians(theta_c)), star_c[1] + cd * math.sin(math.radians(theta_c)))
-    zc = (z_back - 20.0, z_back - 17.0)
-    a.add("pinion_10", spur_gear(g10, 3.0).moved(bd.Location((star_c[0], star_c[1], zc[0]))) -
-          parts.disc(3.0, 20, z0=zc[0] - 5).moved(bd.Location((star_c[0], star_c[1], 0))), group="station",
-          nozzle=0.2)
-    a.allow("pinion_10", "counter_star_shaft")
-    rot_c = mesh_rotation(g10, g100, theta_c)
-    wheel_c = spur_gear(g100, 3.0).rotate(bd.Axis.Z, rot_c) - parts.disc(3.3, 20, z0=-5)
-    # 24 leap bumps on its front face at r 30 (positions 4, 8, ..., 96)
-    for pos in range(4, 100, 4):
-        t = math.radians(pos * 3.6 + 90)
-        wheel_c += parts.disc(2.0, 1.5, z0=3.0).moved(bd.Location((30 * math.cos(t), 30 * math.sin(t), 0)))
-    a.add("wheel_C_100", wheel_c.moved(bd.Location((c_xy[0], c_xy[1], zc[0]))), group="station", nozzle=0.2,
-          note="year in the century; 24 leap bumps")
-    a.add("wheel_C_arbor", parts.rod(3.0, 26.0).moved(bd.Location((c_xy[0], c_xy[1], zc[0] - 6))), material="steel",
-          printed=False, group="station")
-    a.allow("wheel_C_100", "wheel_C_arbor")
-    sat_xy = (c_xy[0] + 51.0 * math.cos(math.radians(-30)), c_xy[1] + 51.0 * math.sin(math.radians(-30)))
-    a.add("satellite_4", parts.disc(28.0, 2.0, bore=3.3, z0=zc[1] + 0.5).moved(bd.Location((sat_xy[0], sat_xy[1], 0))),
-          group="station", note="advanced 1/4 turn per century by a pin on C; one bump for x00 % 400 == 0")
-    a.add("leap_follower", bd.Box(36.0, 4.0, 2.0, align=(bd.Align.MIN, bd.Align.CENTER, bd.Align.MIN)).moved(
-        bd.Location((c_xy[0] - 18.0, c_xy[1] + 30.0, zc[1] + 3.0))), group="station",
-          note="reads C (and the satellite), positions the setter switch")
-    setter = bd.Box(3.0, 8.0, LAYER_A[0] - (CARRIER[2] - 4.0), align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)
-                    ).rotate(bd.Axis.Z, st).moved(bd.Location((*P((TRACK_TAB[0] + TRACK_TAB[1]) / 2, 6.0),
-                                                                CARRIER[2] - 4.0)))
-    a.add("sector_setter_switch", setter, group="station",
-          note="railway-switch guide: steers the passing tab to the leap or common side")
+    # setter and year counter (setter.py): rocker on the ring, reset and set ramps, counting lever,
+    # wheel C with its leap bumps and Ungerer's satellite, the plunger that carries the set ramp
+    for nm, shp in S.rocker_parts(pointer, sector_leap).items():
+        a.add(nm, mirror(shp), group="ring", **S.ROCKER_PART_INFO[nm])
+    a.allow("setter_rocker", "setter_rocker_pivot")
+    a.allow("setter_rocker", "setter_detent_spring")          # the wire rests in a notch, preloaded
+    a.allow("setter_detent_spring", "setter_detent_anchor")   # clamped (glued) in its block
+    for k in range(4):
+        a.allow("setter_rocker_pivot", f"ring_segment_{k}")
+        a.allow("setter_detent_anchor", f"ring_segment_{k}")
+    for nm, shp, kw in S.station_parts(c_now, sat_now, set_engaged):
+        a.add(nm, shp, **kw)
+    for x, y in (("wheel_C_100", "wheel_C_arbor"), ("wheel_C_100", "satellite_4"), ("wheel_C_100", "satellite_pin"),
+                 ("satellite_4", "satellite_pin"), ("satellite_step_pin", "station_bracket"),
+                 ("wheel_C_click", "wheel_C_click_pivot"), ("wheel_C_click_pivot", "station_bracket"),
+                 ("wheel_C_click", "wheel_C_click_spring"), ("wheel_C_click_spring", "station_bracket"),
+                 ("satellite_4", "satellite_detent_spring"), ("satellite_detent_spring", "wheel_C_100"),
+                 ("setter_set_ramp", "setter_plunger"), ("setter_plunger", "setter_plunger_spring"),
+                 ("setter_plunger_spring", "station_bracket"),
+                 ("counting_lever", "counting_lever_stud"), ("counting_lever", "counting_lever_pin"),
+                 ("counting_lever", "counting_lever_stop"), ("counting_lever", "counting_lever_spring"),
+                 ("counting_lever_spring", "counting_lever_spring_anchor"),
+                 ("setter_plunger", "wheel_C_100"), ("setter_plunger", "satellite_4")):
+        a.allow(x, y)
+    for k in range(4):
+        a.allow("setter_reset_ramp", f"carrier_segment_{k}")
+        a.allow("station_bracket", f"carrier_segment_{k}")
     # E6 drive: gearmotor, crank disc, pawl and jumper at the ratchet lip
     e6 = bd.Box(12.0, 10.0, 36.0, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MAX)).moved(
         bd.Location((*P(185.0, -10.0), z_back)))
@@ -492,7 +487,7 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
     for nm in ("E6_gearmotor", "E6_lock_switch", "E6_crank"):
         for k in range(4):
             a.allow(nm, f"carrier_segment_{k}")
-    for nm in ("counter_star_shaft", "sector_setter_switch", "leap_follower", "E6_pawl", "ring_jumper"):
+    for nm in ("E6_pawl", "ring_jumper"):
         for k in range(4):
             a.allow(nm, f"carrier_segment_{k}")
 
@@ -513,5 +508,6 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
     for nm in ("stop_lever", "stop_switch", "witness_opto_1_March"):
         for k in range(4):
             a.allow(nm, f"carrier_segment_{k}")
-    return a, {"pointer": pointer, "sector_leap": sector_leap, "wheel_C_centre": [round(c_xy[0], 1), round(c_xy[1], 1)],
+    return a, {"pointer": pointer, "sector_leap": sector_leap, "wheel_C_centre": list(S.C_XY),
+               "wheel_C_position": c_now, "satellite": sat_now, "set_ramp_engaged": set_engaged,
                "station_angle": round(STATION_ANGLE, 2), "pointer_angle": POINTER_ANGLE, "roller_radius": ROLLER_R}

@@ -1,7 +1,7 @@
 {
  "model": "m2_main_dial",
- "unique_parts": 63,
- "printed_parts": 95,
+ "unique_parts": 67,
+ "printed_parts": 99,
  "sets": {
   "dial": [
    "dial_field",
@@ -1048,18 +1048,18 @@
   },
   {
    "names": [
-    "counter_star_10"
+    "setter_rocker"
    ],
    "material": "PLA",
    "nozzle": 0.4,
    "set": "",
    "size": [
-    19.0,
-    18.1,
-    2.0
+    11.7,
+    12.5,
+    2.7
    ],
-   "note": "one point per year (pin at d = 0)",
-   "file": "counter_star_10.stl",
+   "note": "flip-flop: holds the sector's tab pin; its tip pins meet the station's ramps",
+   "file": "setter_rocker.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
    "fits_dual": true,
@@ -1067,19 +1067,95 @@
   },
   {
    "names": [
-    "pinion_10"
+    "setter_detent_anchor"
    ],
-   "material": "PLA",
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    3.2,
+    3.2,
+    1.5
+   ],
+   "note": "glued under the lip: clamps the detent wire",
+   "file": "setter_detent_anchor.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "setter_reset_ramp"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    10.0,
+    8.7,
+    1.4
+   ],
+   "note": "fixed: puts the sector in its common position",
+   "file": "setter_reset_ramp.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "setter_set_ramp"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    11.6,
+    7.3,
+    1.7
+   ],
+   "note": "glued on the plunger's peg; the carrier window keeps it square",
+   "file": "setter_set_ramp.stl",
+   "overhang_mm2": 4.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "setter_plunger"
+   ],
+   "material": "PETG",
    "nozzle": 0.2,
    "set": "",
    "size": [
-    10.3,
-    9.8,
-    3.0
+    18.6,
+    5.0,
+    5.0
    ],
-   "note": "",
-   "file": "pinion_10.stl",
-   "overhang_mm2": 0.0,
+   "note": "follower: ball tip on wheel C; printed lying down",
+   "file": "setter_plunger.stl",
+   "overhang_mm2": 38.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "station_bracket"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    28.5,
+    20.8,
+    20.0
+   ],
+   "note": "screwed under the carrier's station extension",
+   "file": "station_bracket.stl",
+   "overhang_mm2": 2.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true
@@ -1092,11 +1168,11 @@
    "nozzle": 0.2,
    "set": "",
    "size": [
-    80.9,
-    80.9,
-    4.5
+    63.0,
+    63.0,
+    4.4
    ],
-   "note": "year in the century; 24 leap bumps",
+   "note": "year in the century: 100-tooth ratchet, 24 leap bumps",
    "file": "wheel_C_100.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
@@ -1108,15 +1184,34 @@
     "satellite_4"
    ],
    "material": "PLA",
-   "nozzle": 0.4,
+   "nozzle": 0.2,
    "set": "",
    "size": [
-    28.0,
-    28.0,
-    2.0
+    10.1,
+    5.3,
+    2.9
    ],
-   "note": "advanced 1/4 turn per century by a pin on C; one bump for x00 % 400 == 0",
+   "note": "Ungerer's satellite: \u00bc turn per turn of C, one bump in 400 years",
    "file": "satellite_4.stl",
+   "overhang_mm2": 1.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "counting_lever"
+   ],
+   "material": "PETG",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    16.0,
+    20.8,
+    3.0
+   ],
+   "note": "pin arm, hook on a flexible finger, spring tail; flat print",
+   "file": "counting_lever.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
    "fits_dual": true,
@@ -1124,37 +1219,18 @@
   },
   {
    "names": [
-    "leap_follower"
+    "wheel_C_click"
    ],
-   "material": "PLA",
-   "nozzle": 0.4,
+   "material": "PETG",
+   "nozzle": 0.2,
    "set": "",
    "size": [
-    36.0,
-    4.0,
-    2.0
+    13.2,
+    3.7,
+    3.0
    ],
-   "note": "reads C (and the satellite), positions the setter switch",
-   "file": "leap_follower.stl",
-   "overhang_mm2": 0.0,
-   "fits_single": true,
-   "fits_dual": true,
-   "mesh_ok": true
-  },
-  {
-   "names": [
-    "sector_setter_switch"
-   ],
-   "material": "PLA",
-   "nozzle": 0.4,
-   "set": "",
-   "size": [
-    8.0,
-    3.0,
-    9.1
-   ],
-   "note": "railway-switch guide: steers the passing tab to the leap or common side",
-   "file": "sector_setter_switch.stl",
+   "note": "click: lets C turn forward, stops it turning back, sets each yearly step",
+   "file": "wheel_C_click.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
    "fits_dual": true,

@@ -20,9 +20,11 @@ New Year station.
 - **Model:** [`cad/modules/m2_main_dial/`](../cad/modules/m2_main_dial/)
   - `mechanism.py`: trains, differentials, centre stack, plates, motor;
   - `calendar.py` and `calendar_logic.py`: the calendar ring;
+  - `setter.py`: the sector setter (rocker and ramps) and the year counter (§6);
   - `dial.py`: the dial face;
   - `full.py`: everything together.
-- **Tests:** `cad/tests/test_m2_design.py`, `test_calendar_logic.py`, `test_worm_diff.py`.
+- **Tests:** `cad/tests/test_m2_design.py`, `test_calendar_logic.py`, `test_calendar_ring.py`,
+  `test_setter.py`, `test_worm_diff.py`.
 - **SketchUp:** `export/sketchup/m2_main_dial.dae` and `m2_main_dial_exploded.dae`.
 - **Print files:** `export/print/m2_main_dial/` (STL per part, 3MF for the two-colour dial,
   manifest in its `README.md`).
@@ -33,14 +35,14 @@ New Year station.
 
 | Check | Result |
 |---|---|
-| Interference, all 149 parts, exact B-rep (the 5 date inlays are checked as part of their own parts: `Item.inside`) | **0** |
+| Interference, all 165 parts, exact B-rep (the 5 date inlays are checked as part of their own parts: `Item.inside`) | **0** |
 | Fixed parts inside the path of the turning calendar ring (other than its designed readers) | **0** |
 | Movable sector against the ring, common and leap positions | **0** overlap (`test_calendar_ring.py`) |
 | Rotating hands: any two parts on different tubes that could touch at some angle | 0 (feasibility study; same front stack) |
 | Calendar logic, day by day, 2026–2426, five different start dates | **0 wrong days**. Every New Year jump is 4 divisions (common) or 3 (leap), including 2100, 2200, 2300 and 2400. |
 | Bed fit, single and dual nozzle | every printed part fits in its print pose. The largest are the dial (Ø 287.5) and the plates (281 × 232). |
 | Envelope | x −196 … +184, y −195 … +192, z −162 … +24 mm: inside the M2 bay. Nothing comes within about 18 mm of the floor. **Depth 185 mm.** |
-| Parts | 149 in the model: 95 printed (including 5 date inlays), 52 bought (plus 2 v1.5 space claims) |
+| Parts | 165 in the model: 99 printed (including 5 date inlays), 64 bought (plus 2 v1.5 space claims) |
 | Motor torque | ≈ 2.9 mN·m at the motor, **≈ 50×** margin at 0.5 A [E, §9] |
 
 <p align="center"><img src="img/m2/m2_front.png" width="420" alt="M2 front"> <img src="img/m2/m2_three_quarter.png" width="420" alt="M2 three-quarter"></p>
@@ -244,19 +246,160 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
      - Now the sector clears the ring in both positions, and a test checks it
        (`cad/tests/test_calendar_ring.py`).
 
-**Year counter (station at 6 o'clock, fixed on the carrier):**
-- **Wheel C** (100 positions, one per year; 100-tooth gear at module 0.8) is advanced each year on
-  1 October by a pin on the ring at d = 0. The pin pushes a 10-point star, and a 10-tooth pinion on the star's
-  arbor turns C. This is Ungerer's star-and-rake principle with a fixed counter.
-- **24 leap bumps** sit at positions 4 … 96.
-- **A 4-position satellite**, turned a quarter turn per century by a pin on C, supplies the leap
-  bump at x00 when x00 is divisible by 400.
-- **The follower** reads C and the satellite.
-- **On 30 or 31 October the sector's tab passes the setter**, a railway-switch guide steered by the
-  follower. It puts the sector in the leap or common position for the coming year, two months
+**Year counter (station at 6 o'clock, behind the M2 front plate):**
+- **Wheel C** (100 positions, one per year) is a 100-tooth ratchet. Each year on 1 October the
+  **counter pin** on the ring (d = 0) pushes the **counting lever** aside, and the lever's hook pulls
+  C forward one tooth (detail below).
+- **24 leap bumps** sit on C's face at positions 4 … 96.
+- **Ungerer's satellite** [S: ELS i4] rides on C at position 0. A fixed pin turns it a quarter turn
+  per turn of C, so its single arm supplies the leap bump at x00 only when x00 is divisible by 400.
+- **The follower** is a spring plunger that rides on C's face and carries the setter's set ramp.
+- **The setter** is a rocker on the ring and two ramps at the station (below). It puts the sector in
+  the leap or common position for the coming year in mid-October, about two and a half months
   before it reaches the arrow.
 - Everything acts between 1 March and 31 December, so it never disturbs a date being shown (the
   test checks the timing).
+
+**Setter and follower: concept approved by Paul (3 Nov 2026); detail design below.**
+
+<p align="center"><img src="img/m2/setter_concept.png" width="860" alt="Setter concept: flip-flop rocker on the ring, reset and set ramps at the station, follower on wheel C"></p>
+
+- **Why a rocker.** A fixed part at the station can hold the sector back while the ring moves on,
+  but it can never push the sector forward. Something on the ring must therefore turn the ring's
+  motion into a push in either direction.
+- **The rocker.** It is a small two-position rocker on the ring, beside the sector's tab, and its
+  two positions are the sector's two positions:
+  - common: the set arm is out;
+  - leap: the reset arm is out.
+- **At the station, each October, two ramps act on it:**
+  - the **reset ramp** is fixed and always present. It flips a leap rocker to common;
+  - the **set ramp** rides on a spring plunger that follows wheel C's bumps. It stands in the lane
+    only when the coming year is a leap year, and then flips the rocker to leap.
+- **Energy.** It all comes from the ring's own motion (E6). There is no extra motor, and the
+  counting stays purely mechanical (rule 2).
+
+**Detail design** (`cad/modules/m2_main_dial/setter.py`; rules checked in
+`cad/tests/test_setter.py`). The drawing is made from the model's own geometry.
+
+<p align="center"><img src="img/m2/setter_station.png" width="900" alt="Plan views of the setter and year counter from the model: 30 Sep the counter pin reaches the lever; 13 Oct the reset ramp; 20 Oct the set ramp up"></p>
+
+*On the ring:*
+
+| Part | Detail |
+|---|---|
+| Rocker | PLA, on a Ø2 pin pressed into the ratchet lip at r 165.5, between the tab's common and leap places (d 29.5). An **open fork** holds the sector's Ø2.2 tab pin (r 160.5), 5.0 mm from the pivot. It swings ±15.9°, which moves the tab **one division** [D: 2 × 5.0 × sin 15.9° = 2.740 mm = 2π × 160.5 / 368]. The fork's tines point to the dial centre, so the rocker stays outside r 158.8. |
+| Tip pins | Two Ø1.6 pins on a cross-bar 7.7 mm along the ring from the pivot, ±2.5 mm radially, hanging below the rocker's bars (z −8.3 … −7.0). Their radii [D: `pin_radii`]: common: set 170.15, reset 165.40; leap: set 165.99, reset 161.13. |
+| Detent | A steel wire (Ø0.4, 10 mm free) along the ring, clamped in a printed block glued under the lip. It presses on the hub's outer side, in one of two V-notches (0.3 deep, at ±15.9°), so it holds the rocker, and with it the sector, in either position. Steel, not printed (Paul, PR #8). |
+
+*At the station:*
+
+| Part | Detail |
+|---|---|
+| Reset ramp | PETG, fixed on the carrier, r 158.6–164.35, 18.6° past the station. It meets the reset pin only when the pin is out (leap, 161.13) and pushes it to 165.40 (common). |
+| Set ramp | PETG, r 167.04–174.2, 11.7° past the station, glued on its plunger's peg; the carrier window keeps it square. **Down** (no bump), it sits 1.4 mm low in the window, 0.5 mm under the pins. **Up** (on a bump), it overlaps the set pin by 0.9 mm, meets it only when the pin is out (common, 170.15) and pushes it to 165.99 (leap). |
+| Clearances | Each ramp clears the other pin by 0.84 mm, and lets its own pin go 0.25 mm before the end of its face [D: ramp and pin radii above, pins Ø1.6]. Both ramps stay under the rocker's bars (ramp top −7.4, bars from −7.0). |
+| Plunger | PETG, Ø3, at r 172.0, with a Ø0.8 ball tip on C's face at the bump circle (r 28.42 on C) and a Ø5 collar just above the bumps. Two guides: the collar in a Ø5.4 pocket in a boss that hangs from the bracket, and the shank in a bore at the bracket's front. The steel spring sits in the pocket between its fixed ceiling and the collar, so it **presses the plunger onto C** (spring and forces: *Steel springs* below). |
+| Timing | Reset on the step into **14 October**, set on the step into **21 October** [D: `RESET_OFFSET`, `SET_OFFSET` in `calendar_logic.py`]. The reset always comes first: a leap sector goes back to common every year, and the set ramp puts it back to leap only when the coming year is a leap year. Both come after the counter (1 October), so the plunger already reads the coming year. |
+
+*Year counter:*
+
+| Part | Detail |
+|---|---|
+| Wheel C | PLA, 0.2 mm nozzle; 100 ratchet teeth (root r 30.5, tips r 31.5), 3 mm thick, on a Ø3 stud at (34, −140) pressed into the M2 front plate. The drive faces are radial with a 0.1-pitch undercut and face clockwise. C turns anticlockwise, 3.6° a year. |
+| Leap bumps | 1.4 mm high, on the bump circle (1.79 mm per year there). Each is a **48° ramp on the side that reaches the plunger first, a 0.6 mm top, and a sheer drop** on the other side: the plunger climbs on only when C steps onto that year, and drops off when C steps on. With C up to ±0.25 mm off, the plunger is fully up in its own year and lifts at most 0.16 mm for a neighbour's bump (the lowered ramp stays 0.34 mm under the pin) [D: `plunger_lift`]. A two-point guide does not jam at 48° (limit ≈ 69° with friction 0.3) [D: test]. |
+| Counting lever | PETG, 0.2 mm nozzle, **one flat print in C's layer**, on a Ø3 stud at (−8, −146). It has three arms:<br>- a Ø1.5 steel pin, at r 156.55 at rest, reaching up into the ring's deep layer;<br>- a spring tail;<br>- the **hook** on a flexible finger, 0.6 × 3 mm and 10.2 mm long, outside C's tips. |
+| Stroke | The counter pin (Ø2.5, r 156.25) overlaps the lever pin by 1.7 mm and pushes it outward until it slips past. That turns the lever 14.6° [D: `lever_turn`]. The hook then carries C **2.93 mm = 1.50 pitch** at r 31.0 [D: `hook_travel`]. |
+| One tooth, every time | With radial drive faces, the click's nose passes a tooth tip after exactly 1 pitch, and the next after 2. Any carry between 1 and 2 pitches therefore ends as one tooth once the click settles C back. 1.50 is the middle, so the stroke may vary by ±0.5 pitch (±1 mm, about ±4.9° of lever turn) [D]. |
+| Hook path | The hook's rest and end points are both on r 31.0, symmetric about the line of centres. Through the stroke it stays within 0.09 mm of that radius, so it neither slips off a tooth nor digs into the root [D: test]. |
+| Pulled, never pushed | The finger's root is ahead of the hook, so the finger is in tension while it pulls, and the undercut faces hold the hook in. On the way back, the hook's 45° back rides up the next tooth's flank and the finger bends 0.8 mm outward. |
+| Return and stop | An extension spring (OD 2.5) runs from the tail, 7 mm above the pivot, to a fixed pin 13 mm to its left, and pulls the lever anticlockwise. The tail rests on a fixed stop pin. Both fixed pins are Ø1.5, pressed into the front plate. |
+| Click | A printed PETG click on a Ø1.5 steel pivot pin in the bracket, its nose (r 0.35) in a tooth gap at C's bottom. A steel wire (Ø0.5, 18 mm free), clamped in the bracket, presses its arm towards C. It lets C turn forward, stops it turning back, and sets each yearly step. |
+| Satellite | On a Ø1.5 pin at C's position 0, 6.6 mm inside the bump circle, so its star passes inside the plunger's boss. Three layers: a square hub, an arm that is a leap bump (same profile) when it points out, and a 4-point star. A fixed pin, 6° before the plunger, turns the star a quarter turn as C goes from 98 to 99 [D: 6° / 3.6° per year = 1.67 positions]. A steel wire (Ø0.4, 10 mm free), glued in a boss on C, presses a flat of the square hub, so the satellite stays in its quarter-turn positions. The first draft had no detent. |
+
+**Loads on the counter [E].** Method: cantilever beams, PETG E ≈ 2.0 GPa [E: typical datasheet
+value], friction 0.3. The spring forces come from the catalogue data or the wire calculation below.
+The test rig confirms them.
+- **Finger:** I = 3 × 0.6³ / 12 = 0.054 mm⁴ and L = 10.2 mm, so k = 3EI/L³ ≈ 0.30 N/mm. That is
+  ≈ 0.24 N at 0.8 mm, with a bending strain of ≈ 0.7 %. Dragging it back up a flank (about 30°)
+  takes ≈ 0.26 N at 11.55 mm from the pivot, **≈ 3 N·mm**.
+- **Return spring:** 5.1 N·mm at rest (1.7 times the drag) and 7.2 N·mm at full stroke, where the
+  tail has moved 1.8 mm [D: `bought_springs`].
+- **Click:** lifting its nose (0.54 N at most) over a tooth's 30° flank costs the lever ≈ 6.6 N·mm.
+- **Plunger, every fourth year:** climbing a leap bump at 48° against its spring (0.48 N at most)
+  costs ≈ 29 N·mm on C, **≈ 11 N·mm** at the lever. In other years its friction on C costs
+  ≈ 0.4 N·mm.
+- **Counter pin:** ≈ 25 N·mm in a leap step and ≈ 14 N·mm otherwise, on the 13.2 mm pin arm. That is
+  **about 1.9 N along the ring once every four years, and about 1.1 N in other years**. E6's
+  sizing (D3) must allow for it.
+
+**Steel springs** (Paul, PR #8: "I'd rather go with steel springs"). Every spring in the setter and
+the counter is steel. Two are catalogue parts; three are cut from straight spring wire.
+
+| Spring | Part | As installed [D] | Check |
+|---|---|---|---|
+| Set-ramp plunger, compression | **Sodemann C01800120500S**, stainless AISI 302: d 0.30, De 4.57, Di 3.97, L0 12.70, Ln 4.72, R 0.25 N/mm [S: [ressorts-sodemann.fr](https://www.ressorts-sodemann.fr/c01800120500s)] | 12.2 mm at rest: 0.13 N. 10.8 mm lifted: 0.48 N. | Fits over the Ø3 shank, inside the Ø5.4 pocket; 6 mm from solid. |
+| Counting-lever return, extension | **Sodemann E00940110500S**, stainless AISI 302: d 0.28, De 2.39, L0 12.70, F0 0.22 N, R 0.17 N/mm, Ln 26.16 [S: [ressorts-sodemann.fr](https://www.ressorts-sodemann.fr/e00940110500s)] | Stretched 3.0 mm at rest: 0.73 N. 4.8 mm at full stroke: 1.03 N. | 1.7 times the hook's drag at rest. |
+| Rocker detent | Spring wire, EN 10270-1 DH, **Ø0.4**: 10 mm free, plus about 3 mm clamped | In a notch, deflected 0.65 mm: 0.51 N. On the rim between notches: 0.74 N, 1174 MPa. | Holds 1.9 N·mm, **3.7 times** the sector's weight on the tab (10.3 g at 5 mm: 0.5 N·mm, with the ring at 3 or 9 o'clock). |
+| Wheel C click | Spring wire, DH, **Ø0.5**: 18 mm free | 0.35 N at rest (0.30 N at the nose). 0.63 N with the nose over a tooth: 922 MPa. | Settles C against its friction; light on the counter. |
+| Satellite detent | Spring wire, DH, **Ø0.4**: 10 mm free | 0.31 N on a flat. 0.86 N on a corner: 1365 MPa. | Holds the quarter-turn positions. |
+
+- **Wire stress limit.** 0.7 Rm, the static limit for bent spring wire (EN 13906-3). For DH wire,
+  Rm min is 2560 MPa at Ø0.4 and 2480 MPa at Ø0.5 [S: EN 10270-1 Table 3, as tabled in
+  [Stahl-Becker's data sheet](https://static.rapidonline.com/pdf/521667_v1.pdf)]. The same sheet
+  allows up to 10 % less for straightened rods, so the limits are 1613 and 1562 MPa. Every wire
+  stays under its limit (`test_setter.py`).
+- **Wire formula [D].** A wire clamped at one end with its tip deflected δ: F = 3EIδ/L³, and
+  σ = 3Edδ/(2L²). E = 206 GPa (EN 13906-1, EN 10270-1 wire).
+- **Wire mounting.** Each wire is glued (CA) about 3 mm deep into a Ø0.6 hole drilled with a pin
+  vice in its printed block. The hole points along the wire's unloaded line; the part it presses on
+  then bends it by its preload. The model draws each wire straight, along its installed chord.
+- **Sodemann** (Denmark, French shop): ships to France by UPS in 4–5 working days, €8.00 (business)
+  or €9.60 (private) up to 1 kg [S: [shipping](https://www.ressorts-sodemann.fr/expedition)].
+  - Its sizes are inch-based but quoted in mm. No standard part mates with them, so that causes no
+    interface problem. **Accepted by Paul** as an exception to the metric rule ("accept the
+    sodemann springs"; decisions D13).
+  - Pack sizes and prices are not readable without the shop's pop-up: confirm them when ordering.
+  - Check on the drawing that the extension spring's L0 is measured inside the hooks. The anchor
+    pin's position (`ANCHOR_XY`) is set from it.
+- **Wire supply.**
+  - Preferred: Gutekunst straight 1 m bars, EN 10270-1 SH/DH, refs 23514 (Ø0.4) and 23516 (Ø0.5)
+    ([federnshop.com](https://www.federnshop.com/en/products/steel-wire-bars.html)). **Not
+    verified:** the site refused this session; open the pages to confirm.
+  - Verified alternative: Boley 538805 (Ø0.40) and 538807 (Ø0.50) piano wire, a watchmakers'
+    supplier, in 5 m bundles, not straight ([boley.de](https://www.boley.de/en/shop/1906.spring-steel-wires)).
+- **Metric alternatives, not verified:** Gutekunst VD-011Y (compression, d 0.25, Dm 4.4, L0 15) and
+  RZ-020I (extension, d 0.32, De 3.52, L0 12.9).
+- **Other M2 springs.** The ring jumper, the E6 pawl and the stop lever are still placeholders
+  from PR #5. They get steel wire springs from the same stock when E6 is detailed (D3): about 1 N,
+  0.2 N and 0.3 N respectively [E].
+
+**A change from the approved sketch: approved by Paul in PR #8** ("The lever instead of the star is
+fine").
+- **The sketch kept the 10-point counter star at the station.** It filled the band r 157–176 that
+  the rocker must pass.
+- The counter pin stays where it was (r 156.25). The star and its 10-tooth pinion are replaced by the
+  **counting lever, hook and click** above. The lever's only part in the ring's band is the Ø1.5
+  pin, in the counter pin's own lane.
+- Ungerer describes a star and rake [S: ELS i4]. The lever and ratchet make the same count of one
+  per year.
+- **Caught in review:**
+  - **before PR #8 opened:**
+    - the first draft of the lever had wheel C's ratchet the wrong way round, so C could not turn;
+    - its stroke ended on a tooth tip (1.8 pitch);
+    - it had no return spring.
+  - **while specifying the springs:**
+    - the plunger's first spring sat in a counterbore under the ramp, where it could only push the
+      plunger away from C;
+    - the first leap bumps were sheer cylinders as tall as the stroke, which the plunger could not
+      climb;
+    - the satellite had no detent.
+
+  The interference and sweep checks cannot see motion, so `test_setter.py` now checks every link
+  of the chain:
+  - the direction, the stroke, the hook path and the return;
+  - which way the plunger spring pushes;
+  - the bump profile, in the plunger's own year and its neighbours';
+  - the springs' forces and stresses.
 
 **Radial tracks behind the ring.** Each track has one reader, so nothing triggers the wrong reader.
 
@@ -264,14 +407,16 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
 |---|---|---|---|
 | 1 March witness flag | 148–149.5 | deep | reflective opto at the pointer (architecture §6, updated) |
 | Stop-lever track: rim; bumps S (inner half, 150.2–151.8); sector lug (outer half, 152.2–153.8) | 150–154 | rim at −6.5, bumps and lug to −8.3; the lug's arm stays in front of −6.3 | stop lever at the pointer, spanning both halves |
-| Counter pin | 156.25 | full depth | 10-point star at the station (deep layer) |
-| Sector tab | 159–162 | shallow layer only | setter at the station. It passes over the star. |
+| Counter pin | 155–157.5 | full depth | counting lever's Ø1.5 pin at the station (r 155.8–157.3) |
+| Sector tab pin | 159.4–161.6 | −6.9 … −2.2 | the rocker's fork, on the ring (it travels with the ring) |
+| Rocker tip pins | 160.3–171 | −8.3 … −7.0 | reset ramp (inner lane, 158.6–164.35) and set ramp (outer lane, 167.04–174.2) at the station |
 
 - **Station position.** The station sits at 6 o'clock and sees the division 92 days ahead of the
   pointer. It and wheel C are
   kept at least 195 mm below the dial centre, about 18 mm above the floor [E].
-- **Setting** (architecture §7): turn the ring to the date (lift the jumper), set the sector, and
-  set wheel C and the satellite to the year, as `calendar_logic.initial_state` does.
+- **Setting** (architecture §7): turn the ring to the date (lift the jumper), set the sector by
+  flipping the rocker, and set wheel C (lift its click and the plunger) and the satellite to the
+  year, as `calendar_logic.initial_state` does.
 
 **Carrier: a printed frame that belongs to the works, not the case** (Paul, PR #5: "Print if
 possible, otherwise use model grade plywood"; decisions D12).
@@ -316,7 +461,7 @@ possible, otherwise use model grade plywood"; decisions D12).
 - a `README.md` manifest with quantity, material, nozzle, size, bed fit, down-facing area, and
   whether the part meshes closed and manifold (lib3mf's check, as Bambu Studio expects).
 
-For M2 that is 51 STLs and 6 two-colour 3MFs (the dial, the four ring segments, the sector) for 95 prints. The press, slide and bearing fits still wait for the
+For M2 that is 55 STLs and 6 two-colour 3MFs (the dial, the four ring segments, the sector) for 99 prints. The press, slide and bearing fits still wait for the
 tolerance coupons, so these are design-stage files.
 
 **Print poses.** Each part records which way is up (`Item.print_up`). Where it does not, the
@@ -344,7 +489,10 @@ exporter tries both faces down and keeps the one with less to support.
 
 **Bought:**
 - Ø5 rod: S, J, I, W, R1, the motor shaft and 2 worm shafts;
-- Ø3 rod: fixed arbor, differential pins, C and star arbors;
+- Ø3 rod: fixed arbor, differential pins; the studs for wheel C and the counting lever;
+- setter and year counter: Ø2 rocker pivot pin; Ø1.5 rod for the lever pin, stop and spring anchor,
+  click pivot, satellite pin and step pin; two Sodemann springs (plunger, lever return); Ø0.4 and
+  Ø0.5 spring wire (rocker detent, click, satellite detent);
 - Ø8 studs for the rollers; Ø2 lock pins;
 - brass tubes OD 4–9 for the stack, plus OD 6 sleeves;
 - MR85ZZ bearings: 9 in the plates, 4 in the worm blocks;
@@ -381,8 +529,9 @@ gearmotor class from D3 is chosen after the event-motor noise test (BOM Batch 1)
 These are reserved or simplified:
 - v1.5 drives (cam train routing, sunrise/sunset sectors and yearly cam, Moon slide and lever, phase
   ball);
-- the setter switch's guide profile and the follower geometry (they are blocks in the model; the
-  logic is proven in `calendar_logic.py`);
+- the setter's and counter's springs are sized (§6), not yet tested on the rig;
+- the springs of the ring jumper, the E6 pawl and the stop lever wait for E6's detail design (D3);
+- axial retention of the parts on the station's studs (push-on lock washers, BOM);
 - the dominical-letter dial (I10: set by hand in v1);
 - the v2 feasts arc;
 - Apollo's figure.
