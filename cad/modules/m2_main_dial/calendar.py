@@ -9,12 +9,16 @@ parts, at 1:8 [S: ELS i4: Ø 2.73 m outer, 21 cm wide, 368 divisions → Ø 341,
   sector's lug and tab (through slots); the counter pin at d = 0; the 1 March witness flag.
 - **Movable sector** (1 Jan … 28 Feb), sliding one division in a recess of the face.
 - **Carrier** (4 printed segments) holding the rollers, with openings where readers reach the band:
-  the **stop lever** and the **witness opto** at the pointer (3 o'clock), and the **station** at
+  the **stop lever** and the **witness opto** at the pointer (9 o'clock), and the **station** at
   6 o'clock: E6 gearmotor + crank + pawl, jumper, 10-point counter star, wheel C (100 T) with its
   24 leap bumps, the satellite, the follower and the sector setter switch.
 
-The ring turns clockwise seen from the front; ring division d sits at world angle
-(d - pointer) x 360/368 degrees, so the pointer is at 0° and the station sees pointer - 92 at -90°.
+**Pointer on the viewer's left** [S: ELS i4: "le jour qui commence venant alors sur la gauche de
+l'anneau, en face de la flèche"; DA p. 27: Apollo "se tient à la droite du calendrier", the
+calendar's own right, i.e. the viewer's left]. The ring turns counter-clockwise seen from the front;
+ring division d sits at world angle 180° - (d - pointer) x 360/368, and the station (pointer - 92)
+is at 270°, the bottom. The geometry is built in a canonical frame (pointer at 0°, clockwise) and
+mirrored about the vertical plane, which gives exactly that mapping.
 """
 from __future__ import annotations
 
@@ -46,8 +50,13 @@ LAYER_B = (-8.3, -6.0)                                        # deep: star, leve
 RIM_Z = -6.5                                                  # S-track rim face; bumps reach -8.3
 CARRIER = (133.0, 178.0, -10.9, -8.8)                        # r_in, r_out, z0, z1 (in front of the M2 front plate)
 ROLLER_R = SKIRT[0] - BEARINGS["688ZZ"].od / 2               # 136.5
-STATION_ANGLE = L.STATION_OFFSET * DIV                       # -90°
+STATION_ANGLE = L.STATION_OFFSET * DIV                       # -90° (unchanged by the mirror)
+POINTER_ANGLE = 180.0                                        # after the mirror: the viewer's left
 M_C = 0.8                                                    # wheel C module (hidden, light load)
+RIM_SPAN = (-55.0, 150.0)      # rim where the carrier overhangs the M2 front plate (world angles, CCW)
+RIM_BACK_Z = -40.0             # L-section depth
+CARRIER_BOLTS = (165.0, 195.0, 225.0)     # countersunk M3 into the M2 front plate, where they overlap
+CASE_TABS = (20.0, 90.0, 120.0)           # M5 tabs (clear of the carrier splits): the frame is held, never set
 STATION_R_MAX = 195.0          # nothing below 195 mm under the dial centre: ~18 mm above the floor [E]
 C_CENTRE_Y = -150.0            # wheel C raised beside the station, behind the M2 front plate
 
@@ -137,9 +146,16 @@ def build(pointer: int | None = None, sector_leap: bool = False):
         pointer = L.initial_state(dt.date(2026, 11, 3)).pointer
     a = Assembly("m2_calendar")
     ring, sector, feats = ring_and_sector(pointer, sector_leap)
-    for k, seg in enumerate(segments(ring, pointer)):
-        a.add(f"ring_segment_{k}", seg, material="PLA", group="ring", note="two-colour print, dates in relief")
-    a.add("sector_jan_feb", sector, material="PLA", group="ring", note="slides one division: leap / common")
+    mirror = lambda shp: shp.mirror(bd.Plane.YZ)          # canonical (pointer at 0°, CW) -> pointer at 180°, CCW
+    sector = mirror(sector)
+    feats = {k: mirror(v) for k, v in feats.items()}
+    for k, seg in enumerate(mirror(sg) for sg in segments(ring, pointer)):
+        a.add(f"ring_segment_{k}", seg, material="PLA", group="ring", print_up=(0, 0, -1), nozzle=0.2,
+              note="face down, so dates can be a flush two-colour inlay on the bed side" + (
+                  "; the Jan-Feb sector's seat is a pocket open to the bed: support from the bed inside it, "
+                  "ideally with a support-interface filament on the second nozzle" if k == 0 else ""))
+    a.add("sector_jan_feb", sector, material="PLA", group="ring", print_up=(0, 0, -1), nozzle=0.2,
+          note="slides one division: leap / common")
     for nm, shp in feats.items():
         a.add(nm, shp, material="PLA" if "pin" not in nm else "steel", printed="pin" not in nm, group="ring")
         for k in range(4):
@@ -156,13 +172,47 @@ def build(pointer: int | None = None, sector_leap: bool = False):
                          n=24)
     carrier = carrier + station_ext - _wedge(STATION_ANGLE - 6, STATION_ANGLE + 6, BAND[0] - 1, 190.0,
                                              CARRIER[2] - 1, CARRIER[3] + 1, n=8)
+    carrier = mirror(carrier)
+    # --- a self-supporting printed frame (Paul, PR #5: the works are printed and independent of the
+    # case). Where the carrier overhangs the M2 front plate (top and right) a rear rim stiffens it
+    # into an L-section; where it overlaps the plate, countersunk M3 screws bolt it to the plate.
+    rim = _wedge(RIM_SPAN[0], RIM_SPAN[1], CARRIER[1] - 4.0, CARRIER[1], RIM_BACK_Z, CARRIER[2] + 0.01, n=80)
+    carrier = carrier + rim
+    for ang_ in CARRIER_BOLTS:
+        p_ = (172.0 * math.cos(math.radians(ang_)), 172.0 * math.sin(math.radians(ang_)))
+        carrier -= parts.disc(3.4, 10, z0=CARRIER[2] - 1).moved(bd.Location((p_[0], p_[1], 0)))
+        carrier -= parts.disc(6.4, 1.8, z0=CARRIER[3] - 1.7).moved(bd.Location((p_[0], p_[1], 0)))   # countersink
+    for k, ang_ in enumerate(CASE_TABS):
+        # a straight tab off the back of the rim, M5 clearance hole; two 45° gussets at its edges, clear
+        # of the screw head and washer, make it print without support (the carrier prints face down)
+        tab = bd.Box(CARRIER[1] + 14.0 - (CARRIER[1] - 4.0), 18.0, 4.0, align=(bd.Align.MIN, bd.Align.CENTER, bd.Align.MIN)
+                     ).moved(bd.Location((CARRIER[1] - 4.0, 0, RIM_BACK_Z)))
+        prof = bd.Face(bd.Wire.make_polygon([bd.Vector(x_, 0, z_) for x_, z_ in (
+            (CARRIER[1] - 1.0, RIM_BACK_Z + 3.9), (CARRIER[1] + 14.0, RIM_BACK_Z + 3.9),
+            (CARRIER[1] - 1.0, RIM_BACK_Z + 18.9))], close=True))
+        for y_ in (-9.0, 5.5):
+            tab = tab + bd.extrude(prof, amount=3.5, dir=(0, 1, 0)).moved(bd.Location((0, y_, 0)))
+        tab -= parts.disc(5.5, 10, z0=RIM_BACK_Z - 2).moved(bd.Location((CARRIER[1] + 7.0, 0, 0)))
+        carrier = carrier + tab.rotate(bd.Axis.Z, ang_)
+    # splits: three where the carrier is clear of the front plate (spliced) and one at 225° where it
+    # sits on the plate (both ends bolted to it). 330°, not 315°, keeps that splice off the plate's corner.
+    split = (45.0, 135.0, 225.0, 330.0)
     for k in range(4):
-        piece = carrier & _wedge(45 + 90 * k, 135 + 90 * k, 0, 230, -30, 10, n=40)
-        a.add(f"carrier_segment_{k}", piece, material="PETG", group="carrier",
-              note="mounted on the M2 front plate and, where it overhangs, on the case")
+        a1_ = split[(k + 1) % 4] + (360.0 if k == 3 else 0.0)
+        piece = carrier & _wedge(split[k], a1_, 0, 230, -60, 10, n=40)
+        a.add(f"carrier_segment_{k}", piece, material="PETG", group="carrier", print_up=(0, 0, -1),
+              note="printed frame segment, face down; L-section rim where it overhangs the front plate")
     for k in range(4):
         for j in range(k + 1, 4):
             a.allow(f"carrier_segment_{k}", f"carrier_segment_{j}")
+    for k, ang_ in enumerate(s_ for s_ in split if not (150.0 <= s_ <= 240.0)):   # the plate joins the 225° split
+        joint = _wedge(ang_ - 9, ang_ + 9, 150.0, CARRIER[1] - 4.2, CARRIER[2] - 2.5, CARRIER[2], n=10)
+        for d_ in (-5.0, 5.0):
+            q = (163.0 * math.cos(math.radians(ang_ + d_)), 163.0 * math.sin(math.radians(ang_ + d_)))
+            joint -= parts.disc(3.4, 10, z0=CARRIER[2] - 5).moved(bd.Location((q[0], q[1], 0)))
+        a.add(f"carrier_joint_{k}", joint, material="PETG", group="carrier", note="splice plate, 2 x M3 each side")
+        for j in range(4):
+            a.allow(f"carrier_joint_{k}", f"carrier_segment_{j}")
     # rollers on studs
     b = BEARINGS["688ZZ"]
     for k, ang_ in enumerate((30, 90, 150, 210, 270 + 25, 330)):
@@ -202,7 +252,8 @@ def build(pointer: int | None = None, sector_leap: bool = False):
     c_xy = (star_c[0] + cd * math.cos(math.radians(theta_c)), star_c[1] + cd * math.sin(math.radians(theta_c)))
     zc = (z_back - 20.0, z_back - 17.0)
     a.add("pinion_10", spur_gear(g10, 3.0).moved(bd.Location((star_c[0], star_c[1], zc[0]))) -
-          parts.disc(3.0, 20, z0=zc[0] - 5).moved(bd.Location((star_c[0], star_c[1], 0))), group="station")
+          parts.disc(3.0, 20, z0=zc[0] - 5).moved(bd.Location((star_c[0], star_c[1], 0))), group="station",
+          nozzle=0.2)
     a.allow("pinion_10", "counter_star_shaft")
     rot_c = mesh_rotation(g10, g100, theta_c)
     wheel_c = spur_gear(g100, 3.0).rotate(bd.Axis.Z, rot_c) - parts.disc(3.3, 20, z0=-5)
@@ -210,7 +261,7 @@ def build(pointer: int | None = None, sector_leap: bool = False):
     for pos in range(4, 100, 4):
         t = math.radians(pos * 3.6 + 90)
         wheel_c += parts.disc(2.0, 1.5, z0=3.0).moved(bd.Location((30 * math.cos(t), 30 * math.sin(t), 0)))
-    a.add("wheel_C_100", wheel_c.moved(bd.Location((c_xy[0], c_xy[1], zc[0]))), group="station",
+    a.add("wheel_C_100", wheel_c.moved(bd.Location((c_xy[0], c_xy[1], zc[0]))), group="station", nozzle=0.2,
           note="year in the century; 24 leap bumps")
     a.add("wheel_C_arbor", parts.rod(3.0, 26.0).moved(bd.Location((c_xy[0], c_xy[1], zc[0] - 6))), material="steel",
           printed=False, group="station")
@@ -253,20 +304,22 @@ def build(pointer: int | None = None, sector_leap: bool = False):
         for k in range(4):
             a.allow(nm, f"carrier_segment_{k}")
 
-    # ---------------------------------------------------------------- pointer side (3 o'clock)
+    # ---------------------------------------------------------------- pointer side (9 o'clock: built at 0°, mirrored)
     lever = bd.Box(3.0, 20.0, RIM_Z - (CARRIER[2] - 3.0), align=(bd.Align.CENTER, bd.Align.MIN, bd.Align.MIN)).moved(
         bd.Location(((TRACK_S[0] + TRACK_S[1]) / 2, -2.0, CARRIER[2] - 3.0)))
-    a.add("stop_lever", lever, group="pointer", note="held up by S, the sector lug: keeps E6 running")
-    a.add("stop_switch", bd.Box(13.0, 6.0, 6.0).moved(bd.Location((153.0, 24.0, CARRIER[2] - 3.0))),
+    a.add("stop_lever", mirror(lever), group="pointer", print_up=(1, 0, 0),
+          note="held up by S, the sector lug: keeps E6 running")
+    a.add("stop_switch", mirror(bd.Box(13.0, 6.0, 6.0).moved(bd.Location((153.0, 24.0, CARRIER[2] - 3.0)))),
           material="green", printed=False, group="pointer")
-    a.add("witness_opto_1_March", bd.Box(2.2, 4.0, 2.0, align=(bd.Align.MIN, bd.Align.CENTER, bd.Align.MAX)).moved(
-        bd.Location((147.8, -13.0, -8.6))),
+    a.add("witness_opto_1_March", mirror(bd.Box(2.2, 4.0, 2.0, align=(bd.Align.MIN, bd.Align.CENTER, bd.Align.MAX)).moved(
+        bd.Location((147.8, -13.0, -8.6)))),
           material="green", printed=False, group="pointer", note="fires each 1 March (fixed part of the ring)")
     arrow = bd.extrude(bd.Face(bd.Wire.make_polygon([bd.Vector(176, 0, 0), bd.Vector(196, 5, 0), bd.Vector(196, -5, 0)],
                                                     close=True)), amount=2.0, dir=(0, 0, 1)).moved(bd.Location((0, 0, 0.5)))
-    a.add("apollo_arrow", arrow, material="silver", group="pointer", note="Apollo's arrow (figure in E-module design)")
+    a.add("apollo_arrow", mirror(arrow), material="silver", group="pointer",
+          note="Apollo's arrow, viewer's left (figure in E-module design)")
     for nm in ("stop_lever", "stop_switch", "witness_opto_1_March"):
         for k in range(4):
             a.allow(nm, f"carrier_segment_{k}")
     return a, {"pointer": pointer, "sector_leap": sector_leap, "wheel_C_centre": [round(c_xy[0], 1), round(c_xy[1], 1)],
-               "station_angle": round(STATION_ANGLE, 2), "roller_radius": ROLLER_R}
+               "station_angle": round(STATION_ANGLE, 2), "pointer_angle": POINTER_ANGLE, "roller_radius": ROLLER_R}

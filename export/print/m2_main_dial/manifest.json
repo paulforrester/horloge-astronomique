@@ -1,0 +1,1072 @@
+{
+ "model": "m2_main_dial",
+ "unique_parts": 57,
+ "printed_parts": 90,
+ "sets": {
+  "dial": [
+   "dial_field",
+   "dial_hour_ring"
+  ]
+ },
+ "parts": [
+  {
+   "names": [
+    "hemisphere_dome"
+   ],
+   "material": "silver",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    46.5,
+    46.5,
+    5.0
+   ],
+   "note": "",
+   "file": "hemisphere_dome.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "wheel_sun"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    49.9,
+    49.9,
+    4.0
+   ],
+   "note": "",
+   "file": "wheel_sun.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "S_sleeve_sun_48",
+    "S_sleeve_shadow_48",
+    "wheel_cam"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    50.0,
+    50.0,
+    4.0
+   ],
+   "note": "",
+   "file": "S_sleeve_sun_48.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "wheel_shadow"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    49.9,
+    49.9,
+    4.0
+   ],
+   "note": "",
+   "file": "wheel_shadow.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "wheel_moon"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    85.0,
+    85.0,
+    4.0
+   ],
+   "note": "",
+   "file": "wheel_moon.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "J_sleeve_88"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    90.0,
+    90.0,
+    4.0
+   ],
+   "note": "",
+   "file": "J_sleeve_88.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "I_154"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    156.0,
+    156.0,
+    4.0
+   ],
+   "note": "",
+   "file": "I_154.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "J_169"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    171.0,
+    171.0,
+    4.0
+   ],
+   "note": "",
+   "file": "J_169.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "I_84",
+    "S_84"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    86.0,
+    86.0,
+    4.0
+   ],
+   "note": "",
+   "file": "I_84.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "wheel_sunrise"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    50.0,
+    50.0,
+    4.0
+   ],
+   "note": "v1: locked by a pin; v1.5: driven",
+   "file": "wheel_sunrise.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "wheel_sunset"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    50.0,
+    50.0,
+    4.0
+   ],
+   "note": "v1: locked by a pin; v1.5: driven",
+   "file": "wheel_sunset.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "S_sun_A",
+    "S_sun_B",
+    "J_sun_A",
+    "J_sun_B"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    22.0,
+    22.0,
+    4.0
+   ],
+   "note": "",
+   "file": "S_sun_A.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "S_planet_0_1",
+    "S_planet_0_2",
+    "S_planet_1_1",
+    "S_planet_1_2",
+    "J_planet_0_1",
+    "J_planet_0_2",
+    "J_planet_1_1",
+    "J_planet_1_2"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    19.8,
+    20.0,
+    8.4
+   ],
+   "note": "",
+   "file": "S_planet_0_1.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "S_carrier_plate",
+    "J_carrier_plate"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    60.0,
+    60.0,
+    3.0
+   ],
+   "note": "",
+   "file": "S_carrier_plate.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "S_carrier_worm_wheel",
+    "J_carrier_worm_wheel"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    58.8,
+    58.8,
+    6.0
+   ],
+   "note": "60 T worm wheel = carrier (correction input)",
+   "file": "S_carrier_worm_wheel.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "S_worm",
+    "J_worm"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    14.0,
+    14.0,
+    24.0
+   ],
+   "note": "60:1, self-locking: the v1 lock. Prints axis vertical; the thread's lower flank is a 70\u00b0 overhang 2 mm deep, so use fine layers (0.1 mm) and check it on a test print",
+   "file": "S_worm.stl",
+   "overhang_mm2": 952.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "S_worm_block_0",
+    "S_worm_block_1",
+    "J_worm_block_0",
+    "J_worm_block_1"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    12.0,
+    12.0,
+    10.0
+   ],
+   "note": "pillow block with an MR85ZZ, bolted to a standoff from the back plate",
+   "file": "S_worm_block_0.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "I_72"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    91.8,
+    91.8,
+    6.0
+   ],
+   "note": "",
+   "file": "I_72.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "R1_12",
+    "motor_pinion_12"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    18.2,
+    18.2,
+    6.0
+   ],
+   "note": "",
+   "file": "R1_12.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "R1_48"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    61.8,
+    61.8,
+    6.0
+   ],
+   "note": "",
+   "file": "R1_48.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "S_12_weekday"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    14.6,
+    14.6,
+    4.0
+   ],
+   "note": "",
+   "file": "S_12_weekday.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "W_84"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    85.4,
+    85.4,
+    4.0
+   ],
+   "note": "",
+   "file": "W_84.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "hand_sun"
+   ],
+   "material": "dial",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    71.1,
+    120.1,
+    1.5
+   ],
+   "note": "split-collet hub: friction clutch on the tube (architecture \u00a77)",
+   "file": "hand_sun.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "sun_disc"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    4.7,
+    4.7,
+    1.5
+   ],
+   "note": "",
+   "file": "sun_disc.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "hand_moon"
+   ],
+   "material": "silver",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    125.8,
+    75.0,
+    2.0
+   ],
+   "note": "split-collet hub: friction clutch on the tube (architecture \u00a77)",
+   "file": "hand_moon.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "moon_ball"
+   ],
+   "material": "silver",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    4.5,
+    4.5,
+    4.6
+   ],
+   "note": "",
+   "file": "moon_ball.stl",
+   "overhang_mm2": 8.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "arm_shadow"
+   ],
+   "material": "black",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    70.7,
+    119.9,
+    1.5
+   ],
+   "note": "split-collet hub: friction clutch on the tube (architecture \u00a77)",
+   "file": "arm_shadow.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "shadow_disc"
+   ],
+   "material": "black",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    12.2,
+    12.2,
+    1.5
+   ],
+   "note": "",
+   "file": "shadow_disc.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "front_plate"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    280.7,
+    232.5,
+    4.0
+   ],
+   "note": "",
+   "file": "front_plate.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "back_plate"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    280.7,
+    232.5,
+    4.0
+   ],
+   "note": "",
+   "file": "back_plate.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "bridge"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    145.7,
+    64.5,
+    3.0
+   ],
+   "note": "",
+   "file": "bridge.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "bridge_pillar_0",
+    "bridge_pillar_1"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    8.0,
+    8.0,
+    38.0
+   ],
+   "note": "",
+   "file": "bridge_pillar_0.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "pillar_0",
+    "pillar_1",
+    "pillar_2",
+    "pillar_3",
+    "pillar_4",
+    "pillar_5"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    9.0,
+    9.0,
+    94.6
+   ],
+   "note": "",
+   "file": "pillar_0.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "dial_field"
+   ],
+   "material": "dial",
+   "nozzle": 0.2,
+   "set": "dial",
+   "size": [
+    287.5,
+    287.5,
+    3.0
+   ],
+   "note": "two-colour print, body 1 (azure); face down",
+   "file": "dial_field.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "dial_hour_ring"
+   ],
+   "material": "silver",
+   "nozzle": 0.2,
+   "set": "dial",
+   "size": [
+    287.5,
+    287.5,
+    0.8
+   ],
+   "note": "two-colour print, body 2 (silver); face down",
+   "file": "dial_hour_ring.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "ring_segment_0"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    235.6,
+    92.3,
+    8.5
+   ],
+   "note": "face down, so dates can be a flush two-colour inlay on the bed side; the Jan-Feb sector's seat is a pocket open to the bed: support from the bed inside it, ideally with a support-interface filament on the second nozzle",
+   "file": "ring_segment_0.stl",
+   "overhang_mm2": 3838.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "ring_segment_1",
+    "ring_segment_2"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    92.3,
+    235.6,
+    8.5
+   ],
+   "note": "face down, so dates can be a flush two-colour inlay on the bed side",
+   "file": "ring_segment_1.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "ring_segment_3"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    92.3,
+    235.6,
+    8.5
+   ],
+   "note": "face down, so dates can be a flush two-colour inlay on the bed side",
+   "file": "ring_segment_3.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "sector_jan_feb"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    163.1,
+    42.8,
+    8.2
+   ],
+   "note": "slides one division: leap / common",
+   "file": "sector_jan_feb.stl",
+   "overhang_mm2": 6.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "S_bump_0",
+    "S_bump_1"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    4.1,
+    4.6,
+    1.8
+   ],
+   "note": "",
+   "file": "S_bump_0.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "witness_flag_1_March"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    2.5,
+    2.3,
+    5.3
+   ],
+   "note": "",
+   "file": "witness_flag_1_March.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "carrier_segment_0"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    251.7,
+    98.0,
+    31.2
+   ],
+   "note": "printed frame segment, face down; L-section rim where it overhangs the front plate",
+   "file": "carrier_segment_0.stl",
+   "overhang_mm2": 489.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "carrier_segment_1"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    83.0,
+    251.7,
+    31.2
+   ],
+   "note": "printed frame segment, face down; L-section rim where it overhangs the front plate",
+   "file": "carrier_segment_1.stl",
+   "overhang_mm2": 58.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "carrier_segment_2"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    280.0,
+    128.5,
+    31.2
+   ],
+   "note": "printed frame segment, face down; L-section rim where it overhangs the front plate",
+   "file": "carrier_segment_2.stl",
+   "overhang_mm2": 12.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "carrier_segment_3"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    89.5,
+    214.8,
+    31.2
+   ],
+   "note": "printed frame segment, face down; L-section rim where it overhangs the front plate",
+   "file": "carrier_segment_3.stl",
+   "overhang_mm2": 220.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "carrier_joint_0",
+    "carrier_joint_1",
+    "carrier_joint_2"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    52.4,
+    52.4,
+    2.5
+   ],
+   "note": "splice plate, 2 x M3 each side",
+   "file": "carrier_joint_0.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "counter_star_10"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    19.0,
+    18.1,
+    2.0
+   ],
+   "note": "one point per year (pin at d = 0)",
+   "file": "counter_star_10.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "pinion_10"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    10.3,
+    9.8,
+    3.0
+   ],
+   "note": "",
+   "file": "pinion_10.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "wheel_C_100"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    80.9,
+    80.9,
+    4.5
+   ],
+   "note": "year in the century; 24 leap bumps",
+   "file": "wheel_C_100.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "satellite_4"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    28.0,
+    28.0,
+    2.0
+   ],
+   "note": "advanced 1/4 turn per century by a pin on C; one bump for x00 % 400 == 0",
+   "file": "satellite_4.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "leap_follower"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    36.0,
+    4.0,
+    2.0
+   ],
+   "note": "reads C (and the satellite), positions the setter switch",
+   "file": "leap_follower.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "sector_setter_switch"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    8.0,
+    3.0,
+    9.1
+   ],
+   "note": "railway-switch guide: steers the passing tab to the leap or common side",
+   "file": "sector_setter_switch.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "E6_crank"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    14.0,
+    14.0,
+    3.0
+   ],
+   "note": "",
+   "file": "E6_crank.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "E6_pawl",
+    "ring_jumper"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    16.8,
+    14.1,
+    2.5
+   ],
+   "note": "one crank turn = one ratchet tooth = one division",
+   "file": "E6_pawl.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "stop_lever"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    7.4,
+    20.0,
+    3.0
+   ],
+   "note": "held up by S, the sector lug: keeps E6 running",
+   "file": "stop_lever.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "apollo_arrow"
+   ],
+   "material": "silver",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    20.0,
+    10.0,
+    2.0
+   ],
+   "note": "Apollo's arrow, viewer's left (figure in E-module design)",
+   "file": "apollo_arrow.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  },
+  {
+   "names": [
+    "dial_foot_0",
+    "dial_foot_1",
+    "dial_foot_2"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    7.0,
+    7.0,
+    8.0
+   ],
+   "note": "",
+   "file": "dial_foot_0.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true
+  }
+ ]
+}

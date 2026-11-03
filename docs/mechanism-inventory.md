@@ -284,9 +284,13 @@ Scale aids [D]:
   passé 9 mètres, porte, sur un fond doré, toutes les indications d'un calendrier perpétuel: le
   mois, les quantièmes, les lettres dominicales, les noms des Saints et des Saintes, ainsi que les
   fêtes fixes" [S: DA p. 27; width and circumference checked on the page image].
-  - **Apollo points**: he stands to the right of the calendar and shows the day "avec une flèche".
+  - **Apollo points**: he stands "à la droite du calendrier" and shows the day "avec une flèche".
     Diana is on the other side "seulement pour servir de pendant" (only as a counterpart)
     [S: DA p. 27]. This resolves the Apollo/Diana conflict.
+  - **Side: the viewer's left.** "À la droite du calendrier" is the calendar's own right; DA says "à
+    la droite du spectateur" when it means the viewer's right. ELS i4 agrees: "le jour qui commence
+    venant alors sur la gauche de l'anneau, en face de la flèche". The M2 pointer is at 9 o'clock
+    (corrected 3 Nov 2026; `docs/m2-design.md` §6).
 - **Periods:** the civil year, 365 or 366 days.
 - **Original:**
   - **It jumps daily at midnight:** "Cet anneau, qui est mobile, avance chaque jour d'une

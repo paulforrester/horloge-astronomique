@@ -113,7 +113,7 @@ cad/lib/, cad/modules/   parametric CAD, build123d (Phase 2; see cad/README.md)
 cad/case/                parametric wooden case: joinery, cut lists (Phase 2)
 firmware/                ESP32-S3 controller (Phase 3); firmware/test_rig/ is the rig sketch
 sim/                     accelerated-time simulator and ephemeris validation (Phase 3)
-export/                  generated STL/3MF/DAE (git-ignored except releases)
+export/                  generated files (git-ignored except releases): print/ STL+3MF per model, sketchup/ DAE
 ```
 
 ## Main sources

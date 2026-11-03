@@ -497,7 +497,12 @@ description with ten plates) [S: DA p. 5]. **Lead:** find it.
   circonférence de **passé 9 mètres**" (page image; the OCR reads 26).
 - "Avance chaque jour d'une division, le passage d'un jour à un autre s'effectuant
   instantanément à minuit".
-- Apollo, on the right, points "avec une flèche"; Diana is only a counterpart.
+- "Une statue représentant Apollon se tient **à la droite du calendrier**, en montrant avec une flèche … le
+  jour de l'année"; Diana "est placée de l'autre côté et seulement pour servir de pendant".
+  - **Side (corrected 3 Nov 2026).** "À la droite du calendrier" is the calendar's own right, so it is on
+    the **viewer's left**. DA says "à la droite du spectateur" when it means the viewer's right (the
+    equations case, p. 44). ELS i4 confirms the day is read on the left (Calendar [i4] below).
+    The earlier note "Apollo, on the right" was a misreading.
 - Turns in 365 or 366 days and suppresses 3 days in 400 years by itself.
 - "Commencement de l'année commune" between 31 Dec and 1 Jan; in leap years "commune" disappears
   and a day is inserted between 28 Feb and 1 Mar.
@@ -599,7 +604,7 @@ description with ten plates) [S: DA p. 5]. **Lead:** find it.
 | Item | Resolution |
 |---|---|
 | Hourglass hourly or quarter-hourly | **Hourly**, alternating direction [S: DA p. 51] |
-| Apollo or Diana points to the day | **Apollo** [S: DA p. 27] |
+| Apollo or Diana points to the day | **Apollo**, on the viewer's left [S: DA p. 27, "à la droite du calendrier"; ELS i4, "sur la gauche de l'anneau"] |
 | Calendar ring continuous or jumping | **Jumps at midnight** [S: DA p. 27] |
 | Calendar ring size | **25 cm wide, circumference over 9 m** [S: DA p. 27] |
 | Sunrise/sunset display | **Mobile horizon** [S: DA p. 31]. Its drive is still TBD. |
@@ -663,6 +668,7 @@ and the Lefort gear table against its page image.
 | Item | Value | Instalment |
 |---|---|---|
 | Main dial | "un cadran de 2m,30 de diamètre, divisé en 2 fois 12 heures, qui représente le plan de l'équateur" | i1 |
+| Northern hemisphere, noon | "Au milieu et en avant du cadran … est disposé un **disque légèrement bombé** qui représente l'hémisphère terrestre boréal; **le méridien de Strasbourg est verticalement au-dessus du pôle Nord**, qui est figuré au centre. … **Lorsque le Soleil passe au méridien de Strasbourg, l'aiguille est verticale.**" So true noon is at the top, and the hemisphere is a shallow dome (PR #4 choice confirmed). | i1 |
 | Sun hand | "exactement de 1 mètre, un degré équivaut à 17mm,45" | i2 |
 | Sun / Moon / shadow discs | 9.3 / 9.1 / 24.3 mm (OCR "g" read as 9; consistent with 32′ × 17.45 mm/° [D]) | i2 |
 | Eclipse (latitude) cam | mean radius 134 mm; "R = 154mm,2 et r = 113mm,8" | i2 |
@@ -700,8 +706,10 @@ this pair of hands.
 
 **Calendar [i4].**
 - The ring "est posé sur deux galets … Il avance chaque jour à minuit d'un fuseau, sous l'action d'un
-  moteur spécial déclanché par le rouage de temps moyen" (it rests on two rollers and advances one
-  division each midnight, driven by a special motor released by the mean-time train).
+  moteur spécial déclanché par le rouage de temps moyen, **le jour qui commence venant alors sur la
+  gauche de l'anneau, en face de la flèche**" (it rests on two rollers and advances one division
+  each midnight, driven by a special motor released by the mean-time train; the new day arrives on
+  the **left** of the ring, facing the arrow).
 - Letters A–G, with A on 1 January.
 
 **Leap day [i4]** (the most original part, per ELS):

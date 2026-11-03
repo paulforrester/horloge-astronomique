@@ -71,6 +71,7 @@ MOTOR = (R1[0] + 37.5 * math.cos(math.radians(200)), R1[1] + 37.5 * math.sin(mat
 
 # --- levels (z, mm; dial face = 0) ----------------------------------------------------------------
 FP = (-15.0, -11.0)
+POINTER_WINDOW = (168.0, 192.0, 140.0, 177.0)  # front-plate cut-out (a0, a1, r0, r1) for the calendar readers
 CENTRE = {}                                   # tube -> wheel level, outermost tube first
 _z = FP[0] - GAP
 for _n in ["sunset", "sunrise", "sun", "cam", "moon", "shadow"]:
@@ -236,7 +237,9 @@ def build():
         # worm on its own Ø5 shaft, in the plane of the worm wheel, pointing to the right (M3)
         worm = worm_solid(WORM, 24.0, bore=5.0).moved(bd.Location((0, 0, -12)))
         wp = place_worm(worm, WORM_TEETH, WORM, 6.0, wheel_axis_xy=xy, z0=ww_z0, side_angle=worm_side_angle)
-        a.add(f"{tag}_worm", wp, group="differentials", note="60:1, self-locking: the v1 lock")
+        a.add(f"{tag}_worm", wp, group="differentials", print_up=(1, 0, 0), nozzle=0.2,
+              note="60:1, self-locking: the v1 lock. Prints axis vertical; the thread's lower flank is a "
+                   "70° overhang 2 mm deep, so use fine layers (0.1 mm) and check it on a test print")
         wa = worm_centre_distance(WORM_TEETH, WORM)
         cx = xy[0] + wa * math.cos(math.radians(worm_side_angle))
         cy = xy[1] + wa * math.sin(math.radians(worm_side_angle))
@@ -250,7 +253,7 @@ def build():
             blk = bd.Box(10, 12, 12, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.CENTER)).moved(
                 bd.Location((bx, cy, ww_z0 + 3.0)))
             blk -= bd.Cylinder(2.5, 12).rotate(bd.Axis.Y, 90).moved(bd.Location((bx, cy, ww_z0 + 3.0)))
-            a.add(f"{tag}_worm_block_{k}", blk, material="PETG", group="differentials",
+            a.add(f"{tag}_worm_block_{k}", blk, material="PETG", group="differentials", print_up=(1, 0, 0),
                   note="pillow block with an MR85ZZ, bolted to a standoff from the back plate")
             a.allow(f"{tag}_worm_block_{k}", f"{tag}_worm_shaft")
         rep["notes"].append(f"{tag} worm axis at ({cx:.1f}, {cy:.1f}), z {ww_z0 + 3:.1f}; shaft to x = {x_end:.0f}")
@@ -368,6 +371,13 @@ def build():
         fp -= at(parts.disc(seat.od - 2, 10, z0=FP[0] - 1), p)
     for p in (C_V15, R_V15):                                                 # reserved, drilled undersize
         fp -= at(parts.disc(3.0, 10, z0=FP[0] - 1), p)
+    # window for the calendar pointer's readers (stop lever, stop switch, 1 March witness), which sit
+    # at 9 o'clock on the carrier and reach back through the plate (calendar.py, POINTER_ANGLE)
+    a0, a1, r0, r1 = POINTER_WINDOW
+    th = [math.radians(a0 + (a1 - a0) * k / 8) for k in range(9)]
+    win = [(r1 * math.cos(t), r1 * math.sin(t)) for t in th] + [(r0 * math.cos(t), r0 * math.sin(t)) for t in th[::-1]]
+    fp -= bd.extrude(bd.Face(bd.Wire.make_polygon([bd.Vector(x, y, FP[0] - 1) for x, y in win], close=True)),
+                     amount=FP[1] - FP[0] + 2, dir=(0, 0, 1))
     a.add("front_plate", fp, material="PETG", group="plates", explode=(0, 0, 15))
     bw, bh, bc = fw, fh, fc                                                  # same outline as the front plate
     bp = at(parts.plate((bw, bh), BP[1] - BP[0], z0=BP[0], corner_radius=8), bc)

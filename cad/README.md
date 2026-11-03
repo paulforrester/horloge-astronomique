@@ -41,7 +41,9 @@ python3 -m venv .venv-cad && .venv-cad/bin/pip install -r cad/requirements.txt
 - `cad/tests/test_m2_feasibility.py`: the main-dial layout's checks, plus Schwilgué's latitude-cam
   design point.
 - `cad/tests/test_test_rig.py`: the rig's checks, every mesh engaged, the coupon matrix.
-- `cad/tests/test_sketchup_export.py`: every model writes a `.dae` with named nodes.
+- `cad/tests/test_sketchup_export.py`: every model writes a `.dae` with named nodes, plus its exploded copy.
+- `cad/tests/test_export_print.py`: print poses, the overhang measure, identical parts counted once,
+  two-colour sets.
 - `cad/tests/test_worm_diff.py`, `test_m2_design.py`, `test_calendar_logic.py`: worm and differential meshing, the whole M2 module, and the calendar logic over four centuries.
 
 ## Modules (`cad/modules`)
@@ -50,11 +52,29 @@ python3 -m venv .venv-cad && .venv-cad/bin/pip install -r cad/requirements.txt
 |---|---|
 | `m2_main_dial/feasibility.py` | Layout study, accepted: [`docs/main-dial-feasibility.md`](../docs/main-dial-feasibility.md) |
 | `m2_main_dial/mechanism.py`, `calendar.py`, `calendar_logic.py`, `dial.py`, `full.py` | M2 detailed design, proposed: [`docs/m2-design.md`](../docs/m2-design.md). `python -m cad.modules.m2_main_dial.full` checks the whole module |
-| `test_rig/rig.py`, `test_rig/coupons.py` | Test rig and tolerance coupons, proposed: [`docs/test-rig.md`](../docs/test-rig.md). `python -m cad.modules.test_rig.rig` writes the 3MF print files to `export/test_rig/` |
+| `test_rig/rig.py`, `test_rig/coupons.py` | Test rig and tolerance coupons (with a worm test since PR #5): [`docs/test-rig.md`](../docs/test-rig.md). `python -m cad.modules.test_rig.rig` checks the rig and writes renders to `export/test_rig/` |
+
+## Print files
+
+Paul asked for an STL or 3MF for every printed part, importable into Bambu Studio (PR #5).
+
+```bash
+.venv-cad/bin/python -m cad.export_print
+```
+
+- It writes `export/print/<model>/` for `tolerance_coupons`, `test_rig` and `m2_main_dial`:
+  - one STL per distinct printed part, in its print pose (centred, standing on z = 0);
+  - a 3MF for each multi-colour set (the M2 dial);
+  - `README.md`, the manifest: quantity, material, nozzle, size, bed fit, down-facing area, notes.
+- **Print pose.** `Item.print_up` names the assembly direction that faces up. Where it is not set,
+  the exporter tries both faces down and keeps the one with less overhang (`overhang_area`).
+- Every new module is added to `_models()` in `cad/export_print.py`, and the files are committed
+  with each PR (`git add -f`).
+- The fits wait for the coupons: print `tolerance_coupons` first.
 
 ## SketchUp files
 
-Paul asked for SketchUp files of every CAD model (PR #4).
+Paul asked for SketchUp files of every CAD model (PR #4), with exploded views (PR #5).
 
 ```bash
 .venv-cad/bin/python -m cad.export_sketchup
@@ -62,7 +82,11 @@ Paul asked for SketchUp files of every CAD model (PR #4).
 
 - It writes one COLLADA file per model to `export/sketchup/`: one named node per part, millimetres,
   Z up. In SketchUp, use File > Import > COLLADA (*.dae).
-- Every new module is added to `MODELS` in `cad/export_sketchup.py`.
+- Assemblies also get `<model>_exploded.dae`. It is pulled apart along the arbor axis by group,
+  with the spacing growing with depth (`EXPLODE` in `cad/export_sketchup.py`,
+  `cad.lib.assembly.exploded`). Import both into one SketchUp file to compare them.
+- Every new module is added to `MODELS` (and, if its parts stack, `EXPLODE`) in
+  `cad/export_sketchup.py`.
 - The files are committed with each PR (`git add -f`).
 
 | File | Contents |
@@ -72,5 +96,6 @@ Paul asked for SketchUp files of every CAD model (PR #4).
 | `export/sketchup/test_rig.dae` | The test rig, real teeth |
 | `export/sketchup/tolerance_coupons.dae` | Fit, bearing-seat and gear coupons |
 | `export/sketchup/m2_main_dial.dae` | The M2 module: mechanism, calendar ring and station, two-colour dial |
+| `export/sketchup/*_exploded.dae` | Exploded copies of M2, the M2 feasibility model, the test rig and the coupons |
 
 Other generated files go to `export/` (git-ignored). Released STL/3MF are added deliberately.

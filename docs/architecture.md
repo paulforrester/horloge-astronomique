@@ -105,7 +105,7 @@ goes through a switch and the controller. A link that carries an angle is a shaf
 |---|---|---|---|
 | M3 → M2 | Solar correction (Sun differential, third member) | Rotating shaft Ø5, rack-and-pinion output in M3; in M2 it turns a self-locking 60:1 worm on the differential carrier, 12° at the hand per turn (`docs/m2-design.md` §4) | Keyed single-dog coupling (position-carrying) |
 | M3 → M2 | Lunar correction (Moon differential, third member) | Rotating shaft Ø5; 60:1 worm in M2, 12.72° at the hand per turn | Keyed single-dog coupling |
-| M2 → M7 | Weekday carousel drive | Ø5 output arbor W, **1 rev per 7 days** (12/84 in M2), leaving M2's back plate horizontally; M7 turns it upward with its own right-angle drive (`docs/m2-design.md` §3) | Keyed single-dog coupling |
+| M2 → M7 | Weekday carousel drive | Ø5 output arbor W, **1 rev per 7 days** (12/84 in M2, exact), leaving M2's back plate horizontally at (−75.5, 57.9). M7 carries it up about 240 mm with a 1:1 link: spur or belt if the carousel's axis is parallel, a right-angle pair if it is vertical (axis TBD; `docs/m2-design.md` §3 item 2) | Keyed single-dog coupling |
 | M2 → M4 | Year-end trigger | Switch on the M2 year train → controller | Connector |
 | M4 → M2 | Easter position (feasts arc), dominical letter, century leap exception (v2) | Push-rod or rack, or a shaft. **TBD** in the v2 design; the original's transfer is unknown | Keyed |
 | M1 → E1, E2, E3 | Quarter, hour and noon releases | Switches on M1 cams → controller → event motors | Connector |

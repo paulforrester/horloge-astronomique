@@ -53,3 +53,46 @@ def test_worm_gain():
     # 1 worm turn = 1 tooth of 60 = 6° of carrier = 12° at sun B; Sun 1:1, Moon 88/83
     assert 360 / MECH.WORM_TEETH * 2 == 12.0
     assert MECH.WORM.self_locking(mu=0.2)
+
+
+def test_pointer_on_the_viewers_left(full):
+    # DA p. 27 "à la droite du calendrier"; ELS i4 "sur la gauche de l'anneau, en face de la flèche"
+    a, _ = full
+    assert CAL.POINTER_ANGLE == 180.0
+    for name in ("apollo_arrow", "stop_lever", "stop_switch", "witness_opto_1_March"):
+        bb = a[name].shape.bounding_box()
+        assert bb.max.X < -140 and abs((bb.min.Y + bb.max.Y) / 2) < 30, name
+    # the readers pass through a window in the M2 front plate
+    win = bd.Box(20, 20, 3).moved(bd.Location((-158.5, 0, (MECH.FP[0] + MECH.FP[1]) / 2)))
+    assert (a["front_plate"].shape & win).volume < 1e-6
+
+
+def test_carrier_is_a_printed_frame(full):
+    # Paul, PR #5: works printed and independent of the case; plywood only if a print cannot do it
+    from cad.lib.assembly import BED_DUAL
+    a, _ = full
+    segs = [i for i in a.items if i.name.startswith("carrier_segment_")]
+    assert len(segs) == 4 and all(i.printed and i.material == "PETG" for i in segs)
+    assert all(r["fits"] for r in a.bed_fit(BED_DUAL) if r["part"].startswith("carrier"))
+    z_back = min(i.shape.bounding_box().min.Z for i in segs)
+    assert z_back == pytest.approx(CAL.RIM_BACK_Z)                  # the L-section rim is there
+    assert not [i.name for i in a.items if i.material == "wood"]
+    import math
+    for ang in CAL.CASE_TABS:                                        # each tab exists, with its M5 hole
+        c = (CAL.CARRIER[1] + 7.0) * math.cos(math.radians(ang)), (CAL.CARRIER[1] + 7.0) * math.sin(math.radians(ang))
+        probe = bd.Cylinder(6.0, 3.0).moved(bd.Location((c[0], c[1], CAL.RIM_BACK_Z + 2.0)))
+        hole = bd.Cylinder(2.0, 3.0).moved(bd.Location((c[0], c[1], CAL.RIM_BACK_Z + 2.0)))
+        tab = sum((i.shape & probe).volume for i in segs)
+        assert tab > 0.5 * probe.volume and sum((i.shape & hole).volume for i in segs) < 1e-6, ang
+
+
+def test_print_poses_need_support_only_in_the_sector_seat(full):
+    from cad.lib.assembly import overhang_area, print_pose
+    a, _ = full
+    for k in (1, 2, 3):
+        ring = a[f"ring_segment_{k}"]
+        assert overhang_area(print_pose([ring.shape], ring.print_up)[0]) < 1.0
+    assert overhang_area(print_pose([a["ring_segment_0"].shape], (0, 0, -1))[0]) > 1000   # documented
+    for k in range(4):
+        seg = a[f"carrier_segment_{k}"]
+        assert overhang_area(print_pose([seg.shape], seg.print_up)[0]) < 600   # bridges between tab gussets

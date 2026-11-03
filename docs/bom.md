@@ -106,6 +106,9 @@ rows and count towards the "ground rod, brass tube, bearings" row above.
 | Reflective opto | TCRT5000-class | 1 | 1 March witness | Gotronic |
 | Hall + magnet | DRV5032 + 5 × 2 mm | 2 + 2 | index (daily arbor), Moon-tube witness | as Batch 1 |
 | NEMA 17 + TMC2209; E6 gearmotor | as above | (already counted) | M2 stepper; calendar advance | — |
+| Screws, countersunk | M3 × 10, ISO 10642, A2 | 3 + 12 | carrier to the M2 front plate (3); carrier splice plates (3 × 4) (PR #5 frame) | 3DJake / RS FR |
+| Heat-set inserts M3 | ruthex | 15 | in the front plate and carrier segments for the screws above | as Batch 1 |
+| Screws + washers M5 | M5 × 16, ISO 7380, A2 | 3 | carrier tabs to the works' internal frame (D12 R5) | as Batch 1 |
 | Wall restraint brackets + anchors for stone | per fixing design | TBD | D6; wall material TBD | TBD |
 | Clock oil | horological | 1 | brass tube stacks | TBD |
 | Filament | PLA (gears, display), PETG (structure) | TBD | from slicer estimates per module | TBD |

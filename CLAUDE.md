@@ -43,10 +43,13 @@ at the base). Depth is not yet known — see the open items in `docs/reference-n
 - **Materials:** PLA by default for gears and display parts; PETG for structural or clamped parts;
   nylon optional for the fastest, highest-wear gears near the motors. The room is climate
   controlled, so no UV or weather design is needed. Plan a glazed front to keep dust out.
-- **Wood (fine woodworking) for the case and frame.** Sheet goods (birch plywood, MDF) and
+- **Wood (fine woodworking) for the decorative case.** Sheet goods (birch plywood, MDF) and
   hardwood are both acceptable (Paul, 1 Nov 2026). 3D printing stays for the internal mechanism
-  and for selected visible parts such as ornament and figures. The wood holds the modules but
-  never sets gear geometry; see `docs/decisions.md` D12.
+  and for selected visible parts such as ornament and figures. See `docs/decisions.md` D12.
+- **The clock works are printed and independent of the case** (Paul, PR #5). Print every part of
+  the works where possible, joining several printed pieces if needed. Use model-grade plywood
+  internally only where size or strength rules out a print. The decorative case never carries
+  or locates the works (D12 R5).
   - Finish: painted to resemble the original.
   - Species: one species from a single movement class (D12 R3).
   - **Metal frame elements are hidden where possible**; the exception is the computus (Easter
@@ -83,7 +86,11 @@ at the base). Depth is not yet known — see the open items in `docs/reference-n
   except released STL/3MF files.
 - **SketchUp files for every CAD model** (Paul, PR #4): each model is listed in
   `cad/export_sketchup.py` and its `.dae` (named nodes, mm, Z up) in `export/sketchup/` is committed
-  with the PR.
+  with the PR. Include an **exploded view** (`<model>_exploded.dae`) wherever parts stack (Paul,
+  PR #5). They are for viewing only, not for printing.
+- **Print files for every printed part** (Paul, PR #5): an STL or 3MF that Bambu Studio imports,
+  in its print pose. List the model in `cad/export_print.py`, regenerate `export/print/<model>/`
+  (STLs, 3MF for multi-colour sets, manifest README) and commit it with the PR.
 
 ## Paul's tools and experience (for context)
 

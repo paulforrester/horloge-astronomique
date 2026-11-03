@@ -20,6 +20,7 @@ def test_samples_have_no_interference():
 def test_every_model_writes_a_dae_with_named_nodes(tmp_path):
     from collada import Collada
     paths = export_sketchup.main(str(tmp_path))
-    assert {p.stem for p in paths} == set(export_sketchup.MODELS)
+    assert {p.stem for p in paths} == set(export_sketchup.MODELS) | {f"{m}_exploded" for m in export_sketchup.EXPLODE}
+    assert set(export_sketchup.EXPLODE) <= set(export_sketchup.MODELS)
     for p in paths:
         assert len(Collada(str(p)).scenes[0].nodes) > 5, p

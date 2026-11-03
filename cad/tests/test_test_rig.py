@@ -54,6 +54,7 @@ def test_coupons_cover_the_planned_matrix():
     assert all(r["fits"] for r in a.bed_fit(BED_DUAL))
     gears = [i.name for i in a.items if i.name.startswith("gear_m")]
     assert len(gears) == 2 * len(C.MODULES) * len(C.BACKLASHES)
+    assert {"worm_cradle", "worm_wheel_20", "worm_test"} <= {i.name for i in a.items}   # PR #5 worm test
     fit = a["fit_coupon"].shape
     # 3 rods x 7 allowances = 21 holes through a 6 mm plate
     import math

@@ -667,6 +667,29 @@ Handbook (USDA FPL GTR-282, ch. 4).
   choice.
 - The aluminium-extrusion rack of D6 option B is **not used**.
 
+### Refinement R5: the clock works are printed and independent of the case (Paul, PR #5, 3 Nov 2026)
+
+Paul: "I'd prefer to have the clock works printed where possible, even if that means connecting
+multiple plastic pieces. I'm okay using model grade plywood internally as well if size and/or
+strength would prohibit the use of 3d printed parts. The point is that I want the clock works to be
+independent of the external decorative case. Bottom line. Print if possible, otherwise use model
+grade plywood."
+
+- **The works form their own structure.** That covers every module's plates, carriers, brackets and
+  the internal frame that holds the modules together. It is printed, from several pieces bolted or
+  spliced where one print is too large.
+- **Model-grade plywood is only the fallback**, where size or strength rules out a print. Each such
+  part is named, with the reason, in its module's design note.
+- **The decorative case surrounds the works and never carries them.** Rules 1–3 still apply between
+  the works and whatever finally bears the load (the plinth and wall restraint of rule 8): located,
+  three-point, slotted.
+- **First use: M2.** Its calendar carrier is a printed frame of 4 PETG segments with an L-section
+  rim, bolted to the M2 front plate. It has mounting tabs for the works' frame and needs no plywood
+  (`docs/m2-design.md` §6).
+- **Files.** Every printed part gets an STL or 3MF that Bambu Studio imports, in its print pose
+  (`cad/export_print.py`, `export/print/`). Every SketchUp model also gets an exploded copy where
+  that is meaningful (`cad/export_sketchup.py`).
+
 ---
 
 ## Blockers (not decisions, but they need Paul)

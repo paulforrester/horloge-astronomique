@@ -37,6 +37,12 @@ class Item:
     group: str = ""               # for exploded views and reports
     explode: tuple = (0.0, 0.0, 0.0)
     note: str = ""
+    # print pose (cad/export_print.py): the assembly direction that faces up on the bed (None: +Z or
+    # -Z, whichever leaves less overhang); parts that share a print_set (bodies of one multi-colour
+    # print) are posed together; nozzle in mm
+    print_up: tuple | None = None
+    print_set: str = ""
+    nozzle: float = 0.4
 
 
 @dataclass
@@ -127,6 +133,70 @@ def _mesh(shape, tolerance):
     verts, tris = shape.tessellate(tolerance, 0.5)
     v = np.array([(p.X, p.Y, p.Z) for p in verts], float)
     return v, np.array(tris, int)
+
+
+def print_pose(shapes: list, up=None) -> list:
+    """Shapes turned so that ``up`` (assembly frame; None = +Z) points to +Z, then moved together so
+    their joint bounding box is centred on the origin in X and Y and sits on z = 0 (the bed)."""
+    import build123d as bd
+    u = np.array(up if up is not None else (0.0, 0.0, 1.0), float)
+    u /= np.linalg.norm(u)
+    z = np.array((0.0, 0.0, 1.0))
+    if np.allclose(u, z):
+        out = list(shapes)
+    elif np.allclose(u, -z):
+        out = [s.rotate(bd.Axis.X, 180) for s in shapes]
+    else:
+        ax = np.cross(u, z)
+        ang = math.degrees(math.acos(float(np.clip(u @ z, -1, 1))))
+        axis = bd.Axis((0, 0, 0), tuple(float(c) for c in ax / np.linalg.norm(ax)))
+        out = [s.rotate(axis, ang) for s in shapes]
+    bb = bd.Compound(out).bounding_box()
+    loc = bd.Location((-(bb.min.X + bb.max.X) / 2, -(bb.min.Y + bb.max.Y) / 2, -bb.min.Z))
+    return [s.moved(loc) for s in out]
+
+
+def overhang_area(shape, limit_deg: float = 45.0, tolerance: float = 0.05) -> float:
+    """mm² of downward-facing surface steeper than ``limit_deg`` from vertical and not on the bed
+    (z > 0.1): a printed part posed by ``print_pose`` with more than a few mm² needs support or a
+    bridge (horizontal holes and slots count here as short bridges)."""
+    v, t = _mesh(shape, tolerance)
+    if not len(t):
+        return 0.0
+    tri = v[t]
+    n = np.cross(tri[:, 1] - tri[:, 0], tri[:, 2] - tri[:, 0])
+    area = np.linalg.norm(n, axis=1) / 2
+    nz = n[:, 2] / np.maximum(2 * area, 1e-12)
+    down = (nz < -math.sin(math.radians(limit_deg))) & (tri[:, :, 2].min(axis=1) > 0.1)
+    return float(area[down].sum())
+
+
+def exploded(asm: Assembly, offsets: dict | None = None, spread: float = 1.0, spread_groups=None,
+             item_offsets: dict | None = None, use_item_explode: bool = True, axis: int = 2) -> Assembly:
+    """Copy of ``asm`` pulled apart along ``axis`` (default Z, the arbor axis) for an exploded view.
+
+    Each part moves along the axis by: ``item_offsets[name]`` if given, else ``offsets[group]`` (a
+    block shift, mm); plus ``spread`` times the coordinate of its front face, so layers stacked on
+    one arbor come apart in their own order (only for groups in ``spread_groups``, or all groups when
+    that is None); plus the item's own ``explode`` vector if ``use_item_explode``.
+    """
+    import build123d as bd
+    offsets = offsets or {}
+    item_offsets = item_offsets or {}
+    out = Assembly(asm.name + "_exploded")
+    out.contact_ok = set(asm.contact_ok)
+    for i in asm.items:
+        bb = i.shape.bounding_box()
+        front = (bb.max.X, bb.max.Y, bb.max.Z)[axis]
+        d = np.zeros(3)
+        d[axis] = item_offsets.get(i.name, offsets.get(i.group, 0.0))
+        if spread_groups is None or i.group in spread_groups:
+            d[axis] += spread * front
+        if use_item_explode:
+            d += np.array(i.explode, float)
+        out.items.append(Item(i.name, i.shape.moved(bd.Location(tuple(float(c) for c in d))), i.material,
+                              i.printed, i.group, (0.0, 0.0, 0.0), i.note, i.print_up, i.print_set, i.nozzle))
+    return out
 
 
 def write_dae(asm: Assembly, path: Path, tolerance: float = 0.1):

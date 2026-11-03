@@ -33,8 +33,10 @@ def build():
             continue
         a.items.append(it)
     a.contact_ok |= {p for p in mech.contact_ok if "dial_field" not in p}
-    a.add("dial_field", field, material="dial", group="front", note="two-colour print, body 1 (azure)")
-    a.add("dial_hour_ring", hour_ring, material="silver", group="front", note="two-colour print, body 2 (silver)")
+    a.add("dial_field", field, material="dial", group="front", print_up=(0, 0, -1), print_set="dial", nozzle=0.2,
+          note="two-colour print, body 1 (azure); face down")
+    a.add("dial_hour_ring", hour_ring, material="silver", group="front", print_up=(0, 0, -1), print_set="dial",
+          nozzle=0.2, note="two-colour print, body 2 (silver); face down")
     a.allow("dial_field", "dial_hour_ring")
     for it in mech.items:                        # whatever passed through the old placeholder passes here
         if frozenset((it.name, "dial_field")) in mech.contact_ok:

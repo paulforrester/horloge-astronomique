@@ -9,13 +9,23 @@ New Year station.
   - **60:1 worm** correction inputs;
   - **all of M2** in one design;
   - **two-colour printed dial**.
+- **Paul's review of PR #5 (3 Nov 2026):**
+  - **M2 design approved.** He asked for more detail on the weekday output (§3 item 2).
+  - Saints' names out. **0.2 mm nozzle approved.** He asked the point size of 2 mm text (§11).
+  - **Noon at the top**, as in Strasbourg (§7, now sourced).
+  - **Clock works printed and independent of the decorative case.** Model-grade plywood only where
+    size or strength rules out a print (§6 carrier frame; decisions D12).
+  - **Every printed part gets an STL or 3MF for Bambu Studio** (§8) and SketchUp files get an
+    **exploded view**.
 - **Model:** [`cad/modules/m2_main_dial/`](../cad/modules/m2_main_dial/)
   - `mechanism.py`: trains, differentials, centre stack, plates, motor;
   - `calendar.py` and `calendar_logic.py`: the calendar ring;
   - `dial.py`: the dial face;
   - `full.py`: everything together.
 - **Tests:** `cad/tests/test_m2_design.py`, `test_calendar_logic.py`, `test_worm_diff.py`.
-- **SketchUp:** `export/sketchup/m2_main_dial.dae`.
+- **SketchUp:** `export/sketchup/m2_main_dial.dae` and `m2_main_dial_exploded.dae`.
+- **Print files:** `export/print/m2_main_dial/` (STL per part, 3MF for the two-colour dial,
+  manifest in its `README.md`).
 
 **Status: Proposed** (Phase 2 gate). The decisions needed are in §11.
 
@@ -23,18 +33,19 @@ New Year station.
 
 | Check | Result |
 |---|---|
-| Interference, all 141 parts, exact B-rep | **0** |
+| Interference, all 144 parts, exact B-rep | **0** |
 | Fixed parts inside the path of the turning calendar ring (other than its designed readers) | **0** |
 | Rotating hands: any two parts on different tubes that could touch at some angle | 0 (feasibility study; same front stack) |
 | Calendar logic, day by day, 2026–2426, five different start dates | **0 wrong days**. Every New Year jump is 4 divisions (common) or 3 (leap), including 2100, 2200, 2300 and 2400. |
-| Bed fit, single and dual nozzle | every printed part fits. The largest are the plates, 281 × 232 mm. |
-| Envelope | x −185 … +196, y −195 … +178, z −162 … +24 mm: inside the M2 bay. Nothing comes within about 18 mm of the floor. **Depth 185 mm.** |
-| Parts | 141 in the model: 87 printed, 52 bought (plus 2 v1.5 space claims) |
+| Bed fit, single and dual nozzle | every printed part fits in its print pose. The largest are the dial (Ø 287.5) and the plates (281 × 232). |
+| Envelope | x −196 … +184, y −195 … +192, z −162 … +24 mm: inside the M2 bay. Nothing comes within about 18 mm of the floor. **Depth 185 mm.** |
+| Parts | 144 in the model: 90 printed (57 distinct print files), 52 bought (plus 2 v1.5 space claims) |
 | Motor torque | ≈ 2.9 mN·m at the motor, **≈ 50×** margin at 0.5 A [E, §9] |
 
 <p align="center"><img src="img/m2/m2_front.png" width="420" alt="M2 front"> <img src="img/m2/m2_three_quarter.png" width="420" alt="M2 three-quarter"></p>
 <p align="center"><img src="img/m2/m2_differentials.png" width="420" alt="Differentials and worms"> <img src="img/m2/m2_calendar_station.png" width="420" alt="Calendar station"></p>
 <p align="center"><img src="img/m2/m2_rear.png" width="420" alt="M2 rear"> <img src="img/m2/dial.png" width="420" alt="Two-colour dial"></p>
+<p align="center"><img src="img/m2/m2_exploded.png" width="520" alt="M2 exploded along the arbor axis (as in m2_main_dial_exploded.dae)"></p>
 
 ## 2. Kinematics
 
@@ -94,8 +105,29 @@ S --12/84--> W  (weekday output to M7, 1 rev per 7 days)
      day, **+0.004°/century** [D: `tools/ratios`].
    - That removes a third differential. `spec/clock.yaml` `M2.node_cam` is updated (v1.5, with
      train routing in the v1.5 M2 update).
-2. **The weekday output** is a horizontal Ø5 arbor turning once per 7 days. M7 turns it upward
-   with its own right-angle drive, which keeps bevel gears out of M2. Architecture §4 is updated.
+2. **The weekday output** is arbor W, a horizontal Ø5 arbor turning once per 7 days, handed to M7.
+   Architecture §4 is updated.
+   - **"Horizontal".** Every M2 arbor is perpendicular to the dial, so on the wall it is horizontal
+     and points into the room. W is one of them: at x −75.5, y +57.9 mm from the dial centre (upper
+     left, between S and the front-plate edge). It stands 25 mm out of the back plate (z −114 to
+     −139).
+   - **The ratio is made in M2 by gears.** S turns once per mean day, and W gets 12/84 from it:
+     exactly 1/7 turn per day, ratio error 0 (`spec/clock.yaml` `M2.weekday`). M7 adds no ratio;
+     it only carries the motion to the chariots (rule 2).
+   - **The coupling is keyed, with one dog.** A single dog engages in only one angle, so M7 can come
+     off and go back without losing the day. The "Sunday noon" Hall witness on the carousel
+     (architecture §6) checks the phase.
+   - **What M7 does with it is M7's design.** DA says only that the chariots "roulent sur un chemin
+     de fer circulaire, en suivant un mouvement continu" [S: DA p. 47]. The carousel's axis is
+     still TBD (photos and the Bach/Rieb book).
+     - If the carousel turns in the wall's plane, its axis is parallel to W. M7 then needs only a
+       1:1 spur or timing-belt link up to the carousel, about 240 mm higher [E: from
+       `docs/envelope.md`].
+     - If it turns on a vertical axis, like a turntable, M7 adds a 1:1 right-angle pair: printed
+       bevels, or crossed helicals.
+   - **Why not turn it upward inside M2.** A bevel pair in M2 would need its own bearings and depth
+     next to the S worm. It would also tie M2 to M7's undecided layout. A plain parallel arbor keeps
+     M2 all-spur and serves either M7 layout.
 3. The daily arbor I and the lay shafts were placed to clear the 154/169 wheels and the worm
    shafts. The bridge turned to 20° so its pillars clear S, C, R and J.
 4. Both plates share one 281 × 232 mm outline, with six pillars at points the model found clear of
@@ -154,6 +186,21 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
 - A thin rear lip carries **368 ratchet teeth, one per division**.
 - Ring and sector together are about 150 g of PLA at 100 % infill [D: model volume 122 cm³].
 
+**Pointer on the viewer's left (9 o'clock), corrected on 3 Nov 2026.**
+- Apollo "se tient à la droite du calendrier" [S: DA p. 27]. That is the calendar's own right, so
+  the viewer's left: DA writes "à la droite du spectateur" when it means the viewer's right.
+- ELS confirms it: "le jour qui commence venant alors sur la gauche de l'anneau, en face de la
+  flèche" [S: ELS i4].
+- The first draft had the pointer on the right. The model is now mirrored, so the pointer is at
+  180°.
+- **Direction [D].** The year reads clockwise round the ring as seen from the front: today at the
+  left, early April at the top when the pointer is on 1 January. To bring tomorrow to the pointer, the
+  ring turns **counter-clockwise**. Confirm on a photo [TBD]; if it is the other way, mirror the
+  ring again (one line in `calendar.py`).
+- The station stays at 6 o'clock, still 92 divisions after the pointer.
+- The pointer's readers (stop lever, stop switch, 1 March witness) reach back through a window in
+  the M2 front plate at 168°–192°, r 140–177 mm.
+
 **Layout of the 368 divisions** (`calendar_logic.py`):
 
 | Divisions | Content |
@@ -204,6 +251,24 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
 - **Setting** (architecture §7): turn the ring to the date (lift the jumper), set the sector, and
   set wheel C and the satellite to the year, as `calendar_logic.initial_state` does.
 
+**Carrier: a printed frame that belongs to the works, not the case** (Paul, PR #5: "Print if
+possible, otherwise use model grade plywood"; decisions D12).
+
+| Part | Detail |
+|---|---|
+| Carrier ring | PETG, 2.1 mm plate (r 133–178) carrying the 6 roller studs and the station. Printed **face down**, in **4 segments** (each fits the dual-nozzle bed). |
+| Splits | At 45°, 135°, 225° and 330°. The 225° split lies on the M2 front plate. The other three get a PETG splice plate behind, 2 × M3 each side. The fourth split is at 330°, not 315°, so its splice clears the plate's corner. |
+| Rear rim (L-section) | r 174–178, 31 mm deep, from −55° to 150°: where the carrier overhangs the front plate (top and right). It turns the flat ring into an L-section that holds its shape. |
+| Fixing to M2 | 3 countersunk M3 at r 172 (165°, 195°, 225°), into the front plate where they overlap. |
+| Mounting tabs | 3 tabs at the back of the rim (20°, 90°, 120°), each with an M5 clearance hole, for the works' internal frame. Two 45° gussets flank each hole, so the tab prints without support. |
+
+- **Why printed.** Each segment is at most 280 × 129 × 31 mm in its print pose, so the H2D prints it.
+  The L-section makes up for PETG's stiffness, which is lower than plywood's.
+- **No plywood** is needed in M2.
+- **Separation from the case.** The tabs hold the works on their own internal frame; the
+  decorative case only surrounds it (D12). M2 lifts out with its ring, carrier and station as one
+  unit.
+
 ## 7. Dial (two-colour print)
 
 - **Field (azure):** the Ø 287.5 disc with raised inlays.
@@ -212,17 +277,41 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
 - **Ticks:** quarter hours long, 5 minutes short. The azure inlays fill the cuts flush, so the
   numerals read azure on silver [S: DA "peint en azur … cercle en argent"].
 - **No font is needed:** the numerals are built from straight strokes.
-- **Noon is at the top** [E: convention, to be confirmed on a photo].
+- **Noon is at the top**, as in Strasbourg [S: ELS i1]:
+  - "le méridien de Strasbourg est verticalement au-dessus du pôle Nord, qui est figuré au centre";
+  - "Lorsque le Soleil passe au méridien de Strasbourg, l'aiguille est verticale".
+- **The hemisphere is a shallow dome.** The same passage calls it "un disque légèrement bombé",
+  which confirms the PR #4 choice.
+- **Printed face down**, both bodies together (`export/print/m2_main_dial/dial.3mf`). The silver
+  ring and the azure inlays are the first layers, on the smooth plate. Use the 0.2 mm nozzle for
+  the 1 mm strokes.
 
 ## 8. Print and parts notes
 
-**Orientation:**
-- plates, carrier segments, ring segments (face down), the dial (face up, two filaments) and the
-  hands lie flat;
-- gears lie flat, hub up;
-- differential planets stand on end;
-- the worm stands vertical on its end (no supports; the 4.76° thread overhang is fine);
-- the worm wheel lies flat.
+**Print files** (Paul, PR #5): `python -m cad.export_print` writes `export/print/<model>/`:
+- one STL per distinct printed part, already in its print pose and standing on z = 0;
+- a 3MF for each multi-colour print;
+- a `README.md` manifest with quantity, material, nozzle, size, bed fit and down-facing area.
+
+For M2 that is 57 files for 90 prints. The press, slide and bearing fits still wait for the
+tolerance coupons, so these are design-stage files.
+
+**Print poses.** Each part records which way is up (`Item.print_up`). Where it does not, the
+exporter tries both faces down and keeps the one with less to support.
+- **Face down:** ring segments and sector (dates become a flush inlay on the bed side), the dial
+  (two bodies), and the carrier segments (rim and tabs grow upward; the tab gussets are 45°).
+- **Flat:** gears, plates, hands and links lie flat, on whichever face needs less support.
+- **Worm: axis vertical.** The thread's lower flank is a 70° overhang, 2 mm deep. An earlier draft
+  said the 4.76° lead made this "fine"; that was wrong, because the lead angle is not the
+  overhang.
+  - Use the 0.2 mm nozzle and fine layers (0.1 mm).
+  - Proposed: add a worm to the next coupon plate to check it before the M2 print.
+  - Fallback: print it in two halves split along the axis, flat side down, with no overhang.
+- **Support needed in one place:** ring segment 0, where the Jan–Feb sector's seat is a pocket open
+  to the bed, 2.4 mm deep. Use support from the bed inside the pocket. A support-interface filament
+  on the H2D's second nozzle leaves the cleanest seat.
+- **Other down-facing areas** in the manifest are bridges over bearing seats, holes and slots.
+  They print without support.
 
 **Materials:**
 - PETG: plates, bridge, pillars, carrier, pillow blocks;
@@ -270,23 +359,52 @@ These are reserved or simplified:
   ball);
 - the setter switch's guide profile and the follower geometry (they are blocks in the model; the
   logic is proven in `calendar_logic.py`);
-- the ring's printed dates;
+- the ring's printed dates (sizes: §11 decision 5);
 - the dominical-letter dial (I10: set by hand in v1);
 - the v2 feasts arc;
 - Apollo's figure.
 
-## 11. Decisions needed from Paul
+## 11. Decisions
 
-1. **Approve the M2 design** (§1–§9), including the two changes in §3:
-   - the latitude cam driven directly from mean time;
-   - the weekday output handed to M7 as a horizontal arbor.
-2. **Calendar ring face: what to print and how.**
-   - Each division is 2.9 mm wide at the outer edge, so saints' names are out at 1:8.
-   - **Recommended:** a two-colour print with day numbers (2 mm), month names in the sector and on
-     the fixed part, and the dominical letters. This wants the 0.2 mm nozzle.
-   - Alternatives: day numbers every 5 days only (0.4 mm nozzle); or a printed paper band glued on
-     (finest, not "object-like").
-3. **Dial orientation:** noon at the top? (Assumed; a photo will confirm.)
-4. **Wood or print for the carrier's outer support?** The carrier overhangs the M2 front plate at
-   the top and right. It needs two brackets from the case (wood holds, never sets geometry: D12),
-   or a printed frame. Recommended: brackets from the case.
+**Settled in Paul's review of PR #5 (3 Nov 2026):**
+1. **M2 design approved**, including the latitude cam from mean time and the weekday output (now
+   explained in §3 item 2).
+2. **Calendar ring face:** saints' names out; 0.2 mm nozzle approved.
+3. **Noon at the top**, as in Strasbourg [S: ELS i1; §7].
+4. **Carrier support: printed**, as a frame that belongs to the works (§6). Plywood only where size or
+   strength rules out a print; M2 needs none.
+
+**Text size and readability** (Paul asked: what point size is 2 mm text?).
+
+Method [E]:
+- Font size is set by the em; a capital is about 0.7 em (Helvetica 0.72, Times 0.66). So
+  pt ≈ cap height / 0.7 / 0.3528 mm.
+- A 20/20 eye resolves letters that subtend 5′ of arc (Snellen). So the farthest a cap height h can
+  be read at all is h / tan 5′ ≈ 688 h.
+- Comfortable, fluent reading needs about 3× that size, so divide that distance by 3.
+- At 1:8, text read from d looks as large as the original's from 8 d.
+
+| Cap height | ≈ Point size | Readable at most (20/20) | Comfortable up to |
+|---|---|---|---|
+| 2.0 mm | 8 pt | 1.4 m | 0.45 m |
+| 2.2 mm | 9 pt | 1.5 m | 0.5 m |
+| 3.0 mm | 12 pt | 2.1 m | 0.7 m |
+| 4.0 mm | 16 pt | 2.75 m | 0.9 m |
+| 5.0 mm | 20 pt | 3.4 m | 1.15 m |
+
+What fits on the ring [D]:
+- One division is 2.9 mm wide at the outer edge (2π × 170.5 / 368) and 2.5 mm at the inner edge.
+  Anything printed once per day therefore tops out at about **2.2 mm**, written radially along its
+  division.
+- A month spans 28–31 divisions, about 85 mm of arc, so its name can be much larger.
+
+**Still open: decision 5, the text sizes.** Recommended:
+- **day numbers and dominical letters at 2.2 mm (≈ 9 pt)**, the most a division allows;
+- **month names at 4 mm (≈ 16 pt)** along the circumference.
+
+Both are flush two-colour inlays on the face-down print, using the 0.2 mm nozzle. The dates go
+into the model once these sizes are confirmed.
+
+**Small checks that need a photo, not a decision:**
+- which way the ring turns (§6 [D]: counter-clockwise);
+- the weekday carousel's axis (§3 item 2; M7 design).
