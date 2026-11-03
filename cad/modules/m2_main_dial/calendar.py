@@ -25,7 +25,7 @@ parts, at 1:8 [S: ELS i4: Ø 2.73 m outer, 21 cm wide, 368 divisions → Ø 341,
   letters, which are gold in a black column, as on the original (Paul's photograph; Paul, PR #6).
 - **Carrier** (4 printed segments) holding the rollers, with openings where readers reach the band:
   the **stop lever** and the **witness opto** at the pointer (9 o'clock), and the **station** at
-  6 o'clock: E6 gearmotor + crank + pawl, jumper, 10-point counter star, wheel C (100 T) with its
+  6 o'clock: E6 gearmotor + crank + pawl, jumper, counting lever, wheel C (100 T) with its
   24 leap bumps, the satellite, the follower and the sector setter switch.
 
 **Pointer on the viewer's left** [S: ELS i4: "le jour qui commence venant alors sur la gauche de
@@ -63,10 +63,10 @@ TRACK_S = (150.0, 154.0)                                      # rim + bumps + se
 S_INNER = (150.2, 151.8)                                      # its inner half: the fixed bumps S
 S_OUTER = (152.2, 153.8)                                      # its outer half: the sector's lug, arm, foot
 ARM_Z = (-6.3, -5.5)                                          # the lug's arm: in front of the lever's plane
-R_PIN = 156.25                                                # counter pin, star at the station
+R_PIN = 156.25                                                # counter pin: the counting lever reads it
 TRACK_TAB = (159.0, 162.0)                                    # sector tab, setter at the station
 LAYER_A = (-5.8, -3.0)                                        # shallow: tab
-LAYER_B = (-8.3, -6.0)                                        # deep: star, lever tip, flag
+LAYER_B = (-8.3, -6.0)                                        # deep: counter pin, lever tip, flag
 RIM_Z = -6.5                                                  # S-track rim face; bumps reach -8.3
 CARRIER = (133.0, 178.0, -10.9, -8.8)                        # r_in, r_out, z0, z1 (in front of the M2 front plate)
 ROLLER_R = SKIRT[0] - BEARINGS["688ZZ"].od / 2               # 136.5
@@ -453,8 +453,10 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
         a.add(nm, shp, **kw)
     for x, y in (("wheel_C_100", "wheel_C_arbor"), ("wheel_C_100", "satellite_4"), ("wheel_C_100", "satellite_pin"),
                  ("satellite_4", "satellite_pin"), ("satellite_step_pin", "station_bracket"),
-                 ("wheel_C_100", "counting_lever"), ("wheel_C_100", "wheel_C_jumper"),
-                 ("wheel_C_jumper", "station_bracket"), ("counting_lever", "counting_lever_stud"),
+                 ("wheel_C_100", "wheel_C_jumper"), ("wheel_C_jumper", "station_bracket"),
+                 ("counting_lever", "counting_lever_stud"), ("counting_lever", "counting_lever_pin"),
+                 ("counting_lever", "counting_lever_stop"), ("counting_lever", "counting_lever_spring"),
+                 ("counting_lever_spring", "counting_lever_spring_anchor"),
                  ("setter_set_ramp", "wheel_C_100"), ("setter_set_ramp", "setter_plunger_spring"),
                  ("setter_plunger_spring", "station_bracket"), ("setter_set_ramp", "satellite_4")):
         a.allow(x, y)

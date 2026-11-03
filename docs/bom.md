@@ -96,10 +96,14 @@ rows and count towards the "ground rod, brass tube, bearings" row above.
 | Item | Spec | Qty [E] | How the quantity was counted | Supplier |
 |---|---|---|---|---|
 | Brass tube, 0.45 mm wall | OD 4, 5, 6, 7, 8, 9 mm | 1 length (≈ 300 mm) of each, plus 1 extra OD 6 | centre stack; OD 6 also for the two differential sleeves | as Batch 1 |
-| Ground rod Ø3 | DIN 175 h9 | 0.5 m | fixed centre arbor, 8 differential pins, wheel C and star arbors | as Batch 1 |
+| Ground rod Ø3 | DIN 175 h9 | 0.5 m | fixed centre arbor, 8 differential pins, studs for wheel C and the counting lever | as Batch 1 |
 | Ground rod Ø5 | DIN 175 h9 | 1.5 m | S, J, I, W, R1 (≈ 100 mm each), 2 worm shafts (≈ 170 mm) | as Batch 1 |
 | Rod Ø8 | DIN 175 h9 | 0.1 m | 6 roller studs | as Batch 1 |
-| Rod Ø2 | steel pin | 0.1 m | 3 lock pins for the idle v1.5 tubes | as Batch 1 |
+| Rod Ø2 | steel pin | 0.1 m | 3 lock pins for the idle v1.5 tubes; the setter rocker's pivot pin | as Batch 1 |
+| Silver steel rod Ø1.5 | DIN 175 h9 | 0.2 m | calendar station: counting-lever pin (24 mm), stop and spring-anchor pins (16 mm each), satellite pin and step pin (m2-design §6) | Ameco, as Batch 1 (⚠ verify Ø1.5 in stock) |
+| Compression spring, stainless | OD 4, wire ≈ 0.3, free length ≈ 8 mm, rate ≤ 0.3 N/mm [E] | 1 (+ spares) | set-ramp plunger on wheel C | RS PRO range ([RS FR](https://fr.rs-online.com/web/p/products/0751483) is the class, not the part) or [HPC Europe](https://www.hpceurope.com/docPresse/2017-2018/Ressorts/ressorts.pdf); ⚠ pick after the rig test |
+| Extension spring, stainless | OD ≤ 3.5, body ≈ 8 mm, initial tension ≈ 0.8 N, rate ≤ 0.15 N/mm [E] | 1 (+ spares) | counting-lever return (m2-design §6 loads) | [RS PRO stainless extension springs](https://fr.rs-online.com/web/p/products/0821469) (that one is too long: same range) or HPC Europe; ⚠ pick after the rig test |
+| Push-on lock washers for Ø3 shafts | Starlock type, steel | 4 (+ spares) | axial retention on the wheel C and counting-lever studs | [Bossard Starlock 6110](https://www.bossard.com/eshop/ch-fr/outils-et-pour-elements-de-securite-et-antidesserrage/starlock-6110/p/38905) (⚠ verify the Ø3 size) |
 | Bearing MR85ZZ | 5 × 8 × 2.5 | 13 | 9 plate seats + 4 worm pillow blocks | as Batch 1 |
 | Bearing 688ZZ | 8 × 16 × 5 | 6 | calendar-ring rollers | as Batch 1 |
 | Microswitch | small lever type | 2 | E6 lock, calendar stop lever | as Batch 1 |

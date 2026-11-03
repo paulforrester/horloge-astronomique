@@ -19,7 +19,7 @@ from cad.modules.m2_main_dial import calendar as CAL
 from cad.modules.m2_main_dial import dial as DIAL
 from cad.modules.m2_main_dial import mechanism as MECH
 
-READERS = {"stop_lever", "witness_opto_1_March", "counting_lever", "setter_reset_ramp", "setter_set_ramp",
+READERS = {"stop_lever", "witness_opto_1_March", "counting_lever_pin", "setter_reset_ramp", "setter_set_ramp",
            "E6_pawl", "ring_jumper"}                       # fixed parts that reach the ring on purpose
 
 
@@ -54,7 +54,8 @@ def build():
     for k in range(4):                           # the carrier sits on the front plate where they overlap
         a.allow(f"carrier_segment_{k}", "front_plate")
     a.allow("wheel_C_arbor", "front_plate")      # wheel C's arbor is a stud pressed into the M2 front plate
-    a.allow("counting_lever_stud", "front_plate")
+    for nm in ("counting_lever_stud", "counting_lever_stop", "counting_lever_spring_anchor"):
+        a.allow(nm, "front_plate")                # studs and pins pressed into the M2 front plate
     return a, rep, cinfo
 
 

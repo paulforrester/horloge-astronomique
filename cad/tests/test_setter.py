@@ -44,7 +44,7 @@ def test_fixed_readers_meet_only_their_partners_on_the_ring(leap):
     # the ring sweeps every fixed part in its path; each reader's band may only hold its partner
     a, _ = CAL.build(sector_leap=leap, set_engaged=True, dates=False)
     partners = {"setter_reset_ramp": {"setter_rocker"}, "setter_set_ramp": {"setter_rocker"},
-                "counting_lever": {"counter_pin"}}
+                "counting_lever_pin": {"counter_pin"}}
     sweep_z = (CAL.BAND[2] - 0.3, 0.1)
     for reader, ok in partners.items():
         clip = a[reader].shape & parts.disc(400.0, sweep_z[1] - sweep_z[0], z0=sweep_z[0])
@@ -64,22 +64,65 @@ def test_fixed_readers_meet_only_their_partners_on_the_ring(leap):
         assert hits <= ok, (reader, hits - ok)
 
 
+def test_wheel_C_turns_the_way_the_hook_pulls_it_and_its_teeth_face_the_hook():
+    # the first draft had the ratchet the wrong way round: the pawl met the flanks and the jumper
+    # met the steep faces, so C could not turn. Check every link of the chain explicitly.
+    from shapely.geometry import Point, Polygon
+    # 1. counting up turns C anticlockwise: position c + 1 comes to the plunger from the clockwise side
+    assert S.position_angle(11, 10) == pytest.approx(S.read_angle() - 3.6)
+    # 2. at the station the ring moves towards -x, so the counter pin turns the lever clockwise, and
+    #    the hook then moves anticlockwise about C
+    P, pin = S.LEVER_PIVOT, S._world(0.0, S.LEVER_PIN_R)
+    assert S._world(-1.0, S.COUNTER_PIN_R)[0] < 0                     # the pin's next position
+    arm = (pin[0] - P[0], pin[1] - P[1])
+    assert arm[0] * 0.0 - arm[1] * (-1.0) < 0                         # push along -x: clockwise torque
+    home, end, _ = S.hook_home()
+    assert (S._psi(end) - S._psi(home)) % 360 < 180                   # hook: anticlockwise about C
+    # 3. every drive face faces clockwise: solid just anticlockwise of it, gap just clockwise
+    C = Polygon(S.c_outline())
+    for j in range(0, 100, 7):
+        a = S.tooth_phase() + 3.6 * j
+        r = S.C_R_ROOT + 0.5
+        assert C.contains(Point(S._c_polar(S._face_psi(a, r) + 0.3, r)))
+        assert not C.contains(Point(S._c_polar(S._face_psi(a, r) - 0.3, r)))
+    # 4. at rest the hook waits just behind a drive face, and the jumper's nose sits in a gap
+    lever, jumper = Polygon(S.lever_outline()), Polygon(S.jumper_outline())
+    assert 0.03 < lever.distance(C) < 0.15
+    assert jumper.intersection(C).area < 1e-3
+
+
 def test_counting_lever_steps_wheel_C_one_tooth_per_pass():
-    piv, pin = S.LEVER_PIVOT, S._world(0.0, S.COUNTER_PIN_R)
-    L_pin = math.dist(piv, pin)
-    a0 = math.atan2(pin[1] - piv[1], pin[0] - piv[0])
-    # turn the lever (the counter pin pushes its pin along the ring) until the pin is clear of the
-    # counter pin's path: radially outside it by the two radii
-    need = S.COUNTER_PIN_R + 1.25 + 0.8
-    turn = 0.0
-    while math.hypot(piv[0] + L_pin * math.cos(a0 - turn), piv[1] + L_pin * math.sin(a0 - turn)) < need:
-        turn += math.radians(0.1)
-    d = (piv[0] - S.C_XY[0], piv[1] - S.C_XY[1])
-    pawl_r = math.dist(piv, (S.C_XY[0] + (S.C_R_ROOT + 0.9) * d[0] / math.hypot(*d),
-                             S.C_XY[1] + (S.C_R_ROOT + 0.9) * d[1] / math.hypot(*d)))
-    travel = pawl_r * turn
-    pitch = 2 * math.pi * (S.C_R_ROOT + 0.9) / S.C_TEETH
-    assert pitch < travel < 2 * pitch                 # one tooth, never two (the jumper finishes it)
+    # C's drive faces are radial, so the jumper's nose passes a tip after exactly one pitch and the
+    # next after two: any carry between 1 and 2 pitches ends, once the jumper settles, as one tooth
+    pitch = 2 * math.pi * S.HOOK_R / S.C_TEETH
+    t = S.hook_travel() / pitch
+    assert 1.35 < t < 1.65, t                                         # near the middle of (1, 2)
+    # the hook stays on its radius through the stroke (both ends on HOOK_R, the middle just inside)
+    P = S.LEVER_PIVOT
+    home, _, _ = S.hook_home()
+    dev = []
+    for k in range(41):
+        b = -S.lever_turn() * k / 40
+        x = P[0] + (home[0] - P[0]) * math.cos(b) - (home[1] - P[1]) * math.sin(b)
+        y = P[1] + (home[0] - P[0]) * math.sin(b) + (home[1] - P[1]) * math.cos(b)
+        dev.append(math.dist((x, y), S.C_XY) - S.HOOK_R)
+    assert max(abs(d) for d in dev) < 0.15
+    # the counter pin catches the lever pin with real overlap, and the rocker never reaches it
+    overlap = S.COUNTER_PIN_R + S.COUNTER_PIN_D / 2 - (S.LEVER_PIN_R - S.LEVER_PIN_D / 2)
+    assert overlap > 1.5
+    from cad.lib.assembly import _mesh
+    v, _ = _mesh(S.rocker_parts(0, False)["setter_rocker"], 0.05)
+    assert min(math.hypot(x, y) for x, y, _ in v) > S.LEVER_PIN_R + S.LEVER_PIN_D / 2 + 1.0
+
+
+def test_return_spring_pulls_the_lever_back_onto_its_stop():
+    # spring on the tail (straight up from the pivot), pulled towards -x: anticlockwise, against the
+    # counter pin's push; the tail's left side rests on the stop pin
+    P, tail = S.LEVER_PIVOT, (S.LEVER_PIVOT[0], S.LEVER_PIVOT[1] + S.TAIL)
+    f = (S.ANCHOR_XY[0] - tail[0], S.ANCHOR_XY[1] - tail[1])
+    assert (tail[0] - P[0]) * f[1] - (tail[1] - P[1]) * f[0] > 0
+    assert S.STOP_XY[0] < P[0] and P[1] < S.STOP_XY[1] < tail[1]
+    assert S.STOP_XY[0] + 0.75 == pytest.approx(P[0] - 1.3)          # touching the tail (2.6 wide)
 
 
 def test_follower_and_satellite_timing():
