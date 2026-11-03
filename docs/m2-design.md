@@ -432,6 +432,8 @@ What fits on the ring [D]:
 - **Language and colour.** The language is French, as in the sources' quotations of the ring. The
   black letter colour is [E]; DA gives only the gold ground.
 
+<p align="center"><img src="img/m2/calendar_dates.png" width="760" alt="Dates at the pointer (3 Nov) and at the start of the year: black on the ring face, red on the recess floor, blue on the sector"></p>
+
 **Small checks that need a photo, not a decision:**
 - which way the ring turns (§6 [D]: counter-clockwise);
 - the weekday carousel's axis (§3 item 2; M7 design).
