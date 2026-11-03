@@ -188,3 +188,16 @@ def test_satellite_clears_the_plunger_boss_and_its_detent_holds_a_flat():
     wire_top = S.C_Z[1] + S.STROKE / 2 + S.SAT_WIRE_D / 2
     step_pin_bottom = S.C_Z[1] + S.STROKE + 0.3
     assert wire_top < step_pin_bottom - 0.5
+
+
+def test_bought_springs_as_installed():
+    b = S.bought_springs()
+    # plunger: always presses (guide friction is all it fights), light when C must lift it
+    assert 0.05 < b["plunger"]["F_rest"] < b["plunger"]["F_lift"] < 0.6
+    assert b["plunger"]["L_lift"] > S.PLUNGER_SPRING["Ln"] + 2.0           # far from solid
+    assert S.PLUNGER_SPRING["Di"] > S.PLUNGER_D + 0.1 and S.PLUNGER_SPRING["De"] < S.POCKET_D - 0.3
+    # lever return: at rest it must still drag the hook back up a flank (finger ~0.24 N, 30°, mu 0.3,
+    # 11.55 mm from the pivot: ~3 N·mm), with margin
+    drag = 0.24 * math.tan(math.radians(30) + math.atan(S.MU)) * S.hook_home()[2]
+    assert b["lever_return"]["T_rest"] > 1.5 * drag
+    assert S.RETURN_PRELOAD + S.TAIL * S.lever_turn() < S.RETURN_SPRING["Ln"] - S.RETURN_SPRING["L0"]

@@ -197,10 +197,13 @@ BUMP_HALF_W = 1.0                                  # radial half-width
 TIP_R = 0.4                                        # the plunger's ball tip
 COLLAR_D, COLLAR_T = 5.0, 0.8                      # the plunger's collar: the spring pushes it towards C
 POCKET_D, GUIDE_D = 5.4, 3.25                      # bracket: spring pocket (the collar slides in it), guide
-CEILING = -17.0                                    # the pocket's ceiling: the spring's fixed end
-PLUNGER_SPRING = dict(De=4.4, Di=3.6)              # envelope of the steel compression spring (docs §6)
+# the plunger's spring [S: Sodemann C01800120500S, stainless AISI 302: d 0.30, De 4.57, Di 3.97,
+# L0 12.70, Ln 4.72, R 0.25 N/mm; ressorts-sodemann.fr], installed 12.2 long at rest
+PLUNGER_SPRING = dict(ref="Sodemann C01800120500S", d=0.30, De=4.57, Di=3.97, L0=12.70, Ln=4.72, R=0.25)
+PLUNGER_SPRING_INSTALLED = 12.2
 C_XY = (34.0, -140.0)                              # wheel C's centre (its stud is in the M2 front plate)
 C_Z = (-30.9, -27.9)
+CEILING = C_Z[1] + STROKE + 0.3 + COLLAR_T + PLUNGER_SPRING_INSTALLED   # pocket ceiling: collar top at rest + installed
 C_TEETH, C_R_TIP, C_R_ROOT = 100, 31.5, 30.5      # ratchet teeth 1.0 deep
 C_UNDERCUT = 0.1                                   # drive faces lean back 0.1 pitch: they pull the hook in
 LEVER_PIVOT = (-8.0, -146.0)
@@ -377,7 +380,12 @@ def plunger_z(engaged: bool) -> dict:
 
 TAIL = 7.0                                         # the lever's spring tail, straight up from the pivot
 STOP_XY = (LEVER_PIVOT[0] - 1.3 - 0.75, LEVER_PIVOT[1] + 5.0)   # the tail rests on it (left side)
-ANCHOR_XY = (LEVER_PIVOT[0] - 13.0, LEVER_PIVOT[1] + TAIL)
+# the return spring [S: Sodemann E00940110500S, stainless AISI 302: d 0.28, De 2.39, L0 12.70,
+# F0 0.22 N, R 0.17 N/mm, Ln 26.16; ressorts-sodemann.fr], stretched RETURN_PRELOAD at rest. Its
+# hooks bear on the far side of the tail's Ø1.0 hole and of the Ø1.5 anchor pin.
+RETURN_SPRING = dict(ref="Sodemann E00940110500S", d=0.28, De=2.39, L0=12.70, F0=0.22, R=0.17, Ln=26.16)
+RETURN_PRELOAD = 3.0
+ANCHOR_XY = (LEVER_PIVOT[0] - (RETURN_SPRING["L0"] + RETURN_PRELOAD - 0.5 - 0.75), LEVER_PIVOT[1] + TAIL)
 
 
 def _square(c, s):
@@ -509,7 +517,9 @@ E_WIRE = 206000.0      # N/mm², patented-drawn spring steel wire EN 10270-1 (EN
 SECTOR_MASS = 0.0103   # kg: the Jan–Feb sector, 8268 mm³ of PLA at 1.24 g/cm³ (model volume)
 MU = 0.3               # printed PLA/PETG on steel or on itself [E]
 CLICK_F_NOSE0 = 0.30   # N at the click's nose, at rest: enough to settle C against its friction [E]
-WIRE_RM_MIN = {}       # {d: minimum tensile strength, MPa} from the chosen wire's supplier (sourcing pending)
+# minimum tensile strength of DH spring wire [S: EN 10270-1 Table 3, as tabled in Stahl-Becker's data
+# sheet: d 0.40 -> 2560, d 0.50 -> 2480 MPa], less the 10 % that the same sheet allows for straightened rods
+WIRE_RM_MIN = {0.4: 0.9 * 2560.0, 0.5: 0.9 * 2480.0}
 
 
 def _cantilever(d, L, delta):
@@ -549,6 +559,21 @@ def wire_springs() -> dict:
     return out
 
 
+def bought_springs() -> dict:
+    """Forces of the two catalogue springs as installed [D from the catalogue's R, F0, L0]."""
+    ps, rs = PLUNGER_SPRING, RETURN_SPRING
+    sweep = TAIL * lever_turn()
+    return {
+        "plunger": dict(F_rest=ps["R"] * (ps["L0"] - PLUNGER_SPRING_INSTALLED),
+                        F_lift=ps["R"] * (ps["L0"] - PLUNGER_SPRING_INSTALLED + STROKE),
+                        L_lift=PLUNGER_SPRING_INSTALLED - STROKE),
+        "lever_return": dict(F_rest=rs["F0"] + rs["R"] * RETURN_PRELOAD,
+                             F_stroke=rs["F0"] + rs["R"] * (RETURN_PRELOAD + sweep),
+                             T_rest=(rs["F0"] + rs["R"] * RETURN_PRELOAD) * TAIL,
+                             T_stroke=(rs["F0"] + rs["R"] * (RETURN_PRELOAD + sweep)) * TAIL),
+    }
+
+
 def station_parts(c_now: int, satellite: int, engaged: bool) -> list:
     """[(name, solid, add() kwargs)] of the station's setter and counter parts, world frame."""
     out = []
@@ -581,7 +606,7 @@ def station_parts(c_now: int, satellite: int, engaged: bool) -> list:
                 parts.disc(PLUNGER_SPRING["De"], sz[1] - sz[0], bore=PLUNGER_SPRING["Di"], z0=sz[0]).moved(
                     bd.Location((px, py, 0))),
                 dict(material="steel", printed=False, group="station",
-                     note="compression spring: from the pocket's ceiling, pushes the collar, so the tip, onto C")))
+                     note=f"{PLUNGER_SPRING['ref']}: from the pocket's ceiling, pushes the collar, so the tip, onto C")))
     # bracket behind the carrier: plunger guide and spring pocket (in a boss that hangs down to just
     # above the bumps), click pivot and spring anchor, and the satellite's stepping pin
     br = [(26.0, -177.0), (54.5, -177.0), (54.5, -157.0), (26.0, -157.0)]
@@ -663,10 +688,10 @@ def station_parts(c_now: int, satellite: int, engaged: bool) -> list:
         out.append((nm, parts.rod(1.5, PLATE_BACK - (LEVER_Z[0] - 0.5)).moved(bd.Location((xy[0], xy[1], LEVER_Z[0] - 0.5))),
                     dict(material="steel", printed=False, group="station", note=note)))
     z_mid = (LEVER_Z[0] + LEVER_Z[1]) / 2
-    x0, x1 = ANCHOR_XY[0] + 0.75, tail[0] - 2.2
-    spring = parts.rod(2.5, x1 - x0).rotate(bd.Axis.Y, 90).moved(bd.Location((x0, tail[1], z_mid)))
+    x0, x1 = ANCHOR_XY[0] + 0.75 + 1.4, tail[0] - 2.2
+    spring = parts.rod(RETURN_SPRING["De"], x1 - x0).rotate(bd.Axis.Y, 90).moved(bd.Location((x0, tail[1], z_mid)))
     out.append(("counting_lever_spring", spring, dict(material="steel", printed=False, group="station",
-                                                      note="extension spring OD 2.5, hooks not modelled")))
+                                                      note=f"{RETURN_SPRING['ref']} extension spring; hooks not modelled")))
     # C's click: a printed click on a steel pivot pin, pressed into the tooth gap by a steel wire spring
     clk = click_geometry()
     click = _prism(click_outline(), *C_Z) - parts.disc(1.6, 10, z0=C_Z[0] - 1).moved(
