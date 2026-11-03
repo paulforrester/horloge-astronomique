@@ -25,8 +25,12 @@ in 92 days.
   - a pin on the ring at d = COUNTER_PIN advances the year counter, wheel C (100 positions, one per
     year), once per turn, on 1 October. A pin on C advances the satellite (4 positions, one per
     century) when C passes from 99 to 0;
-  - later in the same turn (30 or 31 October), the sector's tab passes the setter finger, which puts
-    the sector in the leap or common position for the year to come, read from C and the satellite.
+  - later in the same turn the **rocker** on the ring (beside the sector's tab, its tip pins at
+    d = ROCKER_D) passes two ramps. The fixed **reset ramp** (about 13 October) puts the sector in
+    its common position. Then the **set ramp** (about 20 October), which stands in the rocker's lane
+    only when the follower on wheel C reads a leap year, puts it in the leap position. The sector is
+    thus set for the year to come, from C and the satellite, two months before it reaches the
+    arrow.
 
 ``simulate`` runs the mechanism day by day and reports every day on which the ring shows the wrong
 date. The test runs 2026–2426, which covers 2100, 2200, 2300 (not leap) and 2400 (leap).
@@ -44,7 +48,10 @@ FEB29 = 61
 MARCH1 = 62
 STATION_OFFSET = 92           # the station (6 o'clock) sees the division 92 days ahead of the pointer
 COUNTER_PIN = 0               # ring division carrying the counter pin
-SECTOR_TAB = 30               # sector division carrying the setter tab (mid-sector)
+SECTOR_TAB = 30               # sector division carrying the tab the rocker drives (mid-sector)
+ROCKER_D = 32                 # ring division of the rocker's tip pins (the rocker sits beside the tab)
+RESET_OFFSET = STATION_OFFSET + 19   # the reset ramp sees the division 111 ahead of the pointer
+SET_OFFSET = STATION_OFFSET + 12     # the set ramp, a little after it: 104 ahead
 S_BUMPS = (0, 1)              # fixed projection S
 
 
@@ -83,8 +90,10 @@ class Mechanism:
             if self.c == 99:
                 self.satellite = (self.satellite + 1) % 4
             self.c = (self.c + 1) % 100
-        if seen == (SECTOR_TAB + self.sector_start - SECTOR_COMMON_START) % N:
-            self.sector_leap = leap_from_counter(self.c, self.satellite)
+        if (self.pointer + RESET_OFFSET) % N == ROCKER_D:          # reset ramp: always, to common
+            self.sector_leap = False
+        if (self.pointer + SET_OFFSET) % N == ROCKER_D and leap_from_counter(self.c, self.satellite):
+            self.sector_leap = True                                  # set ramp: only for a leap year
 
     def night(self) -> int:
         """Midnight release: run until the stop lever is down. Returns the divisions advanced."""
@@ -120,7 +129,7 @@ def initial_state(date: dt.date) -> Mechanism:
     """The setting procedure (architecture §7): ring turned to the date, sector and wheel C set."""
     y = date.year
     leap = is_leap(y)
-    start = SECTOR_COMMON_START - (1 if leap else 0)
+    start = SECTOR_COMMON_START - (1 if leap else 0)       # where the sector is for this year's dates
     if date.month <= 2:
         d = start + (date - dt.date(y, 1, 1)).days if not (date.month == 2 and date.day == 29) else FEB29
     else:
@@ -129,7 +138,10 @@ def initial_state(date: dt.date) -> Mechanism:
     # has happened (pin seen when the pointer reaches COUNTER_PIN - STATION_OFFSET), then next year
     pin_pointer = (COUNTER_PIN - STATION_OFFSET) % N
     target = y + 1 if d >= pin_pointer else y
-    return Mechanism(pointer=d, sector_leap=leap, c=target % 100, satellite=(target // 100) % 4)
+    # after the October setting the sector already stands for next year
+    set_pointer = (ROCKER_D - SET_OFFSET) % N
+    sector_leap = is_leap(y + 1) if d >= set_pointer else leap
+    return Mechanism(pointer=d, sector_leap=sector_leap, c=target % 100, satellite=(target // 100) % 4)
 
 
 def simulate(start: dt.date, end: dt.date) -> dict:
