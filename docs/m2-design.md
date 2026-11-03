@@ -33,13 +33,14 @@ New Year station.
 
 | Check | Result |
 |---|---|
-| Interference, all 144 parts, exact B-rep | **0** |
+| Interference, all 149 parts, exact B-rep (the 5 date inlays are checked as part of their own parts: `Item.inside`) | **0** |
 | Fixed parts inside the path of the turning calendar ring (other than its designed readers) | **0** |
+| Movable sector against the ring, common and leap positions | **0** overlap (`test_calendar_ring.py`) |
 | Rotating hands: any two parts on different tubes that could touch at some angle | 0 (feasibility study; same front stack) |
 | Calendar logic, day by day, 2026–2426, five different start dates | **0 wrong days**. Every New Year jump is 4 divisions (common) or 3 (leap), including 2100, 2200, 2300 and 2400. |
 | Bed fit, single and dual nozzle | every printed part fits in its print pose. The largest are the dial (Ø 287.5) and the plates (281 × 232). |
 | Envelope | x −196 … +184, y −195 … +192, z −162 … +24 mm: inside the M2 bay. Nothing comes within about 18 mm of the floor. **Depth 185 mm.** |
-| Parts | 144 in the model: 90 printed (57 distinct print files), 52 bought (plus 2 v1.5 space claims) |
+| Parts | 149 in the model: 95 printed (including 5 date inlays), 52 bought (plus 2 v1.5 space claims) |
 | Motor torque | ≈ 2.9 mN·m at the motor, **≈ 50×** margin at 0.5 A [E, §9] |
 
 <p align="center"><img src="img/m2/m2_front.png" width="420" alt="M2 front"> <img src="img/m2/m2_three_quarter.png" width="420" alt="M2 three-quarter"></p>
@@ -191,13 +192,20 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
   the viewer's left: DA writes "à la droite du spectateur" when it means the viewer's right.
 - ELS confirms it: "le jour qui commence venant alors sur la gauche de l'anneau, en face de la
   flèche" [S: ELS i4].
-- The first draft had the pointer on the right. The model is now mirrored, so the pointer is at
-  180°.
-- **Direction [D].** The year reads clockwise round the ring as seen from the front: today at the
-  left, early April at the top when the pointer is on 1 January. To bring tomorrow to the pointer, the
-  ring turns **counter-clockwise**. Confirm on a photo [TBD]; if it is the other way, mirror the
-  ring again (one line in `calendar.py`).
-- The station stays at 6 o'clock, still 92 divisions after the pointer.
+- The first draft had the pointer on the right. It is now at 180°.
+- **Direction: the ring turns clockwise** [S: Paul's photograph of the original, PR #6].
+  - Down the left side, the photograph shows the dates running from late September through
+    October into November. Apollo's hand is at about 1 November.
+  - So the year runs **counter-clockwise** round the ring, and **tomorrow is just below the
+    arrow**.
+  - The first draft of PR #6 had it the other way [D, unsourced]. The model is now built in its
+    canonical frame and turned 180°.
+  - The crop is `docs/img/m2/original_calendar_band.jpg`.
+- **The station stays at 6 o'clock.** With the ring turning clockwise, a division leaving the arrow
+  reaches it three quarters of a turn later. So the station sees the division **92 days ahead of
+  the pointer** (`STATION_OFFSET = +92`), and the year counter and setter act in October (below).
+- **E6's pawl** is unchanged in place; with the ratchet now driven clockwise, it pulls the tooth
+  instead of pushing it.
 - The pointer's readers (stop lever, stop switch, 1 March witness) reach back through a window in
   the M2 front plate at 168°–192°, r 140–177 mm.
 
@@ -223,17 +231,30 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
    - **a lug on the sector**, one division before its first day. It sits at d = 2 in common years
      (jump 4) and at d = 1 in leap years (jump 3).
    - So **the sector's position alone decides 3 or 4**. Ungerer's separate cam E is not needed.
+   - **How the lug is carried (corrected after PR #5).**
+     - The sector's **foot** passes through a floor slot under its first day.
+     - Behind the face, an **arm** reaches one division back to the **lug**. The arm sits on a
+       chamfer, so the face-down print needs no support.
+     - The stop-lever track is split: the fixed bumps run on its inner half and the lug on its
+       outer half. In leap years the lug lands on d = 1, where a bump already is, so it needs its
+       own half. The one lever spans both halves.
+     - **The PR #5 model was wrong here.** It had the lug in the solid face in the leap position,
+       unconnected to the sector, and the tab slot two divisions off. A blanket ring-sector contact
+       allowance hid both.
+     - Now the sector clears the ring in both positions, and a test checks it
+       (`cad/tests/test_calendar_ring.py`).
 
 **Year counter (station at 6 o'clock, fixed on the carrier):**
-- **Wheel C** (100 positions, one per year; 100-tooth gear at module 0.8) is advanced each April by
-  a pin on the ring at d = 0. The pin pushes a 10-point star, and a 10-tooth pinion on the star's
+- **Wheel C** (100 positions, one per year; 100-tooth gear at module 0.8) is advanced each year on
+  1 October by a pin on the ring at d = 0. The pin pushes a 10-point star, and a 10-tooth pinion on the star's
   arbor turns C. This is Ungerer's star-and-rake principle with a fixed counter.
 - **24 leap bumps** sit at positions 4 … 96.
 - **A 4-position satellite**, turned a quarter turn per century by a pin on C, supplies the leap
   bump at x00 when x00 is divisible by 400.
 - **The follower** reads C and the satellite.
-- **In May the sector's tab passes the setter**, a railway-switch guide steered by the follower. It
-  puts the sector in the leap or common position for the coming year.
+- **On 30 or 31 October the sector's tab passes the setter**, a railway-switch guide steered by the
+  follower. It puts the sector in the leap or common position for the coming year, two months
+  before it reaches the arrow.
 - Everything acts between 1 March and 31 December, so it never disturbs a date being shown (the
   test checks the timing).
 
@@ -242,11 +263,12 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
 | Track | r (mm) | Depth | Reader |
 |---|---|---|---|
 | 1 March witness flag | 148–149.5 | deep | reflective opto at the pointer (architecture §6, updated) |
-| Stop-lever track: rim, bumps S, sector lug | 150–154 | rim at −6.5, bumps to −8.3 | stop lever at the pointer |
+| Stop-lever track: rim; bumps S (inner half, 150.2–151.8); sector lug (outer half, 152.2–153.8) | 150–154 | rim at −6.5, bumps and lug to −8.3; the lug's arm stays in front of −6.3 | stop lever at the pointer, spanning both halves |
 | Counter pin | 156.25 | full depth | 10-point star at the station (deep layer) |
 | Sector tab | 159–162 | shallow layer only | setter at the station. It passes over the star. |
 
-- **Station position.** The station sits 92 divisions (90°) after the pointer. It and wheel C are
+- **Station position.** The station sits at 6 o'clock and sees the division 92 days ahead of the
+  pointer. It and wheel C are
   kept at least 195 mm below the dial centre, about 18 mm above the floor [E].
 - **Setting** (architecture §7): turn the ring to the date (lift the jumper), set the sector, and
   set wheel C and the satellite to the year, as `calendar_logic.initial_state` does.
@@ -289,17 +311,19 @@ possible, otherwise use model grade plywood"; decisions D12).
 ## 8. Print and parts notes
 
 **Print files** (Paul, PR #5): `python -m cad.export_print` writes `export/print/<model>/`:
-- one STL per distinct printed part, already in its print pose and standing on z = 0;
-- a 3MF for each multi-colour print;
-- a `README.md` manifest with quantity, material, nozzle, size, bed fit and down-facing area.
+- one STL per distinct single-colour printed part, already in its print pose and standing on z = 0;
+- one 3MF per multi-colour print, holding its bodies in register (no separate STLs for them);
+- a `README.md` manifest with quantity, material, nozzle, size, bed fit, down-facing area, and
+  whether the part meshes closed and manifold (lib3mf's check, as Bambu Studio expects).
 
-For M2 that is 57 files for 90 prints. The press, slide and bearing fits still wait for the
+For M2 that is 51 STLs and 6 two-colour 3MFs (the dial, the four ring segments, the sector) for 95 prints. The press, slide and bearing fits still wait for the
 tolerance coupons, so these are design-stage files.
 
 **Print poses.** Each part records which way is up (`Item.print_up`). Where it does not, the
 exporter tries both faces down and keeps the one with less to support.
-- **Face down:** ring segments and sector (dates become a flush inlay on the bed side), the dial
-  (two bodies), and the carrier segments (rim and tabs grow upward; the tab gussets are 45°).
+- **Face down:** ring segments and sector, each a two-body print (gold base, black dates as a flush
+  inlay on the bed side: `ring_0.3mf` … `ring_3.3mf`, `sector.3mf`); the dial (two bodies,
+  `dial.3mf`); and the carrier segments (rim and tabs grow upward; the tab gussets are 45°).
 - **Flat:** gears, plates, hands and links lie flat, on whichever face needs less support.
 - **Worm: axis vertical.** The thread's lower flank is a 70° overhang, 2 mm deep. An earlier draft
   said the 4.76° lead made this "fine"; that was wrong, because the lead angle is not the
@@ -359,7 +383,6 @@ These are reserved or simplified:
   ball);
 - the setter switch's guide profile and the follower geometry (they are blocks in the model; the
   logic is proven in `calendar_logic.py`);
-- the ring's printed dates (sizes: §11 decision 5);
 - the dominical-letter dial (I10: set by hand in v1);
 - the v2 feasts arc;
 - Apollo's figure.
@@ -398,13 +421,45 @@ What fits on the ring [D]:
   division.
 - A month spans 28–31 divisions, about 85 mm of arc, so its name can be much larger.
 
-**Still open: decision 5, the text sizes.** Recommended:
+**Decision 5: approved by Paul on 3 Nov 2026** ("Ring font face size approved"):
 - **day numbers and dominical letters at 2.2 mm (≈ 9 pt)**, the most a division allows;
 - **month names at 4 mm (≈ 16 pt)** along the circumference.
 
-Both are flush two-colour inlays on the face-down print, using the 0.2 mm nozzle. The dates go
-into the model once these sizes are confirmed.
+**As modelled** (`calendar.py`, `cad/lib/lettering.py`):
+- **Font.** Single-stroke capitals drawn in code, so no font file is needed and the result is the
+  same on every machine.
+- **Inlay.** Black on gold, flush, 0.4 mm deep. Each ring segment and the sector is a two-body
+  print (`ring_<k>.3mf`, `sector.3mf`), face down, 0.2 mm nozzle.
+- **Layout across the band, outside in, as on the original** [S: Paul's photograph, PR #6]: month
+  name, day number, dominical letter. The saints' names that follow on the original are left out at
+  1:8.
+- **Each day:** the day number, then its dominical letter, reading inwards along its division at
+  2.2 mm (stroke 0.35 mm). The letters form one straight column (r 158.0 inwards) and the numbers
+  are right-aligned on it.
+  - The letters run A … G from A on 1 January [S: ELS i4: "Au 1er janvier correspond la lettre A"].
+    The photograph agrees: 15 Oct = A, 22 Oct = A.
+- **Months:** names at 4 mm (stroke 0.6 mm) round the **outer edge**, reading clockwise with their
+  tops outward, as on the original. JANVIER and FÉVRIER are on the sector.
+  - At the bottom of the ring they read upside down, as on any ring.
+  - Accents (FÉVRIER, AOÛT, DÉCEMBRE) stay inside the sector's edge.
+- **Not copied (yet):** on the original the dominical letters are light on a dark column. That
+  would be an easy variant of the two-colour inlay (a black stripe with the letters left gold); see
+  §11.
+- **Divisions 0–2:** "COMMENCEMENT", "DE L'ANNÉE", "COMMUNE" at 1.6 mm, the longest words that fit
+  one division radially [S: ELS i4 for the words].
+- **On the recess floor:** "COMMUNE" (d = 2) and "F 29" (d = 61) sit on the floor, where the sector
+  uncovers them.
+- **29 February carries F**, as on the original (Paul, PR #6). F is the letter of the Roman
+  bissextile day, the doubled 24 February, so the letters from 1 March on are unchanged.
+- **Language and colour.** The language is French, as in the sources' quotations of the ring. The
+  black letter colour is [E]; DA gives only the gold ground.
 
-**Small checks that need a photo, not a decision:**
-- which way the ring turns (§6 [D]: counter-clockwise);
-- the weekday carousel's axis (§3 item 2; M7 design).
+<p align="center"><img src="img/m2/calendar_dates.png" width="700" alt="Model: dates at the pointer (3 Nov) and at the start of the year: black on the ring face, red on the recess floor, blue on the sector"> <img src="img/m2/original_calendar_band.jpg" width="200" alt="The original beside Apollo (Paul's photograph, about 1 Nov 2026): dates run downward past the arrow"></p>
+
+**Settled from Paul's photograph (PR #6):** the ring turns clockwise (tomorrow below the arrow),
+and the layout across the band is month, day, letter.
+
+**Option, Paul's call:** dominical letters light on a dark column, as on the original, instead of
+black letters on gold. It costs no extra parts, and the letter column stays legible.
+
+**Still to confirm on a photo, not a decision:** the weekday carousel's axis (§3 item 2; M7 design).

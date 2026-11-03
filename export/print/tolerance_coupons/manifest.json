@@ -20,7 +20,8 @@
    "file": "fit_coupon.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -38,7 +39,8 @@
    "file": "bearing_coupon.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -56,7 +58,8 @@
    "file": "gear_board.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -74,7 +77,8 @@
    "file": "gear_m1_b0p10_15.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -92,7 +96,8 @@
    "file": "gear_m1_b0p10_30.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -110,7 +115,8 @@
    "file": "gear_m1_b0p15_15.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -128,7 +134,8 @@
    "file": "gear_m1_b0p15_30.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -146,7 +153,8 @@
    "file": "gear_m1_b0p20_15.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -164,7 +172,8 @@
    "file": "gear_m1_b0p20_30.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -182,7 +191,8 @@
    "file": "gear_m0p8_b0p10_15.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -200,7 +210,8 @@
    "file": "gear_m0p8_b0p10_30.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -218,7 +229,8 @@
    "file": "gear_m0p8_b0p15_15.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -236,7 +248,8 @@
    "file": "gear_m0p8_b0p15_30.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -254,7 +267,8 @@
    "file": "gear_m0p8_b0p20_15.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -272,7 +286,8 @@
    "file": "gear_m0p8_b0p20_30.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -290,7 +305,8 @@
    "file": "gear_m0p6_b0p10_15.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -308,7 +324,8 @@
    "file": "gear_m0p6_b0p10_30.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -326,7 +343,8 @@
    "file": "gear_m0p6_b0p15_15.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -344,7 +362,8 @@
    "file": "gear_m0p6_b0p15_30.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -362,7 +381,8 @@
    "file": "gear_m0p6_b0p20_15.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -380,7 +400,8 @@
    "file": "gear_m0p6_b0p20_30.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -398,7 +419,8 @@
    "file": "worm_cradle.stl",
    "overhang_mm2": 32.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -416,7 +438,8 @@
    "file": "worm_wheel_20.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -434,7 +457,8 @@
    "file": "worm_test.stl",
    "overhang_mm2": 952.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   }
  ]
 }

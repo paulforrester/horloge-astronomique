@@ -43,6 +43,12 @@ class Item:
     print_up: tuple | None = None
     print_set: str = ""
     nozzle: float = 0.4
+    # an inlay cut from another item's volume (e.g. dates sunk into a ring segment): it cannot reach
+    # anything that item does not, so interference() skips it; its own test checks it stays inside
+    inside: str = ""
+    # for a part with inlays: the same part with them filled in (the print's outer shape), so print
+    # checks can use it instead of fusing the part with thousands of glyph solids
+    filled: object = None
 
 
 @dataclass
@@ -68,8 +74,9 @@ class Assembly:
     def interference(self, tol: float = 1e-3) -> list[tuple[str, str, float]]:
         """(a, b, volume mm³) for every pair that intersects by more than ``tol``."""
         out = []
-        boxes = {i.name: i.shape.bounding_box() for i in self.items}
-        for a, b in itertools.combinations(self.items, 2):
+        items = [i for i in self.items if not i.inside]
+        boxes = {i.name: i.shape.bounding_box() for i in items}
+        for a, b in itertools.combinations(items, 2):
             if frozenset((a.name, b.name)) in self.contact_ok:
                 continue
             ba, bb = boxes[a.name], boxes[b.name]
@@ -195,7 +202,8 @@ def exploded(asm: Assembly, offsets: dict | None = None, spread: float = 1.0, sp
         if use_item_explode:
             d += np.array(i.explode, float)
         out.items.append(Item(i.name, i.shape.moved(bd.Location(tuple(float(c) for c in d))), i.material,
-                              i.printed, i.group, (0.0, 0.0, 0.0), i.note, i.print_up, i.print_set, i.nozzle))
+                              i.printed, i.group, (0.0, 0.0, 0.0), i.note, i.print_up, i.print_set, i.nozzle,
+                              i.inside))
     return out
 
 

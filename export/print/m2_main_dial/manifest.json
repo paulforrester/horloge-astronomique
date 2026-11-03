@@ -1,11 +1,31 @@
 {
  "model": "m2_main_dial",
- "unique_parts": 57,
- "printed_parts": 90,
+ "unique_parts": 63,
+ "printed_parts": 95,
  "sets": {
   "dial": [
    "dial_field",
    "dial_hour_ring"
+  ],
+  "ring_0": [
+   "ring_text_0",
+   "ring_segment_0"
+  ],
+  "ring_1": [
+   "ring_text_1",
+   "ring_segment_1"
+  ],
+  "ring_2": [
+   "ring_text_2",
+   "ring_segment_2"
+  ],
+  "ring_3": [
+   "ring_text_3",
+   "ring_segment_3"
+  ],
+  "sector": [
+   "sector_text",
+   "sector_jan_feb"
   ]
  },
  "parts": [
@@ -25,7 +45,8 @@
    "file": "hemisphere_dome.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -43,7 +64,8 @@
    "file": "wheel_sun.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -63,7 +85,8 @@
    "file": "S_sleeve_sun_48.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -81,7 +104,8 @@
    "file": "wheel_shadow.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -99,7 +123,8 @@
    "file": "wheel_moon.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -117,7 +142,8 @@
    "file": "J_sleeve_88.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -135,7 +161,8 @@
    "file": "I_154.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -153,7 +180,8 @@
    "file": "J_169.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -172,7 +200,8 @@
    "file": "I_84.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -190,7 +219,8 @@
    "file": "wheel_sunrise.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -208,7 +238,8 @@
    "file": "wheel_sunset.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -229,7 +260,8 @@
    "file": "S_sun_A.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -254,7 +286,8 @@
    "file": "S_planet_0_1.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -273,7 +306,8 @@
    "file": "S_carrier_plate.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -292,7 +326,8 @@
    "file": "S_carrier_worm_wheel.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -311,7 +346,8 @@
    "file": "S_worm.stl",
    "overhang_mm2": 952.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -332,7 +368,8 @@
    "file": "S_worm_block_0.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -350,7 +387,8 @@
    "file": "I_72.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -369,7 +407,8 @@
    "file": "R1_12.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -387,7 +426,8 @@
    "file": "R1_48.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -405,7 +445,8 @@
    "file": "S_12_weekday.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -423,7 +464,8 @@
    "file": "W_84.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -441,7 +483,8 @@
    "file": "hand_sun.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -459,7 +502,8 @@
    "file": "sun_disc.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -477,7 +521,8 @@
    "file": "hand_moon.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -495,7 +540,8 @@
    "file": "moon_ball.stl",
    "overhang_mm2": 8.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -513,7 +559,8 @@
    "file": "arm_shadow.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -531,7 +578,8 @@
    "file": "shadow_disc.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -549,7 +597,8 @@
    "file": "front_plate.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -567,7 +616,8 @@
    "file": "back_plate.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -585,7 +635,8 @@
    "file": "bridge.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -604,7 +655,8 @@
    "file": "bridge_pillar_0.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -627,7 +679,8 @@
    "file": "pillar_0.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -642,10 +695,11 @@
     3.0
    ],
    "note": "two-colour print, body 1 (azure); face down",
-   "file": "dial_field.stl",
+   "file": "dial.3mf",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -660,10 +714,30 @@
     0.8
    ],
    "note": "two-colour print, body 2 (silver); face down",
-   "file": "dial_hour_ring.stl",
+   "file": "dial.3mf",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "ring_text_0"
+   ],
+   "material": "black",
+   "nozzle": 0.2,
+   "set": "ring_0",
+   "size": [
+    226.8,
+    61.0,
+    2.8
+   ],
+   "note": "dates, second filament of ring_0.3mf",
+   "file": "ring_0.3mf",
+   "overhang_mm2": 3841.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -671,36 +745,113 @@
    ],
    "material": "PLA",
    "nozzle": 0.2,
-   "set": "",
+   "set": "ring_0",
    "size": [
     235.6,
     92.3,
     8.5
    ],
-   "note": "face down, so dates can be a flush two-colour inlay on the bed side; the Jan-Feb sector's seat is a pocket open to the bed: support from the bed inside it, ideally with a support-interface filament on the second nozzle",
-   "file": "ring_segment_0.stl",
-   "overhang_mm2": 3838.0,
+   "note": "gold, face down: the dates are a flush black inlay on the bed side (0.2 mm nozzle); the Jan-Feb sector's seat is a pocket open to the bed: support from the bed inside it, ideally with a support-interface filament on the second nozzle",
+   "file": "ring_0.3mf",
+   "overhang_mm2": 3841.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
-    "ring_segment_1",
+    "ring_text_1"
+   ],
+   "material": "black",
+   "nozzle": 0.2,
+   "set": "ring_1",
+   "size": [
+    79.3,
+    223.4,
+    0.4
+   ],
+   "note": "dates, second filament of ring_1.3mf",
+   "file": "ring_1.3mf",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "ring_segment_1"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "ring_1",
+   "size": [
+    92.3,
+    235.6,
+    8.5
+   ],
+   "note": "gold, face down: the dates are a flush black inlay on the bed side (0.2 mm nozzle)",
+   "file": "ring_1.3mf",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "ring_text_2"
+   ],
+   "material": "black",
+   "nozzle": 0.2,
+   "set": "ring_2",
+   "size": [
+    222.2,
+    80.3,
+    0.4
+   ],
+   "note": "dates, second filament of ring_2.3mf",
+   "file": "ring_2.3mf",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
     "ring_segment_2"
    ],
    "material": "PLA",
    "nozzle": 0.2,
-   "set": "",
+   "set": "ring_2",
    "size": [
-    92.3,
     235.6,
+    92.3,
     8.5
    ],
-   "note": "face down, so dates can be a flush two-colour inlay on the bed side",
-   "file": "ring_segment_1.stl",
+   "note": "gold, face down: the dates are a flush black inlay on the bed side (0.2 mm nozzle)",
+   "file": "ring_2.3mf",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "ring_text_3"
+   ],
+   "material": "black",
+   "nozzle": 0.2,
+   "set": "ring_3",
+   "size": [
+    82.0,
+    221.6,
+    0.4
+   ],
+   "note": "dates, second filament of ring_3.3mf",
+   "file": "ring_3.3mf",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -708,17 +859,37 @@
    ],
    "material": "PLA",
    "nozzle": 0.2,
-   "set": "",
+   "set": "ring_3",
    "size": [
     92.3,
     235.6,
     8.5
    ],
-   "note": "face down, so dates can be a flush two-colour inlay on the bed side",
-   "file": "ring_segment_3.stl",
+   "note": "gold, face down: the dates are a flush black inlay on the bed side (0.2 mm nozzle)",
+   "file": "ring_3.3mf",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "sector_text"
+   ],
+   "material": "black",
+   "nozzle": 0.2,
+   "set": "sector",
+   "size": [
+    154.9,
+    28.9,
+    0.4
+   ],
+   "note": "1 Jan \u2026 28 Feb, second filament of sector.3mf",
+   "file": "sector.3mf",
+   "overhang_mm2": 5.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -726,17 +897,18 @@
    ],
    "material": "PLA",
    "nozzle": 0.2,
-   "set": "",
+   "set": "sector",
    "size": [
     163.1,
     42.8,
     8.2
    ],
-   "note": "slides one division: leap / common",
-   "file": "sector_jan_feb.stl",
-   "overhang_mm2": 6.0,
+   "note": "slides one division: leap / common; foot, arm and lug grow up from the face-down plate on a chamfer, no support",
+   "file": "sector.3mf",
+   "overhang_mm2": 5.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -747,15 +919,16 @@
    "nozzle": 0.4,
    "set": "",
    "size": [
-    4.1,
-    4.6,
+    2.8,
+    2.6,
     1.8
    ],
    "note": "",
    "file": "S_bump_0.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -773,7 +946,8 @@
    "file": "witness_flag_1_March.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -789,9 +963,10 @@
    ],
    "note": "printed frame segment, face down; L-section rim where it overhangs the front plate",
    "file": "carrier_segment_0.stl",
-   "overhang_mm2": 489.0,
+   "overhang_mm2": 473.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -809,7 +984,8 @@
    "file": "carrier_segment_1.stl",
    "overhang_mm2": 58.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -827,7 +1003,8 @@
    "file": "carrier_segment_2.stl",
    "overhang_mm2": 12.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -845,7 +1022,8 @@
    "file": "carrier_segment_3.stl",
    "overhang_mm2": 220.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -865,7 +1043,8 @@
    "file": "carrier_joint_0.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -883,7 +1062,8 @@
    "file": "counter_star_10.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -901,7 +1081,8 @@
    "file": "pinion_10.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -919,7 +1100,8 @@
    "file": "wheel_C_100.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -937,7 +1119,8 @@
    "file": "satellite_4.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -955,7 +1138,8 @@
    "file": "leap_follower.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -973,7 +1157,8 @@
    "file": "sector_setter_switch.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -991,7 +1176,8 @@
    "file": "E6_crank.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -1006,11 +1192,12 @@
     14.1,
     2.5
    ],
-   "note": "one crank turn = one ratchet tooth = one division",
+   "note": "pulls the ring clockwise: one crank turn = one ratchet tooth = one division",
    "file": "E6_pawl.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -1028,7 +1215,8 @@
    "file": "stop_lever.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -1046,7 +1234,8 @@
    "file": "apollo_arrow.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   },
   {
    "names": [
@@ -1066,7 +1255,8 @@
    "file": "dial_foot_0.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
-   "fits_dual": true
+   "fits_dual": true,
+   "mesh_ok": true
   }
  ]
 }

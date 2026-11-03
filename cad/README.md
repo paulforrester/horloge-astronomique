@@ -63,8 +63,9 @@ Paul asked for an STL or 3MF for every printed part, importable into Bambu Studi
 ```
 
 - It writes `export/print/<model>/` for `tolerance_coupons`, `test_rig` and `m2_main_dial`:
-  - one STL per distinct printed part, in its print pose (centred, standing on z = 0);
-  - a 3MF for each multi-colour set (the M2 dial);
+  - one STL per distinct single-colour printed part, in its print pose (centred, standing on z = 0);
+  - one 3MF per multi-colour set (the M2 dial, the four calendar-ring segments and the sector), and
+    no separate STLs for its bodies;
   - `README.md`, the manifest: quantity, material, nozzle, size, bed fit, down-facing area, notes.
 - **Print pose.** `Item.print_up` names the assembly direction that faces up. Where it is not set,
   the exporter tries both faces down and keeps the one with less overhang (`overhang_area`).
