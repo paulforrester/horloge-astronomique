@@ -403,7 +403,7 @@ possible, otherwise use model grade plywood"; decisions D12).
 - a `README.md` manifest with quantity, material, nozzle, size, bed fit, down-facing area, and
   whether the part meshes closed and manifold (lib3mf's check, as Bambu Studio expects).
 
-For M2 that is 51 STLs and 6 two-colour 3MFs (the dial, the four ring segments, the sector) for 95 prints. The press, slide and bearing fits still wait for the
+For M2 that is 54 STLs and 6 two-colour 3MFs (the dial, the four ring segments, the sector) for 98 prints. The press, slide and bearing fits still wait for the
 tolerance coupons, so these are design-stage files.
 
 **Print poses.** Each part records which way is up (`Item.print_up`). Where it does not, the
