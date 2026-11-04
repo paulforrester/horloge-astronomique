@@ -915,3 +915,37 @@ numbers.
 - **Stack order:** the lunar stack runs from the bottom in increasing amplitude (reduction,
   annual equation, variation, evection, centre; the reduction's arbor R is "le mobile inférieur"), "pour que chacun des mobiles ait le plus petit
   déplacement vertical possible".
+
+## Paul's photographs of 30 October 2026 (M1 concept gate, PR #11)
+
+Five photographs taken by Paul in the cathedral on 30 October 2026, 10:10–10:11 CET (EXIF:
+`DateTimeOriginal` with offset +01:00; iPhone 16 Pro). Files IMG_0767 to IMG_0771, shared in PR #11.
+Crop: `docs/img/m1/original_mean_time_dial.jpg`.
+
+**Mean-time dial** [S: Paul's photographs IMG_0767 and IMG_0768]
+- **12-hour face**, Roman numerals I–XII in gilt on a dark ground, a pearled minute ring and an
+  inner pearled ring, in a gilt bezel. This settles the 12 h or 24 h question in
+  `docs/mechanism-inventory.md` I1.
+- **Four hands.** At 10:10 CET the dial shows one minute hand at about :10 and one at about :41,
+  nearly opposite each other, and two ornate hour hands together near X.
+  - That fits legal time 10:10 CET and Strasbourg mean time 9:41 [D: LMT = UT + 31 min, CET =
+    UT + 60 min, so mean time = CET − 29 min, and 29 min is 174° of the minute circle].
+  - So the silver hands show CET and the gold hands mean time, as ELS says.
+  - A winter photograph cannot show whether the silver hands follow summer time.
+  - At this resolution the hands' colours and their front-to-back order cannot be read.
+- **Size** [E]. Scaled on the calendar ring's outer diameter (2.73 m [S: ELS]), the pearled minute
+  ring is about 0.83 m across and the bezel about 0.98 m. Method: widths measured on IMG_0768 and
+  corrected by about 1.11 for the dial's greater distance from the camera, from a ≈ 6 m stand-off
+  and a ≈ 2.9 m height difference [E]. Uncertainty about ±15 % (wide-angle lens, upward view). That
+  agrees with envelope §3's 0.78 m [E], so about 98–104 mm at 1:8.
+- **The genies** sit either side of the dial, at about its height [E: same photographs].
+
+**Lower hall** [S: Paul's photographs IMG_0769 and IMG_0770]
+- Death stands on a pedestal holding a bone in its right hand and the scythe in its left, with
+  **a bell on each side**. DA mentions "le timbre à sa droite" [S: DA p. 57–58]. Which bell the ages
+  strike is for E2's design.
+
+**Upper hall** [S: Paul's photograph IMG_0771]
+- Christ holds the banner of the redemption in his left hand and blesses with his right, as DA
+  describes [S: DA p. 58–59].
+

@@ -7,6 +7,11 @@ automaton.
 **Status: Proposed (concept gate).** Nothing is modelled yet. The decisions needed are in §7. Tags
 as in `docs/reference-notes.md`.
 
+<p align="center"><img src="img/m1/original_mean_time_dial.jpg" width="260" alt="The original mean-time dial, 30 Oct 2026 at 10:10 CET: a 12-hour face with four hands (Paul's photograph)"></p>
+
+*The original mean-time dial on 30 Oct 2026 at 10:10 CET (Paul's photograph, crop): a 12-hour
+face; the legal minute hand at :10, the mean one at :41.*
+
 <p align="center"><img src="img/m1/m1_concept.png" width="900" alt="Schematic: where M1 sits in the case and the two ways E2 can get its state; the lion gallery with the dial between the genies; side section of the four-hand coaxial stack"></p>
 
 *Schematic only. Heights are from `docs/envelope.md` §2 [E]; the section is not to final
@@ -42,10 +47,11 @@ dimensions.*
 
 | Item | Value | Tag |
 |---|---|---|
-| Dial diameter | **≈ 98 mm** at 1:8 (≈ 0.78 m on the original) | [E]: from the lithograph (`docs/envelope.md` §3). DA says only "petit cadran". |
+| Dial diameter | **≈ 98–104 mm** at 1:8: the pearled minute ring is ≈ 0.83 m on the original, the bezel ≈ 0.98 m | [E] ±15 %: scaled on the calendar ring in Paul's photograph (`docs/reference-notes.md`, *Paul's photographs of 30 October 2026*). Agrees with the lithograph's 0.78 m (envelope §3). DA says only "petit cadran". |
 | Height | ≈ 567 mm, on the case centreline | [E]: envelope §2 |
-| 12 h or 24 h face | **TBD** | Not in DA or ELS. The Phase 1 trains assume 12 h (`M1.hour_hand` 1/12). One frontal photo settles it. |
-| Order of the four hands, front to back; their shapes | **TBD** | photo |
+| Face | **12 hours**, Roman numerals I–XII in gilt on a dark ground, a pearled minute ring and an inner pearled ring, gilt bezel | [S: Paul's photographs, 30 Oct 2026]. The Phase 1 trains (`M1.hour_hand` 1/12) stand. |
+| Hands | **Four.** At 10:10 CET the photograph shows minute hands at :10 (legal) and :41 (mean), nearly opposite, and two ornate hour hands together near X | [S: photograph; D: mean time = CET − 29 min] |
+| Order of the four hands, front to back; colours | **TBD** | Not readable at the photograph's resolution: needs a close-up |
 | Genies' size (E1), either side of the dial | **TBD** | photo or plate |
 | Motion work | 12/48 × 15/45, exact 1/12, at 30.000 mm centres with profile shift | [S: `spec/clock.yaml` `M1.hour_hand`; `docs/test-rig.md` §2] |
 | Noon train | 12/54 × 12/64, exact 1/24 (one turn a day) | [S: `spec/clock.yaml` `M1.noon_cam`] |
@@ -135,10 +141,11 @@ the cassette's side.
 ## 7. Decisions needed from Paul
 
 1. **E2's state:** A, B or C (§5). **Recommended: B.**
-2. **From a photo, if you have one or can take one:**
-   - is the mean-time dial 12 h or 24 h?
-   - the four hands' order, front to back, and their shapes;
-   - anything that fixes the dial's diameter (now 98 mm [E]).
+2. **From a photo:**
+   - **Settled by your photographs of 30 Oct:** the face is 12 h, and it carries four hands. The
+     dial is about 98–104 mm at 1:8 [E].
+   - **Still open:** the four hands' order, front to back, their colours and shapes. A close-up of
+     the gallery dial would settle it.
 3. **Confirm:** M1 and M1b in one cassette, with E1's genies separate.
 
 ## 8. After the gate: the detail design
