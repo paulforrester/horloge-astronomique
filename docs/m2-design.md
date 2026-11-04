@@ -36,14 +36,14 @@ New Year station.
 
 | Check | Result |
 |---|---|
-| Interference, all 165 parts, exact B-rep (the 5 date inlays are checked as part of their own parts: `Item.inside`) | **0** |
+| Interference, all 174 parts, exact B-rep (the 5 date inlays are checked as part of their own parts: `Item.inside`) | **0** |
 | Fixed parts inside the path of the turning calendar ring (other than its designed readers) | **0** |
 | Movable sector against the ring, common and leap positions | **0** overlap (`test_calendar_ring.py`) |
 | Rotating hands: any two parts on different tubes that could touch at some angle | 0 (feasibility study; same front stack) |
 | Calendar logic, day by day, 2026–2426, five different start dates | **0 wrong days**. Every New Year jump is 4 divisions (common) or 3 (leap), including 2100, 2200, 2300 and 2400. |
 | Bed fit, single and dual nozzle | every printed part fits in its print pose. The largest are the dial (Ø 287.5) and the plates (281 × 232). |
 | Envelope | x −196 … +184, y −195 … +192, z −162 … +24 mm: inside the M2 bay. Nothing comes within about 18 mm of the floor. **Depth 185 mm.** |
-| Parts | 165 in the model: 99 printed (including 5 date inlays), 64 bought (plus 2 v1.5 space claims) |
+| Parts | 174 in the model: 102 printed (including 5 date inlays), 70 bought (plus 2 v1.5 space claims). E6's fallback (crank and pawl) is a separate model, `e6.fallback_assembly()`. |
 | Motor torque | ≈ 2.9 mN·m at the motor, **≈ 50×** margin at 0.5 A [E, §9] |
 
 <p align="center"><img src="img/m2/m2_front.png" width="420" alt="M2 front"> <img src="img/m2/m2_three_quarter.png" width="420" alt="M2 three-quarter"></p>
@@ -421,6 +421,8 @@ module 0.9216, 20°, tips at r 170.5 (the lip's old edge) [D: 2 × 170.5 / 370].
   the setter's rocker passes once a year (its bars reach −5.6 and r 171).
 - The rocker's detent block was narrowed to stay inside r 168.4, clear of the pinion's teeth, which
   reach r 168.66.
+
+<p align="center"><img src="img/m2/e6_drive.png" width="900" alt="E6 from the model: the finger-and-star drive at 6 o'clock, the stop lever in side section, and the crank-and-pawl fallback"></p>
 
 *D, finger and star (built):*
 

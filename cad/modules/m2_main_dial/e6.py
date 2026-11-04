@@ -855,3 +855,15 @@ def pinion_safety() -> dict:
     b = MESH_Z[1] - MESH_Z[0]
     cap = b * M_RING * lewis_y(PINION.teeth)
     return {k: 9.75 / (f / cap) for k, f in mesh_loads().items()}
+
+
+def fallback_assembly(pointer: int = 0):
+    """The fallback's own parts (variant "pawl"), for its print and SketchUp files. The ring and the
+    stop lever are shared with the built variant and exported with M2."""
+    from cad.lib.assembly import Assembly
+    a = Assembly("m2_e6_fallback_pawl")
+    for nm, shp, kw in pawl_parts(pointer):
+        a.add(nm, shp, **kw)
+    for x, y in PAWL_ALLOW:
+        a.allow(x, y)
+    return a
