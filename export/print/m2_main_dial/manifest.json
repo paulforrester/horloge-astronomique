@@ -1,7 +1,7 @@
 {
  "model": "m2_main_dial",
- "unique_parts": 67,
- "printed_parts": 99,
+ "unique_parts": 71,
+ "printed_parts": 102,
  "sets": {
   "dial": [
    "dial_field",
@@ -1073,8 +1073,8 @@
    "nozzle": 0.4,
    "set": "",
    "size": [
-    3.2,
-    3.2,
+    3.1,
+    2.4,
     1.5
    ],
    "note": "glued under the lip: clamps the detent wire",
@@ -1238,18 +1238,18 @@
   },
   {
    "names": [
-    "E6_crank"
+    "e6_star"
    ],
    "material": "PLA",
-   "nozzle": 0.4,
+   "nozzle": 0.2,
    "set": "",
    "size": [
-    14.0,
-    14.0,
-    3.0
+    20.0,
+    20.0,
+    11.9
    ],
-   "note": "",
-   "file": "E6_crank.stl",
+   "note": "12-point star with its tube; one finger turn = one point",
+   "file": "e6_star.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
    "fits_dual": true,
@@ -1257,19 +1257,75 @@
   },
   {
    "names": [
-    "E6_pawl",
-    "ring_jumper"
+    "e6_pinion"
    ],
    "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    12.9,
+    12.9,
+    2.2
+   ],
+   "note": "12 teeth, module 0.922, meshed with the ring; pressed on the star's hex, glued",
+   "file": "e6_pinion.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "e6_finger"
+   ],
+   "material": "PETG",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    15.0,
+    15.0,
+    7.0
+   ],
+   "note": "on the gearmotor's D-shaft; flange with the home magnet",
+   "file": "e6_finger.stl",
+   "overhang_mm2": 23.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "e6_bracket"
+   ],
+   "material": "PETG",
    "nozzle": 0.4,
    "set": "",
    "size": [
-    16.8,
-    14.1,
-    2.5
+    38.8,
+    40.6,
+    10.3
    ],
-   "note": "pulls the ring clockwise: one crank turn = one ratchet tooth = one division",
-   "file": "E6_pawl.stl",
+   "note": "holds the gearmotor (2 x M1.6), the star's stud, the jumper, the Hall sensor; 3 x M3 to the carrier",
+   "file": "e6_bracket.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "e6_jumper"
+   ],
+   "material": "PETG",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    5.3,
+    11.3,
+    3.0
+   ],
+   "note": "holds the star (so the ring) between steps; settles each step",
+   "file": "e6_jumper.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
    "fits_dual": true,
@@ -1279,17 +1335,36 @@
    "names": [
     "stop_lever"
    ],
-   "material": "PLA",
+   "material": "PETG",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    19.2,
+    7.2,
+    3.0
+   ],
+   "note": "held back by S and the sector's lug: keeps E6 running",
+   "file": "stop_lever.stl",
+   "overhang_mm2": 4.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "stop_bridge"
+   ],
+   "material": "PETG",
    "nozzle": 0.4,
    "set": "",
    "size": [
-    7.4,
-    20.0,
-    3.0
+    15.0,
+    44.0,
+    9.7
    ],
-   "note": "held up by S, the sector lug: keeps E6 running",
-   "file": "stop_lever.stl",
-   "overhang_mm2": 0.0,
+   "note": "bridges the carrier's pointer opening; 2 x M3 into the carrier",
+   "file": "stop_bridge.stl",
+   "overhang_mm2": 4.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true

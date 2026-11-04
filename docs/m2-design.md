@@ -568,7 +568,9 @@ possible, otherwise use model grade plywood"; decisions D12).
 - a `README.md` manifest with quantity, material, nozzle, size, bed fit, down-facing area, and
   whether the part meshes closed and manifold (lib3mf's check, as Bambu Studio expects).
 
-For M2 that is 55 STLs and 6 two-colour 3MFs (the dial, the four ring segments, the sector) for 99 prints. The press, slide and bearing fits still wait for the
+For M2 that is 59 STLs and 6 two-colour 3MFs (the dial, the four ring segments, the sector) for 102 prints.
+E6's crank-and-pawl fallback has its own folder, `export/print/m2_e6_fallback_pawl/` (4 prints), printed only if
+the fallback is used. The press, slide and bearing fits still wait for the
 tolerance coupons, so these are design-stage files.
 
 **Print poses.** Each part records which way is up (`Item.print_up`). Where it does not, the
