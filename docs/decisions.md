@@ -7,7 +7,8 @@ the trade-offs and a recommendation. Status is **Proposed** until Paul approves;
 
 **As of 31 Oct 2026 every decision D1–D11 is Accepted.** D2, D5 and D11 were decided point by point;
 the rest were approved as recommended. **D12** (wooden case) was accepted on 1 Nov 2026.
-**D13** (steel springs) was accepted on 3 Nov 2026.
+**D13** (steel springs) was accepted on 3 Nov 2026. **D14** (the shows on legal time) and **D15**
+(the procession: astronomy and time, with Urania) were accepted on 4 Nov 2026.
 
 ## Summary
 
@@ -26,6 +27,8 @@ the rest were approved as recommended. **D12** (wooden case) was accepted on 1 N
 | D12 | Case and frame in wood (fine woodworking); revises D6's structure | **Option B**: plywood carcass + hardwood framing; joinery for the table saw, track saw and drill press (no router); MDF for painted surfaces; one species from the low or moderate class (tulipier, sapelli or sipo preferred); metal hidden except the computus frame | **Accepted** 1 Nov 2026 | Phase 2 (case) |
 | D11 | Case width (7.70 vs 8.60 m) and wall space | **1:8 accepted (PR #1)**. **Width resolved: 7.70 m → 962.5 mm** [S: ELS, Ungerer 1920]. Wall dimensions to follow from Paul | **Accepted** 31 Oct 2026 | Phase 2 (case) |
 | D13 | Springs: steel or printed; catalogue springs in inch-based sizes | **Steel for every spring**; Sodemann's stainless catalogue springs accepted although their sizes are inch-based | **Accepted** 3 Nov 2026 (PR #8) | Phase 2 (M2 purchase) |
+| D14 | When the shows run: mean time or legal time (revises D2 item 2) | **Legal time**: the quarters at :15, :30, :45 and :00 of CET/CEST, the noon show at 12:00 | **Accepted** 4 Nov 2026 (Paul, PR #11) | Phase 2 (M1) |
+| D15 | The noon procession: Christ and the Apostles, or a personal set | **Astronomy and time**: twelve figures from Pythagoras to Einstein pass **Urania**, on the original's mechanism | **Accepted** 4 Nov 2026 (Paul, PR #11) | Phase 2 (E3) |
 
 Plus **Blockers** at the end: the network allowlist and the documents to obtain.
 
@@ -92,6 +95,9 @@ pipeline). Each was verified in this environment on 31 Oct 2026; full results ar
 | C. Mixed (Strasbourg times, Bordeaux sky) | — | Inconsistent; not recommended |
 
 **Recommendation: B.**
+
+**Revised by D14 (4 Nov 2026):** item 2 no longer applies. The automata follow legal time, and the
+noon show is at 12:00 CET/CEST.
 
 - The dial lettering and appearance follow the original.
 - Items 3 and 4 are swappable printed parts generated from φ, so a Strasbourg set can be printed
@@ -718,6 +724,72 @@ spec the springs that you recommend."
 - **Scope:** springs only. Rods, tubes, bearings and fasteners stay metric.
 
 ---
+
+## D14 — When the shows run: legal time
+
+**Status: Accepted, 4 Nov 2026** (Paul, PR #11). It revises D2 item 2.
+
+**Context.**
+- In D2 the automata follow the dial's Strasbourg mean time, so the noon show runs at 12:29 CET
+  (13:29 CEST), as in Strasbourg today.
+- Paul: "I'd like the show to happen at noon, not 12:30. Lets set P1 = 15 minutes past the hour,
+  P2 to the 30 minutes past, P3 to 45 minutes past, and P4 to be on the hour. I think that's closer
+  to the original design intent."
+- In 1842 local mean time was the town's civil time, so Schwilgué's shows ran at civil noon.
+
+**Decision.**
+- Every show follows **legal time (CET/CEST)**:
+  - the four quarters at :15, :30, :45 and :00;
+  - Death's count is the legal hour;
+  - the noon show is at 12:00.
+- The gold hands still show Strasbourg mean time, and the silver hands legal time (D9).
+
+**Consequences.**
+- The quarter, hour and noon releases sit on the legal-time train, M1b, not on M1
+  (`docs/m1-design.md`; architecture §5).
+- Whatever holds E2's state (M1 concept gate, decision 1) follows legal time too.
+- **The autumn change runs +23 h, not +11 h.**
+  - The 24 h noon wheel is on the legal train. +11 h would leave it 12 h out.
+  - +23 h is −1 h on the 24 h wheel and on the 12 h dial.
+  - The spring change stays +1 h. Both are forward-only, at catch-up speed, with the shows
+    suppressed.
+- Quiet hours (D10) are in legal time, the house's time.
+
+## D15 — The noon procession: a personal set of figures
+
+**Status: Accepted, 4 Nov 2026** (Paul, PR #11): "I like your suggestion of astronomy and time, with
+Urania in the centre. Time and the stars have a nice synergy with this clock. I also agree that
+death and the ages still belong, as do the angels." So theme A below, with Urania. The twelve are
+the recommended list; any can be swapped from the alternates before E3 is designed. Death, the
+four ages and the genies stay as on the original.
+
+**Context.**
+- The original's noon show is the twelve Apostles passing Christ, who blesses each
+  (`docs/mechanism-inventory.md` A5).
+- Paul: "I'd like to change Jesus and the Apostles. I'm not religious and I think we can do
+  something here to personalize the clock … famous figures through history (Plato, Copernicus,
+  Newton, Pythagoras, Einstein, etc.). Or famous composers … I think we can remove the Jesus figure
+  completely unless you can think of something to insert there."
+
+**What stays.**
+- E3's mechanism is unchanged: twelve figures on a track, each turning to the central figure and
+  facing forward again, and the central figure's arm gesture.
+- The rooster crows after the 4th, 8th and 12th figure, so the twelve fall naturally into three
+  groups of four.
+
+**Options** (for the PR #11 discussion; the figures need no numbers, so no tags):
+
+| Theme | Central figure | The twelve, in three groups of four |
+|---|---|---|
+| **A. Astronomy and time** (recommended) | **Urania**, muse of astronomy, already painted on the original's weight tower; she lowers a star or laurel to each figure | *Antiquity:* Pythagoras, Plato, Hipparchus (precession, the globe's slowest motion), Hypatia. *The new astronomy:* Copernicus (the planetary dial is Copernican; his portrait is on the original), Tycho Brahe, Kepler (the equation of centre the cams compute), Galileo. *Time and the modern era:* Huygens (the pendulum clock), Newton, Schwilgué (the clock's maker), Einstein. |
+| B. Composers | Euterpe, muse of music; or none | Paul's Mozart, Beethoven and Saint-Saëns, with others in three periods of four |
+| C. No central figure | — | Either set; each figure turns to the audience instead |
+
+**Recommendation: A, with Urania.** It suits an astronomical clock: most of its figures stand for
+something the clock itself shows. It keeps the original's gesture, and both Urania and Copernicus
+already appear on the original's painted panels. Alternates for any slot include Ptolemy, Ulugh
+Beg, Harrison (the marine chronometer), Caroline Herschel and Hubble. Each figure carries an
+attribute (a telescope, a pendulum, an armillary sphere), so it reads at 57 mm.
 
 ## Blockers (not decisions, but they need Paul)
 
