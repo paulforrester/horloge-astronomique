@@ -75,7 +75,7 @@
    ],
    "note": "variant pawl: gearmotor (2 x M1.6), fulcrum and jumper pins, wire post, Hall; 3 x M3",
    "file": "e6_bracket.stl",
-   "overhang_mm2": 0.0,
+   "overhang_mm2": 2.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true
