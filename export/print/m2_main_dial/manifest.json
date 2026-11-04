@@ -37,11 +37,11 @@
    "nozzle": 0.4,
    "set": "",
    "size": [
-    46.5,
-    46.5,
+    94.0,
+    94.0,
     5.0
    ],
-   "note": "",
+   "note": "\u00d894 Earth hemisphere, the original's size; a map of the northern hemisphere (finish TBD)",
    "file": "hemisphere_dome.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
