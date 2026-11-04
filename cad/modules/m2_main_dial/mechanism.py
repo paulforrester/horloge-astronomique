@@ -378,6 +378,14 @@ def build():
     win = [(r1 * math.cos(t), r1 * math.sin(t)) for t in th] + [(r0 * math.cos(t), r0 * math.sin(t)) for t in th[::-1]]
     fp -= bd.extrude(bd.Face(bd.Wire.make_polygon([bd.Vector(x, y, FP[0] - 1) for x, y in win], close=True)),
                      amount=FP[1] - FP[0] + 2, dir=(0, 0, 1))
+    # notch in the lower edge for E6's star-jumper wire holder at the station: its glued length runs
+    # back across the plate's edge (calendar.py, e6.py)
+    from shapely.geometry import Polygon as _Poly
+    from cad.modules.m2_main_dial import e6 as _E6, setter as _ST
+    jg = _E6.jumper_geometry()
+    notch = _Poly(_ST.clamp_outline(jg["anchor"], jg["contact"], 3.0)).buffer(0.6, join_style=2)
+    fp -= bd.extrude(bd.Face(bd.Wire.make_polygon([bd.Vector(x, y, FP[0] - 1) for x, y in list(notch.exterior.coords)[:-1]],
+                                                  close=True)), amount=FP[1] - FP[0] + 2, dir=(0, 0, 1))
     a.add("front_plate", fp, material="PETG", group="plates", explode=(0, 0, 15))
     bw, bh, bc = fw, fh, fc                                                  # same outline as the front plate
     bp = at(parts.plate((bw, bh), BP[1] - BP[0], z0=BP[0], corner_radius=8), bc)

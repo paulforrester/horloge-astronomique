@@ -193,6 +193,16 @@ def test_every_wire_spring_is_glued_behind_its_anchor_and_free_over_its_design_l
         assert abs(total - hi - over - L) < 0.05, (w, total - hi - over, L)
 
 
+@pytest.mark.parametrize("drive", ["star", "pawl"])
+def test_station_and_pointer_parts_clear_the_m2_front_plate(drive):
+    # the full model checks the built variant against the plates; this covers the fallback too
+    from cad.modules.m2_main_dial import mechanism as M
+    fp = M.build()[0]["front_plate"].shape
+    a, _ = CAL.build(dates=False, e6=drive)
+    hits = [it.name for it in a.items if it.group in ("station", "pointer") and (it.shape & fp).volume > 1e-6]
+    assert not hits, hits
+
+
 def test_pawl_fallback_steps_one_tooth():
     # variant "pawl": the hook's push, from the rest phase the ring jumper holds, settles to one tooth
     for phase, depth in ((-0.2, 0.0), (0.0, 0.0), (0.2, 0.0), (0.0, -0.2), (0.0, 0.2)):
