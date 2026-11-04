@@ -5,8 +5,9 @@ out as polylines, mapped into the part's plane (straight, or bent round an arc),
 the stroke width with round caps and joins and merged (Shapely). The result is a list of
 build123d faces, ready to extrude into a flush two-colour inlay.
 
-Only the characters the calendar ring needs are drawn: digits, the capitals of the French month
-names and of "COMMENCEMENT DE L'ANNÉE COMMUNE", the dominical letters A–G, É, Û and the apostrophe.
+Only the characters the dials need are drawn: digits, the capitals of the French month names and
+of "COMMENCEMENT DE L'ANNÉE COMMUNE", the dominical letters A–G, É, Û and the apostrophe (the
+calendar ring), and H, Q, Y for "TEMPS MOYEN" and "HEURE PUBLIQUE" (the mean-time dial).
 """
 from __future__ import annotations
 
@@ -45,6 +46,7 @@ def _glyphs() -> dict:
         "E": [[(w, 1.0), (0.0, 1.0), (0.0, 0.0), (w, 0.0)], [(0.0, 0.52), (0.75 * w, 0.52)]],
         "F": [[(w, 1.0), (0.0, 1.0), (0.0, 0.0)], [(0.0, 0.52), (0.75 * w, 0.52)]],
         "G": [_arc(w / 2, h, w / 2, h, 45, 360, 16) + [(0.55 * w, h)]],
+        "H": [[(0.0, 0.0), (0.0, 1.0)], [(w, 0.0), (w, 1.0)], [(0.0, 0.52), (w, 0.52)]],
         "I": [[(0.0, 0.0), (0.0, 1.0)]],
         "J": [[(w, 1.0), (w, 0.3)] + _arc(w / 2, 0.3, w / 2, 0.3, 0, -180, 9)],
         "L": [[(0.0, 1.0), (0.0, 0.0), (w, 0.0)]],
@@ -52,12 +54,14 @@ def _glyphs() -> dict:
         "N": [[(0.0, 0.0), (0.0, 1.0), (w, 0.0), (w, 1.0)]],
         "O": [_arc(w / 2, h, w / 2, h, 0, 360, 20)],
         "P": [[(0.0, 0.0), (0.0, 1.0), (0.55 * w, 1.0)] + _arc(0.55 * w, 0.74, 0.45 * w, 0.26, 90, -90, 9) + [(0.0, 0.48)]],
+        "Q": [_arc(w / 2, h, w / 2, h, 0, 360, 20), [(0.6 * w, 0.22), (1.05 * w, -0.08)]],
         "R": [[(0.0, 0.0), (0.0, 1.0), (0.55 * w, 1.0)] + _arc(0.55 * w, 0.74, 0.45 * w, 0.26, 90, -90, 9) + [(0.0, 0.48)],
               [(0.45 * w, 0.48), (w, 0.0)]],
         "S": [_arc(w / 2, 0.75, w / 2, 0.25, 15, 270, 10) + _arc(w / 2, 0.25, w / 2, 0.25, 90, -165, 10)[1:]],
         "T": [[(0.0, 1.0), (w, 1.0)], [(w / 2, 1.0), (w / 2, 0.0)]],
         "U": [[(0.0, 1.0), (0.0, 0.35)] + _arc(w / 2, 0.35, w / 2, 0.35, 180, 360, 10) + [(w, 1.0)]],
         "V": [[(0.0, 1.0), (w / 2, 0.0), (w, 1.0)]],
+        "Y": [[(0.0, 1.0), (w / 2, 0.5), (w, 1.0)], [(w / 2, 0.5), (w / 2, 0.0)]],
         "'": [[(0.0, 1.0), (0.0, 0.72)]],
         " ": [],
     }

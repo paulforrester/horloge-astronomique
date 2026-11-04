@@ -121,6 +121,28 @@ rows and count towards the "ground rod, brass tube, bearings" row above.
 | Clock oil | horological | 1 | brass tube stacks | TBD |
 | Filament | PLA (gears, display), PETG (structure) | TBD | from slicer estimates per module | TBD |
 
+### Batch 2 — M1 rows from the detailed design [E]
+
+Quantities from `cad/modules/m1_time/` (`docs/m1-design.md` §9). They count towards the "ground
+rod, brass tube, bearings, fasteners" and "Hall switches + magnets" rows above. The motor fixings
+follow option C, as modelled; option A (`docs/m1-design.md` §10) changes them as noted.
+
+| Item | Spec | Qty [E] | How the quantity was counted | Supplier |
+|---|---|---|---|---|
+| Ground rod Ø3 | DIN 175 h9 | 0.2 m | centre arbor 51 mm, GM 46 mm, SM 19 mm, studs X 19 mm and N 13 mm [D: model] | as Batch 1 |
+| Brass tube, 0.45 mm wall | OD 4, 5, 6 mm | 35 / 20 / 8 mm | silver minute, silver hour, gilt hour [D: model]; cut from the Batch 1 lengths | as Batch 1 |
+| Bearing MR63ZZ | 3 × 6 × 2.5 | 1 | the centre arbor's rear bearing, in a back-plate boss | as Batch 1 |
+| Shaft collar with grub screw | bore Ø3 and Ø4, OD ≤ 9, about 2 mm wide | 1 + 1 | the clutches' preload (`docs/m1-design.md` §9.5) | ⚠ not yet found in these small sizes: Accu / RS FR to check; otherwise a printed collar with an M2 grub screw |
+| Wave washer | for Ø3 and Ø4 shafts, OD ≤ 8, 1.7–7.5 N at working height | 2 + spares | one per clutch | Accu FR (wave washers, Batch 1 link) ⚠ load to check |
+| Push-on lock washer for Ø3 | Starlock type | 2 (+ spares) | the noon wheels' forward stops | as the M2 row (Bossard Starlock 6110, ⚠ verify the Ø3 size) |
+| Hall switch DRV5032 | on a small board, as Batch 1 | 6 | quarters, hour (M1b index), noon, M1 index, two witnesses | as Batch 1 |
+| Magnets | NdFeB disc 5 × 2 mm | 17 | 9 in the mechanism; 8 for the dial mount (4 feet, 4 bezel) | as Batch 1 |
+| NEMA 17 + TMC2209 | as Batch 1 | (already counted) | M1 and M1b | as Batch 1 |
+| Screws | M3 × 8, ISO 4762, A2 | 8 | motors to the back plate (option C). With option A: M3 × 6 ISO 7380 × 8 (motor to adapter) and M3 × 8 × 4 (adapter to plate), plus 4 M3 heat-set inserts no longer than 4 mm | as Batch 1 |
+| Screws + nuts | M3 × 40, ISO 4762, A2, with nuts and washers | 4 | the pillars, through both plates | as Batch 1 |
+| Screws + washers M5 | M5 × 16, ISO 7380, A2 | 2 | the cassette's tabs to the works' internal frame (D12 R5) | as Batch 1 |
+| Glue | epoxy or cyanoacrylate | — | the dial into its bezel; the magnets into their pockets | local |
+
 ## Batch 3 — v1.5 / v2
 
 | Item | Qty [E] | Note |
