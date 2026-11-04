@@ -987,6 +987,22 @@ Crop of the gallery from IMG_0766 (below): `docs/img/m1/original_gallery.jpg`.
 - Weekday figures on either side of the main dial: Apollo (sun crown, arrow pointing at the
   calendar ring) on the left, Diana (crescent) on the right.
 
+**Main dial's colours today** [S: IMG_0761–0764]
+- The field is dark slate blue. The chapter ring is a light gilt band with **black** Roman numerals
+  and black four-pointed stars between them. "TEMPS APPARENT" is in gilt.
+- DA (1844) describes "peint en azur … cercle en argent", which the M2 dial print follows: an azure
+  field, a silver ring, azure numerals (`docs/m2-design.md` §7). So today's colours differ from
+  DA's. Which to follow is a choice for M2.
+
+**Weekday chariots (M7)** [S: IMG_0766; D: 30 Oct 2026 was a Friday]
+- On Friday the centre opening below the gallery shows **Venus's chariot, lettered "VENUS" and
+  "VENDREDI"**, with Cupid. Saturn's (with a child) is in the left niche and Jupiter's (drawn by an
+  eagle) in the right.
+- The wheels face the viewer, so the chariots run across the opening, parallel to the facade.
+  They follow DA's "chemin de fer circulaire" in a horizontal plane: **the carousel turns about a
+  vertical axis.** This settles the open point in `docs/m2-design.md` §3 item 2 for M7. M7 needs the
+  right-angle pair the architecture allowed for (§4).
+
 **Celestial globe (M6)** [S: IMG_0762–0764]
 - A dark blue globe with gilt stars and constellation lines, on four columns.
 - It has a horizon ring, a graduated brass meridian ring (POLE BORÉAL, ZENITH), and a small hour

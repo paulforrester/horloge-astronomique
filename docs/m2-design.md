@@ -809,4 +809,7 @@ and the layout across the band is month, day, letter.
 **Settled (Paul, PR #6):** dominical letters light on a dark column, as on the original: a black
 stripe with the letters left gold.
 
-**Still to confirm on a photo, not a decision:** the weekday carousel's axis (§3 item 2; M7 design).
+**Settled by Paul's photographs (30 Oct 2026):** the weekday carousel turns about a **vertical axis**.
+On a Friday Venus's chariot crosses the centre opening side-on, with Saturn's and Jupiter's in the
+niches either side (`docs/reference-notes.md`). M7 therefore takes W through a right-angle pair (§3
+item 2).
