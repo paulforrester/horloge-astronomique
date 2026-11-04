@@ -28,13 +28,16 @@ dimensions.*
   - "Le moteur central de l'horloge communique directement aux aiguilles du temps moyen le
     mouvement qui les anime" [S: DA p. 49–50]. The replica's M1 stepper is that central motor for
     this dial: 1 rev/h on the minute arbor (architecture §3).
-  - The mean time is Strasbourg's (D2): LMT = UT + 31.00 min, so the noon show starts at 12:29 CET
-    or 13:29 CEST [D: D2].
+  - The mean time is Strasbourg's (D2): LMT = UT + 31.00 min [D: D2]. In Strasbourg the noon show
+    therefore starts at 12:29 CET. The replica's shows follow legal time instead (D14).
 - **Legal time, silver hands.**
   - "Les aiguilles argentées, ajoutées en Mars 1919, donnent l'heure légale" [S: ELS i1]. They are
     not Schwilgué's.
-  - In the replica they follow CET/CEST on their own stepper, **M1b** (D9). The change to summer
-    time is +1 h in spring and +11 h in autumn on a 12 h face, both forward, run at catch-up speed.
+  - In the replica they follow CET/CEST on their own stepper, **M1b** (D9).
+  - **M1b also carries every release (D14)**, so the shows run on the house's time.
+  - The change to summer time is +1 h in spring and **+23 h in autumn**. +23 h is −1 h on both the
+    12 h dial and the 24 h noon wheel; +11 h would leave the noon wheel 12 h out. Both run forward,
+    at catch-up speed, with the shows suppressed.
 - **Releases** (architecture §5; the order is the original's [S: DA p. 64–66], as Paul observed
   it on 30 Oct 2026 (`docs/mechanism-inventory.md` A1–A6)):
   - **each quarter:** at the n-th quarter the genie and an age strike **n pairs**: genie, age, and
@@ -42,10 +45,12 @@ dimensions.*
     bell at the viewer's right of Death, and walks on.
   - **each hour:** after the four pairs, E1's other genie turns the hourglass. Then Death strikes
     the hours on the bell at the viewer's left [S: DA p. 51, 57–58].
-  - **at noon:** after Death's last stroke, the Apostles (E3) pass Christ. The rooster (E4) crows
-    after the 4th, 8th and 12th.
-  - The noon show runs at about 12:30 CET because the dial shows Strasbourg mean time (D2: 12:29
-    CET).
+  - **at noon:** after Death's last stroke, the procession (E3) passes. The rooster (E4) crows after
+    the 4th, 8th and 12th figure. In the replica the procession's twelve figures are Paul's own
+    choice (D15), replacing the Apostles and Christ.
+  - **When (D14):** the quarters at :15, :30, :45 and :00 of **legal time**, and the noon show at
+    12:00 CET/CEST. Strasbourg runs them at 12:29 CET, on mean time. Paul's choice is closer to
+    Schwilgué's intent: in 1842 local mean time was the civil time.
 - **Sensing** (architecture §6): an index on each minute arbor (each hour at :00), and a witness on
   each hour train (at 12:00) that checks the hands' friction clutch.
 - **Setting** (architecture §7): each hand on a friction clutch, turned forward by hand.
@@ -77,9 +82,9 @@ The rule: **pass timing electrically and position mechanically** (architecture �
 |---|---|---|
 | M0 controller | the two steppers, the release sensors, the index and witness sensors | one connector |
 | E1 genies | the hourglass after the fourth quarter; the bell genie's strokes, which alternate with the age's | electrical. The bell genie is cued by E2's quarter train before each of the age's strokes, so E2's rack decides the count (`docs/mechanism-inventory.md` A3). |
-| E2 ages and Death | quarter and hour releases | electrical |
+| E2 ages and Death | quarter and hour releases (legal time, D14) | electrical |
 | E2 ages and Death | **which age appears; Death's count (1–12)** | **Decision 1 (§5)** |
-| E3 Apostles (and E4 through E3) | noon release | electrical |
+| E3 procession (and E4 through E3) | noon release (12:00 legal time) | electrical |
 | Case | the gallery bay | the works' internal frame, never the case (D12 R5) |
 
 ## 4. Proposed concept
@@ -103,15 +108,19 @@ The rule: **pass timing electrically and position mechanically** (architecture �
 - Each minute hand sits on a friction-clutched cannon pinion, as on the test rig.
 
 **4.3 Drives.**
-- M1b (silver) drives the Ø3 arbor directly from behind. M1 (gilt) drives the OD 4 tube through a
-  1:1 gear pair; its release flags sit on that pair's driving shaft, which also turns once an hour.
+- M1b (silver, legal time) drives the Ø3 arbor directly from behind. Its rear end carries the
+  release flags and drives the 24 h noon wheel (4.4).
+- M1 (gilt, mean time) drives the OD 4 tube through a 1:1 gear pair.
 - Both steppers are NEMA 17 at 1:1, with the margins in §2. The depth behind a ≈ 98 mm dial, with
   two motors side by side, is checked against the case depth (TBD) in the detail design.
 
 **4.4 Releases.**
-- A flag disc on M1's minute arbor, ahead of the hands' clutch, carries four magnets, one per
-  quarter. A second track marks the hour; its sensor is also M1's hourly index.
-- A magnet on the 24 h noon wheel gives noon.
+- The releases are on **M1b, the legal-time train** (D14).
+- A flag disc on M1b's Ø3 arbor, ahead of the silver hands' clutch, carries four magnets, one per
+  quarter. A second track marks the hour; its sensor is also M1b's hourly index.
+- A magnet on the 24 h noon wheel (12/54 · 12/64, driven from the same arbor) gives 12:00 legal
+  time.
+- M1 keeps its own index and witness, for the gilt hands only.
 - The switches are DRV5032 Hall sensors, which put no load on the train (architecture §5).
 - The releases follow the stepper, not the hands. Re-setting the hands by hand never moves a show.
 - Timing: at 1 rev/h, 1° of the flag disc is 10 s [D: 3600 s / 360°]. The controller also checks

@@ -650,6 +650,10 @@ Scale aids [D]:
 
 ### A5 Apostles and Christ — E3
 
+**In the replica: a personal procession (D15).** Paul replaces Christ and the Apostles with twelve
+figures of his choosing, on the same mechanism. The original is kept below as the reference for that
+mechanism. The show runs at 12:00 legal time (D14).
+
 - **Behaviour [S: DA p. 58–59]:**
   - "Chaque jour, à l'instant où la Mort a frappé le dernier coup de midi", the twelve Apostles pass
     before Christ: Pierre, Jean, Jacques majeur, André, Barthélemi, Philippe, Simon, Jacques mineur,
@@ -669,7 +673,7 @@ Scale aids [D]:
 - **Replica:** the E3 event motor turns the procession track one full cycle and stops on a locking
   cam. Christ's blessing arm is cam-operated from the same train.
 - **Difficulty:** 3: small figures and a reliable track.
-- **Depends on:** M1 noon trigger; D2 (whose noon).
+- **Depends on:** M1b noon trigger (D14: 12:00 legal time); D15 (the figures).
 
 ### A6 Rooster — E4
 
