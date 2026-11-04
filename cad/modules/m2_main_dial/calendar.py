@@ -50,6 +50,7 @@ from cad.lib.hardware import BEARINGS
 from cad.modules.m2_main_dial import calendar_logic as L
 from cad.modules.m2_main_dial import feasibility as F
 from cad.modules.m2_main_dial import setter as S
+from cad.modules.m2_main_dial import e6 as E6
 
 R_OUT, R_IN = F.RING_OD / 2, F.RING_OD / 2 - F.RING_W        # 170.5, 144.5
 DIV = 360.0 / L.N
@@ -120,16 +121,9 @@ def _wedge(a0: float, a1: float, r0: float, r1: float, z0: float, z1: float, n: 
 
 
 def _ratchet_lip(pointer: int):
-    """Lip with 368 sawtooth teeth on its outer edge, pushed clockwise."""
-    r_root, r_tip = LIP[1] - 2.0, LIP[1]
-    pts = []
-    for k in range(L.N):
-        a0 = math.radians(ring_angle(k, pointer) - DIV / 2)
-        a1 = math.radians(ring_angle(k, pointer) + DIV / 2 - 0.15 * DIV)
-        pts += [(r_root * math.cos(a0), r_root * math.sin(a0)), (r_tip * math.cos(a1), r_tip * math.sin(a1))]
-    outer = bd.Face(bd.Wire.make_polygon([bd.Vector(x, y, 0) for x, y in pts], close=True))
-    inner = bd.Face(bd.Wire.make_circle(LIP[0]))
-    return bd.extrude(outer - inner, amount=FACE_Z[0] - LIP[2], dir=(0, 0, 1)).moved(bd.Location((0, 0, LIP[2])))
+    """Lip with 368 involute gear teeth on its outer edge (e6.py): driven by E6's pinion (variant
+    "star") or pushed by its pawl (variant "pawl"); one tooth per division."""
+    return E6.ring_lip(pointer, LIP[0])
 
 
 def ring_and_sector(pointer: int, sector_leap: bool):
@@ -314,7 +308,7 @@ def segments(ring, pointer: int, n: int = 4):
 
 
 def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = True,
-          set_engaged: bool | None = None):
+          set_engaged: bool | None = None, e6: str | None = None):
     import datetime as dt
     m0 = L.initial_state(dt.date(2026, 11, 3))           # the model's date: 3 Nov 2026
     if pointer is None:
@@ -377,6 +371,8 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
         [bd.Vector(x, y, CARRIER[2] - 1) for x, y in _grow(S.ramp_outlines()["set"], 0.25)], close=True)),
         amount=CARRIER[3] - CARRIER[2] + 2, dir=(0, 0, 1))
     carrier = carrier - window                            # the set ramp drops into it when not needed
+    e6_parts, e6_allow, e6_cuts = E6.station_parts(pointer, e6)
+    carrier = carrier - e6_cuts                           # E6: holes for its shaft, pins and screws
     # --- a self-supporting printed frame (Paul, PR #5: the works are printed and independent of the
     # case). Where the carrier overhangs the M2 front plate (top and right) a rear rim stiffens it
     # into an L-section; where it overlaps the plate, countersunk M3 screws bolt it to the plate.
@@ -463,41 +459,27 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
     for k in range(4):
         a.allow("setter_reset_ramp", f"carrier_segment_{k}")
         a.allow("station_bracket", f"carrier_segment_{k}")
-    # E6 drive: gearmotor, crank disc, pawl and jumper at the ratchet lip
-    e6 = bd.Box(12.0, 10.0, 36.0, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MAX)).moved(
-        bd.Location((*P(185.0, -10.0), z_back)))
-    a.add("E6_gearmotor", e6, material="black", printed=False, group="station", note="Pololu micro-metal 100:1 class")
-    a.add("E6_crank", parts.disc(14.0, 3.0, z0=CARRIER[3] + 0.4).moved(bd.Location((*P(184.0, -9.0), 0))),
-          group="station")
-    def link(p0, p1, w=3.0, t=2.5, z0=LIP[2] + 0.2):
-        L_ = math.dist(p0, p1)
-        ang_ = math.degrees(math.atan2(p1[1] - p0[1], p1[0] - p0[0]))
-        return bd.Box(L_, w, t, align=(bd.Align.MIN, bd.Align.CENTER, bd.Align.MIN)).rotate(bd.Axis.Z, ang_).moved(
-            bd.Location((p0[0], p0[1], z0)))
-    pawl = link(P(184.0, -7.0), P(171.0, -2.5))
-    a.add("E6_pawl", pawl, group="station",
-          note="pulls the ring clockwise: one crank turn = one ratchet tooth = one division")
-    jumper = link(P(184.0, 8.0), P(171.0, 3.5))
-    a.add("ring_jumper", jumper, group="station", note="detent between strokes")
-    for nm in ("E6_pawl", "ring_jumper"):          # they rest in the ratchet's tooth gaps by design
-        for kk in range(4):
-            a.allow(nm, f"ring_segment_{kk}")
-    a.add("E6_lock_switch", bd.Box(13.0, 6.0, 6.0).moved(bd.Location((*P(186.0, -17.0), z_back - 3.0))),
-          material="green", printed=False, group="station")
-    for nm in ("E6_gearmotor", "E6_lock_switch", "E6_crank"):
+    # E6, the ring's nightly drive (e6.py): finger, star and pinion (default) or crank and pawl
+    for nm, shp, kw in e6_parts:
+        a.add(nm, shp, **kw)
+    for x, y in e6_allow:
+        a.allow(x, y)
+    for nm in ("e6_bracket",):                    # screwed to the carrier's back: face contact
         for k in range(4):
             a.allow(nm, f"carrier_segment_{k}")
-    for nm in ("E6_pawl", "ring_jumper"):
+    for nm in ("ring_jumper",):                   # its nose rests on two tooth tips by design
         for k in range(4):
-            a.allow(nm, f"carrier_segment_{k}")
+            a.allow(nm, f"ring_segment_{k}")
 
     # ---------------------------------------------------------------- pointer side (9 o'clock: built at 0°, turned 180°)
-    lever = bd.Box(3.0, 20.0, RIM_Z - (CARRIER[2] - 3.0), align=(bd.Align.CENTER, bd.Align.MIN, bd.Align.MIN)).moved(
-        bd.Location(((TRACK_S[0] + TRACK_S[1]) / 2, -2.0, CARRIER[2] - 3.0)))
-    a.add("stop_lever", mirror(lever), group="pointer", print_up=(1, 0, 0),
-          note="held up by S, the sector lug: keeps E6 running")
-    a.add("stop_switch", mirror(bd.Box(13.0, 6.0, 6.0).moved(bd.Location((153.0, 24.0, CARRIER[2] - 3.0)))),
-          material="green", printed=False, group="pointer")
+    for nm, shp, kw in E6.stop_parts():                 # stop lever, its bridge, wire spring, TCST1202 opto
+        if "print_up" in kw:
+            kw = dict(kw, print_up=(-kw["print_up"][0], -kw["print_up"][1], kw["print_up"][2]))
+        a.add(nm, mirror(shp), **kw)
+    for x, y in E6.STOP_ALLOW:
+        a.allow(x, y)
+    for k in range(4):
+        a.allow("stop_bridge", f"carrier_segment_{k}")    # screwed to the carrier's back: face contact
     a.add("witness_opto_1_March", mirror(bd.Box(2.2, 4.0, 2.0, align=(bd.Align.MIN, bd.Align.CENTER, bd.Align.MAX)).moved(
         bd.Location((147.8, -13.0, -8.6)))),
           material="green", printed=False, group="pointer", note="fires each 1 March (fixed part of the ring)")
@@ -505,9 +487,9 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
                                                     close=True)), amount=2.0, dir=(0, 0, 1)).moved(bd.Location((0, 0, 0.5)))
     a.add("apollo_arrow", mirror(arrow), material="silver", group="pointer",
           note="Apollo's arrow, viewer's left (figure in E-module design)")
-    for nm in ("stop_lever", "stop_switch", "witness_opto_1_March"):
-        for k in range(4):
-            a.allow(nm, f"carrier_segment_{k}")
+    for k in range(4):
+        a.allow("witness_opto_1_March", f"carrier_segment_{k}")
     return a, {"pointer": pointer, "sector_leap": sector_leap, "wheel_C_centre": list(S.C_XY),
                "wheel_C_position": c_now, "satellite": sat_now, "set_ramp_engaged": set_engaged,
-               "station_angle": round(STATION_ANGLE, 2), "pointer_angle": POINTER_ANGLE, "roller_radius": ROLLER_R}
+               "station_angle": round(STATION_ANGLE, 2), "pointer_angle": POINTER_ANGLE, "roller_radius": ROLLER_R,
+               "e6_drive": e6 or E6.E6_DRIVE}

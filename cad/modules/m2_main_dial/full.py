@@ -20,7 +20,7 @@ from cad.modules.m2_main_dial import dial as DIAL
 from cad.modules.m2_main_dial import mechanism as MECH
 
 READERS = {"stop_lever", "witness_opto_1_March", "counting_lever_pin", "setter_reset_ramp", "setter_set_ramp",
-           "E6_pawl", "ring_jumper"}                       # fixed parts that reach the ring on purpose
+           "e6_pinion", "e6_pawl", "ring_jumper"}          # fixed parts that reach the ring on purpose
 
 
 def build():

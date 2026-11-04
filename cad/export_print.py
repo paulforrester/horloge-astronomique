@@ -33,12 +33,14 @@ STL_ANGULAR = 0.3             # rad
 
 
 def _models():
+    from cad.modules.m2_main_dial import e6
     from cad.modules.m2_main_dial import full as m2_full
     from cad.modules.test_rig import coupons, rig
     return {
         "tolerance_coupons": lambda: coupons.build(),
         "test_rig": lambda: rig.build()[0],
         "m2_main_dial": lambda: m2_full.build()[0],
+        "m2_e6_fallback_pawl": lambda: e6.fallback_assembly(),    # Paul: keep design A (crank and pawl)
     }
 
 

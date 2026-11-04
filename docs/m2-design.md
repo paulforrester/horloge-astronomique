@@ -21,10 +21,11 @@ New Year station.
   - `mechanism.py`: trains, differentials, centre stack, plates, motor;
   - `calendar.py` and `calendar_logic.py`: the calendar ring;
   - `setter.py`: the sector setter (rocker and ramps) and the year counter (§6);
+  - `e6.py`: E6, the ring's nightly drive, and the stop lever (§6);
   - `dial.py`: the dial face;
   - `full.py`: everything together.
 - **Tests:** `cad/tests/test_m2_design.py`, `test_calendar_logic.py`, `test_calendar_ring.py`,
-  `test_setter.py`, `test_worm_diff.py`.
+  `test_setter.py`, `test_e6.py`, `test_worm_diff.py`.
 - **SketchUp:** `export/sketchup/m2_main_dial.dae` and `m2_main_dial_exploded.dae`.
 - **Print files:** `export/print/m2_main_dial/` (STL per part, 3MF for the two-colour dial,
   manifest in its `README.md`).
@@ -35,14 +36,14 @@ New Year station.
 
 | Check | Result |
 |---|---|
-| Interference, all 165 parts, exact B-rep (the 5 date inlays are checked as part of their own parts: `Item.inside`) | **0** |
+| Interference, all 174 parts, exact B-rep (the 5 date inlays are checked as part of their own parts: `Item.inside`) | **0** |
 | Fixed parts inside the path of the turning calendar ring (other than its designed readers) | **0** |
 | Movable sector against the ring, common and leap positions | **0** overlap (`test_calendar_ring.py`) |
 | Rotating hands: any two parts on different tubes that could touch at some angle | 0 (feasibility study; same front stack) |
 | Calendar logic, day by day, 2026–2426, five different start dates | **0 wrong days**. Every New Year jump is 4 divisions (common) or 3 (leap), including 2100, 2200, 2300 and 2400. |
 | Bed fit, single and dual nozzle | every printed part fits in its print pose. The largest are the dial (Ø 287.5) and the plates (281 × 232). |
 | Envelope | x −196 … +184, y −195 … +192, z −162 … +24 mm: inside the M2 bay. Nothing comes within about 18 mm of the floor. **Depth 185 mm.** |
-| Parts | 165 in the model: 99 printed (including 5 date inlays), 64 bought (plus 2 v1.5 space claims) |
+| Parts | 174 in the model: 102 printed (including 5 date inlays), 70 bought (plus 2 v1.5 space claims). E6's fallback (crank and pawl) is a separate model, `e6.fallback_assembly()`. |
 | Motor torque | ≈ 2.9 mN·m at the motor, **≈ 50×** margin at 0.5 A [E, §9] |
 
 <p align="center"><img src="img/m2/m2_front.png" width="420" alt="M2 front"> <img src="img/m2/m2_three_quarter.png" width="420" alt="M2 three-quarter"></p>
@@ -206,10 +207,10 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
 - **The station stays at 6 o'clock.** With the ring turning clockwise, a division leaving the arrow
   reaches it three quarters of a turn later. So the station sees the division **92 days ahead of
   the pointer** (`STATION_OFFSET = +92`), and the year counter and setter act in October (below).
-- **E6's pawl** is unchanged in place; with the ratchet now driven clockwise, it pulls the tooth
-  instead of pushing it.
-- The pointer's readers (stop lever, stop switch, 1 March witness) reach back through a window in
-  the M2 front plate at 168°–192°, r 140–177 mm.
+- **E6 drives the ring 10° before the station**, beside the roller at 6 o'clock, through gear
+  teeth on the lip's outer edge (*E6* below).
+- The pointer's readers (the stop lever with its slotted opto, and the 1 March witness) reach back
+  through a window in the M2 front plate at 168°–192°, r 140–177 mm.
 
 **Layout of the 368 divisions** (`calendar_logic.py`):
 
@@ -225,10 +226,10 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
 
 **Each midnight:**
 1. The index sensor on the daily arbor (the time train) releases E6 (rule 4).
-2. E6 is a small gearmotor with a crank and pawl. One crank turn is one ratchet tooth, one
-   division. A jumper holds the ring between strokes, and a lock switch stops E6 at the crank's
-   home.
-3. **The stop lever at the pointer** keeps E6 running while it is held up:
+2. E6's gearmotor turns once: its finger moves a 12-point star one point, and the pinion on the
+   star's shaft moves the ring one tooth, one division. The star's jumper holds the ring between
+   steps, and a Hall sensor stops the motor at home (*E6* below).
+3. **The stop lever at the pointer** keeps E6 running while it is held back:
    - fixed bumps (Ungerer's projection S) at d = 0 and 1;
    - **a lug on the sector**, one division before its first day. It sits at d = 2 in common years
      (jump 4) and at d = 1 in leap years (jump 3).
@@ -369,9 +370,8 @@ the counter is steel. Two are catalogue parts; three are cut from straight sprin
     supplier, in 5 m bundles, not straight ([boley.de](https://www.boley.de/en/shop/1906.spring-steel-wires)).
 - **Metric alternatives, not verified:** Gutekunst VD-011Y (compression, d 0.25, Dm 4.4, L0 15) and
   RZ-020I (extension, d 0.32, De 3.52, L0 12.9).
-- **Other M2 springs.** The ring jumper, the E6 pawl and the stop lever are still placeholders
-  from PR #5. They get steel wire springs from the same stock when E6 is detailed (D3): about 1 N,
-  0.2 N and 0.3 N respectively [E].
+- **E6's springs** are in the same table's stock; see *E6* below: the star jumper (Ø0.5), the stop
+  lever (Ø0.4), and the ring jumper of the fallback (Ø0.5).
 
 **A change from the approved sketch: approved by Paul in PR #8** ("The lever instead of the star is
 fine").
@@ -401,6 +401,190 @@ fine").
   - the bump profile, in the plunger's own year and its neighbours';
   - the springs' forces and stresses.
 
+**E6, the ring's nightly drive** (`cad/modules/m2_main_dial/e6.py`; checks in `cad/tests/test_e6.py`).
+
+**How it was chosen (Paul, 3–4 Nov 2026).** Every candidate had to turn one motor turn into exactly
+one division.
+- **B, a one-tooth pinion on gear teeth:** chosen first, then dropped. Simulated against the real
+  involute teeth, one tooth pushes the ring **2.0–3.3 divisions** per turn. A lone tooth keeps
+  pushing with its tip for its whole 8 mm sweep; in a full gear, the next tooth takes over instead.
+- **C, a Geneva step:** chosen next, then dropped. A 12-tooth pinion needs 12 slots, and a 12-slot
+  Geneva wheel passes **0.65 mm** from the motor's own shaft.
+- **D, the classic calendar finger and star: built.** Approved ("Yes, lets give it a try").
+- **A, crank and pawl:** kept as a designed fallback ("keep the design for A in case we need to go
+  to that"). It uses the same ring, so switching is one setting (`e6.E6_DRIVE = "pawl"`) and needs
+  no reprint of the ring.
+
+**The ring's teeth.** 368 involute teeth on the lip's outer edge, one per division, centred on it:
+module 0.9216, 20°, tips at r 170.5 (the lip's old edge) [D: 2 × 170.5 / 370].
+- Everything that meshes with them works in the lip's 2.5 mm depth (z −5.3 … −3.1). Below the lip,
+  the setter's rocker passes once a year (its bars reach −5.6 and r 171).
+- The rocker's detent block was narrowed to stay inside r 168.4, clear of the pinion's teeth, which
+  reach r 168.66.
+
+<p align="center"><img src="img/m2/e6_drive.png" width="900" alt="E6 from the model: the finger-and-star drive at 6 o'clock, the stop lever in side section, and the crank-and-pawl fallback"></p>
+
+*D, finger and star (built):*
+
+| Part | Detail |
+|---|---|
+| Gearmotor | Pololu 298:1 micro metal gearmotor HP 6 V (#994): 100 rpm, stall 4.0 kg·cm [S: [Pololu](https://www.pololu.com/product/994/specs)]. Gearbox 10 × 12 × 9 mm, motor 15 mm, Ø3 D-shaft 10 mm long, 2 × M1.6 in its face, 4.5 mm either side of the shaft [S: [dimension diagram](https://www.pololu.com/file/0J949/micro-metal-gearmotors-dimensions.pdf), 3 Apr 2024]. Behind the carrier at r 188.1, 10° before the station. |
+| Finger | PETG, on the D-shaft. Its tip is at r 5.0 and goes 2.0 mm into the star. One motor turn is one star point. A flange behind carries the Ø5 × 2 home magnet. |
+| Star | PLA, 12 V-points (tips r 10.0, roots r 7.4), on a Ø3 stud, with a tube through the carrier to a hex. |
+| Pinion | PLA, 12 teeth (module 0.9216), pressed on the hex and glued. It stays meshed with the ring. |
+| Ratio | One star point is 1/12 of a turn of the pinion, which is one tooth of the ring: **one division per motor turn** [D]. |
+| Jumper | PETG, on a Ø1.5 pivot. A round nose sits in the star's gap, pressed by a Ø0.5 steel wire. It holds the star, and through the pinion the ring, between steps, and settles each step. |
+| Home | A DRV5032 Hall sensor in the bracket under the magnet. The motor stops (with braking) anywhere in the finger's 273° dwell. |
+| Bracket | PETG: a plate on the gearbox face carrying the stud, the jumper pivot, the wire's anchor and the Hall pocket. Three standoffs with M3 heat-set inserts take M3 countersunk screws through the carrier. |
+
+- **One point, every time.** The finger's push was simulated against the star.
+  - With the finger at its design depth, the star moves **1.23 points**.
+  - Over ±0.3 mm of depth and ±0.1 point of the star's rest phase, the push stays between **1.08 and
+    1.39 points**, with no jam [D: `finger_push`].
+  - The jumper settles anything between 0.5 and 1.5 points to exactly one point.
+  - Going 2.4 mm deep would make the hub touch the star's tips, so 2.0 mm keeps 0.5 mm clear.
+- **Setting by hand.** Push the ring either way: the pinion turns the star against its jumper,
+  about 1.7 N at the ring [D: the jumper's 9.5 N·mm on the star over the pinion's 5.53 mm]. Do it
+  with the finger at home.
+
+*A, crank and pawl (the fallback, designed, not built):*
+
+| Part | Detail |
+|---|---|
+| Crank | On the same gearmotor (298:1), its pin at r 2.4. The crank disc sits in front of the carrier but outside r 171.8, clear of the rocker. |
+| Pawl | PETG, about 17.3 mm long. It slides over a fixed Ø1.5 fulcrum pin through a slot, so its hook traces an oval: down into a gap while it moves forward, then lifted 2.0 mm clear of the tooth tips on the way back. **No pawl spring.** |
+| Step | The hook pushes the ring **1.22 teeth** from its rest phase, and 1.0–1.45 teeth over ±0.2 tooth of phase and ±0.2 mm of depth. The ring jumper settles it to one [D: `pawl_push`]. |
+| Ring jumper | PETG, a round nose (r 1.3) resting on two tooth tips. It lifts 0.58 mm over a tooth on a 55° slope, pressed by a Ø0.5 wire. |
+| Placement | The station is turned 0.22° so that the hook lands in a gap. The jumper holds the ring at that phase. |
+
+**Stop lever** (both variants; at the pointer, canonical frame).
+- **Shape:** a PETG lever on a tangential Ø1.5 pivot behind the carrier, in the M2 front plate's
+  window. Its tip rests against the S-track rim and spans both halves (r 150.4–154.6).
+- **Climbing:** the S bumps and the sector's lug have sheer sides, so the tip is bevelled at 45° on
+  the side they arrive from, and climbs them.
+- **Sensing:** a **Vishay TCST1202** slotted opto switch [S: [Vishay doc. 83764](https://www.vishay.com/docs/83764/tcst1103.pdf),
+  Rev. 2.0, p. 1–2 and the package drawing on p. 5]. The sensing takes no force and nothing wears.
+  - **The part:** body 11.9 × 6.3 × 10.8 mm, gap 3.1 mm, optical axis 2.6 mm below the arms' tops.
+    Its aperture is a slit 0.5 mm wide and 3.8 mm deep. Resolution 0.4 mm (10–90 %). Output current
+    at least 1 mA at IF 20 mA; VCE(sat) at most 0.4 V.
+  - **Why the TCST1202:** a thin vane on the tail's side moves only 1.33 mm at the beam [D:
+    `opto_states()`]. With the TCST1103's 1.0 mm slit that leaves about 0.17 mm per side. With the
+    TCST1202's 0.5 mm slit it leaves **0.42 mm at rest and 0.41 mm with the lever back**, beyond the
+    slit's edges. The TCST1103 is a drop-in alternative (same package), with less margin.
+  - **Placement:** the opto sits beside the tail, its beam radial (along X) and its slit's depth
+    along the pivot's axis. Every point of the vane on the slit therefore moves by the same amount.
+    The bridge and opto stay inside the front plate's window (r 176.5 against 177, 8.6° against
+    12°). The opto's top 1.5 mm rises into the carrier's pointer opening (4.8° against 6°).
+  - **Logic:** the vane **blocks the beam at rest**; the lever pushed back clears it, and then E6
+    steps again. A dead LED, a cut wire or a missing opto therefore reads "at rest": E6 stops after
+    its normal step rather than running on. The firmware must also cap a night at four divisions.
+  - **Wiring (3.3 V, ESP32-S3):** the LED through 100 Ω (≈ 20 mA [D: (3.3 − 1.2) / 100]); the
+    phototransistor to ground with a 10 kΩ pull-up, which needs only 0.33 mA, a third of the
+    minimum output current.
+- **Spring:** a Ø0.4 wire under the arm presses it forward with 0.2 N at rest. It is glued 3 mm deep
+  in a hole from the bridge's back face and swings freely in a 1 mm channel (checked: it touches
+  nothing but the arm).
+- **Mounting:** a printed PETG bridge spans the carrier's opening at the pointer and takes two M3
+  screws through the carrier, 7.4° either side. It holds the lever's pin (pressed into both cheeks,
+  through holes so it can be pushed out), the wire, and the opto in a pocket whose leads run out of
+  its end. Fit the opto, then the wire, then drop the lever in from the front.
+- **Fixed on the way:** the first bridge's lever slot ran its full height, so the wire's glued end
+  sat in empty space, and the pin's hole was blind at both ends. Both are now tested
+  (`test_stop_wire_is_glued_in_the_bridge_and_free_beyond`, `test_stop_pin_can_be_fitted`).
+
+**Loads on the ring's mesh [E].** Tangential force at the pitch circle, and the pinion's Lewis
+safety factor. The face is 2.2 mm; the allowable stress is 9.75 MPa, which is PLA's 39 MPa
+divided by 4 (`tools/ratios/strength.py`).
+
+| Step | Force (N) | Safety factor |
+|---|---|---|
+| Daily (friction: the stop lever on the rim, the rollers) | 0.08 | 61 |
+| New Year (the stop lever climbs S and the lug) | 0.64 | 7.5 |
+| The counter's step, 1 October | 1.09 | 4.4 |
+| The counter's step before a leap year (once in four years, about a second) | 1.83 | **2.65** |
+
+- **The leap-year step** is below the factor of 4 used for running loads. That factor covers creep
+  and fatigue, which a one-second load every four years does not cause. The tooth is still about
+  10 times below PLA's tensile strength. **Accepted by Paul, 4 Nov 2026** (PR #9: "accept the 2.65
+  safety factor"); the pinion stays PLA.
+- **Why the face is only 2.2 mm.** A deeper toothed rim would have given a factor of 4.5, but the
+  rocker's yearly passage rules it out.
+- **Motor:** about 10 N·mm (0.1 kg·cm) at the finger at the worst step, against a 4.0 kg·cm stall:
+  **40 times** [D].
+
+**How much the loads depend on friction [D].** Friction (μ 0.3 [E], printed PLA/PETG on steel or on
+itself) is the least certain input. Every term that depends on it is re-evaluated at other values:
+the click (a 30° flank) and the plunger (a 48° bump) go as tan(flank + atan μ); the stop lever's
+rubbing and its climb over S go as μ and tan(45° + atan μ); the return spring and the rollers do not
+change (`mesh_loads(mu)`). The pinion's safety factor:
+
+| μ | Daily | New Year | Counter, 1 Oct | Counter, before a leap year |
+|---|---|---|---|---|
+| 0.2 | 78 | 9.4 | 4.9 | 3.1 |
+| **0.3 (as estimated)** | **61** | **7.5** | **4.4** | **2.65** |
+| 0.4 | 49 | 6.0 | 4.0 | 2.24 |
+| 0.5 | 42 | 4.7 | 3.6 | 1.85 |
+
+So the leap-year step is the one to watch: at μ 0.4 or more it falls below the factor you accepted.
+Even at μ 0.5 the root stress is 5.3 MPa, about 7 times below PLA's 39 MPa. The bench check below
+measures the real loads, friction included.
+
+**Bench check of E6's loads (local phase, before M2 goes into the clock).** It needs the printed
+calendar: ring, carrier, station and stop lever, set up as hung (dial vertical).
+1. **Friction:** lay a printed PETG block on a printed PLA plate and tilt it until it slides
+   (μ = tan of the angle, read on a phone). Do the same for PETG on steel rod. This checks the
+   estimate's main input in five minutes.
+2. **Set up:** take E6's bracket off (3 × M3), so only the readers act on the ring. Wind a thread
+   twice round the ring's outer edge (r 170.5) at 3 o'clock and hang a light cup from it: there the
+   ring's clockwise motion is straight down.
+3. **Measure:** set the ring to the evening before each step below. Add weights to the cup until
+   the ring makes the step, and weigh the cup and weights on a kitchen scale. Repeat three times and
+   keep the largest.
+4. **Pass if** each mass is at most the limit [D: `bench_limits()`: the force at the mesh times
+   169.58 / 170.5, divided by g]:
+
+| Step | Ring set to | Estimate | Pass if at most |
+|---|---|---|---|
+| Daily | any ordinary date | 8 g (0.08 N) | 123 g (1.21 N: factor 4) |
+| New Year | 31 December | 65 g (0.64 N) | 123 g (factor 4) |
+| Counter, ordinary year | 30 September | 111 g (1.09 N) | 123 g (factor 4) |
+| Counter, before a leap year | 30 September, with wheel C set one tooth before a leap bump | 186 g (1.83 N) | 186 g (the accepted 2.65) |
+
+5. **If a step fails**, in this order: a dry PTFE lubricant on the plunger's tip, the bumps and the
+   click (it lowers μ); a lighter plunger spring (the set ramp must still rise); a nylon pinion,
+   once a filament strength is sourced.
+
+**E6's steel springs** (the D13 stock):
+
+| Spring | Wire | Free length | Force | Stress (limit) |
+|---|---|---|---|---|
+| Star jumper | Ø0.5 | 17.5 mm | 0.30 N at the nose at rest, 0.58 N over a point | 1401 (1562) MPa |
+| Stop lever | Ø0.4 | 16.3 mm | 0.20 N at the tip at rest, 0.34 N on a bump | 1342 (1613) MPa |
+| Ring jumper (fallback A) | Ø0.5 | 17.0 mm | 0.40 N at rest, 0.48 N over a tooth | 1109 (1562) MPa |
+
+- **Mounting:** each wire is glued 3 mm deep into a drilled hole in its holder. **The holder's face
+  is where the free length starts**, so the spring sums hold. The model draws each wire along its
+  installed chord, through its glued length.
+- **Found and fixed:** the holders of five wires (the setter's rocker detent, the satellite detent
+  and wheel C's click from PR #8, and E6's star jumper and ring jumper) were centred on the anchor
+  point. They covered the first 1.25–1.5 mm of the free length, so those springs would have been up
+  to 1.6 times stiffer than calculated, and three of them over the stress limit. Each holder now has
+  its face on the anchor. A test checks every wire: 3 mm glued, nothing covering the free length,
+  and that length equal to the one in the sums.
+- **Clearance:** a test checks that each wire clears the pivot boss it passes.
+- **Checks** (`test_e6.py`):
+  - the ring's teeth, and the pinion's mesh phase (meshed with backlash, and really in mesh);
+  - the finger step and the jumper's hold;
+  - the springs, and the pinion's strength;
+  - the stop lever's reach over both halves of track S; its opto (the vane blocks the beam at rest
+    and clears it pushed back, with 0.3 mm margins at least); its wire glued and free; its pin's
+    through hole;
+  - every wire spring glued behind its holder's face, free over its design length;
+  - the loads with friction, and the bench limits;
+  - the fallback's step;
+  - a yearly sweep in which every ring item passes E6's parts. For each variant, the parts that
+    reach the ring may meet only its teeth.
+
 **Radial tracks behind the ring.** Each track has one reader, so nothing triggers the wrong reader.
 
 | Track | r (mm) | Depth | Reader |
@@ -410,6 +594,7 @@ fine").
 | Counter pin | 155–157.5 | full depth | counting lever's Ø1.5 pin at the station (r 155.8–157.3) |
 | Sector tab pin | 159.4–161.6 | −6.9 … −2.2 | the rocker's fork, on the ring (it travels with the ring) |
 | Rocker tip pins | 160.3–171 | −8.3 … −7.0 | reset ramp (inner lane, 158.6–164.35) and set ramp (outer lane, 167.04–174.2) at the station |
+| Ring teeth (lip's outer edge) | 168.4–170.5 | lip, −5.5 … −3.0 | E6's pinion, at −5.3 … −3.1 (the fallback: its pawl and ring jumper, the same depth). Above the rocker's bars (to −5.6), which pass under the lip once a year. |
 
 - **Station position.** The station sits at 6 o'clock and sees the division 92 days ahead of the
   pointer. It and wheel C are
@@ -461,7 +646,9 @@ possible, otherwise use model grade plywood"; decisions D12).
 - a `README.md` manifest with quantity, material, nozzle, size, bed fit, down-facing area, and
   whether the part meshes closed and manifold (lib3mf's check, as Bambu Studio expects).
 
-For M2 that is 55 STLs and 6 two-colour 3MFs (the dial, the four ring segments, the sector) for 99 prints. The press, slide and bearing fits still wait for the
+For M2 that is 59 STLs and 6 two-colour 3MFs (the dial, the four ring segments, the sector) for 102 prints.
+E6's crank-and-pawl fallback has its own folder, `export/print/m2_e6_fallback_pawl/` (4 prints), printed only if
+the fallback is used. The press, slide and bearing fits still wait for the
 tolerance coupons, so these are design-stage files.
 
 **Print poses.** Each part records which way is up (`Item.print_up`). Where it does not, the
@@ -498,8 +685,10 @@ exporter tries both faces down and keeps the one with less to support.
 - MR85ZZ bearings: 9 in the plates, 4 in the worm blocks;
 - 6 × 688ZZ rollers;
 - NEMA 17;
-- E6 gearmotor;
-- 2 microswitches (E6 lock, stop lever), 1 reflective opto, 2 Hall sensors and magnets.
+- E6 gearmotor (Pololu 298:1 HP 6 V, #994) and 2 × M1.6 screws;
+- 1 slotted opto (stop lever), 1 reflective opto (1 March witness), 3 Hall sensors and magnets
+  (index, Moon-tube witness, E6 home);
+- 5 × M3 countersunk screws and heat-set inserts (E6 bracket 3, stop lever's bridge 2).
 
 `bom.md` has the rows.
 
@@ -521,8 +710,7 @@ exporter tries both faces down and keeps the one with less to support.
 | Differential sun 20 T / planet 18 T | ≈ 20 N·mm at the output | 1.6 MPa | 6 |
 | Worm wheel (carrier, 2 × output) | ≈ 40 N·mm | 0.5 MPa | 18 |
 
-**E6:** the ring turns on six ball bearings, so the jumper's spring sets the pawl force. The
-gearmotor class from D3 is chosen after the event-motor noise test (BOM Batch 1).
+**E6:** the loads on its pinion and its motor are in §6, *E6*.
 
 ## 10. Not modelled yet
 
@@ -530,7 +718,8 @@ These are reserved or simplified:
 - v1.5 drives (cam train routing, sunrise/sunset sectors and yearly cam, Moon slide and lever, phase
   ball);
 - the setter's and counter's springs are sized (§6), not yet tested on the rig;
-- the springs of the ring jumper, the E6 pawl and the stop lever wait for E6's detail design (D3);
+- E6's loads are estimates (§6, *E6*). The bench check there gives the procedure and the pass
+  limits; it needs the printed calendar (local phase);
 - axial retention of the parts on the station's studs (push-on lock washers, BOM);
 - the dominical-letter dial (I10: set by hand in v1);
 - the v2 feasts arc;
@@ -545,6 +734,11 @@ These are reserved or simplified:
 3. **Noon at the top**, as in Strasbourg [S: ELS i1; §7].
 4. **Carrier support: printed**, as a frame that belongs to the works (§6). Plywood only where size or
    strength rules out a print; M2 needs none.
+
+**Settled in Paul's review of PR #9 (4 Nov 2026):**
+- **E6's pinion at a safety factor of 2.65** on the counter's step before a leap year (about 1.8 N,
+  once in four years): accepted ("accept the 2.65 safety factor"). It is an exception to the running
+  minimum of 4 (`gear-trains.md` decision 5) for this one load; the pinion stays PLA (§6, *E6*).
 
 **Text size and readability** (Paul asked: what point size is 2 mm text?).
 

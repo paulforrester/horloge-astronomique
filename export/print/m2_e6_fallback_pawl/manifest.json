@@ -1,0 +1,84 @@
+{
+ "model": "m2_e6_fallback_pawl",
+ "unique_parts": 4,
+ "printed_parts": 4,
+ "sets": {},
+ "parts": [
+  {
+   "names": [
+    "e6_crank"
+   ],
+   "material": "PETG",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    13.0,
+    13.0,
+    8.3
+   ],
+   "note": "on the D-shaft; crank pin r 2.4; flange with the home magnet",
+   "file": "e6_crank.stl",
+   "overhang_mm2": 34.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "e6_pawl"
+   ],
+   "material": "PETG",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    18.7,
+    5.9,
+    2.2
+   ],
+   "note": "slides over the fulcrum pin: hook down and forward, then up and back",
+   "file": "e6_pawl.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "ring_jumper"
+   ],
+   "material": "PETG",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    12.1,
+    3.5,
+    2.2
+   ],
+   "note": "round nose on two tooth tips: holds the ring, settles each step",
+   "file": "ring_jumper.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "e6_bracket"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    69.5,
+    21.0,
+    14.5
+   ],
+   "note": "variant pawl: gearmotor (2 x M1.6), fulcrum and jumper pins, wire post, Hall; 3 x M3",
+   "file": "e6_bracket.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  }
+ ]
+}
