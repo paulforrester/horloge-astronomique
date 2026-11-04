@@ -4,8 +4,8 @@ Phase 2, module M1: the mean-time dial in the lion gallery, its gold hands (Stra
 the silver legal-time hands (M1b, D9) on the same dial, and the release cams that start every
 automaton.
 
-**Status: Proposed (concept gate).** Nothing is modelled yet. The decisions needed are in §7. Tags
-as in `docs/reference-notes.md`.
+**Status: Concept accepted (Paul, PR #11, 4 Nov 2026).** The decisions are in §7. Nothing is
+modelled yet; the detail design is next (§8). Tags as in `docs/reference-notes.md`.
 
 <p align="center"><img src="img/m1/original_gallery.jpg" width="420" alt="The original lion gallery on 30 Oct 2026 at 10:10 CET: the 12-hour mean-time dial between the two genies (Paul's photograph)"></p>
 
@@ -97,28 +97,33 @@ The rule: **pass timing electrically and position mechanically** (architecture �
 
 **4.2 Four hands on one centre.**
 - A Ø3 arbor and brass tubes OD 4, 5 and 6 (D4: 0.45 mm wall, 1 mm steps). Front to back:
-  - **silver minute hand** on the Ø3 arbor (M1b);
-  - **gilt minute hand** on the OD 4 tube (M1);
+  - **gilt minute hand** on the Ø3 arbor (M1), under a gilt centre cap;
+  - **silver minute hand** on the OD 4 tube (M1b);
   - **silver hour hand** on the OD 5 tube (M1b);
   - **gilt hour hand** on the OD 6 tube (M1).
-- This puts the silver hour hand over the gilt one, as on the original. It assumes the minute hands
-  are in the same order (silver in front), which the photographs cannot show. The minute hands
-  pass over the hour hands, as on any clock.
+- **Why this order** [S: Paul's photograph IMG_0766 and his screen grab of a YouTube video of the
+  noon show, which shows the gilt hands at XII and the silver hands at 12:30]:
+  - the silver hour hand lies over the gilt one;
+  - the gilt cap at the very front looks like the gilt minute hand's nut, so that hand is in front;
+  - the minute hands pass over the hour hands, as on any clock.
+- Paul: "So long as we can make out the hour and minute, I don't think the order of the hands is
+  important to me. Put them in the order that makes sense." This is that order.
 - Two motion works, 12/48 · 15/45 as on the test rig, on studs above and below the centre.
 - Each minute hand sits on a friction-clutched cannon pinion, as on the test rig.
 
 **4.3 Drives.**
-- M1b (silver, legal time) drives the Ø3 arbor directly from behind. Its rear end carries the
-  release flags and drives the 24 h noon wheel (4.4).
-- M1 (gilt, mean time) drives the OD 4 tube through a 1:1 gear pair.
+- M1 (gilt, mean time) drives the Ø3 arbor directly from behind.
+- M1b (silver, legal time) drives the OD 4 tube through a 1:1 gear pair. That pair's driving shaft
+  turns once an hour on legal time. It carries the release flags and drives the 24 h noon wheel
+  (4.4).
 - Both steppers are NEMA 17 at 1:1, with the margins in §2. The depth behind a ≈ 98 mm dial, with
   two motors side by side, is checked against the case depth (TBD) in the detail design.
 
 **4.4 Releases.**
 - The releases are on **M1b, the legal-time train** (D14).
-- A flag disc on M1b's Ø3 arbor, ahead of the silver hands' clutch, carries four magnets, one per
-  quarter. A second track marks the hour; its sensor is also M1b's hourly index.
-- A magnet on the 24 h noon wheel (12/54 · 12/64, driven from the same arbor) gives 12:00 legal
+- A flag disc on M1b's driving shaft, ahead of the silver hands' clutch, carries four magnets, one
+  per quarter. A second track marks the hour; its sensor is also M1b's hourly index.
+- A magnet on the 24 h noon wheel (12/54 · 12/64, driven from the same shaft) gives 12:00 legal
   time.
 - M1 keeps its own index and witness, for the gilt hands only.
 - The switches are DRV5032 Hall sensors, which put no load on the train (architecture §5).
@@ -131,7 +136,7 @@ The rule: **pass timing electrically and position mechanically** (architecture �
 - Noon wheel: an indexed dog clutch set to its mark at commissioning (architecture §7).
 - Night silence and the chaining of the shows are firmware (D10, architecture §5).
 
-## 5. Decision 1: how E2 gets its state
+## 5. Decision 1: how E2 gets its state — B (Paul, 4 Nov 2026)
 
 **Context.**
 - Which age appears is state, so it must live in a train that follows time, never in the event
@@ -159,25 +164,34 @@ The rule: **pass timing electrically and position mechanically** (architecture �
 dial. With A, M1 would also get a right-angle output on its minute arbor and a keyed coupling on
 the cassette's side.
 
-## 6. Smaller choices (recommended; say if you disagree)
+**Decided: B** (Paul, PR #11: "Lets go with your option B").
+- E2 gets its own 1 rev/h state stepper on legal time (D14), carrying the quarter snail, and the
+  hour snail through 12:1.
+- The BOM now has 6 steppers + 1 spare (`docs/bom.md`).
+- Architecture §2–§5 are updated.
 
-- **Cassettes:** M1 and M1b in one cassette; E1's genies separate (4.1).
+## 6. Smaller choices
+
+- **Cassettes:** M1 and M1b in one cassette; E1's genies separate (4.1). **Confirmed** by Paul.
 - **Release switches:** Hall sensors and magnets (4.4), not mechanical switches or optos. They are
   the same parts as every other index and witness.
-- **Which system is direct-driven:** whichever matches the original's hand order (4.3). M1's
-  release flags stay on its own minute arbor either way.
+- **Which system is direct-driven:** M1, whose gilt minute hand is in front (4.2–4.3). The release
+  flags are on M1b's driving shaft.
 
-## 7. Decisions needed from Paul
+## 7. Decisions (all settled, Paul, PR #11, 4 Nov 2026)
 
-1. **E2's state:** A, B or C (§5). **Recommended: B.**
-2. **From the photographs (settled, 30 Oct):**
+1. **E2's state: B**, E2's own 1 rev/h state stepper on legal time (§5).
+2. **From the photographs:**
    - the face is 12 h, with its lettering;
-   - there are four hands: silver for legal time, gilt for mean time, the silver hour hand in front;
+   - there are four hands: silver for legal time, gilt for mean time;
    - the dial is ≈ 98–104 mm and the genies ≈ 78 mm at 1:8 [E].
-
-   **One assumption to confirm or correct:** the silver minute hand is in front of the gilt one, like
-   the hour hands (§4.2).
-3. **Confirm:** M1 and M1b in one cassette, with E1's genies separate.
+3. **Hand order:** "Put them in the order that makes sense". So, front to back: gilt minute,
+   silver minute, silver hour, gilt hour (§4.2).
+4. **Cassettes:** M1 and M1b in one, with E1's genies separate.
+5. **Also decided in this PR:**
+   - the shows run on legal time (**D14**);
+   - the noon procession is astronomy and time, passing Urania (**D15**);
+   - Death, the four ages and the genies stay as on the original.
 
 ## 8. After the gate: the detail design
 

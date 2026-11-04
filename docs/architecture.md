@@ -66,7 +66,7 @@ taken as given. This architecture adds five working principles:
 | M6 | Celestial globe | I16 sidereal rotation; I17 precession | floor level, front | stepper, 1 rev/mean day | v1 |
 | M7 | Weekday carousel | I11 | above the main dial | shaft from M2 (7:1 in M7) | v1 |
 | E1 | Angels | A1 bell, A2 hourglass | either side of the mean-time dial | event motor(s) | v1 |
-| E2 | Ages and Death | A3 quarters, A4 hours | upper stage | event motor | v1 |
+| E2 | Ages and Death | A3 quarters, A4 hours | upper stage | event motor, plus a 1 rev/h **state stepper** on legal time carrying the quarter and hour snails (M1 gate, decision 1: B) | v1 |
 | E3 | Apostles and Christ | A5 | top stage | event motor | v1 |
 | E4 | Rooster | A6 | top of the left tower | event motor | v1 |
 | E5 | Computus run | A7 | in M4 | event motor | v2 |
@@ -81,7 +81,8 @@ arbor turns at a plain clockwork rate, and every other ratio inside the module i
 |---|---|---|---|---|
 | M1 | 1 rev/h (minute arbor) | 1:1 (or 4:1 for torque; Phase 2) | 1.125 s | 0.1125°, i.e. 1.1 s of displayed time |
 | M2, M3, M5, M6 | 1 rev per mean solar day | 24:1 integer reduction (motor 1 rev/h) | 1.125 s | 0.0047°, i.e. 1.1 s of displayed time |
-| M1b (optional) | 1 rev/h | 1:1 | 1.125 s | as M1 |
+| M1b | 1 rev/h, legal time (D9); carries the releases (D14) | 1:1 | 1.125 s | as M1 |
+| E2 state arbor | 1 rev/h, legal time; quarter snail, and the hour snail through 12:1 (M1 gate, decision 1) | 1:1 | 1.125 s | as M1 |
 
 Basis: a 200-step motor at 1/16 microstep is 3200 µsteps/rev. The TMC2209 interpolates to 1/256
 internally [Sn: TMC2209 datasheet]. NEMA 17 is the default; Phase 2 sizes each motor from its
@@ -109,9 +110,9 @@ goes through a switch and the controller. A link that carries an angle is a shaf
 | M2 → M4 | Year-end trigger | Switch on the M2 year train → controller | Connector |
 | M4 → M2 | Easter position (feasts arc), dominical letter, century leap exception (v2) | Push-rod or rack, or a shaft. **TBD** in the v2 design; the original's transfer is unknown | Keyed |
 | M1b → E1, E2, E3 | Quarter, hour and noon releases, in legal time (D14) | Switches on M1b's flags → controller → event motors | Connector |
-| M1 → E2 | Which age appears (state, P2). The original has four lodges whose figures step out [S: DA p. 57]. | Shaft from the M1 quarter arbor turning a lodge-selection cam | Keyed |
-| M1 → E2 | Hour count (snail for Death's strokes) | Snail on the M1 hour arbor read by the E2 rack (as in rack striking) | Mechanical contact across the boundary. Keep M1 and E2 in one cassette, or move the snail into E2 on its own index (Phase 2). |
-| E3 → E4 | Rooster cue at Apostles 4, 8 and 12 | Cam switches on the E3 train → controller → E4 | Connector |
+| — | Which age appears and how many pairs; Death's count (state, P2) | **No link:** E2's own 1 rev/h state stepper on legal time carries the quarter snail and the hour snail (M1 gate, decision 1: B, Paul, 4 Nov 2026) | — |
+| E2 → E1 | The bell genie's strokes, alternating with the age's | E2's quarter train cues E1 before each of its strokes → controller → E1 | Connector |
+| E3 → E4 | Rooster cue at figures 4, 8 and 12 of the procession (D15) | Cam switches on the E3 train → controller → E4 | Connector |
 
 - **Backlash in the correction shafts adds directly to the indicated error.** Mitigations: keep the
   correction amplitude large at the shaft (gear it up in M3 and down again at M2), use
@@ -130,8 +131,8 @@ train's warning, release and locking.
 |---|---|---|---|---|
 | E1 bell angel (A1) | cued by E2's quarter train before each of the age's strokes (n pairs at the n-th quarter; mechanism-inventory A3) | E1 locking cam | one stroke per cue | skip |
 | E1 hourglass (A2) | M1b hour flag, after the fourth quarter | E1 locking cam (half turn, alternating direction [S: DA p. 51]) | — | skip; only the direction parity can change, which is harmless |
-| E2 ages (A3) | M1b quarter flag (legal time, D14) | E2 locking cam | quarter snail (1–4 pairs; it also picks the age); where it lives is the M1 gate's decision 1 | skip. The original also stops the ages at night [S: DA p. 58, 65]. |
-| E2 Death (A4) | M1b hour flag, after A3 | E2 rack locked | hour snail (1–12, legal hour) | skip |
+| E2 ages (A3) | M1b quarter flag (legal time, D14) | E2 locking cam | quarter snail on E2's state arbor (1–4 pairs; it also picks the age) | skip. The original also stops the ages at night [S: DA p. 58, 65]. |
+| E2 Death (A4) | M1b hour flag, after A3 | E2 rack locked | hour snail on E2's state arbor, through 12:1 (1–12, legal hour) | skip |
 | E3 procession (A5; figures D15) | M1b noon flag (24 h wheel, 12:00 legal time) | E3 locking cam (one procession cycle) | — | skip |
 | E4 rooster (A6) | E3 cue switches at Apostles 4, 8 and 12 | E4 locking cam | three crows (one per cue) | skip with E3 |
 | E5 computus (A7) | M2 year-end cam (night of 31 Dec) | E5 locking cam (one computus cycle) | — | **must run**: it is stateful. Catch-up pauses while E5 completes. |

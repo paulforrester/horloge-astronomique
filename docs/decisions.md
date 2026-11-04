@@ -7,9 +7,8 @@ the trade-offs and a recommendation. Status is **Proposed** until Paul approves;
 
 **As of 31 Oct 2026 every decision D1–D11 is Accepted.** D2, D5 and D11 were decided point by point;
 the rest were approved as recommended. **D12** (wooden case) was accepted on 1 Nov 2026.
-**D13** (steel springs) was accepted on 3 Nov 2026. **D14** (the shows on legal time) was accepted
-on 4 Nov 2026. **D15** (a personal procession) is accepted in principle; its figures are still to
-choose.
+**D13** (steel springs) was accepted on 3 Nov 2026. **D14** (the shows on legal time) and **D15**
+(the procession: astronomy and time, with Urania) were accepted on 4 Nov 2026.
 
 ## Summary
 
@@ -29,7 +28,7 @@ choose.
 | D11 | Case width (7.70 vs 8.60 m) and wall space | **1:8 accepted (PR #1)**. **Width resolved: 7.70 m → 962.5 mm** [S: ELS, Ungerer 1920]. Wall dimensions to follow from Paul | **Accepted** 31 Oct 2026 | Phase 2 (case) |
 | D13 | Springs: steel or printed; catalogue springs in inch-based sizes | **Steel for every spring**; Sodemann's stainless catalogue springs accepted although their sizes are inch-based | **Accepted** 3 Nov 2026 (PR #8) | Phase 2 (M2 purchase) |
 | D14 | When the shows run: mean time or legal time (revises D2 item 2) | **Legal time**: the quarters at :15, :30, :45 and :00 of CET/CEST, the noon show at 12:00 | **Accepted** 4 Nov 2026 (Paul, PR #11) | Phase 2 (M1) |
-| D15 | The noon procession: Christ and the Apostles, or a personal set | **A personal set of twelve figures**, with the same mechanism; theme, figures and the central figure **to choose** | **Accepted in principle** 4 Nov 2026 (Paul, PR #11); figures Proposed | Phase 2 (E3) |
+| D15 | The noon procession: Christ and the Apostles, or a personal set | **Astronomy and time**: twelve figures from Pythagoras to Einstein pass **Urania**, on the original's mechanism | **Accepted** 4 Nov 2026 (Paul, PR #11) | Phase 2 (E3) |
 
 Plus **Blockers** at the end: the network allowlist and the documents to obtain.
 
@@ -758,8 +757,11 @@ spec the springs that you recommend."
 
 ## D15 — The noon procession: a personal set of figures
 
-**Status: Accepted in principle, 4 Nov 2026** (Paul, PR #11). The theme, the twelve figures and the
-central figure are **Proposed** below, for Paul to choose.
+**Status: Accepted, 4 Nov 2026** (Paul, PR #11): "I like your suggestion of astronomy and time, with
+Urania in the centre. Time and the stars have a nice synergy with this clock. I also agree that
+death and the ages still belong, as do the angels." So theme A below, with Urania. The twelve are
+the recommended list; any can be swapped from the alternates before E3 is designed. Death, the
+four ages and the genies stay as on the original.
 
 **Context.**
 - The original's noon show is the twelve Apostles passing Christ, who blesses each

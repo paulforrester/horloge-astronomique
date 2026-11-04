@@ -62,8 +62,8 @@ ordering.
 | Item | Spec | Qty [E] | How the quantity was counted | Candidate supplier / link |
 |---|---|---|---|---|
 | ESP32-S3 dev board (clock controller) | as Batch 1 | 1 | one controller (D3) | Mouser FR |
-| NEMA 17 steppers | as Batch 1 | 5 + 1 spare | M1, M2, M5, M6 + M1b (D9); the Batch 1 motor becomes one of them | StepperOnline ⚠ |
-| TMC2209 stepsticks | as Batch 1 | 5 + 1 spare (Batch 1 supplies 2) | one per stepper | 3DJake / West3D |
+| NEMA 17 steppers | as Batch 1 | 6 + 1 spare | M1, M2, M5, M6, M1b (D9) and E2's state arbor (M1 gate, decision 1); the Batch 1 motor becomes one of them | StepperOnline ⚠ |
+| TMC2209 stepsticks | as Batch 1 | 6 + 1 spare (Batch 1 supplies 2) | one per stepper | 3DJake / West3D |
 | Driver carrier | 6-socket carrier, off-the-shelf or custom PCB (Phase 3) | 1 | — | TBD |
 | MCP23017 I/O expander | I²C | 2 | about 27 inputs (architecture §10) | Mouser FR |
 | Hall switches + magnets | as Batch 1 | 20 + 30 | ~6 index + ~8 witness + ~6 trigger sensors | as Batch 1 |

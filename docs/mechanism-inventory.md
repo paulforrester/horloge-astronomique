@@ -621,8 +621,8 @@ Scale aids [D]:
 - **Replica:**
   - Which age appears, and so how many pairs are struck, is *state*. So it is set by a time train,
     not by counting events.
-  - That time train carries a **four-step quarter snail**, as in rack quarter-striking. Where it
-    sits is the M1 concept gate's decision 1 (`docs/m1-design.md` §5).
+  - That time train carries a **four-step quarter snail**, as in rack quarter-striking. It sits on
+    **E2's own 1 rev/h state arbor**, on legal time (M1 gate, decision 1: B; D14).
   - The E2 event motor powers only the striking and the figures' walk. Its rack falls onto the snail
     and counts the pairs.
   - This keeps the display right after skipped shows (night silence, catch-up); see architecture §6.
@@ -643,8 +643,8 @@ Scale aids [D]:
   - The other bell, at the viewer's right, is the ages' bell (A3).
   - Paul's photographs IMG_0769 and IMG_0770 show both bells.
 - **Replica:** a classical rack and snail gives 1–12 strokes. The count is decided mechanically;
-  the controller only switches the motor. The snail's time train is the M1 concept gate's
-  decision 1.
+  the controller only switches the motor. The hour snail is driven 12:1 from E2's own state arbor
+  (M1 gate, decision 1: B), so the count is the legal hour (D14).
 - **Difficulty:** 2.
 - **Depends on:** M1; E2.
 
