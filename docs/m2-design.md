@@ -173,7 +173,7 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
 - Six brass tubes (OD 4–9) on a fixed Ø3 arbor held by the bridge, levels as in the feasibility
   study.
 - **v1 builds** the Sun hand with its disc and the shadow arm with its disc (k = 4 sizes: 4.7 and
-  12.2 mm), the Moon hand with its ball (4.5 mm), and the dome.
+  12.2 mm), the Moon hand with its ball (4.5 mm), and the Ø 94 hemisphere dome (§7).
 - **Hand hubs** are split collets on their tubes: a friction clutch for setting (architecture
   §7). The grip is set by the collet interference, which the tolerance coupons give.
 - **The idle v1.5 tubes** (cam, sunrise, sunset) are in the stack from v1 with their 48-tooth
@@ -637,6 +637,20 @@ possible, otherwise use model grade plywood"; decisions D12).
   - "Lorsque le Soleil passe au méridien de Strasbourg, l'aiguille est verticale".
 - **The hemisphere is a shallow dome.** The same passage calls it "un disque légèrement bombé",
   which confirms the PR #4 choice.
+- **The hemisphere is Ø 94 mm** (Paul, 4 Nov 2026, option B). That is the original's ≈ 0.75 m disc
+  at 1:8 [E: Paul's photographs of 30 Oct 2026, ±20 %; `docs/reference-notes.md`].
+  - It replaces the feasibility study's Ø 46.5, which only covered the latitude cam.
+  - It stays on the fixed Ø3 arbor, in front of every hand (z 18.8–23.8), 5 mm high.
+  - The hands' inner ends pass behind it, as on the original. Their discs and the Moon ball ride
+    near the tips, well outside its edge.
+  - The original carries a painted map of the northern hemisphere. The replica's finish is TBD:
+    paint, or a printed map on a white dome.
+- **Colours: Schwilgué's 1844 scheme** (Paul, 4 Nov 2026: "lets start with our current design that
+  follows Schwilgue's 1844 description").
+  - Today's dial differs: a dark slate field, a light gilt ring with black numerals and stars,
+    "TEMPS APPARENT" in gilt (`docs/reference-notes.md`).
+  - Today's scheme is an alternative for later; the print's colours are filaments, so changing
+    them costs nothing in the model.
 - **Printed face down**, both bodies together (`export/print/m2_main_dial/dial.3mf`). The silver
   ring and the azure inlays are the first layers, on the smooth plate. Use the 0.2 mm nozzle for
   the 1 mm strokes.

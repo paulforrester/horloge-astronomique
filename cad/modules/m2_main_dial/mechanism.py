@@ -72,6 +72,10 @@ MOTOR = (R1[0] + 37.5 * math.cos(math.radians(200)), R1[1] + 37.5 * math.sin(mat
 # --- levels (z, mm; dial face = 0) ----------------------------------------------------------------
 FP = (-15.0, -11.0)
 POINTER_WINDOW = (168.0, 192.0, 140.0, 177.0)  # front-plate cut-out (a0, a1, r0, r1) for the calendar readers
+# Earth hemisphere: the original's ≈ 0.75 m disc at 1:8 [E: Paul's photographs of 30 Oct 2026,
+# ±20 %; docs/reference-notes.md]. Paul chose to match it (option B, 4 Nov 2026). The feasibility
+# study's Ø 46.5 only covered the latitude cam.
+HEMI_D = 94.0
 CENTRE = {}                                   # tube -> wheel level, outermost tube first
 _z = FP[0] - GAP
 for _n in ["sunset", "sunrise", "sun", "cam", "moon", "shadow"]:
@@ -134,8 +138,10 @@ def build():
         front[n] = (z + F.LEVEL_GAP, z + F.LEVEL_GAP + th[n])
         z = front[n][1]
     hemi_z0 = z + F.LEVEL_GAP
-    hemi_d = 2 * (F.CAM_MEAN_R + F.LAT_EXCURSION / 2 + 4)
-    a.add("hemisphere_dome", F.shallow_dome(hemi_d, F.HEMI_H, hemi_z0), material="silver", group="front")
+    hemi_d = HEMI_D
+    assert hemi_d >= 2 * (F.CAM_MEAN_R + F.LAT_EXCURSION / 2 + 4)          # still hides the latitude cam
+    a.add("hemisphere_dome", F.shallow_dome(hemi_d, F.HEMI_H, hemi_z0), material="silver", group="front",
+          note=f"Ø{hemi_d:.0f} Earth hemisphere, the original's size; a map of the northern hemisphere (finish TBD)")
     a.add("fixed_arbor", parts.rod(3.0, hemi_z0 - BRIDGE[0]).moved(bd.Location((0, 0, BRIDGE[0]))),
           material="steel", printed=False, group="centre")
     a.allow("fixed_arbor", "hemisphere_dome")

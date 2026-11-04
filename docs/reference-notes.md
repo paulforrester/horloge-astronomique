@@ -983,7 +983,9 @@ Crop of the gallery from IMG_0766 (below): `docs/img/m1/original_gallery.jpg`.
     little for the disc being nearer the camera. The field is ≈ 1.97 m if the chapter ring's outer
     edge is ELS's 2.30 m.
   - That is ≈ 85–105 mm at 1:8, **about twice the 46.5 mm dome in the M2 model**, which was sized
-    only to hide the latitude cam (`docs/main-dial-feasibility.md` §2). A follow-up for M2.
+    only to hide the latitude cam (`docs/main-dial-feasibility.md` §2).
+  - **Paul chose to match it** (4 Nov 2026, option B): Ø 94 mm on the same fixed arbor
+    (`docs/m2-design.md` §7). The stand is not copied.
 - Weekday figures on either side of the main dial: Apollo (sun crown, arrow pointing at the
   calendar ring) on the left, Diana (crescent) on the right.
 
@@ -992,7 +994,8 @@ Crop of the gallery from IMG_0766 (below): `docs/img/m1/original_gallery.jpg`.
   and black four-pointed stars between them. "TEMPS APPARENT" is in gilt.
 - DA (1844) describes "peint en azur … cercle en argent", which the M2 dial print follows: an azure
   field, a silver ring, azure numerals (`docs/m2-design.md` §7). So today's colours differ from
-  DA's. Which to follow is a choice for M2.
+  DA's.
+  - **Paul (4 Nov 2026): keep DA's 1844 scheme for now.**
 
 **Weekday chariots (M7)** [S: IMG_0766; D: 30 Oct 2026 was a Friday]
 - On Friday the centre opening below the gallery shows **Venus's chariot, lettered "VENUS" and
