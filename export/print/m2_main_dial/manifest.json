@@ -1073,8 +1073,8 @@
    "nozzle": 0.4,
    "set": "",
    "size": [
-    3.1,
-    2.4,
+    3.7,
+    2.6,
     1.5
    ],
    "note": "glued under the lip: clamps the detent wire",
@@ -1149,13 +1149,13 @@
    "nozzle": 0.4,
    "set": "",
    "size": [
-    28.5,
-    20.8,
+    29.6,
+    21.4,
     20.0
    ],
    "note": "screwed under the carrier's station extension",
    "file": "station_bracket.stl",
-   "overhang_mm2": 2.0,
+   "overhang_mm2": 5.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true
@@ -1339,13 +1339,13 @@
    "nozzle": 0.2,
    "set": "",
    "size": [
-    19.2,
+    19.3,
     7.2,
-    3.0
+    8.6
    ],
-   "note": "held back by S and the sector's lug: keeps E6 running",
+   "note": "held back by S and the sector's lug: keeps E6 running; its vane blocks the opto's beam at rest",
    "file": "stop_lever.stl",
-   "overhang_mm2": 4.0,
+   "overhang_mm2": 2.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true
@@ -1358,13 +1358,13 @@
    "nozzle": 0.4,
    "set": "",
    "size": [
-    15.0,
-    44.0,
-    9.7
+    20.4,
+    47.0,
+    12.1
    ],
-   "note": "bridges the carrier's pointer opening; 2 x M3 into the carrier",
+   "note": "bridges the carrier's pointer opening; holds the lever's pin, its wire spring and the TCST1202; 2 x M3 into the carrier",
    "file": "stop_bridge.stl",
-   "overhang_mm2": 4.0,
+   "overhang_mm2": 69.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true

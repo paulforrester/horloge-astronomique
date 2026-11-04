@@ -571,6 +571,9 @@ calendar: ring, carrier, station and stop lever, set up as hung (dial vertical).
   to 1.6 times stiffer than calculated, and three of them over the stress limit. Each holder now has
   its face on the anchor. A test checks every wire: 3 mm glued, nothing covering the free length,
   and that length equal to the one in the sums.
+- **The M2 front plate** gets a small notch in its lower edge (about 6 mm wide and 2.7 mm deep) where the star
+  jumper's holder now reaches back across it. A test checks both variants' station and pointer
+  parts against the plate, since the full model only carries the built variant.
 - **Clearance:** a test checks that each wire clears the pivot boss it passes.
 - **Checks** (`test_e6.py`):
   - the ring's teeth, and the pinion's mesh phase (meshed with backlash, and really in mesh);
