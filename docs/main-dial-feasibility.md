@@ -175,7 +175,7 @@ Tooth-level meshes are checked by the gear tests, not here.
 |---|---|---|
 | 1 | Eclipse display scale (§4) | **k = 4**: discs 4.7 / 4.5 / 12.2 mm; the Moon swings ±10.1 mm; a 4:1 lever on the Moon hand, so the cam stays at Schwilgué's size under the hemisphere |
 | 2 | This layout as the basis for the M2 design: two Sun tubes, the fixed centre arbor on a bridge with the big wheels behind it, the M3 inputs on the right, module 1.0 | **Accepted** |
-| 3 | Hemisphere | **Shallow printed dome**, about Ø 47 mm and 5 mm high; a painted disc is the fallback |
+| 3 | Hemisphere | **Shallow printed dome**, about Ø 47 mm and 5 mm high; a painted disc is the fallback. **Revised for the M2 design** (Paul, 4 Nov 2026): **Ø 94 mm**, the original's size from Paul's photographs (`docs/m2-design.md` §7). This study's model keeps Ø 46.5 as its record. |
 | 4 | Step 3, the test rig | **Go-ahead**. It comes as its own PR. |
 
 Paul also asked for **SketchUp files of every CAD model**:
