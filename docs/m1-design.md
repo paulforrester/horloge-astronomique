@@ -7,10 +7,12 @@ automaton.
 **Status: Proposed (concept gate).** Nothing is modelled yet. The decisions needed are in §7. Tags
 as in `docs/reference-notes.md`.
 
-<p align="center"><img src="img/m1/original_mean_time_dial.jpg" width="260" alt="The original mean-time dial, 30 Oct 2026 at 10:10 CET: a 12-hour face with four hands (Paul's photograph)"></p>
+<p align="center"><img src="img/m1/original_gallery.jpg" width="420" alt="The original lion gallery on 30 Oct 2026 at 10:10 CET: the 12-hour mean-time dial between the two genies (Paul's photograph)"></p>
 
-*The original mean-time dial on 30 Oct 2026 at 10:10 CET (Paul's photograph, crop): a 12-hour
-face; the legal minute hand at :10, the mean one at :41.*
+*The original gallery on 30 Oct 2026 at 10:10 CET (Paul's photograph IMG_0766, crop).*
+- The 12-hour dial reads "TEMPS MOYEN" and "HEURE PUBLIQUE".
+- The silver legal hands show 10:10; the gold mean-time hands show 9:41.
+- The genies sit either side: bell and striker on the left, hourglass on the right.
 
 <p align="center"><img src="img/m1/m1_concept.png" width="900" alt="Schematic: where M1 sits in the case and the two ways E2 can get its state; the lion gallery with the dial between the genies; side section of the four-hand coaxial stack"></p>
 
@@ -49,10 +51,11 @@ dimensions.*
 |---|---|---|
 | Dial diameter | **≈ 98–104 mm** at 1:8: the pearled minute ring is ≈ 0.83 m on the original, the bezel ≈ 0.98 m | [E] ±15 %: scaled on the calendar ring in Paul's photograph (`docs/reference-notes.md`, *Paul's photographs of 30 October 2026*). Agrees with the lithograph's 0.78 m (envelope §3). DA says only "petit cadran". |
 | Height | ≈ 567 mm, on the case centreline | [E]: envelope §2 |
-| Face | **12 hours**, Roman numerals I–XII in gilt on a dark ground, a pearled minute ring and an inner pearled ring, gilt bezel | [S: Paul's photographs, 30 Oct 2026]. The Phase 1 trains (`M1.hour_hand` 1/12) stand. |
-| Hands | **Four.** At 10:10 CET the photograph shows minute hands at :10 (legal) and :41 (mean), nearly opposite, and two ornate hour hands together near X | [S: photograph; D: mean time = CET − 29 min] |
-| Order of the four hands, front to back; colours | **TBD** | Not readable at the photograph's resolution: needs a close-up |
-| Genies' size (E1), either side of the dial | **TBD** | photo or plate |
+| Face | **12 hours**: gilt Roman numerals I–XII on a black ground (IIII for four); a minute track with small figures 5 … 60; "TEMPS MOYEN" on an arc above the centre, "HEURE PUBLIQUE" below; a pearled gilt bezel in an arched stone frame | [S: Paul's photographs IMG_0766–0768, 30 Oct 2026]. The Phase 1 trains (`M1.hour_hand` 1/12) stand. |
+| Hands | **Four.** At 10:10 CET the **silver** minute and hour hands show 10:10 (legal) and the **gilt** ones 9:41 (mean). The minute hands are nearly opposite. | [S: photographs; D: mean time = CET − 29 min, 174° of the minute circle] |
+| Hand shapes | Gilt minute hand with an ornate tip; gilt hour hand with an openwork fleur. Both silver hands are plain spears. A gilt cap covers the centre. | [S: IMG_0766] |
+| Order, front to back | **The silver hour hand lies over the gilt hour hand.** The minute hands' order is hidden by the cap. | [S: IMG_0766]; the minute pair is assumed (§4.2) |
+| Genies (E1) | Winged children seated on the cornice either side: bell and striker (left), hourglass (right). Seated height ≈ 0.63 of the bezel's diameter, so **≈ 78 mm at 1:8** | [S: IMG_0766; E: scaled on the bezel] |
 | Motion work | 12/48 × 15/45, exact 1/12, at 30.000 mm centres with profile shift | [S: `spec/clock.yaml` `M1.hour_hand`; `docs/test-rig.md` §2] |
 | Noon train | 12/54 × 12/64, exact 1/24 (one turn a day) | [S: `spec/clock.yaml` `M1.noon_cam`] |
 | Motor margin, NEMA 17 at 1:1 | M1 23×, M1b 24× | [D: `docs/gear-trains.md` §5] |
@@ -83,15 +86,20 @@ The rule: **pass timing electrically and position mechanically** (architecture �
   electrical.
 
 **4.2 Four hands on one centre.**
-- A Ø3 arbor and brass tubes OD 4, 5 and 6 (D4: 0.45 mm wall, 1 mm steps).
-  - The two minute hands are on the Ø3 arbor and the OD 4 tube.
-  - The two hour hands are on the OD 5 and OD 6 tubes.
+- A Ø3 arbor and brass tubes OD 4, 5 and 6 (D4: 0.45 mm wall, 1 mm steps). Front to back:
+  - **silver minute hand** on the Ø3 arbor (M1b);
+  - **gilt minute hand** on the OD 4 tube (M1);
+  - **silver hour hand** on the OD 5 tube (M1b);
+  - **gilt hour hand** on the OD 6 tube (M1).
+- This puts the silver hour hand over the gilt one, as on the original. It assumes the minute hands
+  are in the same order (silver in front), which the photographs cannot show. The minute hands
+  pass over the hour hands, as on any clock.
 - Two motion works, 12/48 · 15/45 as on the test rig, on studs above and below the centre.
 - Each minute hand sits on a friction-clutched cannon pinion, as on the test rig.
 
 **4.3 Drives.**
-- The system on the Ø3 arbor is driven directly from behind; the other through a 1:1 gear pair to
-  its tube. Which system takes the Ø3 follows the hand order on the original (§2).
+- M1b (silver) drives the Ø3 arbor directly from behind. M1 (gilt) drives the OD 4 tube through a
+  1:1 gear pair; its release flags sit on that pair's driving shaft, which also turns once an hour.
 - Both steppers are NEMA 17 at 1:1, with the margins in §2. The depth behind a ≈ 98 mm dial, with
   two motors side by side, is checked against the case depth (TBD) in the detail design.
 
@@ -141,11 +149,13 @@ the cassette's side.
 ## 7. Decisions needed from Paul
 
 1. **E2's state:** A, B or C (§5). **Recommended: B.**
-2. **From a photo:**
-   - **Settled by your photographs of 30 Oct:** the face is 12 h, and it carries four hands. The
-     dial is about 98–104 mm at 1:8 [E].
-   - **Still open:** the four hands' order, front to back, their colours and shapes. A close-up of
-     the gallery dial would settle it.
+2. **From the photographs (settled, 30 Oct):**
+   - the face is 12 h, with its lettering;
+   - there are four hands: silver for legal time, gilt for mean time, the silver hour hand in front;
+   - the dial is ≈ 98–104 mm and the genies ≈ 78 mm at 1:8 [E].
+
+   **One assumption to confirm or correct:** the silver minute hand is in front of the gilt one, like
+   the hour hands (§4.2).
 3. **Confirm:** M1 and M1b in one cassette, with E1's genies separate.
 
 ## 8. After the gate: the detail design

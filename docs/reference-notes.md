@@ -920,7 +920,7 @@ numbers.
 
 Five photographs taken by Paul in the cathedral on 30 October 2026, 10:10–10:11 CET (EXIF:
 `DateTimeOriginal` with offset +01:00; iPhone 16 Pro). Files IMG_0767 to IMG_0771, shared in PR #11.
-Crop: `docs/img/m1/original_mean_time_dial.jpg`.
+Crop of the gallery from IMG_0766 (below): `docs/img/m1/original_gallery.jpg`.
 
 **Mean-time dial** [S: Paul's photographs IMG_0767 and IMG_0768]
 - **12-hour face**, Roman numerals I–XII in gilt on a dark ground, a pearled minute ring and an
@@ -948,4 +948,58 @@ Crop: `docs/img/m1/original_mean_time_dial.jpg`.
 **Upper hall** [S: Paul's photograph IMG_0771]
 - Christ holds the banner of the redemption in his left hand and blesses with his right, as DA
   describes [S: DA p. 58–59].
+
+### The second set: IMG_0759 to IMG_0766 (30 October 2026, 10:08–10:10 CET)
+
+**Lion gallery** [S: IMG_0766, 35 mm-equivalent, the sharpest view of the dial]
+- **Lettering.** The dial reads "TEMPS MOYEN" on an arc above the centre and "HEURE PUBLIQUE" below.
+  A few small letters beside them are not legible.
+- **Numerals and track.** Four is written IIII. A minute track carries small figures 5 … 60 outside
+  the chapter ring.
+- **Hands, by colour.** The **silver** minute and hour hands show 10:10, the legal time. The **gilt**
+  ones show 9:41, the mean time.
+  - The gilt minute hand has an ornate tip, and the gilt hour hand an openwork fleur.
+  - Both silver hands are plain spears.
+  - A gilt cap covers the centre.
+  - **The silver hour hand lies over the gilt hour hand.** The minute hands' order is hidden by the
+    cap.
+- **Frame.** The dial sits in an arched, moulded stone-coloured frame on green marbling, between the
+  two genies' ledges. Its top reaches the planetary dial's band.
+- **Genies.** Winged children seated on the cornice: on the left one holds a bell and a striker, on
+  the right one an hourglass. Seated height ≈ 0.63 of the bezel's diameter [E: scaled on the
+  photograph], so ≈ 0.6 m on the original and ≈ 78 mm at 1:8.
+
+**Main dial and its surroundings** [S: IMG_0761–0764]
+- "TEMPS APPARENT" in gilt capitals on the dark field, above the centre. The chapter ring is a light
+  band with black Roman numerals I–XII twice, XII at the top, and four-pointed stars between the
+  numerals.
+- The sunrise and sunset hands are black bars lettered in gilt: "LEVER DU SOLEIL" and "COUCHER DU
+  SOLEIL".
+- **The Earth hemisphere** is a coloured map disc, the northern hemisphere centred on the pole,
+  lettered AFRIQUE, EUROPE, ASIE, AMÉRIQUE, OCÉAN ATLANTIQUE, GRAND OCÉAN, Tropique du Cancer.
+  - **It stands on its own black iron stand in front of the dial.** The hands' hubs and the
+    sunrise and sunset hands pass behind it.
+  - **Its size is ≈ 0.75 m ±20 %** [E]: ≈ 0.40 of the dark field's width in IMG_0761, corrected a
+    little for the disc being nearer the camera. The field is ≈ 1.97 m if the chapter ring's outer
+    edge is ELS's 2.30 m.
+  - That is ≈ 85–105 mm at 1:8, **about twice the 46.5 mm dome in the M2 model**, which was sized
+    only to hide the latitude cam (`docs/main-dial-feasibility.md` §2). A follow-up for M2.
+- Weekday figures on either side of the main dial: Apollo (sun crown, arrow pointing at the
+  calendar ring) on the left, Diana (crescent) on the right.
+
+**Celestial globe (M6)** [S: IMG_0762–0764]
+- A dark blue globe with gilt stars and constellation lines, on four columns.
+- It has a horizon ring, a graduated brass meridian ring (POLE BORÉAL, ZENITH), and a small hour
+  ring at the pole. The silvered rings are graduated in degrees: 0–90 on the meridian, 0–360 around.
+
+**Equations vitrine (M3)** [S: IMG_0762]
+- Lettered "ÉQUATIONS SOLAIRES & LUNAIRES": vertical cam stacks with their followers behind glass,
+  to the right of the main dial.
+
+**Computus (M4, v2)** [S: IMG_0759, IMG_0760]
+- Lettered "COMPUT ECCLÉSIASTIQUE", with an arched window "POUR L'AN DE GRÂCE" showing **2026**.
+- Five dials: cycle solaire (1–28), nombre d'or, indiction (1–15), lettre dominicale and épacte.
+- The indiction hand points at **4**, which is right for 2026 [D: (2026 + 3) mod 15 = 4].
+- Open brass wheels and steel racks are visible behind the dials. This is a reference for M4's
+  design.
 
