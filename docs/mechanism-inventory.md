@@ -572,6 +572,9 @@ Scale aids [D]:
   sceptre et porte dans l'autre un timbre, sur lequel il frappe le premier coup de chaque quart
   d'heure, le second étant répété ... par l'un des quatre âges". He gives the ages their signal.
   (The genie is on the spectator's left, with a sceptre in one hand and a bell in the other.)
+- **Observed** [S: Paul's observation of the clock in action, 30 Oct 2026, his video and YouTube videos]: at the n-th quarter he strikes n times, each stroke answered by the age's
+  (A3). Paul's photograph IMG_0766 shows him seated, with the bell in one hand and the striker in
+  the other.
 - **Replica:** E1 event motor; a cam lifts the arm, which drops onto a small bell. Triggered by the
   quarter cam on M1.
 - **Difficulty:** 2.
@@ -585,6 +588,8 @@ Scale aids [D]:
   Mort ne sonne les heures".
   - **Hourly: resolved.**
   - The glass holds red sand and turns half a turn alternately right and left.
+  - Paul saw it turn during the noon show (30 Oct 2026), after the fourth quarter, which fits.
+    DA's "chaque heure" rules out every quarter.
 - **Replica:** the same E1 motor or a second one. It turns the glass 180°, alternating direction,
   e.g. a crank and rocker giving ±180°. Missed events only swap the direction parity, which is
   harmless.
@@ -604,14 +609,25 @@ Scale aids [D]:
   - **The ages work only by day:** they "ne fonctionnent que pendant la durée du jour"; the central
     motor produces "la suspension des fonctions des quatre âges pendant la nuit" [S: DA p. 58, 65].
     Night silence is original behaviour (D10).
-  - **[?]** How the strokes split between genie and age (e.g. paired strokes per quarter). Read the
-    full text closely, or watch a video.
+  - **Resolved: how the strokes split** [S: Paul's observation of the clock in action, 30 Oct 2026, his video and YouTube videos].
+    - At the n-th quarter the genie and the age strike **n pairs**: genie, age, genie, age, and so
+      on. That is one pair at :15, two at :30, three at :45 and four on the hour.
+    - The age walks out in front of Death, strikes the bell at the **viewer's right of Death**
+      (Death's left), and walks on past Death.
+    - This fits DA: the ages strike only the second stroke, "le premier étant frappé par le
+      génie".
+  - Since each age always strikes the same quarter, **its count is its own number**: child 1, youth
+    2, man 3, old man 4.
 - **Replica:**
-  - The original has four separate lodges with figures that step out, not a carousel. Which age
-    appears is *state*, so it is selected by the M1 time train (a quarter cam picks the lodge), not
-    by counting events.
-  - The E2 event motor powers only the striking and figure motion.
+  - Which age appears, and so how many pairs are struck, is *state*. So it is set by a time train,
+    not by counting events.
+  - That time train carries a **four-step quarter snail**, as in rack quarter-striking. Where it
+    sits is the M1 concept gate's decision 1 (`docs/m1-design.md` §5).
+  - The E2 event motor powers only the striking and the figures' walk. Its rack falls onto the snail
+    and counts the pairs.
   - This keeps the display right after skipped shows (night silence, catch-up); see architecture §6.
+  - **The genie's strokes alternate with the age's.** E2's quarter train cues E1's genie before each
+    of its own strokes, through the controller, so the count stays mechanical (E2's rack).
 - **Difficulty:** 3.
 - **Depends on:** M1; E2; D8.
 
@@ -621,9 +637,14 @@ Scale aids [D]:
   de la salle réservée aux quatre âges". At each hour it lets "tomber sur le timbre à sa droite
   l'os qu'elle porte à la main" (drops the bone it holds onto the bell at its right). It strikes
   day and night.
-- **Replica:** a classical rack-and-snail (or count wheel) on the E2 train, from a snail on the M1
-  hour arbor, gives 1–12 strokes. The count is decided mechanically; the controller only switches
-  the motor.
+- **Observed** [S: Paul's observation of the clock in action, 30 Oct 2026, his video and YouTube videos]:
+  - At the noon show Death strikes 12 on the bell at the **viewer's left**, which is Death's own
+    right, as DA says.
+  - The other bell, at the viewer's right, is the ages' bell (A3).
+  - Paul's photographs IMG_0769 and IMG_0770 show both bells.
+- **Replica:** a classical rack and snail gives 1–12 strokes. The count is decided mechanically;
+  the controller only switches the motor. The snail's time train is the M1 concept gate's
+  decision 1.
 - **Difficulty:** 2.
 - **Depends on:** M1; E2.
 
@@ -637,6 +658,12 @@ Scale aids [D]:
     receiving the blessing. "Ce n'est qu'après le départ du dernier apôtre que le Christ donne la
     bénédiction en forme de croix."
   - Christ holds "la bannière de la rédemption" and extends the other hand to bless.
+  - **Observed** [S: Paul's observation of the clock in action, 30 Oct 2026, his video and YouTube videos]:
+    - each Apostle turns to Christ, then faces forward again and moves on;
+    - as each passes beneath Christ's outstretched arm, **Christ lowers his arm slightly in
+      blessing**.
+    - DA's final sign-of-the-cross blessing, after the last Apostle, is not in Paul's account
+      **[?]**: check it on a video.
   - Figures about 18 in high [S: WIKI], so 57 mm at 1:8 [D].
   - Duration: **TBD** (time the Commons video).
 - **Replica:** the E3 event motor turns the procession track one full cycle and stops on a locking
@@ -652,6 +679,8 @@ Scale aids [D]:
     s'agitent et son cou se gonfle" [S: DA p. 59].
   - "tous les jours, à midi, il chante trois fois" [S: DA p. 60].
   - At the 4th, 8th and 12th Apostles [S: LOC; Sn: TS]. DA does not say which Apostles.
+  - **Confirmed** [S: Paul's observation of the clock in action, 30 Oct 2026, his video and YouTube videos]: the rooster crows once after the 4th, the 8th and the 12th Apostle has
+    passed Christ.
   - Size: "exécuté d'après nature, il est aussi grand que celui qui a figuré aux deux anciennes
     horloges" (made from nature, as large as the earlier clocks' rooster) [S: DA p. 59–60].
     **TBD:** a number in centimetres.

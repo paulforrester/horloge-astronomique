@@ -1003,3 +1003,28 @@ Crop of the gallery from IMG_0766 (below): `docs/img/m1/original_gallery.jpg`.
 - Open brass wheels and steel racks are visible behind the dials. This is a reference for M4's
   design.
 
+## Paul's observations of the clock in action (30 October 2026)
+
+From Paul's own video and his review of YouTube videos of the shows. Tagged [S: Paul's observation of the clock in action, 30 Oct 2026, his video and YouTube videos]
+where used elsewhere.
+
+- **Who strikes which bell.**
+  - The genie left of the mean-time dial strikes his hand bell.
+  - The ages strike the bell at the viewer's right of Death.
+  - Death strikes the bell at the viewer's left, its own right (DA: "le timbre à sa droite").
+- **The quarters.** At the n-th quarter the genie and the age strike n pairs: genie, age, and so on,
+  one pair at :15 up to four pairs on the hour. The age walks out in front of Death, strikes, and
+  walks on past Death.
+- **The hour (the noon show).** After the fourth quarter's four pairs, Death strikes the hour on its
+  bell: 12 times at noon.
+- **The hourglass.** The right-hand genie turned it during the noon show. DA says hourly, after the
+  fourth quarter and before Death [S: DA p. 51].
+- **The Apostles.**
+  - They pass Christ after Death's last stroke.
+  - Each turns to Christ, faces forward again and moves on.
+  - As each passes beneath Christ's outstretched arm, Christ lowers it slightly in blessing.
+  - DA's final cross blessing after the last Apostle is not in this account [?].
+- **The rooster** crows once after the 4th, 8th and 12th Apostle.
+- **Timing.** The noon show runs at about 12:30 CET, because the clock shows Strasbourg mean time.
+  This is already in D2: mean noon is 12:29 CET [D: LMT = UT + 31 min].
+

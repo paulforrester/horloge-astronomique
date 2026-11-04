@@ -35,12 +35,17 @@ dimensions.*
     not Schwilgué's.
   - In the replica they follow CET/CEST on their own stepper, **M1b** (D9). The change to summer
     time is +1 h in spring and +11 h in autumn on a 12 h face, both forward, run at catch-up speed.
-- **Releases** (architecture §5; the order is the original's [S: DA p. 64–66]):
-  - **each quarter:** E1's genie strikes the first stroke [S: DA p. 50], then an age the second
-    [S: DA p. 56–58];
-  - **each hour:** after the old man's four quarters, E1's other genie turns the hourglass, then
-    Death strikes the hours [S: DA p. 51, 57–58];
-  - **at noon:** after Death's last stroke, the Apostles (E3), with the rooster (E4) cued by E3.
+- **Releases** (architecture §5; the order is the original's [S: DA p. 64–66], as Paul observed
+  it on 30 Oct 2026 (`docs/mechanism-inventory.md` A1–A6)):
+  - **each quarter:** at the n-th quarter the genie and an age strike **n pairs**: genie, age, and
+    so on, one pair at :15 up to four on the hour. The age walks out in front of Death, strikes the
+    bell at the viewer's right of Death, and walks on.
+  - **each hour:** after the four pairs, E1's other genie turns the hourglass. Then Death strikes
+    the hours on the bell at the viewer's left [S: DA p. 51, 57–58].
+  - **at noon:** after Death's last stroke, the Apostles (E3) pass Christ. The rooster (E4) crows
+    after the 4th, 8th and 12th.
+  - The noon show runs at about 12:30 CET because the dial shows Strasbourg mean time (D2: 12:29
+    CET).
 - **Sensing** (architecture §6): an index on each minute arbor (each hour at :00), and a witness on
   each hour train (at 12:00) that checks the hands' friction clutch.
 - **Setting** (architecture §7): each hand on a friction clutch, turned forward by hand.
@@ -71,7 +76,7 @@ The rule: **pass timing electrically and position mechanically** (architecture �
 | To | What | Link |
 |---|---|---|
 | M0 controller | the two steppers, the release sensors, the index and witness sensors | one connector |
-| E1 genies | quarter and hour releases | electrical (Hall switches → controller → E1's motors) |
+| E1 genies | the hourglass after the fourth quarter; the bell genie's strokes, which alternate with the age's | electrical. The bell genie is cued by E2's quarter train before each of the age's strokes, so E2's rack decides the count (`docs/mechanism-inventory.md` A3). |
 | E2 ages and Death | quarter and hour releases | electrical |
 | E2 ages and Death | **which age appears; Death's count (1–12)** | **Decision 1 (§5)** |
 | E3 Apostles (and E4 through E3) | noon release | electrical |
@@ -122,7 +127,14 @@ The rule: **pass timing electrically and position mechanically** (architecture �
 **Context.**
 - Which age appears is state, so it must live in a train that follows time, never in the event
   train (P2).
-- Death's count is decided mechanically by a snail (`docs/mechanism-inventory.md` A4).
+  - Since each age always strikes the same quarter, it also fixes the count: n pairs at the n-th
+    quarter (observed, A3).
+  - So the state is two snails, as in rack quarter-and-hour striking: a **four-step quarter
+    snail** turning once an hour (which age, how many pairs) and a **twelve-step hour snail**
+    (Death's count).
+  - The event motors' racks fall onto them. That is self-correcting: after skipped shows, the next
+    show still reads the right count.
+- Death's count is decided mechanically by the hour snail (`docs/mechanism-inventory.md` A4).
 - E2's hall is about **757 mm above M1** [D: 1324 − 567, envelope §2 heights [E]], and M5's
   planetary dial (band Ø ≈ 343) and Moon globe lie in between.
 - The architecture put the lodge cam on an M1 shaft and left the snail open: "keep M1 and E2 in one
@@ -130,9 +142,9 @@ The rule: **pass timing electrically and position mechanically** (architecture �
 
 | Option | For | Against |
 |---|---|---|
-| **A. A position shaft from M1**: 1 rev/h, about 760 mm up the side of the case, a right-angle pair at each end, keyed couplings. E2 makes its 12 h snail with its own 12:1 motion work and carries a four-sector lodge cam. | Position passes mechanically, as the architecture's rule says. No extra motor. | A long shaft with intermediate bearings past the M5 bay. Two printed right-angle pairs. Alignment between cassettes in a wooden case. Every keyed coupling must re-engage in phase when M1, E2 or M5 is refitted. |
-| **B. E2 gets its own stepper at 1 rev/h**, on the same time base (rule 3 allows one per module; rule 2: a plain clockwork rate). The snail (through 12:1) and the lodge cam are on that arbor, with an hourly index like every stepper module (P1, §6). | E2 is self-contained and removable (P4). No long shaft. M1 stays small. The state still lives in a gear train, not in the event motor (P2). | One more NEMA 17, TMC2209 and Hall sensor (6 steppers + 1 spare in the BOM). Position passes through the time law rather than a shaft, which the architecture already allowed for the snail. M1 and E2 could disagree only if one loses steps, which each hourly index detects. |
-| **C. State in the E2 event train**: a count wheel and a lodge cam turned by the strikes, as in many striking clocks. | Traditional; no extra motor or shaft. | Every skipped show (night silence, catch-up) puts it out of step, unless the train runs silently. Rejected by P2. |
+| **A. A position shaft from M1**: 1 rev/h, about 760 mm up the side of the case, a right-angle pair at each end, keyed couplings. E2 carries the quarter snail on it, and makes the hour snail with its own 12:1 motion work. | Position passes mechanically, as the architecture's rule says. No extra motor. | A long shaft with intermediate bearings past the M5 bay. Two printed right-angle pairs. Alignment between cassettes in a wooden case. Every keyed coupling must re-engage in phase when M1, E2 or M5 is refitted. |
+| **B. E2 gets its own stepper at 1 rev/h**, on the same time base (rule 3 allows one per module; rule 2: a plain clockwork rate). The quarter snail is on that arbor and the hour snail behind a 12:1 motion work, with an hourly index like every stepper module (P1, §6). | E2 is self-contained and removable (P4). No long shaft. M1 stays small. The state still lives in a gear train, not in the event motor (P2). | One more NEMA 17, TMC2209 and Hall sensor (6 steppers + 1 spare in the BOM). Position passes through the time law rather than a shaft, which the architecture already allowed for the snail. M1 and E2 could disagree only if one loses steps, which each hourly index detects. |
+| **C. State in the E2 event train**: count wheels turned by the strikes, as in many striking clocks. | Traditional; no extra motor or shaft. | Every skipped show (night silence, catch-up) puts it out of step, unless the train runs silently. Rejected by P2. |
 
 **Recommendation: B.** It keeps M1's boundary purely electrical (releases and sensors) plus the
 dial. With A, M1 would also get a right-angle output on its minute arbor and a keyed coupling on
