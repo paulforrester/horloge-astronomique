@@ -481,7 +481,8 @@ divided by 4 (`tools/ratios/strength.py`).
 
 - **The leap-year step** is below the factor of 4 used for running loads. That factor covers creep
   and fatigue, which a one-second load every four years does not cause. The tooth is still about
-  10 times below PLA's tensile strength.
+  10 times below PLA's tensile strength. **Accepted by Paul, 4 Nov 2026** (PR #9: "accept the 2.65
+  safety factor"); the pinion stays PLA.
 - **Why the face is only 2.2 mm.** A deeper toothed rim would have given a factor of 4.5, but the
   rocker's yearly passage rules it out.
 - **Motor:** about 10 N·mm (0.1 kg·cm) at the finger at the worst step, against a 4.0 kg·cm stall:
@@ -655,6 +656,11 @@ These are reserved or simplified:
 3. **Noon at the top**, as in Strasbourg [S: ELS i1; §7].
 4. **Carrier support: printed**, as a frame that belongs to the works (§6). Plywood only where size or
    strength rules out a print; M2 needs none.
+
+**Settled in Paul's review of PR #9 (4 Nov 2026):**
+- **E6's pinion at a safety factor of 2.65** on the counter's step before a leap year (about 1.8 N,
+  once in four years): accepted ("accept the 2.65 safety factor"). It is an exception to the running
+  minimum of 4 (`gear-trains.md` decision 5) for this one load; the pinion stays PLA (§6, *E6*).
 
 **Text size and readability** (Paul asked: what point size is 2 mm text?).
 

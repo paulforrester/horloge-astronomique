@@ -77,7 +77,8 @@ def test_pinion_strength():
     sf = E.pinion_safety()
     assert sf["daily"] > 4 and sf["new_year"] > 4 and sf["counter_normal"] > 4
     # the counter's step before a leap year (once in four years, about a second): >= 2 against the
-    # allowable stress, which is already PLA's strength / 4
+    # allowable stress, which is already PLA's strength / 4. Paul accepted 2.65 here (PR #9, 4 Nov
+    # 2026); the running minimum of 4 holds for every other load.
     assert sf["counter_leap"] > 2
 
 

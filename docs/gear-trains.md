@@ -490,7 +490,7 @@ Motor 17HS19-2004S1 (NEMA 17, 1.8°): holding torque 0.59 N·m at 2.0 A [S: data
 | 2 | M5 input at 1 rev/day (§7). Torque verified in §5 | **Accepted** (Paul, PR #3). Architecture §2 updated |
 | 3 | Large wheels: keep the 169-tooth wheels at module 1.0 (171 mm) on the main-dial Moon and Moon-globe trains. The module stays a parameter and the ratio is unchanged | **Accepted** (Paul, PR #3 review) |
 | 4 | M3 cam convention (§6): A, B or C | **B planned** (Paul, PR #3): revisit if it proves difficult to build. M3 trains re-run for B |
-| 5 | Strength rules (§5): running safety factor ≥ 4; a clutch window (3× load … ½ capacity) on every output; 8 mm faces on `M5.earth` and `M5.moon_arm`; Moon-arm load 3 N·mm | **Accepted** (Paul, PR #3). To revisit if the Earth-arm torque proves too high in practice or its clutch slips too readily; Phase 2 recomputes the loads from CAD masses |
+| 5 | Strength rules (§5): running safety factor ≥ 4; a clutch window (3× load … ½ capacity) on every output; 8 mm faces on `M5.earth` and `M5.moon_arm`; Moon-arm load 3 N·mm | **Accepted** (Paul, PR #3). To revisit if the Earth-arm torque proves too high in practice or its clutch slips too readily; Phase 2 recomputes the loads from CAD masses. **One exception accepted** (Paul, PR #9, 4 Nov 2026): M2 E6's pinion at 2.65 on the counter's step before a leap year, a load of about a second every four years (`m2-design.md` §6, *E6*) |
 | 6 | Planet targets from NASA/JPL mean elements, all five planets (§4F) | **Accepted** (Paul, PR #3). No tooth counts changed (§4F) |
 
 ## 10. Reproduce
