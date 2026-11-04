@@ -108,7 +108,8 @@ rows and count towards the "ground rod, brass tube, bearings" row above.
 | Push-on lock washers for Ø3 shafts | Starlock type, steel | 4 (+ spares) | axial retention on the wheel C and counting-lever studs | [Bossard Starlock 6110](https://www.bossard.com/eshop/ch-fr/outils-et-pour-elements-de-securite-et-antidesserrage/starlock-6110/p/38905) (⚠ verify the Ø3 size) |
 | Bearing MR85ZZ | 5 × 8 × 2.5 | 13 | 9 plate seats + 4 worm pillow blocks | as Batch 1 |
 | Bearing 688ZZ | 8 × 16 × 5 | 6 | calendar-ring rollers | as Batch 1 |
-| Slotted opto switch | 3 mm slot, through-beam (TCST1103 class) | 1 | calendar stop lever (m2-design §6, *E6*) | Gotronic / RS FR (⚠ pick the part) |
+| Slotted opto switch | **Vishay TCST1202**: 3.1 mm gap, 0.5 mm slit, phototransistor, through-hole (TCST1103 fits the same pocket, with less margin) | 1 (+ 1 spare) | calendar stop lever (m2-design §6, *E6*) | RS 145-2215 (about €0.83 each by the tube of 85, on [RS Benelux](https://benl.rs-online.com/web/p/slotted-optical-switches/1452215)) or Farnell 1470058 (⚠ single-unit price and FR stock: check when ordering) |
+| Resistors, metal film 0.25 W | 100 Ω and 10 kΩ | 1 + 1 | the stop opto's LED and its pull-up to 3.3 V | local / RS FR |
 | Screws | M1.6 × 4, ISO 7045 pan head, A2 | 2 (+ spares) | E6 gearmotor to its bracket (Pololu face holes) | Accu / RS FR |
 | Reflective opto | TCRT5000-class | 1 | 1 March witness | Gotronic |
 | Hall + magnet | DRV5032 + 5 × 2 mm | 3 + 3 | index (daily arbor), Moon-tube witness, E6 home | as Batch 1 |

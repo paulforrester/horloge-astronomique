@@ -135,7 +135,7 @@ train's warning, release and locking.
 | E3 Apostles (A5) | M1 noon flag (24 h cam) | E3 locking cam (one procession cycle) | — | skip |
 | E4 rooster (A6) | E3 cue switches at Apostles 4, 8 and 12 | E4 locking cam | three crows (one per cue) | skip with E3 |
 | E5 computus (A7) | M2 year-end cam (night of 31 Dec) | E5 locking cam (one computus cycle) | — | **must run**: it is stateful. Catch-up pauses while E5 completes. |
-| E6 calendar advance (A8) | M2 midnight cam | the stop lever drops; the ring's projection S holds it up for 3 or 4 divisions at New Year | divisions per night, decided by projection S and leap cam E [S: ELS i4] | **must run**: it is stateful. Catch-up runs it once per elapsed midnight. |
+| E6 calendar advance (A8) | M2 midnight cam | the stop lever drops; the ring's projection S holds it up for 3 or 4 divisions at New Year | divisions per night, decided by projection S and leap cam E [S: ELS i4]; read by the stop lever's slotted opto (beam clear = step again), capped at 4 per night in firmware (m2-design §6, *E6*) | **must run**: it is stateful. Catch-up runs it once per elapsed midnight. |
 
 - **Sensors.**
   - Triggers: Hall-effect switches with magnets on the cams. There is no mechanical load on the

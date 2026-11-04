@@ -82,6 +82,18 @@ def test_pinion_strength():
     assert sf["counter_leap"] > 2
 
 
+def test_loads_with_friction_and_the_bench_limits():
+    # at MU 0.3 the loads are the documented ones; each friction term grows with mu
+    base = E.mesh_loads()
+    assert abs(base["counter_leap"] - E.mesh_loads(0.3)["counter_leap"]) < 1e-9
+    for k in base:
+        assert E.mesh_loads(0.2)[k] < base[k] < E.mesh_loads(0.5)[k], k
+    lim = E.bench_limits()
+    assert all(est <= limit + 1e-9 for est, limit, _, _ in lim.values())
+    assert abs(E.pinion_capacity() / lim["counter_normal"][1] - 4.0) < 1e-9
+    assert abs(lim["counter_leap"][1] - base["counter_leap"]) < 1e-9
+
+
 def test_stop_lever_climbs_the_s_bumps_and_its_spring():
     s = E.stop_spring()
     assert s["stress_max"] < s["limit"]
@@ -95,6 +107,90 @@ def test_stop_lever_climbs_the_s_bumps_and_its_spring():
         for half in (CAL.S_INNER, CAL.S_OUTER):
             assert min(hi, half[1]) - max(lo, half[0]) > 1.0, (dx, half)
     assert E.SL_TIP_X[0] > CAL.TRACK_WITNESS[1] + 0.5 and E.SL_TIP_X[1] < CAL.R_PIN - 1.25 - 0.05
+
+
+def _stop():
+    return {n: sh for n, sh, _ in E.stop_parts()}
+
+
+def test_stop_opto_reads_the_lever():
+    # TCST1202 [S: Vishay 83764]: the vane blocks the beam at rest and clears it with the lever back, by
+    # at least 0.3 mm beyond the 0.5 mm slit's edges either way; it covers the slit's 3.8 mm depth
+    st = E.opto_states()
+    assert st["margin_rest"] >= 0.3 and st["margin_back"] >= 0.3, st
+    assert st["y_cover"]
+    assert st["travel"] > E.OPTO["slit_w"] + E.OPTO["resolution"]
+    # pushed back, the lever (and its vane) still clears the opto and the bridge
+    import build123d as bd
+    P = _stop()
+    th = math.degrees(E.stop_lever_rotation())
+    back = P["stop_lever"].rotate(bd.Axis((E.SL_PIVOT[0], 0, E.SL_PIVOT[1]), (0, 1, 0)), -th)
+    assert (back & P["stop_opto"]).volume < 1e-6 and (back & P["stop_bridge"]).volume < 1e-6
+    tail = bd.Box(20, 6, 20, align=(bd.Align.CENTER, bd.Align.MIN, bd.Align.CENTER)).moved(
+        bd.Location((E.OPTO_X, 2.0, -12)))                     # beside the tail (|y| <= 1.5): the vane only
+    rise = (back & tail).bounding_box().min.Z - (P["stop_lever"] & tail).bounding_box().min.Z
+    assert abs(rise - st["travel"]) < 0.05                                                # the vane rose
+    # the output: IC min 1 mA at IF 20 mA, against 0.33 mA for a 10 kΩ pull-up at 3.3 V
+    assert E.OPTO["ic_min"] >= 3 * 3.3 / 10.0
+
+
+def test_stop_wire_is_glued_in_the_bridge_and_free_beyond():
+    import build123d as bd
+    from cad.lib import parts
+    P = _stop()
+    wire, bridge = P["stop_lever_spring"], P["stop_bridge"]
+    assert (wire & bridge).volume < 1e-6                     # in its glue hole and channel, never cut
+    (kx, kz), (ax, az), (fx, fz), u = E.stop_wire_line()
+    ang = -math.degrees(math.atan2(u[1], u[0]))
+
+    def sleeve(p0, length, d):
+        return parts.rod(d, length).rotate(bd.Axis.Y, 90).rotate(bd.Axis.Y, ang).moved(bd.Location((p0[0], 0.0, p0[1])))
+    # the clamped length is surrounded by the bridge (a 1.2 mm sleeve is at least 90 % in material) ...
+    d = E.SL_WIRE_D
+    ring_vol = math.pi / 4 * (1.2 ** 2 - (d + 0.05) ** 2) * E.WIRE_CLAMP
+    assert (sleeve((kx, kz), E.WIRE_CLAMP, 1.2) & bridge).volume > 0.9 * ring_vol
+    # ... and the free length is not: a 0.7 mm sleeve from the anchor to the arm touches nothing
+    free = math.hypot(fx - ax, fz - az)
+    assert (sleeve((ax, az), free, 0.7) & bridge).volume < 1e-6
+
+
+def test_stop_pin_can_be_fitted():
+    # the pin's hole runs through the bridge's width, so the pin can be pushed in, and out for service
+    import build123d as bd
+    P = _stop()
+    probe = bd.Cylinder(0.5, 2 * E.BRIDGE_Y + 4, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.CENTER)).rotate(
+        bd.Axis.X, 90).moved(bd.Location((E.SL_PIVOT[0], 0, E.SL_PIVOT[1])))
+    assert (probe & P["stop_bridge"]).volume < 1e-6
+    assert (P["stop_lever_pivot"] & P["stop_bridge"]).volume > 0.1          # pressed into both cheeks
+
+
+@pytest.mark.parametrize("drive", ["star", "pawl"])
+def test_every_wire_spring_is_glued_behind_its_anchor_and_free_over_its_design_length(drive):
+    # the spring sums use the free length from the holder's face to the contact; the holder must not
+    # cover any of it, and must hold WIRE_CLAMP of the wire behind the face
+    import numpy as np
+    from cad.lib.assembly import _mesh
+    from cad.modules.m2_main_dial import setter as S
+    a, _ = CAL.build(dates=False, e6=drive)
+    wires = [("setter_detent_spring", "setter_detent_anchor", S.DETENT_WIRE_L, 0.5),
+             ("satellite_detent_spring", "wheel_C_100", S.SAT_WIRE_L, 0.8),
+             ("wheel_C_click_spring", "station_bracket", S.CLICK_WIRE_L, 0.8)]
+    wires += {"star": [("e6_jumper_spring", "e6_bracket", E.JUMPER_WIRE_L, 0.8)],
+              "pawl": [("ring_jumper_spring", "e6_bracket", E.RJ_WIRE_L, 0.8)]}[drive]
+    for w, h, L, over in wires:
+        v, _ = _mesh(a[w].shape, 0.02)
+        v = np.asarray(v)
+        c = v.mean(axis=0)
+        u = np.linalg.svd(v - c)[2][0]
+        t = (v - c) @ u
+        total = t.max() - t.min()
+        vi, _ = _mesh(a[w].shape & a[h].shape, 0.02)
+        ti = (np.asarray(vi) - c) @ u
+        lo, hi = ti.min() - t.min(), ti.max() - t.min()
+        if hi > total / 2:
+            lo, hi = total - hi, total - lo
+        assert lo < 0.05 and abs(hi - S.WIRE_CLAMP) < 0.05, (w, lo, hi)
+        assert abs(total - hi - over - L) < 0.05, (w, total - hi - over, L)
 
 
 def test_pawl_fallback_steps_one_tooth():

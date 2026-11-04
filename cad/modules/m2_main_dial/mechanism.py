@@ -371,7 +371,7 @@ def build():
         fp -= at(parts.disc(seat.od - 2, 10, z0=FP[0] - 1), p)
     for p in (C_V15, R_V15):                                                 # reserved, drilled undersize
         fp -= at(parts.disc(3.0, 10, z0=FP[0] - 1), p)
-    # window for the calendar pointer's readers (stop lever, stop switch, 1 March witness), which sit
+    # window for the calendar pointer's readers (stop lever and its opto, 1 March witness), which sit
     # at 9 o'clock on the carrier and reach back through the plate (calendar.py, POINTER_ANGLE)
     a0, a1, r0, r1 = POINTER_WINDOW
     th = [math.radians(a0 + (a1 - a0) * k / 8) for k in range(9)]

@@ -161,11 +161,11 @@ def rocker_parts(pointer: int, leap: bool) -> dict:
     # detent: a steel wire along the ring, clamped in a block glued under the lip; its free length
     # presses on the hub's outer side, in the common notch or the leap notch
     w0, w1 = _to_ring([DETENT_ANCHOR, DETENT_CONTACT], a_p)
-    # the block stays inside r 168.4: E6's pinion teeth reach in to r 168.66 above the lip's back
+    # the block's face is on the anchor (free length DETENT_WIRE_L); the wire's last WIRE_CLAMP is glued in it
     ax0, ay0 = DETENT_ANCHOR
-    blk = [(ax0 - 1.8, ay0 - 1.5), (ax0 + 0.4, ay0 - 1.5), (ax0 + 0.4, ay0 + 1.5), (ax0 - 1.8, ay0 + 1.5)]
+    blk = [(ax0 - 1.5, ay0 - WIRE_CLAMP - 0.6), (ax0 + 0.9, ay0 - WIRE_CLAMP - 0.6), (ax0 + 0.9, ay0), (ax0 - 1.5, ay0)]
     anchor = _prism(_to_ring(blk, a_p), BAR_Z[0], -5.5 + 0.01)
-    wire = _wire(w0, w1, DETENT_WIRE_D, (BAR_Z[0] + BAR_Z[1]) / 2, overrun=0.5)
+    wire = clamped_wire(w0, w1, DETENT_WIRE_D, (BAR_Z[0] + BAR_Z[1]) / 2, overrun=0.5)
     return {"setter_rocker": rocker, "setter_rocker_pivot": pivot, "setter_detent_anchor": anchor,
             "setter_detent_spring": wire}
 
@@ -395,6 +395,30 @@ def _square(c, s):
     return [(c[0] - s / 2, c[1] - s / 2), (c[0] + s / 2, c[1] - s / 2), (c[0] + s / 2, c[1] + s / 2), (c[0] - s / 2, c[1] + s / 2)]
 
 
+WIRE_CLAMP = 3.0       # glued length of every straight wire spring, behind its anchor (the holder's face)
+
+
+def _away(anchor, contact):
+    n = math.dist(anchor, contact)
+    return ((anchor[0] - contact[0]) / n, (anchor[1] - contact[1]) / n)
+
+
+def clamp_outline(anchor, contact, width):
+    """A wire's holder (XY outline): its face on the anchor, so the free length is exactly
+    dist(anchor, contact), and WIRE_CLAMP + 0.6 deep behind it."""
+    u = _away(anchor, contact)
+    n = (-u[1] * width / 2, u[0] * width / 2)
+    far = (anchor[0] + (WIRE_CLAMP + 0.6) * u[0], anchor[1] + (WIRE_CLAMP + 0.6) * u[1])
+    return [(anchor[0] + n[0], anchor[1] + n[1]), (far[0] + n[0], far[1] + n[1]),
+            (far[0] - n[0], far[1] - n[1]), (anchor[0] - n[0], anchor[1] - n[1])]
+
+
+def clamped_wire(anchor, contact, d, z, overrun=0.8):
+    """The wire from its glued end (WIRE_CLAMP behind the anchor) to just past its contact."""
+    u = _away(anchor, contact)
+    return _wire((anchor[0] + WIRE_CLAMP * u[0], anchor[1] + WIRE_CLAMP * u[1]), contact, d, z, overrun)
+
+
 def _face_psi(a_root, r):
     """Angle of a drive face at radius r: radial at the root, leaning back by the undercut at the tip."""
     return a_root - C_UNDERCUT * 360.0 / C_TEETH * (r - C_R_ROOT) / (C_R_TIP - C_R_ROOT)
@@ -622,7 +646,7 @@ def station_parts(c_now: int, satellite: int, engaged: bool) -> list:
     clk = click_geometry()
     bracket += parts.disc(2.6, -23.0 - (C_Z[1] + 0.2) + 0.01, bore=1.5, z0=C_Z[1] + 0.2).moved(
         bd.Location((clk["pivot"][0], clk["pivot"][1], 0)))                                     # sleeve over the pin
-    bracket += _prism(_square(clk["anchor"], 2.6), C_Z[0], -23.0 + 0.01)                          # wire anchor
+    bracket += _prism(clamp_outline(clk["anchor"], clk["contact"], 2.6), C_Z[0], -23.0 + 0.01)   # wire anchor
     out.append(("station_bracket", bracket, dict(material="PETG", group="station",
                                                   note="screwed under the carrier's station extension")))
     # wheel C: a 100-tooth ratchet (radial drive faces, slightly undercut) with 24 leap bumps
@@ -633,7 +657,7 @@ def station_parts(c_now: int, satellite: int, engaged: bool) -> list:
         wheel += _bump_solid(position_angle(k, c_now), rb, bump_profile(), C_Z[1] - 0.01)
     sat_g = satellite_geometry(c_now, satellite)
     sc = sat_g["centre"]
-    wheel += _prism(_square(sat_g["anchor"], 2.4), C_Z[1] - 0.01, C_Z[1] + STROKE).moved(
+    wheel += _prism(clamp_outline(sat_g["anchor"], sat_g["wire"][1], 2.4), C_Z[1] - 0.01, C_Z[1] + STROKE).moved(
         bd.Location((-C_XY[0], -C_XY[1], 0)))                                                    # detent wire's boss
     wheel = wheel.moved(bd.Location((C_XY[0], C_XY[1], 0)))
     out.append(("wheel_C_100", wheel, dict(group="station", nozzle=0.2,
@@ -658,7 +682,7 @@ def station_parts(c_now: int, satellite: int, engaged: bool) -> list:
     out.append(("satellite_4", sat, dict(group="station", nozzle=0.2,
                                          note="Ungerer's satellite: ¼ turn per turn of C, one bump in 400 years")))
     w0, w1 = sat_g["wire"]
-    out.append(("satellite_detent_spring", _wire(w0, w1, SAT_WIRE_D, C_Z[1] + STROKE / 2),
+    out.append(("satellite_detent_spring", clamped_wire(w0, w1, SAT_WIRE_D, C_Z[1] + STROKE / 2),
                 dict(material="steel", printed=False, group="station",
                      note=f"Ø{SAT_WIRE_D} spring wire, glued in C's boss; presses a flat of the satellite's square hub")))
     out.append(("satellite_pin", parts.rod(1.5, C_Z[1] + STROKE + 1.5 - (C_Z[1] - 2.0)).moved(
@@ -704,7 +728,7 @@ def station_parts(c_now: int, satellite: int, engaged: bool) -> list:
     out.append(("wheel_C_click_pivot", parts.rod(1.5, -23.0 - (C_Z[0] - 0.3)).moved(
         bd.Location((clk["pivot"][0], clk["pivot"][1], C_Z[0] - 0.3))),
                 dict(material="steel", printed=False, group="station", note="Ø1.5 pin pressed into the bracket")))
-    out.append(("wheel_C_click_spring", _wire(clk["anchor"], clk["contact"], CLICK_WIRE_D, (C_Z[0] + C_Z[1]) / 2),
+    out.append(("wheel_C_click_spring", clamped_wire(clk["anchor"], clk["contact"], CLICK_WIRE_D, (C_Z[0] + C_Z[1]) / 2),
                 dict(material="steel", printed=False, group="station",
                      note=f"Ø{CLICK_WIRE_D} spring wire, glued in the bracket; presses the click towards C")))
     return out

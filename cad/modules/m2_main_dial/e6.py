@@ -244,6 +244,11 @@ def jumper_outline():
     return list(body.exterior.coords)[:-1]
 
 
+def _st():
+    from cad.modules.m2_main_dial import setter
+    return setter
+
+
 def _wire(p0, p1, d, z, overrun=0.8):
     L_ = math.dist(p0, p1) + overrun
     ang = math.degrees(math.atan2(p1[1] - p0[1], p1[0] - p0[0]))
@@ -325,7 +330,7 @@ def star_parts(pointer: int) -> list:
     plate -= parts.disc(STUD_D - 0.05, 30, z0=PLATE_Z[0] - 1).moved(bd.Location((S[0], S[1], 0)))
     plate += parts.disc(3.2, STAR_Z[0] - 0.1 - PLATE_Z[1] + 0.01, z0=PLATE_Z[1] - 0.01).moved(
         bd.Location((jg["pivot"][0], jg["pivot"][1], 0)))
-    plate += _prism(_circle(jg["anchor"], 1.5, 16), PLATE_Z[1] - 0.01, STAR_Z[1])
+    plate += _prism(_st().clamp_outline(jg["anchor"], jg["contact"], 3.0), PLATE_Z[1] - 0.01, STAR_Z[1])   # face on the anchor
     for p in standoff_xy():
         plate += parts.disc(STANDOFF_D, CARRIER_BACK - PLATE_Z[1] + 0.01, z0=PLATE_Z[1] - 0.01).moved(bd.Location((p[0], p[1], 0)))
         plate -= parts.disc(4.0, 5.0, z0=CARRIER_BACK - 5.0).moved(bd.Location((p[0], p[1], 0)))   # M3 heat-set insert
@@ -344,7 +349,7 @@ def star_parts(pointer: int) -> list:
                                         note="holds the star (so the ring) between steps; settles each step")))
     out.append(("e6_jumper_pivot", parts.rod(1.5, STAR_Z[1] - 0.2 - PLATE_Z[0]).moved(
         bd.Location((jg["pivot"][0], jg["pivot"][1], PLATE_Z[0]))), dict(material="steel", printed=False, group="station")))
-    out.append(("e6_jumper_spring", _wire(jg["anchor"], jg["contact"], JUMPER_WIRE_D, (STAR_Z[0] + STAR_Z[1]) / 2),
+    out.append(("e6_jumper_spring", _st().clamped_wire(jg["anchor"], jg["contact"], JUMPER_WIRE_D, (STAR_Z[0] + STAR_Z[1]) / 2),
                 dict(material="steel", printed=False, group="station",
                      note=f"Ø{JUMPER_WIRE_D} spring wire, glued in the bracket's anchor; presses the jumper")))
     return out
@@ -394,9 +399,25 @@ SL_PIVOT = (162.0, -12.0)          # (x, z): pivot axis along Y, behind the carr
 SL_TAIL_X = 169.0
 SL_WIRE_D, SL_WIRE_AT = 0.4, 6.2   # wire Ø; its contact, along the arm from the pivot
 SL_WIRE_ANCHOR = (169.5, -19.4)    # (x, z) in the bridge, low enough to pass 2.0 under the pivot axis
-SL_BRIDGE_Z0 = -20.6
+SL_BRIDGE_Z0 = -23.0               # bridge's back face: the wire's clamp hole enters from it
+SL_SLOT_Z0 = -14.2                 # floor of the lever's slot (the boss reaches -13.7); the wire has its own channel
 SL_F_TIP = 0.20                    # N at the tip, resting on the rim [E]
-BRIDGE_Y = 22.0                    # the bracket bridges the carrier's pointer opening (±6°) to screw on either side
+BRIDGE_Y = 23.5                    # the bracket bridges the carrier's pointer opening (±6°) to screw on either side
+BRIDGE_INSERT = (158.5, 20.5)      # (x, ±y) of its two M3 inserts: 7.4° off the pointer, clear of the opening
+WIRE_CLAMP = 3.0                   # the wire's glued length in the bridge
+
+# The stop lever's opto: Vishay TCST1202 [S: Vishay doc. 83764 Rev. 2.0 (24 Aug 2011), p. 1-2 and the
+# package drawing 6.550-5039.01-4 on p. 5]. Through-beam across a 3.1 mm gap; its aperture is a slit
+# 0.5 mm wide and 3.8 mm deep from the arms' tops; the optical axis is 2.6 mm below the tops. Here the
+# beam runs along X (radially), the slit's width along Z (the vane's motion), its depth along Y (the
+# pivot's axis), so every point of the vane on the slit moves by the same amount.
+OPTO = dict(part="TCST1202", L=11.9, W=6.3, H=10.8, gap=3.1, floor=3.1, axis=2.6, slit_w=0.5, slit_h=3.8,
+            lead_l=7.6, lead_w=2.54, lead_len=7.8, lead=(0.40, 0.45), resolution=0.4, ic_min=1.0,
+            vce_sat=0.4)
+OPTO_X = 169.35                    # the gap's centre: 7.35 from the pivot, inside the plate's window (r 177)
+OPTO_Y_TOP = 2.8                   # the arms' tops, facing the lever (a 1.0 mm wall of the bridge between)
+VANE_T, VANE_Z0 = 0.8, -13.2       # the vane on the tail: thickness (X), lower edge at rest
+VANE_Y = (-0.5, OPTO_Y_TOP + OPTO["slit_h"] + 0.5)
 
 
 def _xz_prism(points_xz, y0, y1):
@@ -411,6 +432,65 @@ def stop_lever_rotation() -> float:
     return SL_BUMP / abs(tip[0] - SL_PIVOT[0])
 
 
+def _rotate_xz(pt, pivot, th):
+    dx, dz = pt[0] - pivot[0], pt[1] - pivot[1]
+    return (pivot[0] + dx * math.cos(th) - dz * math.sin(th), pivot[1] + dx * math.sin(th) + dz * math.cos(th))
+
+
+def vane_outline(back: bool = False) -> list:
+    """The vane's X-Z section (a rectangle on the tail's side), at rest or with the lever pushed back
+    (the tail turns towards +Z by stop_lever_rotation())."""
+    x0, x1 = OPTO_X - VANE_T / 2, OPTO_X + VANE_T / 2
+    pts = [(x0, VANE_Z0), (x1, VANE_Z0), (x1, SL_PIVOT[1] + 1.0), (x0, SL_PIVOT[1] + 1.0)]
+    return [_rotate_xz(p, SL_PIVOT, stop_lever_rotation()) for p in pts] if back else pts
+
+
+def _vane_low(back: bool) -> float:
+    return min(z for _, z in vane_outline(back))
+
+
+OPTO_Z = round((_vane_low(False) + _vane_low(True)) / 2, 2)    # the beam: midway between the two states
+
+
+def opto_states() -> dict:
+    """The beam is a horizontal line (along X) at OPTO_Z, the slit OPTO_Z ± slit_w/2. The vane blocks it
+    at rest and clears it when the lever is back. Margins are beyond the slit's edges (mm)."""
+    hw = OPTO["slit_w"] / 2
+    return dict(z_beam=OPTO_Z, rest_low=_vane_low(False), back_low=_vane_low(True),
+                margin_rest=(OPTO_Z - hw) - _vane_low(False), margin_back=_vane_low(True) - (OPTO_Z + hw),
+                travel=_vane_low(True) - _vane_low(False),
+                y_cover=(VANE_Y[0] <= OPTO_Y_TOP - 0.3 and VANE_Y[1] >= OPTO_Y_TOP + OPTO["slit_h"] + 0.3))
+
+
+def _box(x0, x1, y0, y1, z0, z1):
+    return bd.Box(x1 - x0, y1 - y0, z1 - z0, align=(bd.Align.MIN, bd.Align.MIN, bd.Align.MIN)).moved(
+        bd.Location((x0, y0, z0)))
+
+
+def opto_solid():
+    """TCST1202 as bought: body, gap, straight leads (canonical frame, as placed)."""
+    o = OPTO
+    x0, x1 = OPTO_X - o["L"] / 2, OPTO_X + o["L"] / 2
+    y0, y1 = OPTO_Y_TOP, OPTO_Y_TOP + o["H"]
+    z0, z1 = OPTO_Z - o["W"] / 2, OPTO_Z + o["W"] / 2
+    body = _box(x0, x1, y0, y1, z0, z1)
+    body -= _box(OPTO_X - o["gap"] / 2, OPTO_X + o["gap"] / 2, y0 - 1, y1 - o["floor"], z0 - 1, z1 + 1)
+    for sx in (-1, 1):
+        for sz in (-1, 1):
+            lx, lz = OPTO_X + sx * o["lead_l"] / 2, OPTO_Z + sz * o["lead_w"] / 2
+            body += _box(lx - o["lead"][0] / 2, lx + o["lead"][0] / 2, y1 - 0.01, y1 + o["lead_len"],
+                         lz - o["lead"][1] / 2, lz + o["lead"][1] / 2)
+    return body
+
+
+def stop_wire_line():
+    """(clamp end, anchor, free end) of the stop lever's wire spring, (x, z)."""
+    (ax_, az_), (cx, cz) = SL_WIRE_ANCHOR, stop_wire_contact()
+    n = math.hypot(cx - ax_, cz - az_)
+    u = ((cx - ax_) / n, (cz - az_) / n)
+    return ((ax_ - WIRE_CLAMP * u[0], az_ - WIRE_CLAMP * u[1]), (ax_, az_), (cx + 0.6 * u[0], cz + 0.6 * u[1]), u)
+
+
 def stop_parts() -> list:
     """[(name, solid, kwargs)] at the pointer, canonical frame (calendar turns them 180°)."""
     out = []
@@ -423,53 +503,74 @@ def stop_parts() -> list:
     boss = bd.Cylinder(1.7, 2 * w, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.CENTER)).rotate(bd.Axis.X, 90).moved(
         bd.Location((px, 0, pz)))
     tail = _xz_prism(_bar((px, pz), (SL_TAIL_X, pz), 2.0), -w, w)
-    flag = _xz_prism([(SL_TAIL_X - 1.0, pz - 1.0), (SL_TAIL_X + 0.6, pz - 1.0), (SL_TAIL_X + 0.6, pz + 3.0),
-                      (SL_TAIL_X - 1.0, pz + 3.0)], -0.4, 0.4)
+    vane = _xz_prism(vane_outline(), *VANE_Y)          # crosses the opto's beam (blocks it at rest)
     # the tip: a block under the rim face, its +Y side bevelled at 45° (the bumps arrive from +Y)
     z0 = z_top - 2.0
     tip_yz = [(-w, z0), (w, z0), (w, z0 + 0.1), (w - (z_top - z0 - 0.1), z_top), (-w, z_top)]
     tip = bd.extrude(bd.Face(bd.Wire.make_polygon([bd.Vector(SL_TIP_X[0], y, z) for y, z in tip_yz], close=True)),
                      amount=SL_TIP_X[1] - SL_TIP_X[0], dir=(1, 0, 0))
-    lever = arm + boss + tail + flag + tip
+    lever = arm + boss + tail + vane + tip
     lever -= bd.Cylinder(0.8, 10, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.CENTER)).rotate(bd.Axis.X, 90).moved(
         bd.Location((px, 0, pz)))
     out.append(("stop_lever", lever, dict(material="PETG", group="pointer", nozzle=0.2, print_up=(0, 1, 0),
-                                          note="held back by S and the sector's lug: keeps E6 running")))
-    out.append(("stop_lever_pivot", bd.Cylinder(0.75, 2 * w + 4.0, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.CENTER)).rotate(
+                                          note="held back by S and the sector's lug: keeps E6 running; "
+                                               "its vane blocks the opto's beam at rest")))
+    pin_y = w + 2.0
+    out.append(("stop_lever_pivot", bd.Cylinder(0.75, 2 * pin_y, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.CENTER)).rotate(
         bd.Axis.X, 90).moved(bd.Location((px, 0, pz))), dict(material="steel", printed=False, group="pointer",
-                                                             note="Ø1.5 pin in the bridge's cheeks")))
-    # bridge: spans the carrier's opening, cheeks either side of the lever, wire anchor, opto pocket
+                                                             note="Ø1.5 x 7 pin, pressed into the bridge's cheeks")))
+    # bridge: spans the carrier's opening; cheeks either side of the lever; the opto's pocket beside the
+    # tail; the wire's clamp hole and channel; two M3 inserts (screws through the carrier)
     zb = (SL_BRIDGE_Z0, -10.9)
-    bridge = _xz_prism([(px - 4.0, zb[0]), (SL_TAIL_X + 4.0, zb[0]), (SL_TAIL_X + 4.0, zb[1]), (px - 4.0, zb[1])],
-                       -BRIDGE_Y, BRIDGE_Y)
-    bridge -= _xz_prism([(px - 4.5, zb[0] - 1), (SL_TAIL_X + 4.5, zb[0] - 1), (SL_TAIL_X + 4.5, zb[1] + 1),
-                         (px - 4.5, zb[1] + 1)], -w - 0.3, w + 0.3)                 # slot for the lever
-    bridge -= bd.Cylinder(0.73, 2 * w + 4.0, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.CENTER)).rotate(
-        bd.Axis.X, 90).moved(bd.Location((px, 0, pz)))
+    o = OPTO
+    x0, x1 = px - 6.5, SL_TAIL_X + 4.0
+    ox0, ox1 = OPTO_X - o["L"] / 2 - 0.15, OPTO_X + o["L"] / 2 + 0.15            # the opto's pocket
+    oy1 = OPTO_Y_TOP + o["H"]
+    bridge = _box(x0, x1, -BRIDGE_Y, BRIDGE_Y, *zb)
+    bridge += _box(x1 - 1.0, ox1 + 0.5, -4.0, oy1 + 0.5, *zb)                     # the opto's housing (r < 176.6)
+    bridge -= _box(x0 - 1.0, SL_TAIL_X + 2.0, -w - 0.3, w + 0.3, SL_SLOT_Z0, zb[1] + 1)   # the lever's slot
+    bridge -= _box(ox0, ox1, OPTO_Y_TOP, oy1 + 0.15, OPTO_Z - o["W"] / 2 - 0.15, zb[1] + 1)
+    bridge -= _box(OPTO_X - o["gap"] / 2 + 0.1, OPTO_X + o["gap"] / 2 - 0.1, 0.0, OPTO_Y_TOP + 0.5,
+                   SL_SLOT_Z0, zb[1] + 1)                                          # the vane's way into the gap
+    bridge -= _box(OPTO_X - o["lead_l"] / 2 - 0.8, OPTO_X + o["lead_l"] / 2 + 0.8, oy1 - 0.5, BRIDGE_Y + 1,
+                   OPTO_Z - o["lead_w"] / 2 - 0.7, zb[1] + 1)                     # leads and solder joints, wires out
+    bridge -= bd.Cylinder(0.73, 2 * pin_y, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.CENTER)).rotate(
+        bd.Axis.X, 90).moved(bd.Location((px, 0, pz)))                             # the pin: pressed in the cheeks,
     for sy in (-1, 1):
+        bridge -= bd.Cylinder(0.85, BRIDGE_Y - pin_y + 1, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)).rotate(
+            bd.Axis.X, -90 * sy).moved(bd.Location((px, sy * pin_y, pz)))            # ...through holes either side
         bridge -= bd.Cylinder(2.0, 6.0, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MAX)).moved(
-            bd.Location(((px + SL_TAIL_X) / 2, sy * (BRIDGE_Y - 3.0), zb[1] + 0.01)))        # M3 heat-set insert
+            bd.Location((BRIDGE_INSERT[0], sy * BRIDGE_INSERT[1], zb[1] + 0.01)))      # M3 heat-set insert
+    # the wire: glued in a hole from the back face, free in a channel that covers its whole swing
+    (kx, kz), (ax_, az_), (fx, fz), u = stop_wire_line()
+    nrm = (-u[1], u[0]) if u[0] < 0 else (u[1], -u[0])                              # towards the arm (+Z side)
+    s_ = stop_spring()
+    swing = SL_BUMP * SL_WIRE_AT / abs((SL_TIP_X[0] + SL_TIP_X[1]) / 2 - px)
+    chan = [(ax_ - 0.6 * nrm[0], az_ - 0.6 * nrm[1]), (fx - (swing + 0.6) * nrm[0], fz - (swing + 0.6) * nrm[1]),
+            (fx + (s_["preload"] + 0.6) * nrm[0], fz + (s_["preload"] + 0.6) * nrm[1]),
+            (ax_ + 0.6 * nrm[0], az_ + 0.6 * nrm[1])]
+    bridge -= _xz_prism(chan, -0.5, 0.5)
+    clamp_len = WIRE_CLAMP + 3.0
+    bridge -= parts.rod(SL_WIRE_D + 0.05, clamp_len).rotate(bd.Axis.Y, 90).rotate(
+        bd.Axis.Y, -math.degrees(math.atan2(u[1], u[0]))).moved(
+        bd.Location((ax_ - clamp_len * u[0], 0.0, az_ - clamp_len * u[1])))
     out.append(("stop_bridge", bridge, dict(material="PETG", group="pointer", print_up=(0, 0, 1),
-                                            note="bridges the carrier's pointer opening; 2 x M3 into the carrier")))
-    # wire spring under the arm, pushing it forward (+Z): from the bridge, under the pivot boss
-    (ax_, az_), (cx, cz) = SL_WIRE_ANCHOR, stop_wire_contact()
-    L_ = math.hypot(cx - ax_, cz - az_) + 0.6
-    ang = math.degrees(math.atan2(cz - az_, cx - ax_))
-    wire = parts.rod(SL_WIRE_D, L_).rotate(bd.Axis.Y, 90).rotate(bd.Axis.Y, -ang).moved(bd.Location((ax_, 0.0, az_)))
+                                            note="bridges the carrier's pointer opening; holds the lever's pin, "
+                                                 "its wire spring and the TCST1202; 2 x M3 into the carrier")))
+    L_ = math.hypot(fx - kx, fz - kz)
+    wire = parts.rod(SL_WIRE_D, L_).rotate(bd.Axis.Y, 90).rotate(bd.Axis.Y, -math.degrees(math.atan2(u[1], u[0]))).moved(
+        bd.Location((kx, 0.0, kz)))
     out.append(("stop_lever_spring", wire, dict(material="steel", printed=False, group="pointer",
-                                                note=f"Ø{SL_WIRE_D} spring wire, glued in the bridge; presses the lever forward")))
-    # opto fork astride the flag (slot along X), body in the bridge
-    fork = _xz_prism([(SL_TAIL_X - 3.0, pz + 1.2), (SL_TAIL_X + 3.0, pz + 1.2), (SL_TAIL_X + 3.0, pz + 2.6),
-                      (SL_TAIL_X - 3.0, pz + 2.6)], -3.0, 3.0)
-    fork -= _xz_prism([(SL_TAIL_X - 3.5, pz + 1.1), (SL_TAIL_X + 3.5, pz + 1.1), (SL_TAIL_X + 3.5, pz + 2.7),
-                       (SL_TAIL_X - 3.5, pz + 2.7)], -1.55, 1.55)
-    out.append(("stop_opto", fork, dict(material="green", printed=False, group="pointer",
-                                        note="slotted opto switch (3 mm slot): the flag breaks the beam when the lever is back")))
+                                                note=f"Ø{SL_WIRE_D} spring wire, {L_:.1f} mm, {WIRE_CLAMP:.0f} mm glued "
+                                                     f"in the bridge; presses the lever forward")))
+    out.append(("stop_opto", opto_solid(), dict(material="green", printed=False, group="pointer",
+                                                note="Vishay TCST1202 slotted opto (3.1 mm gap, 0.5 mm slit): "
+                                                     "beam clear = lever back = E6 steps again")))
     return out
 
 
-STOP_ALLOW = [("stop_lever", "stop_lever_pivot"), ("stop_lever_pivot", "stop_bridge"), ("stop_lever", "stop_lever_spring"),
-              ("stop_lever_spring", "stop_bridge"), ("stop_opto", "stop_bridge")]
+STOP_ALLOW = [("stop_lever", "stop_lever_pivot"), ("stop_lever_pivot", "stop_bridge"), ("stop_lever", "stop_lever_spring")]
+# not allowed, so checked: the wire in its glue hole and channel, the opto in its pocket, the vane in the gap
 
 
 def stop_wire_contact():
@@ -772,7 +873,7 @@ def pawl_parts(pointer: int) -> list:
     out.append(("ring_jumper_pivot", parts.rod(1.5, PAWL_Z[1] - 0.1 - PAWL_PLATE_Z[0]).moved(bd.Location((jp[0], jp[1], PAWL_PLATE_Z[0]))),
                 dict(material="steel", printed=False, group="station")))
     an, ct = W(g["anchor"]), W(g["contact"])
-    out.append(("ring_jumper_spring", _wire(an, ct, RJ_WIRE_D, (PAWL_Z[0] + PAWL_Z[1]) / 2),
+    out.append(("ring_jumper_spring", _st().clamped_wire(an, ct, RJ_WIRE_D, (PAWL_Z[0] + PAWL_Z[1]) / 2),
                 dict(material="steel", printed=False, group="station", note=f"Ø{RJ_WIRE_D} spring wire, glued in its post")))
     # bracket: plate on the gearbox face, standoffs, the post for the wire anchor, Hall pocket
     hall = W((Kl[0] + 4.3 * math.cos(math.radians(b0 + 180)), Kl[1] + 4.3 * math.sin(math.radians(b0 + 180))))
@@ -788,7 +889,7 @@ def pawl_parts(pointer: int) -> list:
     for p in stand:
         plate += parts.disc(STANDOFF_D, CARRIER_BACK - PAWL_PLATE_Z[1] + 0.01, z0=PAWL_PLATE_Z[1] - 0.01).moved(bd.Location((p[0], p[1], 0)))
         plate -= parts.disc(4.0, 5.0, z0=CARRIER_BACK - 5.0).moved(bd.Location((p[0], p[1], 0)))
-    plate += parts.disc(2.6, PAWL_Z[1] - PAWL_PLATE_Z[1] + 0.01, z0=PAWL_PLATE_Z[1] - 0.01).moved(bd.Location((an[0], an[1], 0)))
+    plate += _prism(_st().clamp_outline(an, ct, 2.6), PAWL_PLATE_Z[1] - 0.01, PAWL_Z[1])          # face on the anchor
     for q in (Q, jp):
         plate -= parts.disc(1.45, 10, z0=PAWL_PLATE_Z[0] - 1).moved(bd.Location((q[0], q[1], 0)))
     plate -= parts.disc(4.4, 1.6, z0=PAWL_PLATE_Z[1] - 1.5).moved(bd.Location((hall[0], hall[1], 0)))
@@ -830,31 +931,77 @@ def station_parts(pointer: int, drive: str = None):
 
 # --- loads on the ring's mesh [E] ----------------------------------------------------------------------
 # Tangential force at the ring's pitch circle (r 169.58) for each kind of step, from the loads worked
-# out in docs/m2-design.md §6 (setter and counter) and the stop lever's spring above.
+# out in docs/m2-design.md §6 (setter and counter) and the stop lever's spring above. Friction is the
+# least certain input (MU 0.3 [E]), so every term that depends on it is written with it.
 FRICTION_N = 0.08                  # stop lever on the rim (0.2 N x 0.3 at r 152) + six ball rollers [E]
+FRICTION_ROLLERS = FRICTION_N - SL_F_TIP * 0.3 * 152.0 / 169.58     # the rollers' share (no MU in it)
 COUNTER_N = {"normal": 1.1, "leap": 1.9}            # at the counter pin, r 156.25 (m2-design §6) [E]
+# the counter's moment at the counting lever, N·mm at MU 0.3 (m2-design §6, "Loads on the counter"):
+# the return spring at full stroke, the click's nose over a 30° flank, and the plunger: up a 48° bump
+# in a leap step, its friction on C otherwise
+COUNTER_TERMS = dict(spring=7.2, click=6.6, click_flank=30.0, plunger_leap=11.0, bump_flank=48.0,
+                     plunger_normal=0.4)
 
 
-def mesh_loads() -> dict:
+def _tf(flank_deg, mu):
+    return math.tan(math.radians(flank_deg) + math.atan(mu))
+
+
+def counter_force(kind: str, mu: float) -> float:
+    """N at the counter pin: COUNTER_N at MU 0.3, with its friction-dependent terms re-evaluated at mu."""
+    t, mu0 = COUNTER_TERMS, 0.3
+
+    def moment(m):
+        click = t["click"] * _tf(t["click_flank"], m) / _tf(t["click_flank"], mu0)
+        plunger = (t["plunger_leap"] * _tf(t["bump_flank"], m) / _tf(t["bump_flank"], mu0) if kind == "leap"
+                   else t["plunger_normal"] * m / mu0)
+        return t["spring"] + click + plunger
+    return COUNTER_N[kind] * moment(mu) / moment(mu0)
+
+
+def mesh_loads(mu: float | None = None) -> dict:
     """Tangential force at the ring's mesh (N) for: a daily step, New Year (the stop lever climbs S),
-    the counter's step in an ordinary year, and in a year before a leap year."""
+    the counter's step in an ordinary year, and in a year before a leap year; friction mu (default MU)."""
     from cad.modules.m2_main_dial import setter as S
+    mu = S.MU if mu is None else mu
     R = RING.pitch_radius
     sl = stop_spring()
-    climb = sl["F_tip_max"] * math.tan(math.radians(45.0) + math.atan(S.MU)) * 152.5 / R
-    out = {"daily": FRICTION_N, "new_year": FRICTION_N + climb}
-    for k, f in COUNTER_N.items():
-        out[f"counter_{k}"] = FRICTION_N + f * S.COUNTER_PIN_R / R
+    daily = FRICTION_ROLLERS + SL_F_TIP * mu * 152.0 / R
+    climb = sl["F_tip_max"] * _tf(45.0, mu) * 152.5 / R
+    out = {"daily": daily, "new_year": daily + climb}
+    for k in COUNTER_N:
+        out[f"counter_{k}"] = daily + counter_force(k, mu) * S.COUNTER_PIN_R / R
     return out
 
 
-def pinion_safety() -> dict:
-    """Lewis bending safety factor of the pinion (the weaker wheel) for each load, against the
-    project's allowable stress (9.75 MPa: PLA's 39 MPa / 4; tools/ratios/strength.py)."""
+def pinion_capacity() -> float:
+    """Tangential force (N) at which the pinion's Lewis root stress reaches the allowable 9.75 MPa
+    (PLA's 39 MPa / 4; tools/ratios/strength.py): the force for a safety factor of 1."""
     from tools.ratios.strength import lewis_y
     b = MESH_Z[1] - MESH_Z[0]
-    cap = b * M_RING * lewis_y(PINION.teeth)
-    return {k: 9.75 / (f / cap) for k, f in mesh_loads().items()}
+    return 9.75 * b * M_RING * lewis_y(PINION.teeth)
+
+
+def pinion_safety(mu: float | None = None) -> dict:
+    """Lewis bending safety factor of the pinion (the weaker wheel) for each load."""
+    cap = pinion_capacity()
+    return {k: cap / f for k, f in mesh_loads(mu).items()}
+
+
+# The bench check (docs/m2-design.md §6, E6): the ring is pulled by a thread round its outer edge with
+# E6 removed, and the mass that makes each step is weighed. Pass limits: the running minimum of 4, and
+# for the counter's step before a leap year the load behind the factor Paul accepted (2.65, PR #9).
+GRAV = 9.81                        # m/s²
+
+
+def bench_limits() -> dict:
+    """{step: (estimate N, pass limit N, pass limit in grams on a thread at the ring's edge r 170.5)}."""
+    from cad.modules.m2_main_dial import calendar as CAL
+    cap, est = pinion_capacity(), mesh_loads()
+    lim = {k: cap / 4.0 for k in est}
+    lim["counter_leap"] = est["counter_leap"]              # 1.83 N: the accepted case (Paul, PR #9)
+    to_g = lambda f: f * RING.pitch_radius / CAL.R_OUT / GRAV * 1000.0
+    return {k: (est[k], lim[k], to_g(lim[k]), to_g(est[k])) for k in est}
 
 
 def fallback_assembly(pointer: int = 0):

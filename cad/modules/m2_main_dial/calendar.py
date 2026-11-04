@@ -472,7 +472,7 @@ def build(pointer: int | None = None, sector_leap: bool = False, dates: bool = T
             a.allow(nm, f"ring_segment_{k}")
 
     # ---------------------------------------------------------------- pointer side (9 o'clock: built at 0°, turned 180°)
-    for nm, shp, kw in E6.stop_parts():                 # stop lever, its bridge, wire spring, opto fork
+    for nm, shp, kw in E6.stop_parts():                 # stop lever, its bridge, wire spring, TCST1202 opto
         if "print_up" in kw:
             kw = dict(kw, print_up=(-kw["print_up"][0], -kw["print_up"][1], kw["print_up"][2]))
         a.add(nm, mirror(shp), **kw)

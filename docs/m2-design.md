@@ -209,7 +209,7 @@ blocks (MR85ZZ) and ends in a keyed dog coupling at x = 135, facing the equation
   the pointer** (`STATION_OFFSET = +92`), and the year counter and setter act in October (below).
 - **E6 drives the ring 10° before the station**, beside the roller at 6 o'clock, through gear
   teeth on the lip's outer edge (*E6* below).
-- The pointer's readers (the stop lever with its opto fork, and the 1 March witness) reach back
+- The pointer's readers (the stop lever with its slotted opto, and the 1 March witness) reach back
   through a window in the M2 front plate at 168°–192°, r 140–177 mm.
 
 **Layout of the 368 divisions** (`calendar_logic.py`):
@@ -462,11 +462,35 @@ module 0.9216, 20°, tips at r 170.5 (the lip's old edge) [D: 2 × 170.5 / 370].
   window. Its tip rests against the S-track rim and spans both halves (r 150.4–154.6).
 - **Climbing:** the S bumps and the sector's lug have sheer sides, so the tip is bevelled at 45° on
   the side they arrive from, and climbs them.
-- **Sensing:** a flag on its tail passes through a **slotted opto switch**, so the sensing takes no
-  force and nothing wears.
-- **Spring:** a Ø0.4 wire under the arm presses it forward with 0.2 N at rest.
-- **Mounting:** a printed bridge spans the carrier's opening at the pointer and screws on either
-  side.
+- **Sensing:** a **Vishay TCST1202** slotted opto switch [S: [Vishay doc. 83764](https://www.vishay.com/docs/83764/tcst1103.pdf),
+  Rev. 2.0, p. 1–2 and the package drawing on p. 5]. The sensing takes no force and nothing wears.
+  - **The part:** body 11.9 × 6.3 × 10.8 mm, gap 3.1 mm, optical axis 2.6 mm below the arms' tops.
+    Its aperture is a slit 0.5 mm wide and 3.8 mm deep. Resolution 0.4 mm (10–90 %). Output current
+    at least 1 mA at IF 20 mA; VCE(sat) at most 0.4 V.
+  - **Why the TCST1202:** a thin vane on the tail's side moves only 1.33 mm at the beam [D:
+    `opto_states()`]. With the TCST1103's 1.0 mm slit that leaves about 0.17 mm per side. With the
+    TCST1202's 0.5 mm slit it leaves **0.42 mm at rest and 0.41 mm with the lever back**, beyond the
+    slit's edges. The TCST1103 is a drop-in alternative (same package), with less margin.
+  - **Placement:** the opto sits beside the tail, its beam radial (along X) and its slit's depth
+    along the pivot's axis. Every point of the vane on the slit therefore moves by the same amount.
+    The bridge and opto stay inside the front plate's window (r 176.5 against 177, 8.6° against
+    12°). The opto's top 1.5 mm rises into the carrier's pointer opening (4.8° against 6°).
+  - **Logic:** the vane **blocks the beam at rest**; the lever pushed back clears it, and then E6
+    steps again. A dead LED, a cut wire or a missing opto therefore reads "at rest": E6 stops after
+    its normal step rather than running on. The firmware must also cap a night at four divisions.
+  - **Wiring (3.3 V, ESP32-S3):** the LED through 100 Ω (≈ 20 mA [D: (3.3 − 1.2) / 100]); the
+    phototransistor to ground with a 10 kΩ pull-up, which needs only 0.33 mA, a third of the
+    minimum output current.
+- **Spring:** a Ø0.4 wire under the arm presses it forward with 0.2 N at rest. It is glued 3 mm deep
+  in a hole from the bridge's back face and swings freely in a 1 mm channel (checked: it touches
+  nothing but the arm).
+- **Mounting:** a printed PETG bridge spans the carrier's opening at the pointer and takes two M3
+  screws through the carrier, 7.4° either side. It holds the lever's pin (pressed into both cheeks,
+  through holes so it can be pushed out), the wire, and the opto in a pocket whose leads run out of
+  its end. Fit the opto, then the wire, then drop the lever in from the front.
+- **Fixed on the way:** the first bridge's lever slot ran its full height, so the wire's glued end
+  sat in empty space, and the pin's hole was blind at both ends. Both are now tested
+  (`test_stop_wire_is_glued_in_the_bridge_and_free_beyond`, `test_stop_pin_can_be_fitted`).
 
 **Loads on the ring's mesh [E].** Tangential force at the pitch circle, and the pinion's Lewis
 safety factor. The face is 2.2 mm; the allowable stress is 9.75 MPa, which is PLA's 39 MPa
@@ -488,6 +512,48 @@ divided by 4 (`tools/ratios/strength.py`).
 - **Motor:** about 10 N·mm (0.1 kg·cm) at the finger at the worst step, against a 4.0 kg·cm stall:
   **40 times** [D].
 
+**How much the loads depend on friction [D].** Friction (μ 0.3 [E], printed PLA/PETG on steel or on
+itself) is the least certain input. Every term that depends on it is re-evaluated at other values:
+the click (a 30° flank) and the plunger (a 48° bump) go as tan(flank + atan μ); the stop lever's
+rubbing and its climb over S go as μ and tan(45° + atan μ); the return spring and the rollers do not
+change (`mesh_loads(mu)`). The pinion's safety factor:
+
+| μ | Daily | New Year | Counter, 1 Oct | Counter, before a leap year |
+|---|---|---|---|---|
+| 0.2 | 78 | 9.4 | 4.9 | 3.1 |
+| **0.3 (as estimated)** | **61** | **7.5** | **4.4** | **2.65** |
+| 0.4 | 49 | 6.0 | 4.0 | 2.24 |
+| 0.5 | 42 | 4.7 | 3.6 | 1.85 |
+
+So the leap-year step is the one to watch: at μ 0.4 or more it falls below the factor you accepted.
+Even at μ 0.5 the root stress is 5.3 MPa, about 7 times below PLA's 39 MPa. The bench check below
+measures the real loads, friction included.
+
+**Bench check of E6's loads (local phase, before M2 goes into the clock).** It needs the printed
+calendar: ring, carrier, station and stop lever, set up as hung (dial vertical).
+1. **Friction:** lay a printed PETG block on a printed PLA plate and tilt it until it slides
+   (μ = tan of the angle, read on a phone). Do the same for PETG on steel rod. This checks the
+   estimate's main input in five minutes.
+2. **Set up:** take E6's bracket off (3 × M3), so only the readers act on the ring. Wind a thread
+   twice round the ring's outer edge (r 170.5) at 3 o'clock and hang a light cup from it: there the
+   ring's clockwise motion is straight down.
+3. **Measure:** set the ring to the evening before each step below. Add weights to the cup until
+   the ring makes the step, and weigh the cup and weights on a kitchen scale. Repeat three times and
+   keep the largest.
+4. **Pass if** each mass is at most the limit [D: `bench_limits()`: the force at the mesh times
+   169.58 / 170.5, divided by g]:
+
+| Step | Ring set to | Estimate | Pass if at most |
+|---|---|---|---|
+| Daily | any ordinary date | 8 g (0.08 N) | 123 g (1.21 N: factor 4) |
+| New Year | 31 December | 65 g (0.64 N) | 123 g (factor 4) |
+| Counter, ordinary year | 30 September | 111 g (1.09 N) | 123 g (factor 4) |
+| Counter, before a leap year | 30 September, with wheel C set one tooth before a leap bump | 186 g (1.83 N) | 186 g (the accepted 2.65) |
+
+5. **If a step fails**, in this order: a dry PTFE lubricant on the plunger's tip, the bumps and the
+   click (it lowers μ); a lighter plunger spring (the set ramp must still rise); a nylon pinion,
+   once a filament strength is sourced.
+
 **E6's steel springs** (the D13 stock):
 
 | Spring | Wire | Free length | Force | Stress (limit) |
@@ -496,14 +562,25 @@ divided by 4 (`tools/ratios/strength.py`).
 | Stop lever | Ø0.4 | 16.3 mm | 0.20 N at the tip at rest, 0.34 N on a bump | 1342 (1613) MPa |
 | Ring jumper (fallback A) | Ø0.5 | 17.0 mm | 0.40 N at rest, 0.48 N over a tooth | 1109 (1562) MPa |
 
-- **Mounting:** each wire is glued into a drilled hole in its block. The model draws each one along
-  its installed chord.
+- **Mounting:** each wire is glued 3 mm deep into a drilled hole in its holder. **The holder's face
+  is where the free length starts**, so the spring sums hold. The model draws each wire along its
+  installed chord, through its glued length.
+- **Found and fixed:** the holders of five wires (the setter's rocker detent, the satellite detent
+  and wheel C's click from PR #8, and E6's star jumper and ring jumper) were centred on the anchor
+  point. They covered the first 1.25–1.5 mm of the free length, so those springs would have been up
+  to 1.6 times stiffer than calculated, and three of them over the stress limit. Each holder now has
+  its face on the anchor. A test checks every wire: 3 mm glued, nothing covering the free length,
+  and that length equal to the one in the sums.
 - **Clearance:** a test checks that each wire clears the pivot boss it passes.
 - **Checks** (`test_e6.py`):
   - the ring's teeth, and the pinion's mesh phase (meshed with backlash, and really in mesh);
   - the finger step and the jumper's hold;
   - the springs, and the pinion's strength;
-  - the stop lever's reach over both halves of track S;
+  - the stop lever's reach over both halves of track S; its opto (the vane blocks the beam at rest
+    and clears it pushed back, with 0.3 mm margins at least); its wire glued and free; its pin's
+    through hole;
+  - every wire spring glued behind its holder's face, free over its design length;
+  - the loads with friction, and the bench limits;
   - the fallback's step;
   - a yearly sweep in which every ring item passes E6's parts. For each variant, the parts that
     reach the ring may meet only its teeth.
@@ -641,7 +718,8 @@ These are reserved or simplified:
 - v1.5 drives (cam train routing, sunrise/sunset sectors and yearly cam, Moon slide and lever, phase
   ball);
 - the setter's and counter's springs are sized (§6), not yet tested on the rig;
-- E6's loads and springs are estimates (§6, *E6*), to be confirmed on the test rig;
+- E6's loads are estimates (§6, *E6*). The bench check there gives the procedure and the pass
+  limits; it needs the printed calendar (local phase);
 - axial retention of the parts on the station's studs (push-on lock washers, BOM);
 - the dominical-letter dial (I10: set by hand in v1);
 - the v2 feasts arc;
