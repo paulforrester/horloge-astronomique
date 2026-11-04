@@ -161,7 +161,10 @@ def rocker_parts(pointer: int, leap: bool) -> dict:
     # detent: a steel wire along the ring, clamped in a block glued under the lip; its free length
     # presses on the hub's outer side, in the common notch or the leap notch
     w0, w1 = _to_ring([DETENT_ANCHOR, DETENT_CONTACT], a_p)
-    anchor = _prism(_to_ring(_square(DETENT_ANCHOR, 3.0), a_p), BAR_Z[0], -5.5 + 0.01)
+    # the block stays inside r 168.4: E6's pinion teeth reach in to r 168.66 above the lip's back
+    ax0, ay0 = DETENT_ANCHOR
+    blk = [(ax0 - 1.8, ay0 - 1.5), (ax0 + 0.4, ay0 - 1.5), (ax0 + 0.4, ay0 + 1.5), (ax0 - 1.8, ay0 + 1.5)]
+    anchor = _prism(_to_ring(blk, a_p), BAR_Z[0], -5.5 + 0.01)
     wire = _wire(w0, w1, DETENT_WIRE_D, (BAR_Z[0] + BAR_Z[1]) / 2, overrun=0.5)
     return {"setter_rocker": rocker, "setter_rocker_pivot": pivot, "setter_detent_anchor": anchor,
             "setter_detent_spring": wire}

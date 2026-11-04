@@ -96,24 +96,25 @@ rows and count towards the "ground rod, brass tube, bearings" row above.
 | Item | Spec | Qty [E] | How the quantity was counted | Supplier |
 |---|---|---|---|---|
 | Brass tube, 0.45 mm wall | OD 4, 5, 6, 7, 8, 9 mm | 1 length (≈ 300 mm) of each, plus 1 extra OD 6 | centre stack; OD 6 also for the two differential sleeves | as Batch 1 |
-| Ground rod Ø3 | DIN 175 h9 | 0.5 m | fixed centre arbor, 8 differential pins, studs for wheel C and the counting lever | as Batch 1 |
+| Ground rod Ø3 | DIN 175 h9 | 0.5 m | fixed centre arbor, 8 differential pins, studs for wheel C, the counting lever and E6's star | as Batch 1 |
 | Ground rod Ø5 | DIN 175 h9 | 1.5 m | S, J, I, W, R1 (≈ 100 mm each), 2 worm shafts (≈ 170 mm) | as Batch 1 |
 | Rod Ø8 | DIN 175 h9 | 0.1 m | 6 roller studs | as Batch 1 |
 | Rod Ø2 | steel pin | 0.1 m | 3 lock pins for the idle v1.5 tubes; the setter rocker's pivot pin | as Batch 1 |
-| Silver steel rod Ø1.5 | DIN 175 h9 | 0.2 m | calendar station: counting-lever pin (24 mm), stop and spring-anchor pins (16 mm each), click pivot (8 mm), satellite pin and step pin (m2-design §6) | Ameco, as Batch 1 (⚠ verify Ø1.5 in stock) |
+| Silver steel rod Ø1.5 | DIN 175 h9 | 0.2 m | calendar station: counting-lever pin (24 mm), stop and spring-anchor pins (16 mm each), click pivot (8 mm), satellite pin and step pin; E6: star jumper pivot (9 mm), stop-lever pivot (7 mm) (m2-design §6) | Ameco, as Batch 1 (⚠ verify Ø1.5 in stock) |
 | Compression spring, stainless AISI 302 (inch-based size, accepted: D13) | **Sodemann C01800120500S**: d 0.30, De 4.57, Di 3.97, L0 12.70, R 0.25 N/mm | 1 (+ 2 spares) | set-ramp plunger: 0.13 N at rest, 0.48 N lifted (m2-design §6, *Steel springs*) | [ressorts-sodemann.fr](https://www.ressorts-sodemann.fr/c01800120500s), ships to FR (⚠ pack size and price: check when ordering) |
 | Extension spring, stainless AISI 302 (inch-based size, accepted: D13) | **Sodemann E00940110500S**: d 0.28, De 2.39, L0 12.70, F0 0.22 N, R 0.17 N/mm | 1 (+ 2 spares) | counting-lever return: 0.73 N at rest, 1.03 N at full stroke | [ressorts-sodemann.fr](https://www.ressorts-sodemann.fr/e00940110500s) (⚠ check that L0 is inside the hooks) |
-| Spring wire, EN 10270-1 DH, straight | Ø0.4 and Ø0.5, 1 m bars | 1 bar of each | Ø0.4: rocker detent and satellite detent. Ø0.5: wheel C click. Later, from the same stock: the ring jumper, E6 pawl and stop-lever springs. | Gutekunst 23514 / 23516 ([federnshop.com](https://www.federnshop.com/en/products/steel-wire-bars.html), ⚠ not verified: the site refused this session) or Boley 538805 / 538807 ([boley.de](https://www.boley.de/en/shop/1906.spring-steel-wires), 5 m bundles) |
+| Spring wire, EN 10270-1 DH, straight | Ø0.4 and Ø0.5, 1 m bars | 1 bar of each | Ø0.4: rocker detent, satellite detent, E6 stop lever. Ø0.5: wheel C click, E6 star jumper (and the fallback's ring jumper). | Gutekunst 23514 / 23516 ([federnshop.com](https://www.federnshop.com/en/products/steel-wire-bars.html), ⚠ not verified: the site refused this session) or Boley 538805 / 538807 ([boley.de](https://www.boley.de/en/shop/1906.spring-steel-wires), 5 m bundles) |
 | Cyanoacrylate glue + Ø0.6 drill, pin vice | — | 1 | to fix the wire springs in their printed blocks | local |
 | Push-on lock washers for Ø3 shafts | Starlock type, steel | 4 (+ spares) | axial retention on the wheel C and counting-lever studs | [Bossard Starlock 6110](https://www.bossard.com/eshop/ch-fr/outils-et-pour-elements-de-securite-et-antidesserrage/starlock-6110/p/38905) (⚠ verify the Ø3 size) |
 | Bearing MR85ZZ | 5 × 8 × 2.5 | 13 | 9 plate seats + 4 worm pillow blocks | as Batch 1 |
 | Bearing 688ZZ | 8 × 16 × 5 | 6 | calendar-ring rollers | as Batch 1 |
-| Microswitch | small lever type | 2 | E6 lock, calendar stop lever | as Batch 1 |
+| Slotted opto switch | 3 mm slot, through-beam (TCST1103 class) | 1 | calendar stop lever (m2-design §6, *E6*) | Gotronic / RS FR (⚠ pick the part) |
+| Screws | M1.6 × 4, ISO 7045 pan head, A2 | 2 (+ spares) | E6 gearmotor to its bracket (Pololu face holes) | Accu / RS FR |
 | Reflective opto | TCRT5000-class | 1 | 1 March witness | Gotronic |
-| Hall + magnet | DRV5032 + 5 × 2 mm | 2 + 2 | index (daily arbor), Moon-tube witness | as Batch 1 |
-| NEMA 17 + TMC2209; E6 gearmotor | as above | (already counted) | M2 stepper; calendar advance | — |
-| Screws, countersunk | M3 × 10, ISO 10642, A2 | 3 + 12 | carrier to the M2 front plate (3); carrier splice plates (3 × 4) (PR #5 frame) | 3DJake / RS FR |
-| Heat-set inserts M3 | ruthex | 15 | in the front plate and carrier segments for the screws above | as Batch 1 |
+| Hall + magnet | DRV5032 + 5 × 2 mm | 3 + 3 | index (daily arbor), Moon-tube witness, E6 home | as Batch 1 |
+| NEMA 17 + TMC2209; E6 gearmotor | as above; E6 is the **298:1** HP 6 V (#994), not the 100:1 | (already counted) | M2 stepper; calendar advance (Paul, 4 Nov 2026) | Gotronic (Pololu) |
+| Screws, countersunk | M3 × 10, ISO 10642, A2 | 3 + 12 + 5 | carrier to the M2 front plate (3); carrier splice plates (3 × 4) (PR #5 frame); E6 bracket (3) and the stop lever's bridge (2) | 3DJake / RS FR |
+| Heat-set inserts M3 | ruthex | 20 | in the front plate, carrier segments, E6 bracket and the stop lever's bridge, for the screws above | as Batch 1 |
 | Screws + washers M5 | M5 × 16, ISO 7380, A2 | 3 | carrier tabs to the works' internal frame (D12 R5) | as Batch 1 |
 | Wall restraint brackets + anchors for stone | per fixing design | TBD | D6; wall material TBD | TBD |
 | Clock oil | horological | 1 | brass tube stacks | TBD |

@@ -59,7 +59,7 @@ def test_pointer_on_the_viewers_left(full):
     # DA p. 27 "à la droite du calendrier"; ELS i4 "sur la gauche de l'anneau, en face de la flèche"
     a, _ = full
     assert CAL.POINTER_ANGLE == 180.0
-    for name in ("apollo_arrow", "stop_lever", "stop_switch", "witness_opto_1_March"):
+    for name in ("apollo_arrow", "stop_lever", "stop_opto", "witness_opto_1_March"):
         bb = a[name].shape.bounding_box()
         assert bb.max.X < -140 and abs((bb.min.Y + bb.max.Y) / 2) < 30, name
     # the readers pass through a window in the M2 front plate
