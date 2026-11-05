@@ -944,6 +944,10 @@ Crop of the gallery from IMG_0766 (below): `docs/img/m1/original_gallery.jpg`.
 - Death stands on a pedestal holding a bone in its right hand and the scythe in its left, with
   **a bell on each side**. DA mentions "le timbre à sa droite" [S: DA p. 57–58]. Which bell the ages
   strike is for E2's design.
+- **No age is in view** at 10:10–10:11 CET, between quarters: the ages are hidden while they wait
+  [S: IMG_0769, IMG_0770].
+- Each bell is about 0.44 of Death's visible height wide (from the balustrade up), so ≈ 25–40 mm
+  at 1:8 [E: measured on IMG_0770, ±25 %; `docs/e2-design.md` §2].
 
 **Upper hall** [S: Paul's photograph IMG_0771]
 - Christ holds the banner of the redemption in his left hand and blesses with his right, as DA
