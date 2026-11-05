@@ -1,7 +1,7 @@
 {
  "model": "m2_main_dial",
- "unique_parts": 71,
- "printed_parts": 102,
+ "unique_parts": 73,
+ "printed_parts": 103,
  "sets": {
   "dial": [
    "dial_field",
@@ -392,8 +392,7 @@
   },
   {
    "names": [
-    "R1_12",
-    "motor_pinion_12"
+    "R1_12"
    ],
    "material": "PLA",
    "nozzle": 0.4,
@@ -425,6 +424,44 @@
    "note": "",
    "file": "R1_48.stl",
    "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "motor_pinion_12"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    18.2,
+    18.2,
+    8.7
+   ],
+   "note": "pressed on the motor's D-shaft, its hub 0.3 mm clear of the adapter's boss (set with a shim); it comes out with the motor, back through the plate's hole (D16)",
+   "file": "motor_pinion_12.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "motor_adapter"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    42.3,
+    66.0,
+    7.0
+   ],
+   "note": "motor adapter (D16): screwed to the motor at the bench; plugs into the back plate from behind, 2 x M3 x 8 into heat-set inserts",
+   "file": "motor_adapter.stl",
+   "overhang_mm2": 361.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true
