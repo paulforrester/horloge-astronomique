@@ -315,7 +315,8 @@ PlatformIO; Paul knows it), with **TMC2209 stepsticks in UART mode** on a carrie
 - **Access.**
   - Each stage's glazing opens.
   - Each module slides out forward or rearward on rails (direction chosen in Phase 2 per module).
-  - Motors are reachable without removing gears.
+  - Motors are reachable without removing gears: each plugs in from behind on an adapter plate
+    (D16; `docs/m1-design.md` §9.2).
 
 ## 12. Repository layout (refines `CLAUDE.md`)
 

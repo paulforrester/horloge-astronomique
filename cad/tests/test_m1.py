@@ -105,14 +105,35 @@ def test_dial_lifts_off_the_front_on_its_magnets(built):
         assert not i.name.startswith("dial_foot")
 
 
-def test_pillar_screws_clear_the_motors():
-    """An M3 nut (6.35 across corners) on each pillar screw, on the back plate's rear face, clears both motors."""
-    half = 42.3 / 2
+def test_pillar_screws_clear_the_motors_and_adapters():
+    """An M3 nut (6.35 across corners) on each pillar screw, on the back plate's rear face, clears both motor
+    adapters (which are wider than the motors)."""
+    hx, hy = M.ADAPTER["w"] / 2, M.ADAPTER["h"] / 2
     for p in M.PILLARS:
         for c in (M.TA, M.TB):
-            dx = max(abs(p[0] - c[0]) - half, 0.0)
-            dy = max(abs(p[1] - c[1]) - half, 0.0)
+            dx = max(abs(p[0] - c[0]) - hx, 0.0)
+            dy = max(abs(p[1] - c[1]) - hy, 0.0)
             assert math.hypot(dx, dy) > 6.35 / 2 + 0.5, (p, c)
+
+
+@pytest.mark.parametrize("tag", ["M1", "M1b"])
+def test_each_motor_comes_out_from_behind_without_touching_a_gear(built, tag):
+    """Option A (D16): the motor, its shaft and its adapter, withdrawn backwards, touch nothing at any point:
+    the drive part stays behind, held by its post and the back plate, and the D-shaft slides out of it."""
+    a, _ = built
+    unit = [f"motor_{tag}", f"shaft_{tag}", f"adapter_{tag}"]
+    others = [i for i in a.items if i.name not in unit]
+    for dz in (-0.2, -3.0, -10.0, -30.0):
+        for n in unit:
+            moved = a[n].shape.moved(bd.Location((0, 0, dz)))
+            mb = moved.bounding_box()
+            for o in others:
+                ob = o.shape.bounding_box()
+                if mb.max.X < ob.min.X or ob.max.X < mb.min.X or mb.max.Y < ob.min.Y or ob.max.Y < mb.min.Y or \
+                        mb.max.Z < ob.min.Z or ob.max.Z < mb.min.Z:
+                    continue
+                v = (moved & o.shape).volume
+                assert v < 1e-3, f"{n} withdrawn {dz} mm hits {o.name} ({v:.3f} mm³)"
 
 
 BODIES = {   # parts that move together along the axis
@@ -126,6 +147,9 @@ BODIES = {   # parts that move together along the axis
                          "magnet_gilt_witness"],
     "silver motion work": ["arbor_silver_motion_work", "silver_minute_wheel_48", "silver_minute_pinion_15",
                            "magnet_silver_witness"],
+    "M1 drive (TA)": ["M1_drive_45", "M1_index_disc", "magnet_M1_index"],
+    "M1b drive (TB)": ["M1b_drive_45_noon_12", "M1b_flag_disc", "magnet_quarter_0", "magnet_quarter_1",
+                       "magnet_quarter_2", "magnet_quarter_3", "magnet_hour"],
     "noon wheel X": ["noon_wheel_54_12_X"],
     "24 h wheel N": ["noon_wheel_64_N", "magnet_noon"],
 }

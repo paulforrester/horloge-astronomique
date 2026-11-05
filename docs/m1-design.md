@@ -6,7 +6,8 @@ automaton.
 
 **Status: Detail design for review.** The concept was accepted (Paul, PR #11, 4 Nov 2026; the
 decisions are in §7). The detail design is §9: `cad/modules/m1_time/`, its checks, print files and
-SketchUp files. **One decision is needed (§10)**, and the open items are in §11. Tags as in
+SketchUp files. The motor-access decision is settled: option A, plug-in motors (§10, D16). The
+open items are in §11. Tags as in
 `docs/reference-notes.md`.
 
 <p align="center"><img src="img/m1/original_gallery.jpg" width="420" alt="The original lion gallery on 30 Oct 2026 at 10:10 CET: the 12-hour mean-time dial between the two genies (Paul's photograph)"></p>
@@ -239,8 +240,8 @@ Coordinates: origin at the dial centre, on the dial face; +X right, +Y up, +Z to
 | Arbor | x, y (mm) | Carries | Turns |
 |---|---|---|---|
 | Centre | 0, 0 | Ø3 steel arbor (gilt minute); brass tubes OD 4 (silver minute), OD 5 (silver hour), OD 6 (gilt hour) | 1/h and 1/12 h |
-| TA, M1 motor | −38.97, −22.5 | M1's drive 45 and its index disc | 1/h, mean time |
-| TB, M1b motor | 38.97, −22.5 | M1b's drive 45, the noon pinion 12, the flag disc | 1/h, legal time |
+| TA, M1 motor | −38.97, −22.5 | M1's drive 45 and its index disc, sliding on the motor's D-shaft | 1/h, mean time |
+| TB, M1b motor | 38.97, −22.5 | M1b's drive 45, the noon pinion 12, the flag disc, sliding on the D-shaft | 1/h, legal time |
 | GM | 0, 30 | gilt minute wheel 48, gilt minute pinion 15, gilt witness disc | 1 in 4 h |
 | SM | 0, −30 | silver minute wheel 48 (witness magnet), silver minute pinion 15 | 1 in 4 h |
 | X | 38.97, −55.5 | noon wheel 54 with pinion 12, on a stud | 1 in 4.5 h |
@@ -264,12 +265,13 @@ arbors turn anticlockwise; the firmware sets each motor's direction.
 | Gilt clutch | −39.4 to −36.9 | wave washer and Ø3 collar; the MR63ZZ behind it in a back-plate boss (−42.2 to −39.7) |
 | Noon 2 | −42.3 to −39.3 | noon 12 (X) / 24 h wheel 64 (N) |
 | Flags | −44.7 to −42.7 | M1 index disc (TA), M1b flag disc (TB), gilt witness disc (GM) |
-| Back plate | −51.1 to −47.1 | PETG. Hall pockets in its front face; the motors behind |
-| Motors | −99.1 to −51.1 | two NEMA 17 |
+| Back plate | −51.1 to −47.1 | PETG. Hall pockets in its front face; the drive parts' spigots pass through it to −49.8 |
+| Motor adapters | −55.1 to −50.1 | PETG, one per motor; a Ø26 boss locates each in a pocket in the back plate's rear face (§10) |
+| Motors | −103.1 to −55.1 | two NEMA 17 |
 
 **Size** [D: model envelope]. The plates are 136 × 112 mm, and the frame tabs bring the width to
 164 mm. The bezel is Ø 120. The noon wheels hang 20 mm below the plates (y down to −88). The depth
-from the cap to the motors' backs is ≈ 108 mm. Check this against the case depth when the depth is
+from the cap to the motors' backs is ≈ 112 mm. Check this against the case depth when the depth is
 known (still TBD, `docs/reference-notes.md`). The cassette hangs on the works' internal frame by
 two M5 tabs (D12 R5).
 
@@ -296,7 +298,7 @@ are DRV5032 Hall switches on small boards, 1 mm from the magnet's face.
 | Sensor | Where | Reads | Window, half-width |
 |---|---|---|---|
 | Quarters | back-plate pocket, under TB's flag disc | four magnets at r 13, 90° apart: :15, :30, :45, :00 | ±2.9 min [E] |
-| Hour (M1b's index) | back-plate pocket, under TB's flag disc | one magnet at r 7 | ±5.5 min [E] |
+| Hour (M1b's index) | back-plate pocket, under TB's flag disc | one magnet at r 19, outside the quarters | ±2.0 min [E] |
 | Noon | on a back-plate boss, facing N | one magnet at r 26 on the 24 h wheel | ±35.3 min [E] |
 | M1 index | back-plate pocket, under TA's disc | one magnet at r 9 | (index only) |
 | Gilt witness | back-plate pocket, under GM's disc | one magnet: GM turns once in 4 h, after the clutch | (check only) |
@@ -304,7 +306,7 @@ are DRV5032 Hall switches on small boards, 1 mm from the magnet's face.
 
 - **Windows** [E]. A switch stays on while its magnet is within about 4 mm of it, sideways
   (`HALL_RANGE`, an estimate for a DRV5032 with a 5 × 2 magnet at a 1 mm gap). Half-width =
-  4 / (2π r) × period [D]: quarter 4 / (2π · 13) × 60 = 2.94 min; hour 5.46 min; noon
+  4 / (2π r) × period [D]: quarter 4 / (2π · 13) × 60 = 2.94 min; hour 4 / (2π · 19) × 60 = 2.01 min; noon
   4 / (2π · 26) × 1440 = 35.3 min. **The test rig measures `HALL_RANGE`** (`docs/test-rig.md`,
   question 5).
 - **Timing comes from the controller** (CLAUDE.md, accuracy split). A window opens; the
@@ -358,8 +360,11 @@ each way and checks that it meets its stop. Three details came out of this check
 | Silver motion work (SM) | wheel 48 on the front plate | pinion's hub on the front plate's boss |
 | Noon wheel X | Starlock | rear hub on the back plate |
 | 24 h wheel N | Starlock | rear hub on the back plate |
+| M1 drive (TA: drive 45, index disc) | a post on the front plate | its spigot on the adapter's boss |
+| M1b drive (TB: drive 45, noon 12, flag disc) | a post on the front plate | its spigot on the adapter's boss |
 
-The two drive parts on the motor shafts are held by the shafts (§10).
+The drive parts slide on the motors' D-shafts (D16). When a motor is out, its drive part stays in
+the cassette: its spigot runs in the back plate's hole, and its post stops it from the front.
 
 ### 9.7 Dial, bezel and hands
 
@@ -381,7 +386,10 @@ The two drive parts on the motor shafts are held by the shafts (§10).
   - gilt hour: 27 mm, an openwork head;
   - silver minute 44 mm and silver hour 27.5 mm: plain spears;
   - a gilt cap on the arbor's tip.
-- **Service order:**
+- **To change a motor** (D16): from behind, undo the adapter's two M3 screws and draw the motor
+  straight out with its adapter. Nothing else moves. To refit it, turn the shaft until its flat
+  enters the drive part's D-bore, and push the adapter home.
+- **Service order for the works:**
   1. Pull the hands.
   2. Lift off the dial.
   3. Slide the hour wheels and tubes forward off the stack.
@@ -395,18 +403,20 @@ The two drive parts on the motor shafts are held by the shafts (§10).
   - **Flag discs:** printed separately and pressed on their drive part's Ø8 spigot. Printed in
     one piece with the drive part, they would overhang its hub by about 800 mm².
   - **Remaining overhangs:**
-    - the back plate's two Ø 22 motor pilot pockets, bridged;
+    - the back plate's two Ø 26 adapter pockets, bridged. The pocket's wall locates the adapter,
+      so the bridged ceiling's finish does not matter;
+    - each adapter's Ø 22 pilot counterbore, bridged the same way;
     - the bezel's 1.7 mm lip over the dial seat.
   - The fits wait for the tolerance coupons, as for every module.
 - **SketchUp files:** `export/sketchup/m1_time.dae` and `m1_time_exploded.dae`.
 
-## 10. Decision needed: motor access
+## 10. Motor access — A, plug-in motors (Paul, PR #13, 5 Nov 2026; D16)
 
-`docs/architecture.md` §11 says "Motors are reachable without removing gears". **The model does
-not meet that yet.** Each motor is screwed to the back plate from the inside. Its drive part is
-pressed on the motor's D-shaft between the plates. To change a motor you must pull the hands,
-lift off the dial and open the cassette. M2 is the same: its motor pinion is on the shaft between
-the plates (`cad/modules/m2_main_dial/mechanism.py`, level `RED1`).
+`docs/architecture.md` §11 says "Motors are reachable without removing gears". The first model
+did not meet that. Each motor was screwed to the back plate from the inside, and its drive part
+was pressed on the motor's D-shaft between the plates. To change a motor you had to pull the
+hands, lift off the dial and open the cassette. M2 is the same: its motor pinion is on the shaft
+between the plates (`cad/modules/m2_main_dial/mechanism.py`, level `RED1`).
 
 | Option | How | For | Against |
 |---|---|---|---|
@@ -414,19 +424,41 @@ the plates (`cad/modules/m2_main_dial/mechanism.py`, level `RED1`).
 | B. Arbor and coupling | Each drive part on its own Ø5 arbor in a bearing. A dog coupling behind the back plate; the motor on standoffs (as on the test rig). | Classic. The motor never carries the gear. | ≈ +30 mm depth. Two couplings and two bearings. |
 | C. Keep as modelled | Open the cassette to change a motor. | Simplest; nothing to add. | Breaks the architecture rule. Steppers rarely fail, but the job takes the dial and hands off. |
 
-**Recommendation: A.** It meets the rule for the least depth. With A, the drive parts get a
-D-bore slip fit and stops. The same scheme can then be applied to M2 in a small follow-up.
+**Decided: A** (Paul: "Lets go with option A for the motors"). As built in the model:
+- **Adapter** (`adapter_M1`, `adapter_M1b`): PETG, 42.3 × 66 × 4 mm.
+  - The motor is screwed to it at the bench: 4 × M3 × 6 ISO 7380, heads in Ø6.2 counterbores in
+    its front face.
+  - Its rear face has a counterbore for the motor's Ø22 × 2 pilot boss [E: NEMA 17 standard].
+  - A Ø26 × 1 boss on its front face locates it in a Ø26.3 pocket in the back plate.
+  - Two M3 × 8 screws from behind, 27 mm above and below the shaft, go into heat-set inserts in
+    the back plate. Both clear the motor's body by 3 mm, so a hex key reaches them.
+- **Drive parts:** a slip fit on the D-shaft (round bore Ø5.3, the key 0.15 mm off the flat).
+  - The Ø8 spigot runs through a Ø8.3 hole in the back plate and stops 0.3 mm in front of the
+    adapter's boss.
+  - A PETG post, its Ø4 peg pressed into the front plate, stops the part 0.3 mm in front. TA's post
+    is 12.6 mm long, with a Ø6 hole for the shaft's tip; TB's is 3.4 mm.
+- **The hour magnet moved from r 7 to r 19.** At r 7 its Hall pocket would have broken into the
+  spigot's hole. The hour window narrows to ±2.0 min, still far wider than the controller needs.
+- **Checks:**
+  - each motor, its shaft and its adapter, withdrawn backwards in steps to 30 mm, touch nothing;
+  - both drive parts meet their stops each way within 0.45 mm;
+  - the pillar nuts clear the adapters.
+- **M2** gets the same scheme in its own PR.
 
 ## 11. Open items
 
-- **Motor drawing** [E]: the NEMA 17's shaft length (24 mm in the model, `MOTOR_SHAFT`) and its
-  D-flat (4.5 mm across, 15 mm long). Check both against the chosen motor's drawing.
+- **Motor drawing** [E]: check these against the chosen motor's drawing:
+  - the NEMA 17's shaft length (24 mm in the model, `MOTOR_SHAFT`);
+  - its D-flat (4.5 mm across, 15 mm long);
+  - its pilot boss (Ø22 × 2).
+- **Heat-set inserts** ⚠: M3, no longer than 4 mm (the back plate is 4 mm thick). The model's
+  Ø4.0 hole (`INSERT_HOLE`) is to be set from the chosen insert's datasheet.
 - **`HALL_RANGE`** [E]: measure on the test rig (question 5). The windows in §9.4 scale with it.
 - **Endshake `E`** [E] and all fits: set from the tolerance coupons.
 - **Clutch:** the wave washers' load at their working height (1.7–7.5 N), and the running torque
   (1.0 N·mm [E]). Both are measured on the test rig.
 - **Sourcing** ⚠ (`docs/bom.md`): shaft collars with Ø3 and Ø4 bores and an OD of 9 mm or less;
   wave washers for Ø3 and Ø4; Starlock washers for Ø3 (also needed by M2).
-- **Case depth:** M1 needs ≈ 108 mm (§9.2). Check when the case depth is fixed.
+- **Case depth:** M1 needs ≈ 112 mm (§9.2). Check when the case depth is fixed.
 - **Hand lengths and the dial's size** [E] stay scaled on Paul's photographs (±15 %) until the
   Ungerer or Bach books give drawings.

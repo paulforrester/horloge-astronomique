@@ -16,6 +16,8 @@ Detail-design layout (the concept's §4 refined):
 - **Each clutch** is the minute member's 45-tooth drive gear, free on its tube or arbor, pressed by a
   wave washer and a collar against the cannon pinion fixed in front of it. The hands set by turning
   their minute hand; the releases, on the motor side of the clutch, never move.
+- **Motors plug in from behind** (option A, Paul, PR #13; D16): each on a printed adapter plate held by 2 x M3
+  into heat-set inserts; its drive part slides on the D-shaft, held by the adapter's boss and a front-plate post.
 
 Coordinates: origin at the dial centre on the dial face; +X right, +Y up, +Z towards the viewer.
 Run:  python -m cad.modules.m1_time.mechanism [out_dir]
@@ -67,7 +69,12 @@ FLAGS = (N2[0] - G - 2.0, N2[0] - G)       # flag discs (TA index; TB quarters a
 HALL = (8.0, 6.0, 3.0)                     # DRV5032 on a small PCB (as on the test rig)
 HALL_POCKET, HALL_GAP = 1.6, 1.0           # pocket depth in the back plate; gap to the magnet's face
 BP = (FLAGS[0] - HALL_GAP - (HALL[2] - HALL_POCKET) - 4.0, FLAGS[0] - HALL_GAP - (HALL[2] - HALL_POCKET))
-MOTOR_FACE = BP[0]
+# option A (Paul, PR #13, 5 Nov 2026; D16): each motor plugs in from behind on a printed adapter plate
+ADAPTER = dict(w=42.3, h=66.0, t=4.0, boss=(26.0, 1.0), pilot=(22.0, 2.0), ears=27.0, screws=15.5)
+INSERT_HOLE = 4.0                          # [E] M3 heat-set insert no longer than 4 mm: hole per its datasheet
+POST_D = 10.0                              # the front-plate posts that stop the drive parts from the front
+MOTOR_FACE = BP[0] - ADAPTER["t"]
+SPIGOT_END = BP[0] + ADAPTER["boss"][1] + E  # the drive parts' spigots end E in front of the adapter's boss
 S_HOUR_HUB = FP[1] + E                     # the silver hour wheel's rear hub ends E in front of the FP
 BRG_Z0 = G_COLLAR[0] - E - 2.5             # MR63ZZ (width 2.5) in a back-plate boss: its face is the gilt collar's stop
 BRG_BOSS = 10.0
@@ -75,7 +82,6 @@ CLUTCH_D = 8.0                             # the drive gears' raised friction fa
 STARLOCK = (8.0, 0.4)                      # push-on lock washer for Ø3 (OD, thickness) [E: check the chosen part]
 MOTOR_SHAFT = 24.0                         # [E] NEMA 17 shaft length from the face: check the motor's drawing
 FLAT = (2.0, 15.0)                         # [E] the D-shaft's flat: 4.5 across (2.0 from the axis), 15 mm from the tip
-MOTOR_BOSS = (22.2, 2.2)                   # pilot boss pocket (Ø, depth) in the back plate's rear face
 
 # --- positions (x, y) ---------------------------------------------------------------------------------
 C = (0.0, 0.0)
@@ -91,7 +97,7 @@ ARBOR_BOSS = (8.0, -12.5)                  # Ø and front face of the front-plat
 PLATE = (-67.0, 69.0, -68.0, 44.0)          # x0, x1, y0, y1
 
 # release flags on TB (M1b, legal time): radii from TB
-R_QUARTER, R_HOUR, R_INDEX_A, R_NOON, R_WITNESS = 13.0, 7.0, 9.0, 26.0, 7.0
+R_QUARTER, R_HOUR, R_INDEX_A, R_NOON, R_WITNESS = 13.0, 19.0, 9.0, 26.0, 7.0   # the hour Hall clear of the spigot
 MAGNET = (5.0, 2.0)
 # angles (deg, as built, at the modelled moment) at which each Hall sits
 HALL_ANG = {"quarter": 90.0, "hour": 270.0, "index_A": 90.0, "noon": 90.0, "witness_G": 0.0, "witness_S": 180.0}
@@ -128,9 +134,10 @@ def d_side(x0, z0, z1):
 
 
 def d_key(z_top):
-    """The key that fills a drive part's Ø5 bore against the shaft's flat, from the flat's start to z_top."""
-    z0 = SHAFT_TIP - FLAT[1]
-    return parts.disc(5.0 + 0.2, z_top - z0, z0=z0) & d_side(FLAT[0] + parts.FITS.press / 2, z0, z_top)
+    """The key that fills a drive part's Ø5 bore against the shaft's flat (a slip fit), from 1 mm inside the flat's
+    start to z_top, so the drive part slides off the shaft's tip when the motor is withdrawn."""
+    z0 = SHAFT_TIP - FLAT[1] + 1.0
+    return parts.disc(5.0 + 0.4, z_top - z0, z0=z0) & d_side(FLAT[0] + parts.FITS.running / 2, z0, z_top)
 
 
 def magnet_pocket(xy, z_face, into=+1):
@@ -283,25 +290,25 @@ def build():
     # M1 (TA): drive 45 at the gilt drive level; M1b (TB): drive 45 at the silver level and the noon pinion 12.
     # Each flag disc is its own print, pressed on its drive's Ø8 spigot: its phase on the shaft does not matter,
     # because its own magnets are the index, and printed in one piece it would overhang its hub.
-    press = parts.FITS.press
-    pa = gear_part(g_d45a, G_DRIVE, 5.0, "press", hub=(10.0, FLAGS[1], G_DRIVE[0])) + d_key(G_DRIVE[1])
-    pa += parts.disc(SPIGOT, FLAGS[1] - FLAGS[0], bore=5.0 + press, z0=FLAGS[0])
-    a.add("M1_drive_45", at(pa, TA), group="drive", note="pressed on M1's D-shaft (D-bore); the index disc is "
-          "pressed on its spigot")
+    press, run = parts.FITS.press, parts.FITS.running
+    spigot = parts.disc(SPIGOT, FLAGS[1] - SPIGOT_END, bore=5.0 + run, z0=SPIGOT_END)   # through the back plate
+    pa = gear_part(g_d45a, G_DRIVE, 5.0, "running", hub=(10.0, FLAGS[1], G_DRIVE[0])) + d_key(G_DRIVE[1]) + spigot
+    a.add("M1_drive_45", at(pa, TA), group="drive", note="slides on M1's D-shaft; held between the adapter's boss "
+          "and a front-plate post; the index disc is pressed on its spigot")
     ia = polar((0, 0), R_INDEX_A, flag_angle(HALL_ANG["index_A"], MEAN_HM[1], 60))
     da = parts.disc(2 * (R_INDEX_A + 4.0), FLAGS[1] - FLAGS[0], bore=SPIGOT + press, z0=FLAGS[0])
     da -= magnet_pocket(ia, FLAGS[0], into=+1)
     a.add("M1_index_disc", at(da, TA), group="drive", note="M1's hourly index: one magnet; pressed on the "
           "drive's spigot in any phase")
     a.add("magnet_M1_index", at(magnet(ia, FLAGS[0]), TA), material="silver", printed=False, group="sensors")
-    pb = gear_part(g_d45a, S_DRIVE, 5.0, "press", hub=(10.0, FLAGS[1], S_DRIVE[0]))
-    pb += gear_part(g_n12, N1, 5.0, "press") + d_key(S_DRIVE[1])
-    pb += parts.disc(SPIGOT, FLAGS[1] - FLAGS[0], bore=5.0 + press, z0=FLAGS[0])
+    pb = gear_part(g_d45a, S_DRIVE, 5.0, "running", hub=(10.0, FLAGS[1], S_DRIVE[0]))
+    pb += gear_part(g_n12, N1, 5.0, "running") + d_key(S_DRIVE[1]) + spigot
     a.add("M1b_drive_45_noon_12", at(pb, TB), group="drive",
-          note="pressed on M1b's D-shaft (D-bore): drive 45 and noon pinion 12; the flag disc is pressed on its spigot")
+          note="slides on M1b's D-shaft: drive 45 and noon pinion 12; held between the adapter's boss and a "
+               "front-plate post; the flag disc is pressed on its spigot")
     q_pts = [polar((0, 0), R_QUARTER, flag_angle(HALL_ANG["quarter"], LEGAL_HM[1], 60) + 90.0 * k) for k in range(4)]
     h_pt = polar((0, 0), R_HOUR, flag_angle(HALL_ANG["hour"], LEGAL_HM[1], 60))
-    db = parts.disc(2 * (R_QUARTER + 4.0), FLAGS[1] - FLAGS[0], bore=SPIGOT + press, z0=FLAGS[0])
+    db = parts.disc(2 * (max(R_QUARTER, R_HOUR) + 4.0), FLAGS[1] - FLAGS[0], bore=SPIGOT + press, z0=FLAGS[0])
     for p_ in q_pts + [h_pt]:
         db -= magnet_pocket(p_, FLAGS[0], into=+1)
     a.add("M1b_flag_disc", at(db, TB), group="drive",
@@ -315,8 +322,31 @@ def build():
     a.allow("magnet_M1_index", "M1_index_disc")
     a.allow("M1_index_disc", "M1_drive_45")
     a.allow("M1b_flag_disc", "M1b_drive_45_noon_12")
-    for tag, part in (("M1", "M1_drive_45"), ("M1b", "M1b_drive_45_noon_12")):
-        a.allow(part, f"shaft_{tag}")
+    # the adapters (motor screwed on at the bench, 4 x M3 x 6 in counterbores; 2 x M3 x 8 from behind into inserts)
+    ad_ = ADAPTER
+    for tag, xy in (("M1", TA), ("M1b", TB)):
+        ad = parts.plate((ad_["w"], ad_["h"]), ad_["t"], z0=MOTOR_FACE, corner_radius=4.0)
+        ad += parts.disc(ad_["boss"][0], ad_["boss"][1], z0=BP[0])
+        ad -= parts.disc(6.0, 20, z0=MOTOR_FACE - 5)                                     # the shaft
+        ad -= parts.disc(ad_["pilot"][0] + run, ad_["pilot"][1] + 0.2, z0=MOTOR_FACE - 0.01)  # the motor's pilot boss
+        for dx in (-ad_["screws"], ad_["screws"]):
+            for dy in (-ad_["screws"], ad_["screws"]):
+                ad -= parts.disc(3.4, 20, z0=MOTOR_FACE - 5).moved(bd.Location((dx, dy, 0)))
+                ad -= parts.disc(6.2, 2.01, z0=BP[0] - 2.0).moved(bd.Location((dx, dy, 0)))   # head counterbore
+        for dy in (-ad_["ears"], ad_["ears"]):
+            ad -= parts.disc(3.4, 20, z0=MOTOR_FACE - 5).moved(bd.Location((0, dy, 0)))
+        a.add(f"adapter_{tag}", at(ad, xy), material="PETG", group="drive",
+              note="motor adapter: screwed to the motor at the bench, it plugs into the back plate from behind "
+                   "(2 x M3 x 8 into heat-set inserts); its boss locates it and stops the drive part")
+    # the front stops: posts pressed into the front plate's rear face
+    for tag, xy, front in (("TA", TA, G_DRIVE[1]), ("TB", TB, S_DRIVE[1])):
+        z0 = front + E
+        post = parts.disc(POST_D, FP[0] - z0, z0=z0) + parts.disc(4.0, 3.0, z0=FP[0])
+        if SHAFT_TIP > z0:
+            post -= parts.disc(6.0, SHAFT_TIP + 1.5 - z0 + 0.01, z0=z0 - 0.01)         # clears the shaft's tip
+        a.add(f"stop_post_{tag}", at(post, xy), material="PETG", group="drive",
+              note="the drive part's front stop; its Ø4 peg is pressed into the front plate")
+        a.allow(f"stop_post_{tag}", "front_plate")
 
     # ------------------------------------------------------------------ noon train (between the plates)
     xp = gear_part(g_n54, N1, 3.0, "running", rot=mesh_rotation(g_n12, g_n54, 270.0)) + \
@@ -384,11 +414,12 @@ def build():
     for xy in (X, N):
         bp -= at(parts.disc(3.0 + parts.FITS.press, 10, z0=BP[0] - 1), xy)
     for xy in (TA, TB):
-        bp -= at(parts.disc(MOTOR_BOSS[0], MOTOR_BOSS[1], z0=BP[0] - 0.01), xy)
-        bp -= at(parts.disc(7.0, 10, z0=BP[0] - 1), xy)
-        for dx in (-15.5, 15.5):
-            for dy in (-15.5, 15.5):
-                bp -= at(parts.disc(3.4, 10, z0=BP[0] - 1), (xy[0] + dx, xy[1] + dy))
+        bp -= at(parts.disc(ADAPTER["boss"][0] + parts.FITS.running, ADAPTER["boss"][1] + 0.11, z0=BP[0] - 0.01), xy)
+        bp -= at(parts.disc(SPIGOT + parts.FITS.running, 10, z0=BP[0] - 1), xy)       # the drive part's spigot
+        for dy in (-ADAPTER["ears"], ADAPTER["ears"]):
+            bp -= at(parts.disc(INSERT_HOLE, 10, z0=BP[0] - 1), (xy[0], xy[1] + dy))  # M3 heat-set inserts
+    for xy in (TA, TB):
+        fp -= at(parts.disc(4.0 + parts.FITS.press, 3.01, z0=FP[0] - 0.01), xy)      # the stop posts' pegs
     for k, p_ in enumerate(PILLARS):
         a.add(f"pillar_{k}", at(parts.standoff(FP[0] - BP[1], od=8.0), p_, BP[1]), material="PETG", group="plates")
         a.allow(f"pillar_{k}", "front_plate"); a.allow(f"pillar_{k}", "back_plate")

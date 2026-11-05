@@ -124,8 +124,8 @@ rows and count towards the "ground rod, brass tube, bearings" row above.
 ### Batch 2 — M1 rows from the detailed design [E]
 
 Quantities from `cad/modules/m1_time/` (`docs/m1-design.md` §9). They count towards the "ground
-rod, brass tube, bearings, fasteners" and "Hall switches + magnets" rows above. The motor fixings
-follow option C, as modelled; option A (`docs/m1-design.md` §10) changes them as noted.
+rod, brass tube, bearings, fasteners" and "Hall switches + magnets" rows above. The motors plug in
+from behind on adapter plates (D16, `docs/m1-design.md` §10).
 
 | Item | Spec | Qty [E] | How the quantity was counted | Supplier |
 |---|---|---|---|---|
@@ -138,7 +138,9 @@ follow option C, as modelled; option A (`docs/m1-design.md` §10) changes them a
 | Hall switch DRV5032 | on a small board, as Batch 1 | 6 | quarters, hour (M1b index), noon, M1 index, two witnesses | as Batch 1 |
 | Magnets | NdFeB disc 5 × 2 mm | 17 | 9 in the mechanism; 8 for the dial mount (4 feet, 4 bezel) | as Batch 1 |
 | NEMA 17 + TMC2209 | as Batch 1 | (already counted) | M1 and M1b | as Batch 1 |
-| Screws | M3 × 8, ISO 4762, A2 | 8 | motors to the back plate (option C). With option A: M3 × 6 ISO 7380 × 8 (motor to adapter) and M3 × 8 × 4 (adapter to plate), plus 4 M3 heat-set inserts no longer than 4 mm | as Batch 1 |
+| Screws | M3 × 6, ISO 7380 (button head), A2 | 8 | each motor to its adapter plate, heads in counterbores (D16) | as Batch 1 |
+| Screws | M3 × 8, ISO 7380 or 4762, A2 | 4 | each adapter to the back plate, from behind (D16) | as Batch 1 |
+| Heat-set inserts M3 | **no longer than 4 mm** (the back plate is 4 mm thick) | 4 | the adapter screws (D16) | ⚠ ruthex or CNC Kitchen short M3: check the length and the hole size |
 | Screws + nuts | M3 × 40, ISO 4762, A2, with nuts and washers | 4 | the pillars, through both plates | as Batch 1 |
 | Screws + washers M5 | M5 × 16, ISO 7380, A2 | 2 | the cassette's tabs to the works' internal frame (D12 R5) | as Batch 1 |
 | Glue | epoxy or cyanoacrylate | — | the dial into its bezel; the magnets into their pockets | local |
