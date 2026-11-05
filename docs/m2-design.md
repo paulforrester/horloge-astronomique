@@ -42,7 +42,7 @@ New Year station.
 | Rotating hands: any two parts on different tubes that could touch at some angle | 0 (feasibility study; same front stack) |
 | Calendar logic, day by day, 2026–2426, five different start dates | **0 wrong days**. Every New Year jump is 4 divisions (common) or 3 (leap), including 2100, 2200, 2300 and 2400. |
 | Bed fit, single and dual nozzle | every printed part fits in its print pose. The largest are the dial (Ø 287.5) and the plates (281 × 232). |
-| Envelope | x −196 … +184, y −195 … +192, z −162 … +24 mm: inside the M2 bay. Nothing comes within about 18 mm of the floor. **Depth 185 mm.** |
+| Envelope | x −196 … +184, y −195 … +192, z −166 … +24 mm: inside the M2 bay. Nothing comes within about 18 mm of the floor. **Depth 189 mm** (185 before the motor adapter, D16). |
 | Parts | 174 in the model: 102 printed (including 5 date inlays), 70 bought (plus 2 v1.5 space claims). E6's fallback (crank and pawl) is a separate model, `e6.fallback_assembly()`. |
 | Motor torque | ≈ 2.9 mN·m at the motor, **≈ 50×** margin at 0.5 A [E, §9] |
 
@@ -96,7 +96,18 @@ S --12/84--> W  (weekday output to M7, 1 rev per 7 days)
 | Reduction 12/72; weekday 12/84 | −100 … −94 |
 | Reduction 12/48 | −108 … −102 |
 | Back plate | −114 … −110 |
-| NEMA 17 | −162 … −114 |
+| Motor adapter (D16) | −118 … −114; its boss −114 … −111, in the plate's Ø22.5 hole |
+| NEMA 17 | −166 … −118 |
+
+**The motor plugs in from behind (D16, Paul, PR #13).**
+- The NEMA 17 is screwed at the bench to a printed adapter plate: 4 × M3 × 6, heads in
+  counterbores. The adapter's Ø22.2 boss locates it in the back plate's Ø22.5 hole, and
+  2 × M3 × 8 from behind hold it, into heat-set inserts (`cad/lib/motor_mount.py`).
+- The 12-tooth motor pinion is pressed on the D-shaft. It is Ø18.2 over the tips
+  [D: 1.25 × (12 + 2 + 2 × 0.298)]. Its hub is set 0.3 mm clear of the boss with a shim.
+- To change the motor, undo the two screws and draw it out. The pinion leaves its mesh with
+  R1's 48 and comes back through the plate's hole with the motor, so no gear in the module
+  moves. A test checks the whole withdrawal, in steps to 30 mm.
 
 ## 3. Changes from the feasibility layout and the spec
 
@@ -701,7 +712,8 @@ exporter tries both faces down and keeps the one with less to support.
 - brass tubes OD 4–9 for the stack, plus OD 6 sleeves;
 - MR85ZZ bearings: 9 in the plates, 4 in the worm blocks;
 - 6 × 688ZZ rollers;
-- NEMA 17;
+- NEMA 17 on its adapter plate (D16): 4 × M3 × 6 ISO 7380, 2 × M3 × 8, 2 M3 heat-set inserts no
+  longer than 4 mm;
 - E6 gearmotor (Pololu 298:1 HP 6 V, #994) and 2 × M1.6 screws;
 - 1 slotted opto (stop lever), 1 reflective opto (1 March witness), 3 Hall sensors and magnets
   (index, Moon-tube witness, E6 home);

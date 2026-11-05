@@ -96,3 +96,25 @@ def test_print_poses_need_support_only_in_the_sector_seat(full):
     for k in range(4):
         seg = a[f"carrier_segment_{k}"]
         assert overhang_area(print_pose([seg.shape], seg.print_up)[0]) < 600   # bridges between tab gussets
+
+
+def test_the_motor_comes_out_from_behind_without_touching_a_gear(full):
+    """D16 (Paul, PR #13): the motor, its shaft, its adapter and its pinion (pressed on the shaft), withdrawn
+    backwards in steps to 30 mm, touch nothing: the pinion leaves its mesh and passes back through the plate's
+    hole, and the pinion's hub clears the adapter's boss."""
+    a, _ = full
+    unit = ["motor_nema17", "motor_shaft", "motor_adapter", "motor_pinion_12"]
+    others = [i for i in a.items if i.name not in unit]
+    for dz in (-0.2, -3.0, -8.0, -30.0):
+        for n in unit:
+            moved = a[n].shape.moved(bd.Location((0, 0, dz)))
+            mb = moved.bounding_box()
+            for o in others:
+                ob = o.shape.bounding_box()
+                if mb.max.X < ob.min.X or ob.max.X < mb.min.X or mb.max.Y < ob.min.Y or ob.max.Y < mb.min.Y or \
+                        mb.max.Z < ob.min.Z or ob.max.Z < mb.min.Z:
+                    continue
+                v = (moved & o.shape).volume
+                assert v < 1e-3, f"{n} withdrawn {dz} mm hits {o.name} ({v:.3f} mm³)"
+    pinion = a["motor_pinion_12"].shape.bounding_box()
+    assert max(pinion.size.X, pinion.size.Y) < 22.5 - 1.0        # it passes the back plate's Ø22.5 hole
