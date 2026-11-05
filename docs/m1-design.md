@@ -398,7 +398,7 @@ the cassette: its spigot runs in the back plate's hole, and its post stops it fr
 
 ### 9.8 Print and SketchUp files
 
-- **Print files:** `export/print/m1_time/`, 27 STL/3MF files for 31 prints, all closed and
+- **Print files:** `export/print/m1_time/`, 30 STL/3MF files for 35 prints, all closed and
   manifold. The manifest README gives each part's pose, nozzle and down-facing area.
   - **Flag discs:** printed separately and pressed on their drive part's Ø8 spigot. Printed in
     one piece with the drive part, they would overhang its hub by about 800 mm².
