@@ -1,0 +1,588 @@
+{
+ "model": "m1_time",
+ "unique_parts": 30,
+ "printed_parts": 35,
+ "sets": {
+  "dial": [
+   "dial_field",
+   "dial_gilt"
+  ]
+ },
+ "parts": [
+  {
+   "names": [
+    "silver_cannon_12"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    14.6,
+    14.6,
+    3.0
+   ],
+   "note": "pressed on the OD 4 tube; the clutch's front face",
+   "file": "silver_cannon_12.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "silver_drive_45"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    47.0,
+    47.0,
+    3.4
+   ],
+   "note": "free on the OD 4 tube: M1b drives the silver hands through it",
+   "file": "silver_drive_45.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "gilt_cannon_12"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    14.6,
+    14.6,
+    3.0
+   ],
+   "note": "pressed on the \u00d83 arbor; the clutch's front face",
+   "file": "gilt_cannon_12.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "gilt_drive_45"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    47.0,
+    47.0,
+    3.4
+   ],
+   "note": "free on the \u00d83 arbor: M1 drives the gilt hands through it",
+   "file": "gilt_drive_45.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "gilt_minute_wheel_48"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    49.3,
+    49.3,
+    12.2
+   ],
+   "note": "",
+   "file": "gilt_minute_wheel_48.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "gilt_minute_pinion_15",
+    "silver_minute_pinion_15"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    17.1,
+    17.2,
+    5.0
+   ],
+   "note": "",
+   "file": "gilt_minute_pinion_15.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "gilt_hour_wheel_45"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    46.7,
+    46.7,
+    3.9
+   ],
+   "note": "",
+   "file": "gilt_hour_wheel_45.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "silver_minute_wheel_48"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    49.3,
+    49.3,
+    3.0
+   ],
+   "note": "",
+   "file": "silver_minute_wheel_48.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "silver_hour_wheel_45"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    46.7,
+    46.7,
+    10.2
+   ],
+   "note": "",
+   "file": "silver_hour_wheel_45.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "M1_drive_45"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    47.0,
+    47.0,
+    15.9
+   ],
+   "note": "slides on M1's D-shaft; held between the adapter's boss and a front-plate post; the index disc is pressed on its spigot",
+   "file": "M1_drive_45.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "M1_index_disc"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    26.0,
+    26.0,
+    2.0
+   ],
+   "note": "M1's hourly index: one magnet; pressed on the drive's spigot in any phase",
+   "file": "M1_index_disc.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "M1b_drive_45_noon_12"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    47.0,
+    47.0,
+    25.1
+   ],
+   "note": "slides on M1b's D-shaft: drive 45 and noon pinion 12; held between the adapter's boss and a front-plate post; the flag disc is pressed on its spigot",
+   "file": "M1b_drive_45_noon_12.stl",
+   "overhang_mm2": 39.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "M1b_flag_disc"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    46.0,
+    46.0,
+    2.0
+   ],
+   "note": "the release flags: four quarter magnets and the hour magnet (M1b's index); pressed on the drive's spigot in any phase",
+   "file": "M1b_flag_disc.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "adapter_M1",
+    "adapter_M1b"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    42.3,
+    66.0,
+    5.0
+   ],
+   "note": "motor adapter: screwed to the motor at the bench, it plugs into the back plate from behind (2 x M3 x 8 into heat-set inserts); its boss locates it and stops the drive part",
+   "file": "adapter_M1.stl",
+   "overhang_mm2": 361.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "stop_post_TA"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    10.0,
+    10.0,
+    15.6
+   ],
+   "note": "the drive part's front stop; its \u00d84 peg is pressed into the front plate",
+   "file": "stop_post_TA.stl",
+   "overhang_mm2": 28.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "stop_post_TB"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    10.0,
+    10.0,
+    6.4
+   ],
+   "note": "the drive part's front stop; its \u00d84 peg is pressed into the front plate",
+   "file": "stop_post_TB.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "noon_wheel_54_12_X"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    55.4,
+    55.3,
+    12.9
+   ],
+   "note": "",
+   "file": "noon_wheel_54_12_X.stl",
+   "overhang_mm2": 54.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "noon_wheel_64_N"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    65.4,
+    65.4,
+    7.5
+   ],
+   "note": "24 h wheel: its magnet marks the noon window; set by meshing it to its mark (\u00b1\u00bd tooth = \u00b111 min)",
+   "file": "noon_wheel_64_N.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "gilt_witness_disc"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    22.0,
+    22.0,
+    2.0
+   ],
+   "note": "pressed on the gilt motion-work arbor: 1 turn in 4 h",
+   "file": "gilt_witness_disc.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "pillar_0",
+    "pillar_1",
+    "pillar_2",
+    "pillar_3"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    8.0,
+    8.0,
+    26.1
+   ],
+   "note": "",
+   "file": "pillar_0.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "front_plate"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    136.0,
+    112.0,
+    18.4
+   ],
+   "note": "the four dial feet (a magnet in each top) and the two arbor bosses print upwards, without support",
+   "file": "front_plate.stl",
+   "overhang_mm2": 72.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "back_plate"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    164.0,
+    112.0,
+    11.4
+   ],
+   "note": "printed rear face down: the two \u00d8 22 motor pilot pockets are bridged (the down-facing area)",
+   "file": "back_plate.stl",
+   "overhang_mm2": 975.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "dial_field"
+   ],
+   "material": "black",
+   "nozzle": 0.2,
+   "set": "dial",
+   "size": [
+    104.0,
+    104.0,
+    2.0
+   ],
+   "note": "two-colour print with dial_gilt, face down, 0.2 mm nozzle",
+   "file": "dial.3mf",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "dial_gilt"
+   ],
+   "material": "gold",
+   "nozzle": 0.2,
+   "set": "dial",
+   "size": [
+    100.7,
+    100.7,
+    0.6
+   ],
+   "note": "",
+   "file": "dial.3mf",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "bezel"
+   ],
+   "material": "gold",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    120.0,
+    120.0,
+    4.5
+   ],
+   "note": "pearled gilt bezel; the dial is glued in its seat; four magnets hold it on the dial feet, so it pulls straight off once the hands are off. Printed face up: the lip's 1.7 mm ledge over the dial seat is most of the down-facing area and prints without support",
+   "file": "bezel.stl",
+   "overhang_mm2": 628.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hand_gilt_hour"
+   ],
+   "material": "gold",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    32.7,
+    15.4,
+    1.0
+   ],
+   "note": "gilt hour hand, flat print, pressed on its tube",
+   "file": "hand_gilt_hour.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hand_silver_hour"
+   ],
+   "material": "silver",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    28.0,
+    20.0,
+    1.0
+   ],
+   "note": "silver hour hand, flat print, pressed on its tube",
+   "file": "hand_silver_hour.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hand_silver_minute"
+   ],
+   "material": "silver",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    43.7,
+    25.6,
+    1.0
+   ],
+   "note": "silver minute hand, flat print, pressed on its tube",
+   "file": "hand_silver_minute.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hand_gilt_minute"
+   ],
+   "material": "gold",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    51.8,
+    24.2,
+    1.0
+   ],
+   "note": "gilt minute hand, flat print, pressed on its arbor",
+   "file": "hand_gilt_minute.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "centre_cap"
+   ],
+   "material": "gold",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    5.2,
+    5.2,
+    2.6
+   ],
+   "note": "",
+   "file": "centre_cap.stl",
+   "overhang_mm2": 7.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  }
+ ]
+}

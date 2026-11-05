@@ -8,7 +8,8 @@ the trade-offs and a recommendation. Status is **Proposed** until Paul approves;
 **As of 31 Oct 2026 every decision D1–D11 is Accepted.** D2, D5 and D11 were decided point by point;
 the rest were approved as recommended. **D12** (wooden case) was accepted on 1 Nov 2026.
 **D13** (steel springs) was accepted on 3 Nov 2026. **D14** (the shows on legal time) and **D15**
-(the procession: astronomy and time, with Urania) were accepted on 4 Nov 2026.
+(the procession: astronomy and time, with Urania) were accepted on 4 Nov 2026. **D16** (motors plug in
+from behind) was accepted on 5 Nov 2026.
 
 ## Summary
 
@@ -29,6 +30,7 @@ the rest were approved as recommended. **D12** (wooden case) was accepted on 1 N
 | D13 | Springs: steel or printed; catalogue springs in inch-based sizes | **Steel for every spring**; Sodemann's stainless catalogue springs accepted although their sizes are inch-based | **Accepted** 3 Nov 2026 (PR #8) | Phase 2 (M2 purchase) |
 | D14 | When the shows run: mean time or legal time (revises D2 item 2) | **Legal time**: the quarters at :15, :30, :45 and :00 of CET/CEST, the noon show at 12:00 | **Accepted** 4 Nov 2026 (Paul, PR #11) | Phase 2 (M1) |
 | D15 | The noon procession: Christ and the Apostles, or a personal set | **Astronomy and time**: twelve figures from Pythagoras to Einstein pass **Urania**, on the original's mechanism | **Accepted** 4 Nov 2026 (Paul, PR #11) | Phase 2 (E3) |
+| D16 | How a stepper is reached for service | **Plug-in from behind**: each motor on a printed adapter plate, held by 2 × M3 into heat-set inserts; its drive part slides on the D-shaft and is held by stops | **Accepted** 5 Nov 2026 (Paul, PR #13) | every stepper module (M1 now; M2 next) |
 
 Plus **Blockers** at the end: the network allowlist and the documents to obtain.
 
@@ -790,6 +792,39 @@ something the clock itself shows. It keeps the original's gesture, and both Uran
 already appear on the original's painted panels. Alternates for any slot include Ptolemy, Ulugh
 Beg, Harrison (the marine chronometer), Caroline Herschel and Hubble. Each figure carries an
 attribute (a telescope, a pendulum, an armillary sphere), so it reads at 57 mm.
+
+## D16 — Motors plug in from behind
+
+**Status: Accepted, 5 Nov 2026** (Paul, PR #13: "Lets go with option A for the motors").
+
+**Context.**
+- Architecture §11: "Motors are reachable without removing gears".
+- The first M1 model did not meet that. Each motor was screwed to the back plate from inside the
+  cassette, and its drive gear was pressed on its shaft between the plates. M2 is built the same
+  way. Changing a motor meant pulling the hands, lifting the dial and opening the cassette.
+- The options are in `docs/m1-design.md` §10:
+  - A, plug-in motor (+4 mm depth);
+  - B, arbor and coupling (≈ +30 mm);
+  - C, keep as modelled.
+
+**Decision: A.**
+- **Adapter.** Each stepper is screwed to a small printed adapter plate at the bench (4 × M3 × 6,
+  heads in counterbores).
+  - A boss on the adapter's face locates it in a pocket in the back plate.
+  - Two M3 × 8 screws from behind hold it, into heat-set inserts in the plate.
+- **Drive part.** It slides on the motor's D-shaft and stays in the cassette when the motor is out.
+  - Its spigot passes through the back plate and stops on the adapter's boss.
+  - A post on the front plate stops it from the front.
+  - Both stops have the endshake `E` (0.3 mm [E]).
+- **To change a motor:** undo two screws from behind and draw the motor and adapter straight out.
+  To refit it, turn the shaft until its flat finds the drive part's D-bore.
+
+**Consequences.**
+- The motors sit 4 mm further back.
+- The drive is a slip fit on the D-flat, so it has a little backlash. It stays taken up, because
+  the steppers turn forwards only (CLAUDE.md rule 3).
+- M1 has this from PR #13. **M2 is to be converted the same way** in its own PR.
+- New modules (E2's state stepper, M5, M6) start with it.
 
 ## Blockers (not decisions, but they need Paul)
 
