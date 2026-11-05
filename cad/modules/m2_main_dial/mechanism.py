@@ -29,6 +29,7 @@ from pathlib import Path
 
 import build123d as bd
 
+from cad.lib import motor_mount as MM
 from cad.lib import parts
 from cad.lib.assembly import BED_DUAL, BED_SINGLE, Assembly, write_dae
 from cad.lib.differential import SpurDifferential
@@ -91,6 +92,11 @@ L80 = (BIG[0] - GAP - FACE, BIG[0] - GAP)     # 84/84 (I -> S)
 RED2 = (L80[0] - GAP - FACE_MOTOR, L80[0] - GAP)    # 12/72 (R1 -> I)
 RED1 = (RED2[0] - GAP - FACE_MOTOR, RED2[0] - GAP)  # 12/48 (motor -> R1)
 BP = (RED1[0] - GAP - 4.0, RED1[0] - GAP)     # back plate
+# D16 (Paul, PR #13): the motor plugs in from behind on an adapter plate; its pinion, pressed on the shaft, passes
+# back through the plate's Ø22.5 hole with it
+MOTOR_FACE = BP[0] - MM.ADAPTER["t"]
+MOTOR_BOSS = (22.2, 3.0)                      # the adapter's boss, in the back plate's Ø22.5 hole
+E_MOTOR = 0.3                                 # the pinion's hub clears the boss by this (set with a shim)
 BRIDGE_DIR = 20.0                             # bridge pillars clear S, C, R and J
 WEEKDAY = RED2                                # 12 on S, 84 on W, beside the reduction
 
@@ -290,13 +296,21 @@ def build():
     sx, sy = pair_shifts(12, 48)
     g12a, g48, r48 = mesh(12, 48, MOTOR, R1, m=M_MOTOR, x=(sx, sy), label="motor -> R1 (reduction 1)")
     a.add("R1_48", gear_at(g48, R1, RED1, rot=r48), group="drive", explode=(0, 0, -90))
-    a.add("motor_pinion_12", gear_at(g12a, MOTOR, RED1), group="drive", explode=(0, 0, -90))
+    pin = spur_gear(g12a, RED1[1] - RED1[0]).moved(bd.Location((0, 0, RED1[0])))
+    pin += parts.disc(10.0, RED1[0] - (BP[0] + MOTOR_BOSS[1] + E_MOTOR), z0=BP[0] + MOTOR_BOSS[1] + E_MOTOR)
+    pin -= parts.disc(5.0 + parts.FITS.press, 50, z0=BP[0] - 10)
+    pin += MM.d_key(MOTOR_FACE, BP[0] + MOTOR_BOSS[1] + E_MOTOR, RED1[1])
+    a.add("motor_pinion_12", at(pin, MOTOR), group="drive", explode=(0, 0, -90),
+          note="pressed on the motor's D-shaft, its hub 0.3 mm clear of the adapter's boss (set with a shim); it "
+               "comes out with the motor, back through the plate's hole (D16)")
     for g_, sh in (("I_72", "shaft_I"), ("R1_12", "shaft_R1"), ("R1_48", "shaft_R1")):
         a.allow(g_, sh)
-    motor = bd.Box(42.3, 42.3, 48.0, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MAX))
-    a.add("motor_nema17", at(motor, MOTOR, BP[0]), material="black", printed=False, group="drive")
-    a.add("motor_shaft", at(parts.rod(5.0, RED1[1] - BP[0] + 1), MOTOR, BP[0]), material="steel", printed=False,
-          group="drive")
+    a.add("motor_nema17", at(MM.motor_body(MOTOR_FACE), MOTOR), material="black", printed=False, group="drive")
+    a.add("motor_shaft", at(MM.shaft(MOTOR_FACE), MOTOR), material="steel", printed=False, group="drive",
+          note="the motor's own Ø5 D-shaft")
+    a.add("motor_adapter", at(MM.adapter(BP[0], *MOTOR_BOSS), MOTOR), material="PETG", group="drive",
+          explode=(0, 0, -110), note="motor adapter (D16): screwed to the motor at the bench; plugs into the back "
+          "plate from behind, 2 x M3 x 8 into heat-set inserts")
     a.allow("motor_shaft", "motor_pinion_12")
     a.allow("motor_shaft", "back_plate")
     a.allow("motor_shaft", "motor_nema17")
@@ -398,10 +412,8 @@ def build():
     for p in (S, J, I, W, R1):
         bp -= at(parts.disc(seat.od + parts.FITS.bearing_seat, seat.width + 1, z0=BP[1] - seat.width), p)
         bp -= at(parts.disc(seat.od - 2, 10, z0=BP[0] - 1), p)
-    bp -= at(parts.disc(22.5, 10, z0=BP[0] - 1), MOTOR)                     # NEMA 17 boss
-    for dx in (-15.5, 15.5):
-        for dy in (-15.5, 15.5):
-            bp -= at(parts.disc(3.4, 10, z0=BP[0] - 1), (MOTOR[0] + dx, MOTOR[1] + dy))
+    bp -= at(parts.disc(22.5, 10, z0=BP[0] - 1), MOTOR)                     # the adapter's boss; the pinion passes
+    bp -= at(MM.insert_holes(BP[0], BP[1] - BP[0]), MOTOR)                  # the adapter's M3 inserts (D16)
     a.add("back_plate", bp, material="PETG", group="plates", explode=(0, 0, -110))
     bridge = parts.plate((150.0, 14.0), BRIDGE[1] - BRIDGE[0], z0=BRIDGE[0]).rotate(bd.Axis.Z, BRIDGE_DIR)
     bridge -= parts.disc(3.0 + parts.FITS.press, 10, z0=BRIDGE[0] - 1)

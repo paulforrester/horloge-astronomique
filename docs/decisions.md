@@ -30,7 +30,7 @@ from behind) was accepted on 5 Nov 2026.
 | D13 | Springs: steel or printed; catalogue springs in inch-based sizes | **Steel for every spring**; Sodemann's stainless catalogue springs accepted although their sizes are inch-based | **Accepted** 3 Nov 2026 (PR #8) | Phase 2 (M2 purchase) |
 | D14 | When the shows run: mean time or legal time (revises D2 item 2) | **Legal time**: the quarters at :15, :30, :45 and :00 of CET/CEST, the noon show at 12:00 | **Accepted** 4 Nov 2026 (Paul, PR #11) | Phase 2 (M1) |
 | D15 | The noon procession: Christ and the Apostles, or a personal set | **Astronomy and time**: twelve figures from Pythagoras to Einstein pass **Urania**, on the original's mechanism | **Accepted** 4 Nov 2026 (Paul, PR #11) | Phase 2 (E3) |
-| D16 | How a stepper is reached for service | **Plug-in from behind**: each motor on a printed adapter plate, held by 2 × M3 into heat-set inserts; its drive part slides on the D-shaft and is held by stops | **Accepted** 5 Nov 2026 (Paul, PR #13) | every stepper module (M1 now; M2 next) |
+| D16 | How a stepper is reached for service | **Plug-in from behind**: each motor on a printed adapter plate, held by 2 × M3 into heat-set inserts; its drive part slides on the D-shaft and is held by stops | **Accepted** 5 Nov 2026 (Paul, PR #13) | every stepper module (M1 and M2 done) |
 
 Plus **Blockers** at the end: the network allowlist and the documents to obtain.
 
@@ -823,7 +823,10 @@ attribute (a telescope, a pendulum, an armillary sphere), so it reads at 57 mm.
 - The motors sit 4 mm further back.
 - The drive is a slip fit on the D-flat, so it has a little backlash. It stays taken up, because
   the steppers turn forwards only (CLAUDE.md rule 3).
-- M1 has this from PR #13. **M2 is to be converted the same way** in its own PR.
+- M1 has this from PR #13.
+- M2 has it too. Its 12-tooth motor pinion is small enough to come back through the back plate's
+  Ø22.5 hole, so it stays pressed on the shaft and leaves with the motor. M2 needs no stops in the
+  module (`docs/m2-design.md` §2, `cad/lib/motor_mount.py`).
 - New modules (E2's state stepper, M5, M6) start with it.
 
 ## Blockers (not decisions, but they need Paul)
