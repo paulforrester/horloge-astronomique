@@ -267,6 +267,12 @@ original's separate trains, and it gives the simplest mechanisms.
    Death's bone strikes directly (§7.4).
 6. **Depth:** the faithful ring (≈ 243 mm deep), to be checked against the case in the detail
    design (§7.3).
+7. **The stop fingers are swung by a program cam on the walk train** (Paul, 6 Nov 2026, choosing A
+   over two micro servos).
+   - The cam turns once per show, through a 1:5 pair; a rocker and two rods swing both fingers.
+   - Two notches on the cam stop the walk motor at the end of each phase.
+   - A Hall at the bell station, with a magnet in each age's base, tells the controller whether an
+     age was caught, so it knows whether to strike or run another turn (§10.3).
 
 ## 10. Detail design, part 1: the layout, the ring and the selection
 
@@ -391,8 +397,9 @@ The model's envelope [D] is:
 
 ### 10.7 Open items for part 2
 
-- The walk train: the gearmotor (⚠ choose from the maker's table), the slip clutch, the program
-  cam and its lock switch, and the fingers' linkages.
+- The walk train (decided: a program cam, §9.7): the gearmotor (⚠ choose from the maker's table),
+  the slip clutch, the program cam with its two lock notches, the rocker and rods to the fingers,
+  and the Hall that says an age was caught at the bell.
 - The state module: the snails, the 12:1, and the index and witness Halls.
 - The quarter and hour trains: racks, gathering pallets, lifters, E1's cue switch, the lock
   switches, and Death's arm.
