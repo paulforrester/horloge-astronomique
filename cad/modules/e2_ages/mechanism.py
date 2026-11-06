@@ -184,7 +184,8 @@ def build():
     pin = pin.rotate(bd.Axis.Z, mesh_rotation(g_ring, g_pin, th_p)) - parts.disc(5.0 + parts.FITS.press, 30, z0=-20)
     a.add("walk_pinion_16", at(pin, pp), group="drive", note="pressed on the top of the walk shaft: turns the ring")
     data["walk"] = {"pinion_xy": [round(v, 2) for v in pp], "ring_speed_deg_s": L.RING_SPEED, **L.walk_timing(),
-                    "travel_limits": {k: round(v, 3) for k, v in G.ring_travel_limits().items()}}
+                    "travel_limits": {k: round(v, 3) for k, v in G.ring_travel_limits().items()},
+                    "timing": {k: round(v, 2) for k, v in G.timing().items()}}
 
     # ------------------------------------------------------------------ part 2a: stops, walk drive, state module
     k_sel = 0                                         # 12:10: the age cam selects the child

@@ -150,7 +150,6 @@ def walk_timing() -> dict:
     out = (PHI_WAIT - PHI_BELL) / RING_SPEED
     on = (PHI_BELL - (PHI_WAIT - PHI_SPACING)) / RING_SPEED
     return {"walk_out_s": out, "walk_on_s": on,
-            "program_turn_s": (PHASE_TRAVEL["A"] + PHASE_TRAVEL["B"]) / RING_SPEED,
             "slip_A_deg": PHASE_TRAVEL["A"] - (PHI_WAIT - PHI_BELL),
             "slip_B_deg": PHASE_TRAVEL["B"] - (PHI_BELL - (PHI_WAIT - PHI_SPACING))}
 

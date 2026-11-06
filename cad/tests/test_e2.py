@@ -94,6 +94,15 @@ def test_the_walk_train_turns_the_ring_at_6_deg_per_s():
     assert G.PROG_RATIO * G.WALK_PINION / L.TEETH["z"] == pytest.approx(G.ring_deg_per_program_deg())
 
 
+def test_the_show_timing_at_the_estimated_motor_speed():
+    """At ≈ 32 rpm [E] the walk on takes ≈ 10 s (Paul); each phase holds < 2 s before the ring moves and ends with
+    > 1 s of clutch slip (the margin for a slower motor)."""
+    t = G.timing()
+    assert t["walk_on_s"] == pytest.approx(10.0, rel=0.05)
+    assert t["hold_before_walk_out_s"] < 2.0 and t["hold_before_walk_on_s"] < 2.0
+    assert t["slip_before_strikes_s"] > 1.0 and t["slip_at_rest_s"] > 1.0
+
+
 def test_the_motion_work_is_one_twelfth():
     assert Fraction(12, 48) * Fraction(15, 45) == Fraction(1, 12)
     assert 12 + 48 == 15 + 45                                  # one centre distance (30 at m 1)

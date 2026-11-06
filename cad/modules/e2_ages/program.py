@@ -210,3 +210,25 @@ def pressure_angle_max(samples: int = 3600) -> float:
         dr = (groove_radius(t + h / 2, cg) - groove_radius(t - h / 2, cg)) / math.radians(h)
         worst = max(worst, math.degrees(math.atan2(abs(dr), r)))
     return worst
+
+
+MOTOR_RPM = 32.0                             # [E] the walk gearmotor's speed under load ⚠ (trimmed by PWM, §11.8)
+
+
+def timing(motor_rpm: float = MOTOR_RPM) -> dict:
+    """Seconds of one show's walk at a given gearmotor speed [D]: the motor pinion 12 drives the compound 24, which
+    turns the walk shaft (pinion 16 on the ring 264) and, through 12'/72, the program."""
+    walk_rpm = motor_rpm * 12 / 24
+    prog_dps = walk_rpm / PROG_RATIO * 6.0                    # program degrees per second
+    ring_dps = walk_rpm * WALK_PINION / L.TEETH["z"] * 6.0
+    e = events()
+    walk_out = (L.PHI_WAIT - L.PHI_BELL) / ring_dps
+    walk_on = (L.PHI_BELL - (L.PHI_WAIT - L.PHI_SPACING)) / ring_dps
+    hold_ba = e["wait_lets_go"] / prog_dps
+    hold_ab = (e["bell_lets_go"] - LOCK_N) / prog_dps
+    a_run = LOCK_N / prog_dps
+    b_run = (360.0 - LOCK_N) / prog_dps
+    return {"ring_deg_s": ring_dps, "program_deg_s": prog_dps, "hold_before_walk_out_s": hold_ba,
+            "walk_out_s": walk_out, "slip_before_strikes_s": a_run - hold_ba - walk_out, "phase_A_s": a_run,
+            "hold_before_walk_on_s": hold_ab, "walk_on_s": walk_on, "slip_at_rest_s": b_run - hold_ab - walk_on,
+            "phase_B_s": b_run, "program_turn_s": a_run + b_run}
