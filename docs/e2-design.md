@@ -9,7 +9,16 @@ Death strikes the hour.
 
 <p align="center"><img src="img/e2/e2_concept.png" width="980" alt="Schematic: the hall in plan with the four ages on a turntable round Death and the two bells; the trains and where the state lives; the order of one show on the hour"></p>
 
-*Schematic only, not to final dimensions. The hall's width is from `docs/envelope.md` §3 [E].*
+*Schematic only, not to final dimensions. The hall's width is from `docs/envelope.md` §3 [E]. The
+hall's plan is scaled from the 2011 photograph below [E].*
+
+<p align="center"><img src="img/e2/original_lower_hall_2011.jpg" width="760" alt="The original lower hall on 7 December 2011 at 12:24 CET: Death on its pedestal between two bells; the man (third quarter) going into the left doorway, back turned; the old man (fourth quarter) waiting at the right with his crutch"></p>
+
+*The lower hall at rest, 7 Dec 2011, 12:24 CET, which is 11:55 Strasbourg mean time [D: mean =
+CET − 29 min]. The man struck at 11:45 and stands at the left doorway, back turned. The old man,
+who strikes at 12:00, waits at the right. Photograph: Tangopaso, Wikimedia Commons,
+"Death_and_old_man_of_the_astronomical_clock_of_Strasbourg.jpg", released into the public domain
+(crop, downscaled). Found by Paul.*
 
 ## 1. What E2 does
 
@@ -36,8 +45,17 @@ Death strikes the hour.
     the bell at its right, which is the **viewer's left**, 1 to 12 times, day and night.
   - Paul's photographs IMG_0769 and IMG_0770 (10:10 CET) show:
     - Death with the bone raised in its right hand and the scythe in its left;
-    - a bell on each side of Death;
-    - **no age in view**: between quarters every age is hidden.
+    - a bell on each side of Death.
+  - Those two photographs frame only the centre of the hall, so they do not show the doorways.
+- **The hall at rest** [S: the 2011 photograph above; its clock agrees with the shows' schedule].
+  - **Two ages are in view between shows.** The one that struck last stands at the left doorway
+    with its back turned. The next one waits at the right, facing Death.
+  - **They walk from right to left.** Each comes in from the right doorway, strikes the bell at the
+    viewer's right of Death, walks on in front of Death, and goes out by the left doorway. That
+    matches Paul's "walks on past Death".
+  - The bells hang mouth down from curved brackets on posts, one either side of Death at about its
+    waist.
+  - The doorways sit at the two ends of the back wall. The hall's front is convex, a shallow bay.
 - **The order of the trains** [S: DA p. 64–66, quoted in `docs/architecture.md` §5].
   - Schwilgué gave E2's work to **three separate trains**:
     1. the "rouage des quatre âges" moves the age out;
@@ -60,9 +78,12 @@ Death strikes the hour.
 | Height of the hall | ≈ 1324 mm above the floor at 1:8; E3's hall ≈ 149 mm above it | [E: envelope §2]; [D: 1473 − 1324] |
 | Hall opening | ≈ 1.46 m wide, so **≈ 183 mm at 1:8** | [E: envelope §3] |
 | Depth available | TBD: the case depth is still open | `docs/reference-notes.md`, open items |
-| Figure heights (ages, Death) | **[?] ≈ 57 mm or ≈ 88 mm at 1:8**: 0.46 m in one source, ≈ 0.70 m as drawn on the plate | [S: WIKI] vs [E: plate]; envelope §3 says "resolve with a photo" (§7, question 1) |
-| Bells | two, either side of Death, each about 0.44 of Death's visible height wide, so **≈ 25–40 mm at 1:8** if Death is 0.46–0.70 m | [E: measured on IMG_0770, ±25 %] |
-| Which way the ages walk | in front of Death to the bell at the viewer's right, then on past Death; the side they enter from is not recorded | [S: Paul's observation]; the entry side is [?] (§7, question 2) |
+| Death's height | **≈ 0.62 m, so ≈ 78 mm at 1:8** (range 0.52–0.74 m, 65–92 mm) | [E: 2011 photograph. Death is 0.349 of the hall's width as seen, corrected by 1/cos 35° for the upward view; 0.349 × 1.46 m / 0.82. The view angle comes from the bells' rim ellipses (axis ratio 0.58–0.64, so 35–40°; 30° allowed for tilt). The hall's width is ±11 % (envelope §3)] |
+| The ages' heights | the old man as tall as Death, though stooped; the man appears about 0.8 of Death, but he is turned away in the doorway; the youth and the child are not in the photograph | [E: same photograph]; [?] for the child and the youth |
+| Bells | **≈ 0.17 m across, so ≈ 21 mm at 1:8**, their centres ≈ 24 mm either side of Death's axis | [E: 0.113 and 0.133 of the hall's width; widths are not foreshortened; ±11 %] |
+| Which way the ages walk | **in from the right doorway, strike at the right-hand bell, on past Death, out by the left doorway** | [S: 2011 photograph and Paul's observation] |
+| Rest state | the last age stands at the left doorway, the next waits at the right; both in view | [S: 2011 photograph, 12:24 CET = 11:55 mean time, between the 11:45 and 12:00 shows] |
+| Turntable that fits these positions | four ages 90° apart on a ring of R ≈ 121 mm, its centre ≈ 94 mm behind Death; the front of the ring ≈ 27 mm in front of Death; **≈ 243 mm deep in all** | [D: a circle through both doorways (±0.42 of the hall's width, at Death's depth) and 0.15 of the width in front of Death; the photograph's rest positions (±0.41 and −0.46 of the width) fall at ±45° on it] |
 | Stroke cadence | not recorded | [?] (§7, question 2) |
 | How the original moves the ages | not described in DA; Ungerer 1922 and Bach et al. 1992 may show it | [?]: the books are still to obtain |
 | State arbor | 1 rev/h, legal time; quarter snail 1:1; hour snail through 12:1 (12/48 · 15/45, as M1's motion work) | [S: M1 gate, decision 1; architecture §3] |
@@ -83,8 +104,10 @@ As everywhere: **pass timing electrically and position mechanically** (architect
 - What must match the time is in the state train: which age is due, how many pairs, and Death's
   count.
 - The event motors only supply the energy for each show.
-- Between shows every age is hidden, so a skipped show (quiet hours, catch-up, a fault) can never
-  leave anything visibly wrong.
+- **Between shows the next age is in view**, waiting at the right. So a skipped show (quiet
+  hours, catch-up, a fault) would leave the wrong age waiting. The walk train therefore always
+  stops on an age chosen by the state train (4.2), and the controller runs it alone, silently,
+  after any skip (4.5).
 
 ## 4. Proposed concept
 
@@ -103,22 +126,29 @@ As everywhere: **pass timing electrically and position mechanically** (architect
 **4.2 The quarter train: the count and the choice of age.**
 - When released, a rack falls onto the quarter snail. Its fall (1–4 steps) sets the number of pairs,
   as in rack quarter-striking.
-- **The same fall also picks the age.** The rack positions a stop finger at one of four radii.
+- **The state train picks the age.** A four-step age cam on the state arbor sets a stop finger at
+  one of four radii.
   - Each age has a peg at its own radius on the turntable (option A, §5).
-  - So only the due age's peg meets the finger.
+  - So only the age that is due next can stop at the waiting position, at the right doorway.
+  - The age cam steps just after each show starts, a quarter ahead of the quarter snail.
+    Whenever the walk train stops, the next due age is waiting.
 - Each stroke cycle closes a cue switch. The controller fires E1's genie, and the age's stroke
   follows a moment later on the cam.
 - The age strikes the ages' bell with its attribute. A lifter at the bell station raises the arm
   of whichever age stands there, and the arm falls onto the bell.
 
 **4.3 The walk.**
-- The walk train turns the turntable through a slip clutch until the due age's peg meets the stop
-  finger. That puts the age at the bell.
-- After the strikes, the walk train lifts the finger and runs on to the rest position: the next
-  quarter turn, with all ages hidden behind the lodge screens.
-- **If shows were skipped**, the turntable simply runs further at the next show. The skipped ages
-  pass without striking, until the due age meets the finger. So it corrects itself, as a rack on a
-  snail does.
+- At rest the due age waits at the right doorway, held by the age cam's stop, and the last one
+  stands at the left doorway.
+- **The show.**
+  1. The walk train lifts the stop and turns the turntable through a slip clutch. A fixed cam
+     brings the waiting age to the bell, a short move.
+  2. The quarter train strikes.
+  3. The walk train walks the age on past Death to the left doorway. The turntable stops when
+     the next due age reaches the waiting position: a quarter turn in all.
+- **If shows were skipped**, running the walk train simply turns on until the age cam's stop
+  catches the age now due. The skipped ages pass without striking. So it corrects itself, as a
+  rack on a snail does.
 
 **4.4 The hour train.**
 - A rack falls onto the hour snail (1–12).
@@ -130,7 +160,9 @@ As everywhere: **pass timing electrically and position mechanically** (architect
 **4.5 Night, catch-up and setting.**
 - Quiet hours are firmware (D10). The minimal faithful setting silences the ages at night, while
   Death strikes day and night [S: DA p. 58, 65].
-- After quiet hours or a power cut, the first show catches the turntable up by itself (4.3).
+- At the end of quiet hours, and after a power cut, the controller runs the walk train alone,
+  silently (4.3). Then the right age waits in view. Nothing else needs catching up: the snails
+  are on the state arbor.
 - No hands to set: the state arbor's phase is the stepper's (P1). The hour snail is meshed at its
   mark at commissioning, and its witness checks it.
 
@@ -140,13 +172,13 @@ All three options keep the state in the state train. They differ in how the age 
 
 | Option | How | For | Against |
 |---|---|---|---|
-| **A. Turntable round Death, stopped by the state** (4.2–4.3) | The four ages stand 90° apart on a ring round Death's fixed pedestal. Each show turns it a quarter turn in two moves: out to the bell, then on behind the right-hand lodge screen. | Matches what Paul saw: out in front of Death, strike, walk on. One rigid, printable part on one bearing. It corrects itself after skipped shows. | Two stops to design (the selected stop and the rest stop) and a slip clutch. The depth needed is about the ring's diameter. |
+| **A. Turntable, stopped by the state** (4.2–4.3) | The four ages stand 90° apart on a ring whose centre is behind the back wall. Only its front arc, between the two doorways, is in view. Each show turns it a quarter turn: in from the right, strike, out by the left. | Matches the 2011 photograph and Paul's observation, including the two ages in view at rest. One rigid, printable ring (Ø ≈ 243 mm, within the bed) on one bearing. It corrects itself after skipped shows. | **About 243 mm of depth** at the original's geometry [E]. A smaller ring, with the doorways moved in, needs less depth but spoils the look. Two stops and a slip clutch to design. |
 | B. Turntable geared to the state arbor | The ring turns continuously at 1 rev/h. Each age reaches the bell at its own quarter. | The simplest: no walk motor, no stops, no clutch. Nothing can get out of step. | The ages creep all the time. With a visible arc of ≈ 80°, an age is in view for ≈ 13 min each hour, so one is in view ≈ 53 min of every hour [D: 80/360 × 60 × 4]. Not what Paul saw. |
 | C. Four lodges, one slide per age (DA's "sort de sa loge, fait deux pas") | The state arbor turns a selector that couples the walk train to the due age's slide. The age steps out two paces, strikes, and steps back. | Follows DA's wording. Each show starts and ends at rest. | Four slides and a selector. The age goes back rather than on past Death, against Paul's observation. Four lodges take up the hall's width. |
 
 **Recommendation: A.**
-- It is the only option that matches both DA ("sort de sa loge … disparaît") and Paul's
-  observation ("walks on past Death").
+- It is the only option that matches DA ("sort de sa loge … disparaît"), Paul's observation
+  ("walks on past Death") and the 2011 photograph (two ages in view at rest).
 - It stays self-correcting.
 - The cost is the two stops and the clutch, which the detail design proves on paper first, with a
   test over every pair of resting age and due age.
@@ -166,14 +198,18 @@ All three options keep the state in the state train. They differ in how the age 
 
 ## 7. Smaller questions
 
-1. **Figure heights.** The detail design needs one height for the ages and one for Death; both are
-   [?] (57 or 88 mm, §2).
-   - **Paul, have you a photo or video frame showing the whole lower hall with an age at the bell?**
-     I can scale the figures on the hall's opening [E, ±20 %].
-   - Otherwise the figures are parametric, and I start at 70 mm until the books settle it.
-2. **The walk.** From your video, which side does the age come from: left or right of Death?
-   Roughly how many seconds are there between strokes?
-3. **The strike.**
+1. **Figure heights.** The 2011 photograph gives Death ≈ 78 mm at 1:8 (65–92 mm) [E, §2]. That is
+   nearer the plate's 88 mm than the 57 mm source.
+   - I propose Death at 78 mm, the man, youth and old man about as tall, and the child smaller.
+   - All of them are parametric, so the books can still correct them.
+   - The 57 mm Apostles in `CLAUDE.md` came from the same 18-inch source. E3 will need the same
+     check against a photograph.
+2. **The walk.** Its direction is settled: in from the right, out by the left (§1). Still open, from
+   your video: roughly how many seconds are there between strokes, and how long does the walk
+   take?
+3. **Depth.** The faithful turntable needs about 243 mm of depth at E2's level (§2). Is that
+   acceptable, or should I plan a shallower ring? The case depth is still open.
+4. **The strike.**
    - **Recommended:** the age's own attribute strikes the bell, as in the original. It is soft,
      which suits a living room (D8).
    - **Fallback:** a hidden hammer moved with the arm, if the test bells sound too weak.

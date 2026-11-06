@@ -944,10 +944,37 @@ Crop of the gallery from IMG_0766 (below): `docs/img/m1/original_gallery.jpg`.
 - Death stands on a pedestal holding a bone in its right hand and the scythe in its left, with
   **a bell on each side**. DA mentions "le timbre à sa droite" [S: DA p. 57–58]. Which bell the ages
   strike is for E2's design.
-- **No age is in view** at 10:10–10:11 CET, between quarters: the ages are hidden while they wait
-  [S: IMG_0769, IMG_0770].
-- Each bell is about 0.44 of Death's visible height wide (from the balustrade up), so ≈ 25–40 mm
-  at 1:8 [E: measured on IMG_0770, ±25 %; `docs/e2-design.md` §2].
+- These two photographs frame only the centre of the hall, so they do not show the doorways where
+  the ages wait. (An earlier note here said "no age is in view"; the 2011 photograph below shows
+  that two ages are in view at rest, at the doorways.)
+
+**The lower hall at rest, 7 Dec 2011** [S: Tangopaso, Wikimedia Commons,
+https://commons.wikimedia.org/wiki/File:Death_and_old_man_of_the_astronomical_clock_of_Strasbourg.jpg,
+released into the public domain; original 4416 × 3312, taken 7 Dec 2011 12:24:24. Found by Paul,
+6 Nov 2026. Crop: `docs/img/e2/original_lower_hall_2011.jpg`]
+- 12:24 CET is 11:55 Strasbourg mean time [D: mean = CET − 29 min], between the 11:45 and 12:00
+  shows. The ages' positions agree with that:
+  - **the man** (third quarter) stands at the left doorway, back turned, going out;
+  - **the old man** (fourth quarter, next) waits at the right, facing Death, crutch in hand.
+- So **two ages are in view at rest**, and they walk **from right to left**: in from the right
+  doorway, strike the bell at the viewer's right of Death, on in front of Death, out by the left
+  doorway. This agrees with Paul's observation.
+- **The hall.**
+  - Death stands on a low pedestal in the middle.
+  - The two bells hang mouth down from curved brackets on posts, either side of Death at waist
+    height.
+  - The back wall is arcaded, with a doorway at each end. The front is convex, a shallow bay.
+- **Measured** [E] in the 2000 × 1500 copy, as fractions of the hall's width W at the vault's
+  front edge (1433 px), with W = 1.46 m ±11 % (envelope §3):
+  - Death: 0.349 W tall as seen. Corrected for the upward view by 1/cos θ, with θ = 30–40° from the
+    bells' rim ellipses (axis ratio 0.58–0.64), that gives **≈ 0.62 m (0.52–0.74 m), ≈ 78 mm at
+    1:8**.
+  - Old man: as tall as Death, though stooped. The man appears about 0.8 of Death, but he is
+    turned away in the doorway.
+  - Bells: **0.113 W across, ≈ 0.17 m, ≈ 21 mm at 1:8**. Their centres are ±0.133 W from Death's
+    axis (≈ 24 mm at 1:8).
+  - Doorways at ±0.42–0.51 W. Waiting ages at +0.41 W and −0.46 W.
+- This replaces the bell estimate above (25–40 mm), which had assumed Death's height.
 
 **Upper hall** [S: Paul's photograph IMG_0771]
 - Christ holds the banner of the redemption in his left hand and blesses with his right, as DA
