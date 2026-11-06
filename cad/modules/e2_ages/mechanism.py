@@ -233,10 +233,15 @@ def renders(a: Assembly, out: Path):
     out.mkdir(parents=True, exist_ok=True)
     a.render(out / "e2_front.png", elev=12, azim=-90, title="E2: the hall from the front (rest, 12:10)",
              tolerance=0.3, size=(9, 7))
-    a.render(out / "e2_plan.png", elev=89, azim=-90, title="E2: plan (the ring, its rollers, the stops)",
-             hide=("figures",), tolerance=0.3, size=(8, 9))
+    a.render(out / "e2_plan.png", elev=89, azim=-90, title="E2: plan (floors and deck hidden: the ring, the stops, the drives)",
+             hide=("figures", "hall"), tolerance=0.3, size=(8, 9))
     a.render(out / "e2_three_quarter.png", elev=22, azim=-60, title="E2: three-quarter (hall hidden)",
              hide=("hall",), tolerance=0.3, size=(9, 8))
+    a.render(out / "e2_drives.png", elev=18, azim=-62, title="E2 part 2a: the stops, the walk drive and the state "
+             "module (hall, ring and figures hidden)", hide=("hall", "ring", "figures"), tolerance=0.2, size=(10, 8))
+    a.render(out / "e2_stops.png", elev=28, azim=-48, title="E2 part 2a: the stops and the walk drive (state module, "
+             "hall, ring and figures hidden; rest state B)", hide=("hall", "ring", "figures", "state"), tolerance=0.15,
+             size=(10, 8))
 
 
 def main(out_dir="export/e2_ages"):

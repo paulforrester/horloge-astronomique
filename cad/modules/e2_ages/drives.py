@@ -182,10 +182,10 @@ def add_stops(a, theta: float, k_sel: int, minutes: float):
     a.add("bell_arm", stop_arm(sb, z_sel - L.STOP["h"] / 2, z_top, arms["bell"], hub_d=7.0, bore=SQUARE, square=True),
           group="stops", note="pressed on the square rod: catches only the selected age's peg")
     sleeve_z = (lv["stop_gear"][0], -28.0)
-    sleeve = zdisc(6.0, *sleeve_z) + zdisc(10.0, DECK[1] + 0.3, DECK[1] + 1.5)
-    sleeve -= box(SQUARE + parts.FITS.running, SQUARE + parts.FITS.running, sleeve_z[0] - 1, sleeve_z[1] + 1)
-    a.add("bell_sleeve", at(sleeve.rotate(bd.Axis.Z, rot_b), sb), group="stops",
-          note="turns in the deck; the square rod slides in it; its collar rests on the deck")
+    sleeve_parts = zdisc(6.0, *sleeve_z)
+    sleeve_parts -= box(SQUARE + parts.FITS.running, SQUARE + parts.FITS.running, sleeve_z[0] - 1, sleeve_z[1] + 1)
+    collar = zdisc(10.0, DECK[1] + 0.3, DECK[1] + 1.5, bore=6.0 + parts.FITS.press)
+    a.add("bell_collar", at(collar, sb), group="stops", note="pressed on the sleeve above the deck: it rests on the deck")
     # waiting stop: Ø3 steel shaft, arm level with the waiting pegs, its hub down to the deck
     wz = L.STOP["wait_z"]
     a.add("wait_shaft", at(parts.rod(3.0, wz[1] - lv["crank"][0], z0=lv["crank"][0]), sw), material="steel",
@@ -207,12 +207,16 @@ def add_stops(a, theta: float, k_sel: int, minutes: float):
           note="Ø2 steel pin, pressed in the crank, runs in the push rod's yoke")
     th_bw = math.degrees(math.atan2(sb[1] - sw[1], sb[0] - sw[0]))
     rb = mesh_rotation(g["stop_w"], g["stop_b"], th_bw, gam)
-    a.add("bell_gear", at(gear(g["stop_b"], *lv["stop_gear"], 6.0, rot=rb), sb), group="stops",
-          note="12 teeth pressed on the bell sleeve: turns it opposite to the waiting shaft")
-    for x, y in (("bell_arm", "bell_rod"), ("bell_sleeve", "bell_rod"), ("bell_gear", "bell_sleeve"),
+    sleeve = sleeve_parts.rotate(bd.Axis.Z, rot_b) + gear(g["stop_b"], *lv["stop_gear"], 3.0, rot=rb)
+    sleeve -= box(SQUARE + parts.FITS.running, SQUARE + parts.FITS.running, sleeve_z[0] - 1,
+                  sleeve_z[1] + 1).rotate(bd.Axis.Z, rot_b)
+    a.add("bell_sleeve", at(sleeve, sb), group="stops", note="12 teeth and the keyed sleeve in one print: turns in the "
+          "deck, opposite to the waiting shaft; the square rod slides in it")
+    for x, y in (("bell_arm", "bell_rod"), ("bell_sleeve", "bell_rod"), ("bell_collar", "bell_sleeve"),
+                 ("bell_collar", "deck"),
                  ("wait_arm", "wait_shaft"), ("wait_gear_crank", "wait_shaft"), ("crank_pin", "wait_gear_crank"),
                  ("bell_sleeve", "deck"), ("wait_shaft", "deck"), ("wait_arm", "deck"), ("bell_rod", "age_cam"),
-                 ("bell_gear", "wait_gear_crank")):
+                 ("bell_sleeve", "wait_gear_crank")):
         a.allow(x, y)
     # the push rod: a flat bar along u through P, the follower pin near P, the yoke round the crank pin
     P, u, n = cg["P"], cg["u"], cg["n"]
@@ -280,17 +284,22 @@ def add_walk_drive(a, theta: float):
     a.add("walk_starlock", at(zdisc(STARLOCK[5.0][0], *lv["starlock"], bore=5.0), pp), material="steel",
           printed=False, group="drive", note="Starlock for Ø5: holds the shaft down against the clutch's preload")
     a.allow("walk_starlock", "walk_shaft"); a.allow("walk_starlock", "walk_bearing_bottom")
-    adds.append(at(zdisc(14.0, *lv["walk_boss"]), pp))
+    blk = zdisc(18.0, *lv["walk_boss"]) - zdisc(b85.od + parts.FITS.bearing_seat, lv["brg_bot"][0] - 1, lv["brg_bot"][1])
+    blk -= zdisc(6.5, lv["walk_boss"][0] - 1, lv["walk_boss"][1] + 1)
+    for dx in (-6.5, 6.5):
+        blk -= zdisc(2.4, lv["walk_boss"][0] - 1, lv["walk_boss"][1] + 1).moved(bd.Location((dx, 0, 0)))
+    a.add("walk_bearing_block", at(blk.rotate(bd.Axis.Z, G.PROG_DIR + 90.0), pp), material="PETG", group="drive",
+          note="the walk shaft's lower bearing: screwed under the deck (2 x M2)")
+    a.allow("walk_bearing_block", "deck"); a.allow("walk_bearing_block", "walk_bearing_bottom")
     cuts += [at(zdisc(b85.od + parts.FITS.bearing_seat, lv["brg_top"][0], lv["brg_top"][1] + 1), pp),
-             at(zdisc(b85.od + parts.FITS.bearing_seat, lv["brg_bot"][0] - 1, lv["brg_bot"][1]), pp),
-             at(zdisc(6.5, DECK[0] - 5, DECK[1] + 1), pp)]
+             at(zdisc(6.5, DECK[0] - 1, DECK[1] + 1), pp)]
     # the clutch: spacer | wave washer | compound (free) | hub (pressed)
     a.add("walk_spacer", at(zdisc(7.5, *lv["spacer"], bore=5.0 + parts.FITS.running), pp), group="drive",
           note="on the top bearing's inner race")
     a.add("walk_wave_washer", at(zdisc(WAVE[0], *lv["washer"], bore=5.3), pp), material="steel", printed=False,
           group="drive", note="wave washer for Ø5: the clutch's preload [E]")
     comp = gear(g["g24"], *lv["g24"], 5.0, "running") + gear(g["g12p"], *lv["g12p"], 5.0, "running")
-    comp += zdisc(8.0, lv["neck"][0] - 0.01, lv["neck"][1] + 0.01, bore=5.3) + zdisc(8.0, *lv["boss"], bore=5.3)
+    comp += zdisc(10.0, lv["neck"][0] - 0.01, lv["neck"][1] + 0.01, bore=5.3) + zdisc(8.0, *lv["boss"], bore=5.3)
     a.add("walk_compound", at(comp, pp), group="drive",
           note="24 + 12' in one print, free on the walk shaft: the clutch's driven member")
     a.add("walk_hub", at(zdisc(12.0, *lv["hub"], bore=5.0 + parts.FITS.press), pp), group="drive",
@@ -321,6 +330,7 @@ def add_walk_drive(a, theta: float):
     for dy in (-5.5, 5.5):
         flange -= zdisc(2.4, d0 - 3.0, d0 + 1.0).moved(bd.Location((12.5, dy, 0)))
     a.add("walk_motor_bracket", at((sleeve + flange).rotate(bd.Axis.Z, MOTOR_DIR), wm), material="PETG", group="drive",
+          print_up=(0, 0, -1),
           note="holds the gearmotor; two M2 screws under the deck: undo them and the motor drops out with its pinion")
     a.allow("walk_motor_bracket", "walk_motor"); a.allow("walk_motor_bracket", "deck")
     cuts.append(at(zdisc(16.0, DECK[0] - 1, DECK[1] + 1), wm))
@@ -334,10 +344,16 @@ def add_walk_drive(a, theta: float):
     for nm, z0 in (("program_bearing_top", lv["prog_brg_top"][0]), ("program_bearing_bottom", lb["prog_brg"][0])):
         a.add(nm, at(parts.bearing(b85, z0), P), material="bearing", printed=False, group="drive", note="MR85ZZ")
         a.allow(nm, "program_shaft"); a.allow(nm, "deck")
-    adds.append(at(zdisc(12.0, *lv["prog_boss"]), P))
-    cuts += [at(zdisc(b85.od + parts.FITS.bearing_seat, lv["prog_brg_top"][0], lv["prog_brg_top"][1] + 1), P),
-             at(zdisc(b85.od + parts.FITS.bearing_seat, lb["prog_brg"][0] - 1, lb["prog_brg"][1]), P),
-             at(zdisc(6.5, DECK[0] - 1, lv["prog_boss"][1] + 1), P)]
+    pblk = zdisc(18.0, *lv["prog_boss"]) - zdisc(b85.od + parts.FITS.bearing_seat, lv["prog_brg_top"][0],
+                                                   lv["prog_brg_top"][1] + 1)
+    pblk -= zdisc(6.5, lv["prog_boss"][0] - 1, lv["prog_boss"][1] + 1)
+    for dx in (-6.5, 6.5):
+        pblk -= zdisc(2.4, lv["prog_boss"][0] - 1, lv["prog_boss"][1] + 1).moved(bd.Location((dx, 0, 0)))
+    a.add("program_bearing_block", at(pblk, P), material="PETG", group="drive",
+          note="the program shaft's upper bearing: screwed on the deck (2 x M2)")
+    a.allow("program_bearing_block", "deck"); a.allow("program_bearing_block", "program_bearing_top")
+    cuts += [at(zdisc(b85.od + parts.FITS.bearing_seat, lb["prog_brg"][0] - 1, lb["prog_brg"][1]), P),
+             at(zdisc(6.5, DECK[0] - 1, DECK[1] + 1), P)]
     cg = G.crank()
     ang_u = math.degrees(math.atan2(cg["u"][1], cg["u"][0]))
     rot_c = -theta                                             # the program shaft turns CW seen from above
@@ -412,10 +428,10 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
     rot = 6.0 * minutes                                       # the arbor's angle (local, about +X)
     rot_h = 30.0 * hours
     x_l, x_r = -31.0, 79.5                                    # the arbor's ends
-    xp = dict(plate_l=(-30.0, -26.0), witness=(-26.0, -23.0), tube=(-25.7, -10.3), snail_h=(-22.0, -18.0),
-              hour_wheel=(-16.0, -13.5), p12=(-10.0, -7.5), lay_hub=(-13.5, -10.0), lay_stud=(-30.0, -6.5),
-              age_cam=(cam_x - AGE_CAM["t"] / 2, cam_x + AGE_CAM["t"] / 2), snail_q=(42.0, 46.0),
-              index=(55.0, 58.0), index_hall=(58.5, 61.5), block=(62.0, 66.0), coupling=(66.3, 95.5),
+    xp = dict(plate_l=(-30.0, -26.0), witness=(-26.0, -23.0), tube=(-25.7, -13.5), snail_h=(-22.0, -18.0),
+              hour_wheel=(-16.0, -13.5), p12=(-13.2, -10.7), lay_hub=(-13.5, -13.2), lay_stud=(-30.0, -9.7),
+              age_cam=(cam_x - AGE_CAM["t"] / 2, cam_x + AGE_CAM["t"] / 2), snail_q=(39.5, 43.5),
+              index=(45.5, 48.5), index_hall=(49.0, 52.0), block=(52.3, 56.3), coupling=(56.6, 95.5),
               plate_r=(96.0, 100.0))
     lay_y = arbor_y + 30.0
     a.add("state_arbor", on_x(parts.rod(5.0, x_r - x_l), x_l, arbor_y, z), material="steel", printed=False,
@@ -426,12 +442,13 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
 
     t_cam = xp["age_cam"][1] - xp["age_cam"][0]
     a.add("age_cam", ox(arbor_cam(age_cam_radius, 60.0, t_cam).rotate(bd.Axis.Z, rot), xp["age_cam"]), group="state",
-          note="sets the bell rod's height: 4 steps of 4 mm, a ramp back from the old man to the child")
+          print_up=(1, 0, 0), note="sets the bell rod's height: 4 steps of 4 mm, a ramp back from the old man to the child")
     a.add("quarter_snail", ox(arbor_cam(quarter_snail_radius, 60.0, xp["snail_q"][1] - xp["snail_q"][0]).rotate(
-        bd.Axis.Z, rot), xp["snail_q"]), group="state", note="part 2b's quarter rack falls on it: 1 to 4 pairs")
+        bd.Axis.Z, rot), xp["snail_q"]), group="state", print_up=(1, 0, 0),
+          note="part 2b's quarter rack falls on it: 1 to 4 pairs")
     idx = zdisc(24.0, 0.0, 3.0, bore=5.0 + parts.FITS.press) - zdisc(MAGNET[0] + 0.2, 3.0 - MAGNET[1] - 0.2, 3.1).moved(
         bd.Location((0, 9.0, 0)))
-    a.add("index_disc", ox(idx.rotate(bd.Axis.Z, rot), xp["index"]), group="state", print_up=(-1, 0, 0),
+    a.add("index_disc", ox(idx.rotate(bd.Axis.Z, rot), xp["index"]), group="state", print_up=(1, 0, 0),
           note="its magnet passes the index Hall at minute 0")
     mag = zdisc(MAGNET[0], 3.0 - MAGNET[1], 3.0).moved(bd.Location((0, 9.0, 0)))
     a.add("index_magnet", ox(mag.rotate(bd.Axis.Z, rot), xp["index"]), material="silver", printed=False,
@@ -452,14 +469,15 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
         45, 1.0, shift=s45)
     assert abs(centre_distance(g12, g48) - 30.0) < 1e-6 and abs(centre_distance(g15, g45) - 30.0) < 1e-6
     pw = xp["p12"][1] - xp["p12"][0]
-    a.add("state_pinion_12", ox(gear(g12, 0.0, pw, 5.0, rot=rot), xp["p12"]), group="state",
+    a.add("state_pinion_12", ox(gear(g12, 0.0, pw, 5.0, rot=rot), xp["p12"]), group="state", print_up=(1, 0, 0),
           note="pressed on the state arbor: the 12:1 motion work's input")
     r_lay = mesh_rotation(g12, g48, 0.0, rot)
     lay = gear(g48, xp["p12"][0] - xp["hour_wheel"][0], xp["p12"][1] - xp["hour_wheel"][0], 4.0, "running", rot=r_lay)
     lay += gear(g15, 0.0, xp["hour_wheel"][1] - xp["hour_wheel"][0], 4.0, "running", rot=r_lay)
-    lay += zdisc(9.0, xp["lay_hub"][0] - xp["hour_wheel"][0] - 0.01, xp["lay_hub"][1] - xp["hour_wheel"][0] + 0.01,
+    lay += zdisc(12.0, xp["lay_hub"][0] - xp["hour_wheel"][0] - 0.01, xp["lay_hub"][1] - xp["hour_wheel"][0] + 0.01,
                  bore=4.0 + parts.FITS.running)
-    a.add("lay_compound", on_x(lay, xp["hour_wheel"][0], lay_y, z), group="state", note="48 + 15 in one print, "
+    a.add("lay_compound", on_x(lay, xp["hour_wheel"][0], lay_y, z), group="state", print_up=(-1, 0, 0),
+          note="48 + 15 in one print, "
           "free on its stud")
     a.add("lay_stud", on_x(parts.rod(4.0, xp["lay_stud"][1] - xp["lay_stud"][0]), xp["lay_stud"][0], lay_y, z),
           material="steel", printed=False, group="state", note="Ø4 ground rod pressed in the left plate")
@@ -468,11 +486,11 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
     r45 = mesh_rotation(g15, g45, 180.0, r_lay)
     hw = gear(g45, xp["hour_wheel"][0] - xp["tube"][0], xp["hour_wheel"][1] - xp["tube"][0], 5.0, "running", rot=r45)
     hw += zdisc(7.0, 0.0, xp["tube"][1] - xp["tube"][0], bore=5.0 + parts.FITS.running)
-    a.add("hour_wheel_45", ox(hw, xp["tube"]), group="state", print_up=(1, 0, 0),
+    a.add("hour_wheel_45", ox(hw, xp["tube"]), group="state", print_up=(-1, 0, 0),
           note="the hour wheel on its tube, free on the state arbor (1 turn in 12 h)")
     hs = arbor_cam(hour_snail_radius, 12.0, xp["snail_h"][1] - xp["snail_h"][0], bore=7.0 + parts.FITS.press)
     hs -= zdisc(MAGNET[0] + 0.2, -0.1, MAGNET[1] + 0.2).moved(bd.Location((0, 7.0, 0)))
-    a.add("hour_snail", ox(hs.rotate(bd.Axis.Z, rot_h), xp["snail_h"]), group="state",
+    a.add("hour_snail", ox(hs.rotate(bd.Axis.Z, rot_h), xp["snail_h"]), group="state", print_up=(-1, 0, 0),
           note="pressed on the hour wheel's tube; part 2b's hour rack falls on it: 1 to 12 strokes")
     a.add("witness_magnet", ox(zdisc(MAGNET[0], 0.0, MAGNET[1]).moved(bd.Location((0, 7.0, 0))).rotate(
         bd.Axis.Z, rot_h), xp["snail_h"]), material="silver", printed=False, group="state")
@@ -504,12 +522,12 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
     left -= ox(zdisc(b85.od + parts.FITS.bearing_seat, -0.01, b85.width), (xp["plate_l"][0], 0))
     left -= ox(zdisc(6.5, -1, 6), (xp["plate_l"][0], 0))
     left -= on_x(zdisc(4.0 + parts.FITS.press, -1, 6), xp["plate_l"][0], lay_y, z)
-    a.add("state_plate_left", left, material="PETG", group="state", print_up=(1, 0, 0),
+    a.add("state_plate_left", left, material="PETG", group="state", print_up=(0, 0, -1),
           note="carries the arbor's left bearing, the lay stud and the witness Hall")
     block = yz_plate(xp["block"], arbor_y - 10.0, arbor_y + 10.0, z - 9.0, DECK[0])
     block -= ox(zdisc(b85.od + parts.FITS.bearing_seat, xp["block"][1] - b85.width, xp["block"][1] + 0.01) , (0, 0))
     block -= ox(zdisc(6.5, xp["block"][0] - 1, xp["block"][1] + 1), (0, 0))
-    a.add("state_block", block, material="PETG", group="state", print_up=(1, 0, 0),
+    a.add("state_block", block, material="PETG", group="state", print_up=(0, 0, -1),
           note="the arbor's right bearing and the index Hall")
     # the coupling: the arbor's right end in a press bore, the motor's D-shaft in a D socket (D16)
     xf = xp["plate_r"][1]                                     # the adapter's front face (global x)
@@ -524,7 +542,7 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
     coup = zdisc(12.0, c0, c1)
     tip = zf + MM.SHAFT["length"]
     coup -= zdisc(5.0 + parts.FITS.running, c0 - 1, tip + 0.3)
-    coup += MM.d_key(zf, c0, tip + 0.3)
+    coup += MM.d_key(zf, c0, tip + 0.3, fit=parts.FITS.running)        # a slip fit: the motor slides out
     coup -= zdisc(5.0 + parts.FITS.press, xf - x_r, c1 + 1)
     a.add("state_coupling", mx(coup), group="state", print_up=(1, 0, 0),
           note="pressed on the arbor; the NEMA 17's D-shaft slides into its D socket (D16: plugs in from the right)")
@@ -539,7 +557,7 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
     for dz in (-MM.ADAPTER["ears"], MM.ADAPTER["ears"]):
         mplate -= on_x(zdisc(MM.INSERT_HOLE, -0.01, xp["plate_r"][1] - xp["plate_r"][0] + 0.01), xp["plate_r"][0],
                        arbor_y, z + dz)
-    a.add("state_motor_plate", mplate, material="PETG", group="state", print_up=(1, 0, 0),
+    a.add("state_motor_plate", mplate, material="PETG", group="state", print_up=(0, 0, -1),
           note="the motor's plate: its adapter's boss locates in it; two M3 heat-set inserts")
     for x, y in (("state_coupling", "state_arbor"), ("state_coupling", "state_motor_shaft"),
                  ("state_motor_shaft", "state_motor"), ("state_motor", "state_motor_adapter"),
