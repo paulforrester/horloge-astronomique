@@ -66,7 +66,7 @@ taken as given. This architecture adds five working principles:
 | M6 | Celestial globe | I16 sidereal rotation; I17 precession | floor level, front | stepper, 1 rev/mean day | v1 |
 | M7 | Weekday carousel | I11 | above the main dial | shaft from M2 (7:1 in M7) | v1 |
 | E1 | Angels | A1 bell, A2 hourglass | either side of the mean-time dial | event motor(s) | v1 |
-| E2 | Ages and Death | A3 quarters, A4 hours | upper stage | event motor, plus a 1 rev/h **state stepper** on legal time carrying the quarter and hour snails (M1 gate, decision 1: B) | v1 |
+| E2 | Ages and Death | A3 quarters, A4 hours | upper stage | three event motors (walk, quarters, hours; `docs/e2-design.md` §6), plus a 1 rev/h **state stepper** on legal time carrying the quarter snail, the age cam and the hour snail (M1 gate, decision 1: B) | v1 |
 | E3 | Apostles and Christ | A5 | top stage | event motor | v1 |
 | E4 | Rooster | A6 | top of the left tower | event motor | v1 |
 | E5 | Computus run | A7 | in M4 | event motor | v2 |
@@ -131,8 +131,8 @@ train's warning, release and locking.
 |---|---|---|---|---|
 | E1 bell angel (A1) | cued by E2's quarter train before each of the age's strokes (n pairs at the n-th quarter; mechanism-inventory A3) | E1 locking cam | one stroke per cue | skip |
 | E1 hourglass (A2) | M1b hour flag, after the fourth quarter | E1 locking cam (half turn, alternating direction [S: DA p. 51]) | — | skip; only the direction parity can change, which is harmless |
-| E2 ages (A3) | M1b quarter flag (legal time, D14) | E2 locking cam | quarter snail on E2's state arbor (1–4 pairs; it also picks the age) | skip. The original also stops the ages at night [S: DA p. 58, 65]. |
-| E2 Death (A4) | M1b hour flag, after A3 | E2 rack locked | hour snail on E2's state arbor, through 12:1 (1–12, legal hour) | skip |
+| E2 ages (A3) | M1b quarter flag (legal time, D14) | walk train: the age cam's stop catches the next due age at the right doorway; quarter train: its locking cam | quarter snail on E2's state arbor (1–4 pairs); the age cam on the same arbor picks the age (`docs/e2-design.md` §4.2) | skip; afterwards the controller runs the walk train alone, so the right age waits in view (`docs/e2-design.md` §4.5). The original also stops the ages at night [S: DA p. 58, 65]. |
+| E2 Death (A4) | M1b hour flag, after A3 | hour train: its rack locked | hour snail on E2's state arbor, through 12:1 (1–12, legal hour) | skip |
 | E3 procession (A5; figures D15) | M1b noon flag (24 h wheel, 12:00 legal time) | E3 locking cam (one procession cycle) | — | skip |
 | E4 rooster (A6) | E3 cue switches at Apostles 4, 8 and 12 | E4 locking cam | three crows (one per cue) | skip with E3 |
 | E5 computus (A7) | M2 year-end cam (night of 31 Dec) | E5 locking cam (one computus cycle) | — | **must run**: it is stateful. Catch-up pauses while E5 completes. |
@@ -278,7 +278,7 @@ independently settable, by turning it forward, against a scale.**
 | Item | Count | I/O needed |
 |---|---|---|
 | Steppers | 4 (v1) to 6 | STEP + DIR each = 8–12 GPIO, plus ENABLE. TMC2209 UART: 4 addresses per bus, so 2 buses for 6 drivers. |
-| Event motors | 6–7 (E1×1–2, E2, E3, E4, E5, E6), DC gearmotors, one direction | 7 PWM channels through H-bridges or MOSFETs |
+| Event motors | 8–9 (E1×1–2, E2×3 for the walk, quarters and hours, E3, E4, E5, E6), DC gearmotors, one direction | 9 PWM channels through H-bridges or MOSFETs |
 | Inputs | ~6 index, ~8 witness, ~6 trigger, ~6 lock, 1 door = **~27** | 2 × MCP23017 I²C expanders with interrupt |
 | I²C devices | RTC, FRAM, 2 expanders, optional current monitor | 1 bus |
 | Sound (if D8 chooses a speaker) | DFPlayer Mini-class module | 1 UART |

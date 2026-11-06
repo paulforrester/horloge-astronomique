@@ -4,8 +4,8 @@ Phase 2, module E2: the lower hall of the automata. At each quarter one of the f
 walks out in front of Death and strikes the quarter, answering the genie's strokes (E1). Each hour
 Death strikes the hour.
 
-**Status: Concept for review (this PR).** Nothing is modelled yet. Two decisions are needed (§5 and
-§6); smaller questions are in §7. Tags as in `docs/reference-notes.md`.
+**Status: Concept accepted (Paul, PR #15, 6 Nov 2026).** The decisions are in §9. Nothing is
+modelled yet; the detail design is next (§8). Tags as in `docs/reference-notes.md`.
 
 <p align="center"><img src="img/e2/e2_concept.png" width="980" alt="Schematic: the hall in plan with the four ages on a turntable round Death and the two bells; the trains and where the state lives; the order of one show on the hour"></p>
 
@@ -84,7 +84,8 @@ who strikes at 12:00, waits at the right. Photograph: Tangopaso, Wikimedia Commo
 | Which way the ages walk | **in from the right doorway, strike at the right-hand bell, on past Death, out by the left doorway** | [S: 2011 photograph and Paul's observation] |
 | Rest state | the last age stands at the left doorway, the next waits at the right; both in view | [S: 2011 photograph, 12:24 CET = 11:55 mean time, between the 11:45 and 12:00 shows] |
 | Turntable that fits these positions | four ages 90° apart on a ring of R ≈ 121 mm, its centre ≈ 94 mm behind Death; the front of the ring ≈ 27 mm in front of Death; **≈ 243 mm deep in all** | [D: a circle through both doorways (±0.42 of the hall's width, at Death's depth) and 0.15 of the width in front of Death; the photograph's rest positions (±0.41 and −0.46 of the width) fall at ±45° on it] |
-| Stroke cadence | not recorded | [?] (§7, question 2) |
+| Stroke cadence | **the genie strikes, the age strikes 1 s later, then a 2 s pause; repeated n times.** So a pair every 3 s, and the old man's four pairs take ≈ 10 s from the genie's first stroke to his last | [S: Paul's observation, 6 Nov 2026]; [D: 3 × 3 s + 1 s] |
+| Walk duration | not recorded | [?]: parametric in the detail design |
 | How the original moves the ages | not described in DA; Ungerer 1922 and Bach et al. 1992 may show it | [?]: the books are still to obtain |
 | State arbor | 1 rev/h, legal time; quarter snail 1:1; hour snail through 12:1 (12/48 · 15/45, as M1's motion work) | [S: M1 gate, decision 1; architecture §3] |
 
@@ -166,7 +167,7 @@ As everywhere: **pass timing electrically and position mechanically** (architect
 - No hands to set: the state arbor's phase is the stepper's (P1). The hour snail is meshed at its
   mark at commissioning, and its witness checks it.
 
-## 5. Decision 1: how the ages move
+## 5. Decision 1: how the ages move — A (Paul, PR #15, 6 Nov 2026)
 
 All three options keep the state in the state train. They differ in how the age reaches the bell.
 
@@ -176,14 +177,14 @@ All three options keep the state in the state train. They differ in how the age 
 | B. Turntable geared to the state arbor | The ring turns continuously at 1 rev/h. Each age reaches the bell at its own quarter. | The simplest: no walk motor, no stops, no clutch. Nothing can get out of step. | The ages creep all the time. With a visible arc of ≈ 80°, an age is in view for ≈ 13 min each hour, so one is in view ≈ 53 min of every hour [D: 80/360 × 60 × 4]. Not what Paul saw. |
 | C. Four lodges, one slide per age (DA's "sort de sa loge, fait deux pas") | The state arbor turns a selector that couples the walk train to the due age's slide. The age steps out two paces, strikes, and steps back. | Follows DA's wording. Each show starts and ends at rest. | Four slides and a selector. The age goes back rather than on past Death, against Paul's observation. Four lodges take up the hall's width. |
 
-**Recommendation: A.**
+**Decided: A** (Paul: "go with A"). It was recommended because:
 - It is the only option that matches DA ("sort de sa loge … disparaît"), Paul's observation
   ("walks on past Death") and the 2011 photograph (two ages in view at rest).
 - It stays self-correcting.
 - The cost is the two stops and the clutch, which the detail design proves on paper first, with a
   test over every pair of resting age and due age.
 
-## 6. Decision 2: how many event motors
+## 6. Decision 2: how many event motors — three (Paul, PR #15, 6 Nov 2026)
 
 | Option | For | Against |
 |---|---|---|
@@ -191,25 +192,31 @@ All three options keep the state in the state train. They differ in how the age 
 | Two: walk and quarters on one cam program, hours separate | One fewer motor than three | The walk and strike motions still share a cam program, and the walk's slip clutch shares the strike train's motor |
 | **Three: walk, quarters, hours, as Schwilgué** | Each train is a simple, classic one with its own locking. The controller chains them in DA's order (walk out, quarters, walk on, hourglass, Death). A fault in one does not jam the others. | Two more DC gearmotors and two more H-bridge channels than the BOM's one for E2 |
 
-**Recommendation: three.**
-- It is faithful to the original's separate trains, and it gives the simplest mechanisms.
-- The BOM would go from 6 + 1 to 8 + 1 gearmotors, and from 3 to 4 dual H-bridges
-  (architecture §10 then has 9 event channels, not 7).
+**Decided: three** (Paul: "three motors"). It was recommended because it is faithful to the
+original's separate trains, and it gives the simplest mechanisms.
+- The BOM now has 8 + 1 gearmotors, up from 6 + 1, and 4 dual H-bridges, up from 3.
+- Architecture §10 now has 9 event channels, up from 7.
 
-## 7. Smaller questions
+## 7. Smaller questions (answered, Paul, PR #15, 6 Nov 2026)
 
 1. **Figure heights.** The 2011 photograph gives Death ≈ 78 mm at 1:8 (65–92 mm) [E, §2]. That is
    nearer the plate's 88 mm than the 57 mm source.
-   - I propose Death at 78 mm, the man, youth and old man about as tall, and the child smaller.
-   - All of them are parametric, so the books can still correct them.
+   - **Decided: 78 mm** (Paul: "78mm is fine").
+   - The man, youth and old man are about as tall; the child is smaller.
+   - All are parametric, so the books can still correct them.
    - The 57 mm Apostles in `CLAUDE.md` came from the same 18-inch source. E3 will need the same
      check against a photograph.
-2. **The walk.** Its direction is settled: in from the right, out by the left (§1). Still open, from
-   your video: roughly how many seconds are there between strokes, and how long does the walk
-   take?
-3. **Depth.** The faithful turntable needs about 243 mm of depth at E2's level (§2). Is that
-   acceptable, or should I plan a shallower ring? The case depth is still open.
-4. **The strike.**
+2. **The walk and the strokes.**
+   - The direction is settled: in from the right, out by the left (§1).
+   - **The cadence** (Paul): the genie strikes, the age strikes 1 s later, then a 2 s pause, and
+     the pair repeats; four times for the old man.
+   - So the quarter train turns its strike cam once per pair, every 3 s. The cue to E1 comes at the
+     start of each turn, and the age's lifter drops 1 s later. E1 must strike within that second.
+   - The walk's duration was not recorded [?]. It is a parameter in the detail design.
+3. **Depth.** With A at the original's geometry, the turntable needs about 243 mm of depth at E2's
+   level (§2). The case depth is still open. The detail design carries 243 mm into the envelope
+   and reports back if the case cannot give it; a shallower ring is the fallback.
+4. **The strike.** Taken as recommended ("for the rest, go with…"):
    - **Recommended:** the age's own attribute strikes the bell, as in the original. It is soft,
      which suits a living room (D8).
    - **Fallback:** a hidden hammer moved with the arm, if the test bells sound too weak.
@@ -233,3 +240,20 @@ All three options keep the state in the state train. They differ in how the age 
   - bed fit and print poses.
 - **Files:** print files, SketchUp files with an exploded view, BOM rows, and `spec/clock.yaml`
   entries for E2's state rates.
+
+## 9. Decisions (settled, Paul, PR #15, 6 Nov 2026)
+
+1. **How the ages move: A.**
+   - A turntable carries the four ages 90° apart, with its centre behind the back wall.
+   - Each show turns it a quarter turn: in from the right doorway, strike, out by the left.
+   - An age cam on the state arbor sets the stop, so the next due age always waits at the right
+     (§4.2–4.3, §5).
+2. **Event motors: three**, for the walk, the quarters and the hours, chained by the controller in
+   DA's order (§6).
+3. **Figures: Death 78 mm at 1:8**, the adult ages about as tall, the child smaller; all
+   parametric (§7.1).
+4. **Cadence:** genie, the age 1 s later, then 2 s, repeated n times (§7.2).
+5. **The strike:** the age's own attribute strikes the bell, with a hidden hammer only as a fallback.
+   Death's bone strikes directly (§7.4).
+6. **Depth:** the faithful ring (≈ 243 mm deep), to be checked against the case in the detail
+   design (§7.3).

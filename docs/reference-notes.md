@@ -1067,6 +1067,9 @@ where used elsewhere.
   walks on past Death.
 - **The hour (the noon show).** After the fourth quarter's four pairs, Death strikes the hour on its
   bell: 12 times at noon.
+- **The cadence of a pair** [S: Paul, PR #15, 6 Nov 2026]. The genie's bell sounds first. One second
+  later the age beside Death strikes its bell: the old man, at the noon show. Then there is a
+  two-second pause, and the pair repeats, four times for the old man.
 - **The hourglass.** The right-hand genie turned it during the noon show. DA says hourly, after the
   fourth quarter and before Death [S: DA p. 51].
 - **The Apostles.**
