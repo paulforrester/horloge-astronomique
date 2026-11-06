@@ -42,21 +42,28 @@ R_PATH = 121.0                              # the figures' path
 ANNULUS = (110.0, 134.0)                    # walking surface, flush with the floor (z -3 .. 0)
 FLOOR_GAP = 0.5                             # between the ring and the static floor, each side
 INNER_SKIRT = (108.0, 110.0, -16.0)         # r_in, r_out, z_bottom: the guide rollers run inside it
-OUTER_BODY = (127.0, 131.0, -28.0)          # r_in, r_out, z_bottom: carries the teeth and the pegs
+OUTER_BODY = (127.0, 131.0, -30.0)          # r_in, r_out, z_bottom: carries the teeth and the pegs
 TEETH = dict(z=264, m=1.0, face=(-8.0, -3.0))   # external teeth at the top of the outer body
 PEG = dict(d=2.5, r=(131.0, 135.0))         # radial pegs out of the outer body, one per age
-PEG_Z = (-12.0, -16.0, -20.0, -24.0)        # one height per age (child .. old man): 4 mm apart
+PEG_Z = (-12.0, -16.0, -20.0, -24.0)        # selection pegs: one height per age (child .. old man), 4 mm apart
+# Each age also has a waiting peg, longer and lower, 30° behind it: when the age stands at the waiting position
+# (φ 45°) its waiting peg is at the bell station (φ 15°). So both stops sit on one shaft at the bell station
+# (part 2a, e2-design §10.8): the bell arm catches only the selection peg at its height; the short waiting
+# arm reaches only the long waiting pegs.
+WAIT_PEG = dict(d=2.5, r=(131.0, 139.0), z=-28.0)
 
 # --- the stations (φ, degrees) ----------------------------------------------------------------------------
 PHI_WAIT = 45.0                             # the next age waits at the right doorway [S: photo]
 PHI_BELL = 15.0                             # the age strikes here, just right of the ages' bell [D: x ≈ 32]
 PHI_SPACING = 90.0                          # four ages
 PHI_REST = tuple(PHI_WAIT + PHI_SPACING * k for k in range(4))   # at rest, the next age (k = 0) waits
+WAIT_PEG_OFFSET = PHI_BELL - PHI_WAIT       # -30°: a waiting peg trails its age by 30°
+STOP = dict(r=144.0, bell_tip=132.2, wait_tip=137.0, w=2.0, h=2.5, swing=70.0)   # the stop shaft and arms
 
 # --- the walk [S: Paul's observation, 6 Nov 2026; D: below] ------------------------------------------------
 WALK_ON_S = 10.0                            # [S] from the last stroke past Death to the left doorway
 RING_SPEED = (PHI_BELL - (PHI_WAIT - PHI_SPACING)) / WALK_ON_S   # [D] 60° in 10 s = 6°/s = 1 rpm
-PHASE_TRAVEL = dict(A=40.0, B=70.0)         # ring travel per program phase, slip margin included [D, below]
+PHASE_TRAVEL = dict(A=40.0, B=69.1)         # ring travel per program phase, slip included [D: drives.ring_travel_limits]
 
 
 def polar(phi_deg: float, r: float, centre=C) -> tuple[float, float]:
