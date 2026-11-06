@@ -570,7 +570,7 @@ B (the waiting arm in). Program angles [D: `program.py`]:
   - the rest state: the waiting arm is 0.2 mm in front of the child's waiting peg, and the bell
     arm is clear.
 
-### 11.8 Estimates to confirm, and decisions for Paul
+### 11.8 Estimates to confirm, and decisions
 
 **Estimates [E]:**
 - **The gearmotor ⚠:** a 1000:1 micro metal gearmotor (12 × 10 mm, Ø3 D-shaft), about 32 rpm
@@ -583,19 +583,19 @@ B (the waiting arm in). Program angles [D: `program.py`]:
 - **Press fits:** printed parts are pressed on ground rods, as in M1; the tolerance test sets the
   fits.
 
-**Decisions for Paul:**
-1. **Two geared stop shafts (§11.1)**, instead of one shaft or a rocker with two rods.
-   Recommended: it is the only layout here in which neither arm pushes a peg back.
-2. **The holds.** Each change of state takes 45° of the program, which keeps the cam's pressure
-   angle at 36°. The cost is two holds:
-   - each show starts with a 1.8 s hold before the waiting age moves. The controller can start the
+**Decisions (settled, Paul, PR #17, 6 Nov 2026):**
+1. **Two geared stop shafts (§11.1): kept**, instead of one shaft or a rocker with two rods. It is
+   the only layout here in which neither arm pushes a peg back.
+2. **The holds: 45° per change of state, kept.** The cam's pressure angle stays at 36°. The cost is
+   two holds:
+   - each show starts with a 1.8 s hold before the waiting age moves. The controller starts the
      walk motor 1.8 s earlier, so the show's timing is unchanged;
    - the struck age stands 1.8 s after its last stroke before it walks on.
 
-   Shorter changes would shorten the holds but steepen the cam: 30° changes give about 1.2 s and
-   about 47°. Recommended: keep 45°.
-3. **The module's size below the floor:** it now reaches 114 mm down (the NEMA adapter's lower ear)
-   and its front is at y −66. Check this against the case, which is still TBD.
+   (30° changes would have given about 1.2 s, with the cam at about 47°.)
+3. **The module's size below the floor: left until the case is designed.** It reaches 114 mm down
+   (the NEMA adapter's lower ear), and its front is at y −66. Check both against the case when its
+   design fixes them (still TBD).
 
 ### 11.9 Open items for part 2b
 

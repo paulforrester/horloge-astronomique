@@ -152,6 +152,12 @@ train's warning, release and locking.
     2. A2, the glass, at the last quarter stroke, while the old man walks on (≈ 10 s);
     3. A4, Death, as soon as the walk ends [S: DA p. 51; Paul, 6 Nov 2026];
     4. at noon, then A5.
+  - **E2's walk train runs in two phases**, each ended by its lock switch (`docs/e2-design.md`
+    §11.3; Paul, PR #17):
+    - phase A, the walk out, takes ≈ 8.7 s [D, at ≈ 32 rpm [E]], including a 1.8 s hold while the
+      stops change over. It comes before the age's strokes, so the controller, which knows the
+      time from the RTC, starts it that much before the quarter is due;
+    - phase B, the walk on (≈ 13.8 s), follows the strokes.
 - **Original drive, for comparison.** "Ce régulateur déclanche toutes les cinq secondes un rouage moteur qui met en mouvement toute la partie astronomique" (the regulator releases the astronomical train every 5 s) [S: ELS i1]. The replica's steppers step every 1.125 s.
 - **Faithful ordering.** The original chains its motors in exactly this way [S: DA p. 64–66]:
   - "quand l'heure doit sonner, le moteur central détend le second moteur (ou rouage des quatre
