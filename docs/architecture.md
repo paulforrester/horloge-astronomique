@@ -147,8 +147,11 @@ train's warning, release and locking.
   - a timeout (fault detection);
   - a quiet-hours schedule (D10);
   - a suppression flag during catch-up;
-  - priority ordering when triggers coincide (on the hour: A1, then A3 old man, then A4 Death,
-    then A2 glass; at noon: then A5).
+  - priority ordering when triggers coincide. On the hour:
+    1. A1 with A3, the old man's four pairs;
+    2. A2, the glass, at the last quarter stroke, while the old man walks on (≈ 10 s);
+    3. A4, Death, as soon as the walk ends [S: DA p. 51; Paul, 6 Nov 2026];
+    4. at noon, then A5.
 - **Original drive, for comparison.** "Ce régulateur déclanche toutes les cinq secondes un rouage moteur qui met en mouvement toute la partie astronomique" (the regulator releases the astronomical train every 5 s) [S: ELS i1]. The replica's steppers step every 1.125 s.
 - **Faithful ordering.** The original chains its motors in exactly this way [S: DA p. 64–66]:
   - "quand l'heure doit sonner, le moteur central détend le second moteur (ou rouage des quatre
@@ -163,8 +166,8 @@ train's warning, release and locking.
   - The hourglass turns "au dernier coup des quatre quarts, un instant avant que la Mort ne sonne
     les heures" [S: DA p. 51].
   - The replica chains its event motors the same way: each one's lock switch cues the next
-    through the controller. So the order on the hour is: genie and age quarters → hourglass →
-    Death → (at noon) Apostles and rooster.
+    through the controller. So the order on the hour is: genie and age quarters → (hourglass,
+    during the age's walk on) → Death → (at noon) Apostles and rooster.
 
 ## 6. Homing and zero sensing
 

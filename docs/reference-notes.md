@@ -1070,6 +1070,12 @@ where used elsewhere.
 - **The cadence of a pair** [S: Paul, PR #15, 6 Nov 2026]. The genie's bell sounds first. One second
   later the age beside Death strikes its bell: the old man, at the noon show. Then there is a
   two-second pause, and the pair repeats, four times for the old man.
+- **The walk and the hour** [S: Paul, PR #15, 6 Nov 2026, from his video].
+  - After the old man's fourth stroke he starts walking. It takes about 10 seconds to reach the
+    other side of Death, and then the next age comes into view.
+  - Death starts tolling the hour immediately.
+  - The next age to come into view is **the child**, who strikes at :15. That is the quarter order
+    (Paul confirmed, 6 Nov 2026, after first naming the youth).
 - **The hourglass.** The right-hand genie turned it during the noon show. DA says hourly, after the
   fourth quarter and before Death [S: DA p. 51].
 - **The Apostles.**

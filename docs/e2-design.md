@@ -85,7 +85,8 @@ who strikes at 12:00, waits at the right. Photograph: Tangopaso, Wikimedia Commo
 | Rest state | the last age stands at the left doorway, the next waits at the right; both in view | [S: 2011 photograph, 12:24 CET = 11:55 mean time, between the 11:45 and 12:00 shows] |
 | Turntable that fits these positions | four ages 90° apart on a ring of R ≈ 121 mm, its centre ≈ 94 mm behind Death; the front of the ring ≈ 27 mm in front of Death; **≈ 243 mm deep in all** | [D: a circle through both doorways (±0.42 of the hall's width, at Death's depth) and 0.15 of the width in front of Death; the photograph's rest positions (±0.41 and −0.46 of the width) fall at ±45° on it] |
 | Stroke cadence | **the genie strikes, the age strikes 1 s later, then a 2 s pause; repeated n times.** So a pair every 3 s, and the old man's four pairs take ≈ 10 s from the genie's first stroke to his last | [S: Paul's observation, 6 Nov 2026]; [D: 3 × 3 s + 1 s] |
-| Walk duration | not recorded | [?]: parametric in the detail design |
+| Walk duration | **the walk on takes ≈ 10 s**: from the old man's last stroke, past Death to the left doorway. The next age comes into view at the right during the same move. The walk out, from the right doorway to the bell, was not timed; at the same speed it would take ≈ 6 s | [S: Paul's observation, 6 Nov 2026]; [E: 34° of the ring's 56° walk on, at its 5.6°/s (§2 geometry), 34/56 × 10 s] |
+| What follows the walk | **Death starts the hour as soon as the walk ends.** The hourglass turns "au dernier coup des quatre quarts", so it runs during the walk | [S: Paul, 6 Nov 2026; DA p. 51] |
 | How the original moves the ages | not described in DA; Ungerer 1922 and Bach et al. 1992 may show it | [?]: the books are still to obtain |
 | State arbor | 1 rev/h, legal time; quarter snail 1:1; hour snail through 12:1 (12/48 · 15/45, as M1's motion work) | [S: M1 gate, decision 1; architecture §3] |
 
@@ -145,8 +146,11 @@ As everywhere: **pass timing electrically and position mechanically** (architect
   1. The walk train lifts the stop and turns the turntable through a slip clutch. A fixed cam
      brings the waiting age to the bell, a short move.
   2. The quarter train strikes.
-  3. The walk train walks the age on past Death to the left doorway. The turntable stops when
-     the next due age reaches the waiting position: a quarter turn in all.
+  3. The walk train walks the age on past Death to the left doorway, in about 10 s [S: Paul]. The
+     turntable stops when the next due age reaches the waiting position: a quarter turn in all.
+     At the 1:8 ring that is ≈ 12 mm/s at the figures [D: 56° of R 121 mm in 10 s].
+  4. On the hour, the walk train's lock starts the hour train at once. E1's hourglass has already
+     started, at the quarter train's last stroke.
 - **If shows were skipped**, running the walk train simply turns on until the age cam's stop
   catches the age now due. The skipped ages pass without striking. So it corrects itself, as a
   rack on a snail does.
@@ -212,7 +216,10 @@ original's separate trains, and it gives the simplest mechanisms.
      the pair repeats; four times for the old man.
    - So the quarter train turns its strike cam once per pair, every 3 s. The cue to E1 comes at the
      start of each turn, and the age's lifter drops 1 s later. E1 must strike within that second.
-   - The walk's duration was not recorded [?]. It is a parameter in the detail design.
+   - **The walk** (Paul, 6 Nov 2026): after the old man's fourth stroke he walks on past Death.
+     That takes about 10 s, while the next age comes into view at the right.
+   - Death starts the hour immediately after the walk.
+   - The walk out was not timed; it is a parameter, ≈ 6 s at the same speed [E].
 3. **Depth.** With A at the original's geometry, the turntable needs about 243 mm of depth at E2's
    level (§2). The case depth is still open. The detail design carries 243 mm into the envelope
    and reports back if the case cannot give it; a shallower ring is the fallback.
@@ -252,7 +259,8 @@ original's separate trains, and it gives the simplest mechanisms.
    DA's order (§6).
 3. **Figures: Death 78 mm at 1:8**, the adult ages about as tall, the child smaller; all
    parametric (§7.1).
-4. **Cadence:** genie, the age 1 s later, then 2 s, repeated n times (§7.2).
+4. **Cadence:** genie, the age 1 s later, then 2 s, repeated n times. The walk on takes ≈ 10 s,
+   and Death starts at once after it (§7.2).
 5. **The strike:** the age's own attribute strikes the bell, with a hidden hammer only as a fallback.
    Death's bone strikes directly (§7.4).
 6. **Depth:** the faithful ring (≈ 243 mm deep), to be checked against the case in the detail
