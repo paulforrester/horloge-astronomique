@@ -146,6 +146,18 @@ from behind on adapter plates (D16, `docs/m1-design.md` §10).
 | Screws + washers M5 | M5 × 16, ISO 7380, A2 | 2 | the cassette's tabs to the works' internal frame (D12 R5) | as Batch 1 |
 | Glue | epoxy or cyanoacrylate | — | the dial into its bezel; the magnets into their pockets | local |
 
+### Batch 2 — E2 rows, detail design part 1 [E]
+
+Quantities from `cad/modules/e2_ages/` (`docs/e2-design.md` §10). Part 2 adds the drives' parts.
+
+| Item | Spec | Qty [E] | How the quantity was counted | Supplier |
+|---|---|---|---|---|
+| Bearing 688ZZ | 8 × 16 × 5 | 7 | the ring: 4 support rollers, 3 guide rollers | as Batch 1 |
+| Rod Ø8 | DIN 175 h9 | 0.15 m | 7 roller studs | as Batch 1 |
+| Rod Ø3 | DIN 175 h9 | 0.15 m | the two stop fingers' shafts | as Batch 1 |
+| Rod Ø5 | DIN 175 h9 | 0.15 m | the walk shaft, the state arbor | as Batch 1 |
+| Bells | small brass bowl bells, Ø ≈ 21 mm, about 15 mm deep, mouth down | 2 (+ 1 spare) | the ages' bell and Death's bell [E: photo] | ⚠ not yet found; to source |
+
 ## Batch 3 — v1.5 / v2
 
 | Item | Qty [E] | Note |

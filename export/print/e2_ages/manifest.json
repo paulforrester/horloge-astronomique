@@ -1,0 +1,303 @@
+{
+ "model": "e2_ages",
+ "unique_parts": 15,
+ "printed_parts": 25,
+ "sets": {},
+ "parts": [
+  {
+   "names": [
+    "floor_island"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    215.0,
+    215.0,
+    3.0
+   ],
+   "note": "the static floor inside the ring: Death, the bells and the back wall stand on it",
+   "file": "floor_island.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "floor_front"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    203.0,
+    50.8,
+    3.0
+   ],
+   "note": "the static floor in front of the ring",
+   "file": "floor_front.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "back_wall"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    128.0,
+    4.0,
+    72.0
+   ],
+   "note": "the back wall; the doorways are the gaps at its ends [E: h 72]",
+   "file": "back_wall.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "pier_left",
+    "pier_right"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    10.0,
+    40.0,
+    100.0
+   ],
+   "note": "",
+   "file": "pier_left.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "island_post_0",
+    "island_post_1",
+    "island_post_2"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    8.0,
+    8.0,
+    37.0
+   ],
+   "note": "",
+   "file": "island_post_0.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "floor_post_0",
+    "floor_post_1",
+    "floor_post_2",
+    "floor_post_3"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    5.0,
+    5.0,
+    37.0
+   ],
+   "note": "",
+   "file": "floor_post_0.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "pedestal"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    24.0,
+    18.0,
+    6.0
+   ],
+   "note": "",
+   "file": "pedestal.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "ages_bell_bracket",
+    "deaths_bell_bracket"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    4.0,
+    11.5,
+    35.0
+   ],
+   "note": "bell bracket on the island floor",
+   "file": "ages_bell_bracket.stl",
+   "overhang_mm2": 7.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "ring"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    268.0,
+    268.0,
+    28.0
+   ],
+   "note": "turntable \u00d8268: walking surface flush with the floor, 264 teeth, one peg per age at its own height (the selection)",
+   "file": "ring.stl",
+   "overhang_mm2": 31.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "support_post_0",
+    "support_post_1",
+    "support_post_2",
+    "support_post_3"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    5.5,
+    8.0,
+    33.0
+   ],
+   "note": "",
+   "file": "support_post_0.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "walk_pinion_16"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    18.1,
+    18.1,
+    4.6
+   ],
+   "note": "walk pinion on the clutch shaft (the clutch is part 2)",
+   "file": "walk_pinion_16.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "bell_finger"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    11.4,
+    5.0,
+    2.5
+   ],
+   "note": "at the selected age's peg height; swung in for the walk out only (program cam, part 2)",
+   "file": "bell_finger.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "waiting_finger"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    9.3,
+    9.5,
+    16.0
+   ],
+   "note": "spans every peg height; in at rest and for the walk on",
+   "file": "waiting_finger.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "age_cam"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    5.0,
+    32.0,
+    35.6
+   ],
+   "note": "on the state arbor, 1 rev/h legal time: sets the bell finger's height (4 steps of 4 mm, a ramp back from the old man to the child)",
+   "file": "age_cam.stl",
+   "overhang_mm2": 128.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "deck"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    295.0,
+    297.0,
+    4.0
+   ],
+   "note": "the module's deck: rollers, posts and drives stand on it",
+   "file": "deck.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  }
+ ]
+}
