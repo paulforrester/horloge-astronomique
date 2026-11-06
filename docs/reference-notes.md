@@ -1076,6 +1076,10 @@ where used elsewhere.
   - Death starts tolling the hour immediately.
   - The next age to come into view is **the child**, who strikes at :15. That is the quarter order
     (Paul confirmed, 6 Nov 2026, after first naming the youth).
+- **The ages' sizes** [E: Paul, from his video, 6 Nov 2026].
+  - The child is about ¾ the height of the old man.
+  - Otherwise the figures are not very different in size. They are told apart by their
+    appearance.
 - **The hourglass.** The right-hand genie turned it during the noon show. DA says hourly, after the
   fourth quarter and before Death [S: DA p. 51].
 - **The Apostles.**

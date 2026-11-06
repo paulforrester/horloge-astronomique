@@ -79,7 +79,7 @@ who strikes at 12:00, waits at the right. Photograph: Tangopaso, Wikimedia Commo
 | Hall opening | ≈ 1.46 m wide, so **≈ 183 mm at 1:8** | [E: envelope §3] |
 | Depth available | TBD: the case depth is still open | `docs/reference-notes.md`, open items |
 | Death's height | **≈ 0.62 m, so ≈ 78 mm at 1:8** (range 0.52–0.74 m, 65–92 mm) | [E: 2011 photograph. Death is 0.349 of the hall's width as seen, corrected by 1/cos 35° for the upward view; 0.349 × 1.46 m / 0.82. The view angle comes from the bells' rim ellipses (axis ratio 0.58–0.64, so 35–40°; 30° allowed for tilt). The hall's width is ±11 % (envelope §3)] |
-| The ages' heights | the old man as tall as Death, though stooped; the man appears about 0.8 of Death, but he is turned away in the doorway; the youth and the child are not in the photograph | [E: same photograph]; [?] for the child and the youth |
+| The ages' heights | the old man as tall as Death, though stooped. The man appears about 0.8 of Death, but he is turned away in the doorway. **The child is about ¾ of the old man**, so ≈ 58 mm at 1:8. The youth and the man are not much different from the old man. They are told apart by their costumes and attributes more than by size | [E: same photograph]; [E: Paul's estimate from his video, 6 Nov 2026]; [D: ¾ × 78 mm] |
 | Bells | **≈ 0.17 m across, so ≈ 21 mm at 1:8**, their centres ≈ 24 mm either side of Death's axis | [E: 0.113 and 0.133 of the hall's width; widths are not foreshortened; ±11 %] |
 | Which way the ages walk | **in from the right doorway, strike at the right-hand bell, on past Death, out by the left doorway** | [S: 2011 photograph and Paul's observation] |
 | Rest state | the last age stands at the left doorway, the next waits at the right; both in view | [S: 2011 photograph, 12:24 CET = 11:55 mean time, between the 11:45 and 12:00 shows] |
@@ -206,7 +206,9 @@ original's separate trains, and it gives the simplest mechanisms.
 1. **Figure heights.** The 2011 photograph gives Death ≈ 78 mm at 1:8 (65–92 mm) [E, §2]. That is
    nearer the plate's 88 mm than the 57 mm source.
    - **Decided: 78 mm** (Paul: "78mm is fine").
-   - The man, youth and old man are about as tall; the child is smaller.
+   - The man, youth and old man are about as tall. The child is about ¾ of the old man, so ≈ 58 mm
+     (Paul's estimate from his video). They are told apart by costume and attribute more than by
+     size.
    - All are parametric, so the books can still correct them.
    - The 57 mm Apostles in `CLAUDE.md` came from the same 18-inch source. E3 will need the same
      check against a photograph.
@@ -257,8 +259,8 @@ original's separate trains, and it gives the simplest mechanisms.
      (§4.2–4.3, §5).
 2. **Event motors: three**, for the walk, the quarters and the hours, chained by the controller in
    DA's order (§6).
-3. **Figures: Death 78 mm at 1:8**, the adult ages about as tall, the child smaller; all
-   parametric (§7.1).
+3. **Figures: Death 78 mm at 1:8**, the youth, the man and the old man about as tall, the child
+   ≈ ¾ of that (≈ 58 mm); all parametric (§7.1).
 4. **Cadence:** genie, the age 1 s later, then 2 s, repeated n times. The walk on takes ≈ 10 s,
    and Death starts at once after it (§7.2).
 5. **The strike:** the age's own attribute strikes the bell, with a hidden hammer only as a fallback.
