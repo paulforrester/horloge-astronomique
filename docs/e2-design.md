@@ -4,8 +4,8 @@ Phase 2, module E2: the lower hall of the automata. At each quarter one of the f
 walks out in front of Death and strikes the quarter, answering the genie's strokes (E1). Each hour
 Death strikes the hour.
 
-**Status: Concept accepted (Paul, PR #15, 6 Nov 2026).** The decisions are in §9. Nothing is
-modelled yet; the detail design is next (§8). Tags as in `docs/reference-notes.md`.
+**Status: Detail design, part 1 for review (§10).** The concept was accepted (Paul, PR #15, 6 Nov
+2026; the decisions are in §9). Tags as in `docs/reference-notes.md`.
 
 <p align="center"><img src="img/e2/e2_concept.png" width="980" alt="Schematic: the hall in plan with the four ages on a turntable round Death and the two bells; the trains and where the state lives; the order of one show on the hour"></p>
 
@@ -267,3 +267,135 @@ original's separate trains, and it gives the simplest mechanisms.
    Death's bone strikes directly (§7.4).
 6. **Depth:** the faithful ring (≈ 243 mm deep), to be checked against the case in the detail
    design (§7.3).
+
+## 10. Detail design, part 1: the layout, the ring and the selection
+
+The detail design comes in three parts, so each can be checked before the next:
+1. **This part:**
+   - the hall's layout;
+   - the ring (turntable) on its rollers, with its teeth and the four selection pegs;
+   - the two stop fingers, and the age cam that sets the bell finger's height;
+   - a simulation of the walk over every case.
+
+   The drives that part 2 details are placeholders, at their true places, so their space is held.
+2. **The drives:**
+   - the walk train's slip clutch and program cam, and the fingers' linkages;
+   - the state module: the quarter snail, the 12:1 motion work, the hour snail and the sensors;
+   - the quarter and hour striking trains, with the figures' arms and push pins.
+3. **The figures:** sculpted to the decided heights.
+
+Model: `cad/modules/e2_ages/` (`layout.py` for the numbers and the simulation, `mechanism.py` for the
+CAD). Tests: `cad/tests/test_e2.py`. Frame: X to the viewer's right, Y away from the viewer, Z up,
+with the origin on Death's axis on the floor. The model shows the rest state at 12:10: the child
+waits at the right doorway, and the old man stands at the left one.
+
+<p align="center"><img src="img/e2/e2_front.png" width="440" alt="E2 part 1 from the front: the hall's floor and piers, the back wall, Death between the bells, two ages at the doorways and two behind the wall, the ring below the floor, the drive placeholders"> <img src="img/e2/e2_plan.png" width="380" alt="E2 part 1 in plan: the ring centred behind the back wall, the four ages 90° apart, Death and the bells on the static island inside the ring"></p>
+
+<p align="center"><img src="img/e2/e2_three_quarter.png" width="520" alt="E2 part 1 three-quarter with the hall hidden: the ring with its teeth, the rollers, the walk pinion, the fingers, the age cam and the state module's placeholders"></p>
+
+### 10.1 The layout
+
+| Item | Value | Tag |
+|---|---|---|
+| Hall opening | 183 mm; piers at ±91.5–101.5, 100 mm high | [E: envelope §3] |
+| Back wall | x ±64, y 12–16, 72 mm high; the doorways are the gaps at its ends | [E: photo, e2-design §2] |
+| Death | on a 24 × 18 × 6 pedestal at the origin; 78 mm | [S: decided] |
+| Bells | Ø21 × 15 brass bowls, mouth down, at x ±24, y 0, rims at z 16, each on a printed bracket | [E: photo] |
+| The ring's centre C | (0, 94): 94 mm behind Death | [D: §2] |
+| The figures' path | R 121 | [D: §2] |
+| Waiting positions | φ ±45°: (±85.6, 8.4), in the doorways | [D] |
+| Bell station | φ 15°: (31.3, −22.9), just right of the ages' bell, 8 mm from it | [D] |
+| Floors | static island inside the ring (R < 107.5) and a static front floor outside it (R > 134.5), both flush with the ring | [D] |
+
+### 10.2 The ring and its rollers
+
+| Item | Value |
+|---|---|
+| Walking surface | annulus R 110–134, z −3 to 0, flush with the floor, 0.5 mm gap each side |
+| Inner skirt | R 108–110, down to z −16; the guide rollers run inside it |
+| Outer body | R 127–131, down to z −28; it carries the teeth and the pegs |
+| Teeth | 264, module 1, z −8 to −3 |
+| Walk pinion | 16, at C + 140 mm at −60° (under the front floor, right); profile shifts −0.064/+0.064 |
+| Selection pegs | one per age, Ø2.5, radial from R 131 to 135, at its own height: child −12, youth −16, man −20, old man −24 |
+| Support rollers | 4 × 688ZZ, horizontal radial axes at R 118, every 90°; the ring rests on their tops |
+| Guide rollers | 3 × 688ZZ, vertical axes at R 100, at −30°, 90° and 210° (clear of Death's axis) |
+| Print | one piece, Ø268, face down, within the bed |
+
+### 10.3 The selection and the walk
+
+- **The bell finger** pivots on a vertical shaft at R 141, just downstream of the bell station.
+  - **Its height is the selection.** The shaft rides on the age cam, so its arm sits at the due
+    age's peg height. Only that peg can run into it.
+  - The walk train's program cam swings it in for the walk out only (part 2).
+- **The waiting finger** spans all four peg heights, so it catches whichever age comes next. It is
+  in at rest and during the walk on, and out during the walk out.
+- **The age cam** sits on the state arbor (1 rev/h, legal time), right under the bell finger's
+  shaft.
+  - Its radii are 20, 16, 12 and 8 mm: the child from :07.5, the youth from :22.5, the man from
+    :37.5 and the old man from :52.5.
+  - It rises back from the old man to the child as a ramp between :01 and :07, so the riding shaft
+    is lifted, never struck.
+  - Each quarter's show falls in the middle of its step.
+- **The program.** Each show is one turn of the walk train's program cam.
+  - **Phase A, the walk out:** the waiting finger is out and the bell finger in. The ring turns at
+    most 40°: 30° to the bell, then 10° of clutch slip.
+  - **Phase B, the walk on:** the bell finger is out and the waiting finger in. The ring turns at
+    most 70°: 60° to the next waiting age, then 10° of slip.
+  - If no age is caught at the bell in phase A, the controller skips the strikes and runs another
+    turn.
+- **The simulation** (`layout.simulate_walk`), over all 16 pairs of waiting age and due age:
+  - the due age is always the one struck, and the next one is left waiting;
+  - it takes (due − waiting) mod 4 + 1 program turns, each exactly a quarter turn of the ring.
+  - So skipped shows correct themselves, with the skipped ages walking past silently.
+- **Timing** [D: from Paul's 10 s walk on]:
+  - the ring turns at 6°/s (1 rpm);
+  - the walk out takes 5 s and the walk on 10 s; a program turn takes 18.3 s.
+  - The pinion turns at 16.5 rpm. A walk gearmotor of ≈ 33 rpm through 12/24 gives that. Part 2
+    chooses the motor (⚠ a micro metal gearmotor of the 1000:1 HP 6 V class, about 32 rpm [E]).
+
+### 10.4 What is a placeholder
+
+These hold space at their true places; part 2 replaces them.
+- **Walk drive:** below the pinion, the space for the slip clutch and the program cam's gearing;
+  below the deck, the walk gearmotor.
+- **State module:** under the front of the hall, along X at z −80, next to the age cam (the
+  quarter snail, the 12:1 motion work and the hour snail).
+- **State motor:** the NEMA 17 on its D16 adapter at the right-hand end. It is withdrawn to the
+  right, from the module's side.
+- **Figures:** Death and the four ages, at the decided heights (part 3).
+
+### 10.5 Size
+
+The model's envelope [D] is:
+- **x:** −145 to 152, 297 mm. That is wider than the hall's 183 mm opening: the ring and the
+  deck run on behind the piers.
+- **y:** −64 to 235, about 299 mm deep from the stage's front to the deck's back. The ring alone
+  is 273 mm deep.
+- **z:** −101 to 100, from the state motor's bottom to the piers' tops. The vault above the hall is
+  not modelled.
+
+**Check the depth against the case** when the case design fixes it (still TBD).
+
+### 10.6 Checks
+
+`cad/tests/test_e2.py`, 26 tests:
+- the walk over all 16 cases;
+- the timing against Paul's 10 s;
+- the layout against the 2011 photograph: both doorways, the bell station's reach to the bell;
+- the decided heights;
+- the age cam against the peg heights at each quarter, and its ramp;
+- the bell finger catches only the selected peg at each of the four heights, and none when
+  withdrawn;
+- the waiting finger catches every peg, and each rests against it;
+- no interference, and every part fits the bed.
+
+### 10.7 Open items for part 2
+
+- The walk train: the gearmotor (⚠ choose from the maker's table), the slip clutch, the program
+  cam and its lock switch, and the fingers' linkages.
+- The state module: the snails, the 12:1, and the index and witness Halls.
+- The quarter and hour trains: racks, gathering pallets, lifters, E1's cue switch, the lock
+  switches, and Death's arm.
+- The figures' arms and push pins, which are lifted at the bell station from below the ring.
+- **The bells ⚠:** Ø21 brass bowl bells, to source.
+- The hall's vault and side walls, and where E2 ends and the case begins (D12 R5).

@@ -22,6 +22,7 @@ from pathlib import Path
 
 from cad.lib import samples
 from cad.lib.assembly import Assembly, Item, exploded, write_dae
+from cad.modules.e2_ages import mechanism as e2
 from cad.modules.m1_time import mechanism as m1
 from cad.modules.m2_main_dial import e6
 from cad.modules.m2_main_dial import feasibility
@@ -31,6 +32,7 @@ from cad.modules.test_rig import coupons, rig
 MODELS = {
     "cad_lib_samples": lambda: samples.build(),
     "m1_time": lambda: m1.build()[0],
+    "e2_ages": lambda: e2.build()[0],
     "m2_main_dial_feasibility": lambda: feasibility.build()[0],
     "m2_main_dial": lambda: m2_full.build()[0],
     "m2_e6_fallback_pawl": lambda: e6.fallback_assembly(),
@@ -48,6 +50,8 @@ EXPLODE = {                             # model -> exploded() arguments (front o
     "m2_main_dial_feasibility": dict(offsets={"hands": 60.0, "front": 30.0}, spread=1.2, use_item_explode=False),
     "test_rig": dict(offsets={"hands": 50.0, "front": 25.0}, spread=1.5, use_item_explode=False),
     "m1_time": dict(offsets={"hands": 60.0, "front": 35.0, "drive": -40.0}, spread=1.5, use_item_explode=False),
+    "e2_ages": dict(offsets={"figures": 120.0, "hall": 60.0, "ring": 0.0, "stops": -40.0, "drive": -40.0,
+                             "state": -90.0, "placeholders": -90.0}, spread=1.0, use_item_explode=False),
     "tolerance_coupons": dict(spread=0.0),     # gears lift off the board by their own explode vectors
     "m2_e6_fallback_pawl": dict(spread=1.5, use_item_explode=False),   # its layers come apart along the shafts
 }
