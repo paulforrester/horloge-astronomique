@@ -176,7 +176,7 @@ def build():
     g_ring, g_pin = Gear(L.TEETH["z"], L.TEETH["m"], shift=sx), Gear(16, L.TEETH["m"], shift=sp)
     cd = centre_distance(g_ring, g_pin)
     ring = annulus(L.ANNULUS[0], L.ANNULUS[1], -L.FLOOR_T, 0.0)
-    ring += annulus(L.INNER_SKIRT[0], L.INNER_SKIRT[1], L.INNER_SKIRT[2], -L.FLOOR_T + 0.01)
+    ring += annulus(L.INNER_SKIRT[0], L.INNER_SKIRT[1], L.INNER_SKIRT[2], 0.0)   # up to the surface: prints flat
     ring += annulus(L.OUTER_BODY[0], L.OUTER_BODY[1], L.OUTER_BODY[2], -L.FLOOR_T + 0.01)
     teeth = spur_gear(g_ring, L.TEETH["face"][1] - L.TEETH["face"][0]).moved(bd.Location((0, 0, L.TEETH["face"][0])))
     teeth -= parts.disc(2 * L.OUTER_BODY[0], 20, z0=-15)

@@ -311,8 +311,8 @@ waits at the right doorway, and the old man stands at the left one.
 
 | Item | Value |
 |---|---|
-| Walking surface | annulus R 110–134, z −3 to 0, flush with the floor, 0.5 mm gap each side |
-| Inner skirt | R 108–110, down to z −16; the guide rollers run inside it |
+| Walking surface | annulus R 108–134, z −3 to 0, flush with the floor, 0.5 mm gap each side |
+| Inner skirt | R 108–110, from the surface down to z −16; the guide rollers run inside it |
 | Outer body | R 127–131, down to z −28; it carries the teeth and the pegs |
 | Teeth | 264, module 1, z −8 to −3 |
 | Walk pinion | 16, at C + 140 mm at −60° (under the front floor, right); profile shifts −0.064/+0.064 |
