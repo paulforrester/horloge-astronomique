@@ -623,8 +623,14 @@ Scale aids [D]:
     not by counting events.
   - That time train carries a **four-step quarter snail**, as in rack quarter-striking. It sits on
     **E2's own 1 rev/h state arbor**, on legal time (M1 gate, decision 1: B; D14).
-  - The E2 event motor powers only the striking and the figures' walk. Its rack falls onto the snail
-    and counts the pairs.
+  - Two of E2's three event motors power the walk and the striking (`docs/e2-design.md` §6). The
+    quarter train's rack falls onto the snail and counts the pairs.
+  - **The ages ride a turntable** whose centre is behind the back wall. Each show turns it a
+    quarter turn: in from the right doorway, strike, out by the left. An age cam on the state
+    arbor sets its stop, so the next due age always waits in view at the right (`docs/e2-design.md`
+    §4.2–4.3; decided, PR #15).
+  - **Cadence** [S: Paul, 6 Nov 2026]: the genie strikes, then the age 1 s later, then a 2 s pause,
+    repeated n times.
   - This keeps the display right after skipped shows (night silence, catch-up); see architecture §6.
   - **The genie's strokes alternate with the age's.** E2's quarter train cues E1's genie before each
     of its own strokes, through the controller, so the count stays mechanical (E2's rack).
@@ -642,8 +648,8 @@ Scale aids [D]:
     right, as DA says.
   - The other bell, at the viewer's right, is the ages' bell (A3).
   - Paul's photographs IMG_0769 and IMG_0770 show both bells.
-- **Replica:** a classical rack and snail gives 1–12 strokes. The count is decided mechanically;
-  the controller only switches the motor. The hour snail is driven 12:1 from E2's own state arbor
+- **Replica:** a classical rack and snail gives 1–12 strokes, on E2's hour train, the third of its
+  event motors. The count is decided mechanically; the controller only switches the motor. The hour snail is driven 12:1 from E2's own state arbor
   (M1 gate, decision 1: B), so the count is the legal hour (D14).
 - **Difficulty:** 2.
 - **Depends on:** M1; E2.

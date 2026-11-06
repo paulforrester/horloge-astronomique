@@ -104,7 +104,7 @@ Columns:
 | Moon-phase globe | M5 | **Ø 0.40 m**, half gilt, half black; axis tilted ~40° | **Ø 50 mm** | ~1074 mm | [S: ELS]; height [E] |
 | Lower hall (four ages, Death) | E2 | opening ~1.46 m wide | ~183 mm | ~1324 mm | [E] |
 | Upper hall (Christ, Apostles) | E3 | opening ~1.46 m wide | ~183 mm | ~1473 mm | [E] |
-| Figures (Apostles, Christ, Death) | E2, E3 | **[?]** ~18 in (0.46 m) [S: WIKI], but drawn at ~0.70 m on the plate [E] | 57 mm or 88 mm | — | Resolve with a photo; this matters for E2/E3 sizing |
+| Figures (Apostles, Christ, Death) | E2, E3 | **[?]** ~18 in (0.46 m) [S: WIKI], but drawn at ~0.70 m on the plate [E]. **Death ≈ 0.62 m (0.52–0.74)** from a 2011 photograph [E: `docs/e2-design.md` §2] | Death ≈ 78 mm; Apostles still 57 or 88 mm | — | Death and the ages resolved by photo (E2). The Apostles still need the same check (E3). |
 | Rooster | E4 | "d'après nature" (life-size) [S: DA] | TBD | top of the weight tower, ~1729 mm [E] | — |
 | Left (weight) tower | — | ~1.72 m wide; top ~13.8 m incl. rooster | ~215 mm; ~1729 mm | left | [E] |
 | Staircase tower | — | ~2.05 m wide; top ~11.3 m | ~256 mm; ~1409 mm | right | [E] |
