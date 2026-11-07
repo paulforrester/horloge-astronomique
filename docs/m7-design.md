@@ -4,8 +4,8 @@ Phase 2, module M7: the seven chariots of the days of the week, which turn on a 
 under the lion gallery, above the main dial. M7 has no stepper. It takes M2's weekday arbor W,
 which turns once in 7 days, and carries that motion up to the carousel.
 
-**Status: concept for review.** Nothing is modelled yet. The decisions Paul is asked to take are
-in §5–§7 and listed in §9. Tags as in `docs/reference-notes.md`.
+**Status: concept accepted** (Paul, PR #20, 7 Nov 2026; the decisions are in §9). The detail
+design follows in its own PR. Nothing is modelled yet. Tags as in `docs/reference-notes.md`.
 
 <p align="center"><img src="img/m7/m7_concept.png" width="900" alt="Schematic: the carousel in plan with seven chariots and the three openings; side view of the drive from M2's arbor W up to the turntable"></p>
 
@@ -125,7 +125,7 @@ As everywhere: **pass timing electrically and position mechanically** (architect
   (§6) carries it. The detail design sizes it from the CAD masses.
 
 **4.4 Phase, setting and sensing.**
-- **Phase.** Each chariot is centred at **mean noon** (Strasbourg mean time, 12:29 CET), §7.
+- **Phase.** Each chariot is centred at **Bordeaux mean noon** (13:02 CET), §9 item 4.
 - **Setting** (architecture §7: "dog clutch at the drive"). The turntable sits on its hub through
   an indexed dog clutch, lifted to free it, turned, and dropped back. With 84 dog teeth one tooth
   is 2 h of carousel motion [D: 7 × 24 h / 84], ample for a display that moves 3.9 mm an hour.
@@ -189,14 +189,25 @@ the carrying, which gets most of B's benefit.
   and height, the opening's width and the niches' positions. That fixes R and the figure size.
 - If a photograph shows the rail or the underside, it would answer §6.
 
-## 9. Decisions needed from Paul
+## 9. Decisions (Paul, PR #20, 7 Nov 2026: "M7 design recommendations approved")
 
 1. **Drive: A, the lay shaft** (bevel at W, vertical shaft, 1:1 spur pair to the turntable), §5.
 2. **Chariots: A, fixed to the turntable on a decorative rail**, §6.
 3. **Size: the faithful R ≈ 105 mm (≈ 235 mm deep)**, a parameter, to be checked against the case
    depth, §7.
-4. **Phase: each chariot centred at Strasbourg mean noon**, §7.
-5. **The photograph crop** in §8, so the figures and R can be sized from it.
+4. **Phase: each chariot centred at local mean noon, with Bordeaux as the local reference** (Paul:
+   "we are basing the localtime on Bordeaux, not Strasbourg").
+   - Bordeaux mean noon is **13:02 CET** (14:02 CEST) [D: D2, Bordeaux LMT = UT − 2.28 min].
+   - W follows M2's mean-time arbor, which D2 sets to Strasbourg mean time (UT + 31.00 min). So
+     the carousel is set **33.3 min later** than Strasbourg mean noon [D: 31.00 + 2.28]. That is
+     only a setting offset: 33.3 min is 1.2° of the carousel [D: 360° × 33.3 / (7 × 1440)], a
+     sixth of a dog tooth (4.4). No gear changes.
+   - **Asked back on PR #20:** D2 records the dials' time as Strasbourg mean time (items 1, 2, 5),
+     with only the sky set for Bordeaux. If Paul means D2 itself should now use Bordeaux mean time,
+     that changes M1 and M2 as well, outside M7. Either way, M7 takes Bordeaux mean noon.
+5. **The photograph crop** in §8: IMG_0766 is not in the repository (only the gallery crop is),
+   so Paul is asked to attach it, or a crop round the chariot opening. Until then R and the
+   figures are parameters.
 
 No interface change is asked of M2.
 

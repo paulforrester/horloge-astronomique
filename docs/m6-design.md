@@ -4,8 +4,8 @@ Phase 2, module M6: the star globe on four columns at floor level, in front of t
 once per sidereal day and shows sidereal time on an hour circle (I16). Precession (I17) is v2:
 v1 provides for it and lets it be set by hand (D5).
 
-**Status: concept for review.** Nothing is modelled yet. The decisions Paul is asked to take are
-in §5–§9 and listed in §11. Tags as in `docs/reference-notes.md`.
+**Status: concept accepted** (Paul, PR #20, 7 Nov 2026: "M5 & M6 design recommendations are
+approved"; the decisions are in §11). The detail design follows in its own PR, after M5's. Tags as in `docs/reference-notes.md`.
 
 <p align="center"><img src="img/m6/m6_concept.png" width="900" alt="Schematic: the globe on its columns in front of the case, with the polar axis at the Bordeaux latitude; the drive from the stepper through the sidereal train and a bevel to the polar axis; the star shell on its ecliptic axis inside the frame"></p>
 
@@ -193,12 +193,12 @@ Both fit inside the v1 provision. Nothing needs deciding before v2.
   they give the rings' and columns' sizes, the hour ring, the globe's height and how far it
   stands in front of the case, and which way the meridian faces.
 
-## 11. Decisions needed from Paul
+## 11. Decisions (accepted as recommended, Paul, PR #20, 7 Nov 2026)
 
 1. **Drive: A, a pedestal under the globe** holding the stepper and the sidereal train (§5).
 2. **Meridian: A, parallel to the facade** (§6).
 3. **Stars: A, two-colour print with gilt inlay**; the magnitude limit from the smallest
-   printable dot (§7). Which constellation set to draw.
+   printable dot (§7). Which constellation set to draw is still open: proposed in the detail PR.
 4. **Precession provision: A**, an equatorial frame with a star shell on its ecliptic axis and a
    hollow polar arbor; set by hand in v1 (§8).
 5. **Columns and rings printed and painted as metal**, and **the globe under its own small

@@ -4,8 +4,8 @@ Phase 2, module M5: the Copernican planetary dial above the lion gallery (I14) a
 globe in the lunette above it (I15). One stepper turns M5's daily arbor at 1 rev per mean day
 (`docs/gear-trains.md` §7). Every ratio after it is gearing, from the trains accepted in Phase 1.
 
-**Status: concept for review.** Nothing is modelled yet. The decisions Paul is asked to take are
-in §5–§9 and listed in §11. Tags as in `docs/reference-notes.md`.
+**Status: concept accepted** (Paul, PR #20, 7 Nov 2026: "M5 & M6 design recommendations are
+approved"; the decisions are in §11). The detail design follows in its own PR, after M7's. Tags as in `docs/reference-notes.md`.
 
 <p align="center"><img src="img/m5/m5_concept.png" width="980" alt="Schematic: the planetary dial and Moon globe in elevation; side section of the coaxial planet stack with the reverted pairs; the Moon gearing on the Earth arm, with the idler"></p>
 
@@ -244,7 +244,7 @@ To size from a photograph (§10), all parameters until then:
   the orbit radii, the sphere and Sun sizes, the arm shapes, the zodiac's direction, and the
   globe's tilt.
 
-## 11. Decisions needed from Paul
+## 11. Decisions (accepted as recommended, Paul, PR #20, 7 Nov 2026)
 
 1. **The planetarium Moon's sense** (§3): accept the idler fix. Ratio and tooth counts are
    unchanged; the `spec/clock.yaml` note gains one line in the detail PR.
