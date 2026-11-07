@@ -31,6 +31,7 @@ from cad.lib.hardware import BEARINGS
 from cad.modules.e2_ages import drives as D
 from cad.modules.e2_ages import layout as L
 from cad.modules.e2_ages import program as G
+from cad.modules.e2_ages import strikers as K
 from cad.modules.e2_ages.drives import age_cam_radius  # noqa: F401
 
 DECK = D.DECK                               # the module's deck plate (z)
@@ -198,6 +199,8 @@ def build():
     d_state, ad, cu = D.add_state_module(a, MODEL_TIME[1], MODEL_TIME[0] + MODEL_TIME[1] / 60.0, sb[1], sb[0])
     adds += ad; cuts += cu
     data["stops"], data["drive"], data["state"] = d_stops, d_walk, d_state
+    data["strike"] = K.add_strike_trains(a, MODEL_TIME[1], MODEL_TIME[0] + MODEL_TIME[1] / 60.0)
+    data["strike"]["frame"] = K.add_strike_frame(a)
     for s_ in adds:
         deck = deck + s_
     for c_ in cuts:
@@ -240,6 +243,17 @@ def renders(a: Assembly, out: Path):
              hide=("hall",), tolerance=0.3, size=(9, 8))
     a.render(out / "e2_drives.png", elev=18, azim=-62, title="E2 part 2a: the stops, the walk drive and the state "
              "module (hall, ring and figures hidden)", hide=("hall", "ring", "figures"), tolerance=0.2, size=(10, 8))
+    hidden = {"state_arbor", "hour_snail", "quarter_snail", "release_cam_hour", "release_cam_quarter",
+              "hour_wheel_45"}
+    regroup = [(i, i.group) for i in a.items if i.group == "state" and i.name not in hidden]
+    for i, _ in regroup:
+        i.group = "state_rest"
+    a.render(out / "e2_strike.png", elev=18, azim=-125, title="E2 part 2b: the counting trains, from behind "
+             "(the hall, ring, stops, walk drive and most of the state module hidden)",
+             hide=("hall", "ring", "figures", "stops", "drive", "state_rest"), tolerance=0.15, size=(11, 8))
+    for i, g in regroup:
+        i.group = g
+    K.yz_plot(out / "e2_strike_yz.png")
     a.render(out / "e2_stops.png", elev=28, azim=-48, title="E2 part 2a: the stops and the walk drive (state module, "
              "hall, ring and figures hidden; rest state B)", hide=("hall", "ring", "figures", "state"), tolerance=0.15,
              size=(10, 8))

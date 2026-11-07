@@ -35,15 +35,19 @@ from cad.lib.gears import Gear, centre_distance, mesh_rotation, pair_shifts, spu
 from cad.lib.hardware import BEARINGS
 from cad.modules.e2_ages import layout as L
 from cad.modules.e2_ages import program as G
+from cad.modules.e2_ages import striking as S
 
 DECK = (-47.0, -43.0)                        # the module's deck plate (z); lowered 3 mm in part 2a
-STATE_Z = -81.0                              # the state arbor's axis
+STATE_Z = S.ARBOR_Z                          # the state arbor's axis
 AGE_CAM = dict(r0=20.0, step=4.0, t=5.0)     # 4 steps of 4 mm (the selection pegs' spacing)
-SNAIL_Q = (14.0, 12.0, 10.0, 8.0)            # quarter snail radii for 1..4 pairs (part 2b's rack reads it)
-SNAIL_H = tuple(20.0 - 0.9 * k for k in range(12))   # hour snail radii for 1..12 strokes [D: 0.9 mm per hour]
+SNAIL_Q = tuple(S.snail_radii(S.QUARTER))     # quarter snail radii for 1..4 pairs [D: from the rack, striking.py]
+SNAIL_H = tuple(S.snail_radii(S.HOUR))        # hour snail radii for 1..12 strokes [D: from the rack]
+quarter_snail_radius = S.quarter_snail_radius
+hour_snail_radius = S.hour_snail_radius
 HALL = (8.0, 6.0, 3.0)                       # [E] DRV5032 on a small board: long side, short side, thickness
 MAGNET = (5.0, 2.0)                          # [E] Ø5 x 2 NdFeB disc
 MAGNET_R = 123.5                             # magnets under the ages: clear of the support rollers' track
+WITNESS_R = 9.0                              # the hour snail's magnet, on its 6 o'clock step: under the snail at 12:00
 STARLOCK = {5.0: (11.0, 0.4), 4.0: (9.0, 0.4)}   # push-on lock washers (OD, thickness) [E: check the chosen part]
 WAVE = (10.0, 0.6)                           # wave washer for Ø5, compressed height [E]
 SQUARE = 3.0                                 # the bell stop's brass square rod
@@ -111,22 +115,14 @@ def age_cam_radius(minutes: float) -> float:
     return r0 - 3 * s + 3 * s * (m - 1.0) / 6.0 if m < 7.0 else r0
 
 
-def quarter_snail_radius(minutes: float) -> float:
-    """1 pair at :15, 2 at :30, 3 at :45, 4 at :00; each step centred on its show."""
-    m = (minutes + 7.5) % 60.0
-    return SNAIL_Q[(int(m // 15.0) - 1) % 4]
-
-
-def hour_snail_radius(hours: float) -> float:
-    """The hour snail under its reader: H strokes from H - 0.5 h to H + 0.5 h (H = 1 .. 12)."""
-    h = int(math.floor((hours + 0.5) % 12.0)) or 12
-    return SNAIL_H[h - 1]
+ARBOR_SENSE = -1                             # the state arbor turns clockwise seen from its motor (+X): the snails' past
+#                                              steps, never their coming ones, pass under the racks' tail arms (§12)
 
 
 def arbor_cam(radius_of_time, period, t, bore=5.0 + parts.FITS.press):
-    """A cam on an arbor turning +360°/period: the local angle a passes the top (local +y) at time
-    (90 - a) / 360 · period, which is when its radius is radius_of_time(that time)."""
-    return profile_plate(lambda a: radius_of_time(((90.0 - a) % 360.0) / 360.0 * period), t, bore)
+    """A cam on the state arbor (or the hour tube), which turns ARBOR_SENSE·360° per period: the local angle a
+    passes the top (local +y) at the time when its radius is radius_of_time(that time)."""
+    return profile_plate(lambda a: radius_of_time((((a - 90.0) * -ARBOR_SENSE) % 360.0) / 360.0 * period), t, bore)
 
 
 # ------------------------------------------------------------------------------------------------ the stops
@@ -425,12 +421,16 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
     """The state arbor and everything on it, its frame plates, the NEMA 17 on its D16 adapter (to the right)."""
     z = STATE_Z
     b85 = BEARINGS["MR85ZZ"]
-    rot = 6.0 * minutes                                       # the arbor's angle (local, about +X)
-    rot_h = 30.0 * hours
+    rot = ARBOR_SENSE * 6.0 * minutes                         # the arbor's angle (local, about +X)
+    rot_h = ARBOR_SENSE * 30.0 * hours
     x_l, x_r = -31.0, 79.5                                    # the arbor's ends
-    xp = dict(plate_l=(-30.0, -26.0), witness=(-26.0, -23.0), tube=(-25.7, -13.5), snail_h=(-22.0, -18.0),
-              hour_wheel=(-16.0, -13.5), p12=(-13.2, -10.7), lay_hub=(-13.5, -13.2), lay_stud=(-30.0, -9.7),
-              age_cam=(cam_x - AGE_CAM["t"] / 2, cam_x + AGE_CAM["t"] / 2), snail_q=(39.5, 43.5),
+    xp = dict(plate_l=(-30.0, -26.0), p12=(-25.7, -23.2), lay_hub=(-23.2, -22.9), hour_wheel=(-22.9, -20.4),
+              lay_stud=(-30.0, -19.4), tube=(-22.9, -8.5), witness=(-15.8, -12.8),
+              snail_h=(S.HOUR.x_rack - 2.0, S.HOUR.x_rack + 2.0),
+              release_h=(S.HOUR.x_rack + 4.3, S.HOUR.x_rack + 7.3),
+              snail_q=(S.QUARTER.x_rack - 2.0, S.QUARTER.x_rack + 2.0),
+              release_q=(S.QUARTER.x_rack + 4.3, S.QUARTER.x_rack + 7.3),
+              age_cam=(cam_x - AGE_CAM["t"] / 2, cam_x + AGE_CAM["t"] / 2),
               index=(45.5, 48.5), index_hall=(49.0, 52.0), block=(52.3, 56.3), coupling=(56.6, 95.5),
               plate_r=(96.0, 100.0))
     lay_y = arbor_y + 30.0
@@ -446,6 +446,11 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
     a.add("quarter_snail", ox(arbor_cam(quarter_snail_radius, 60.0, xp["snail_q"][1] - xp["snail_q"][0]).rotate(
         bd.Axis.Z, rot), xp["snail_q"]), group="state", print_up=(1, 0, 0),
           note="part 2b's quarter rack falls on it: 1 to 4 pairs")
+    for nm, fn, xr in (("release_cam_hour", S.hour_release_radius, xp["release_h"]),
+                       ("release_cam_quarter", S.quarter_release_radius, xp["release_q"])):
+        a.add(nm, ox(arbor_cam(fn, 60.0, xr[1] - xr[0]).rotate(bd.Axis.Z, rot), xr), group="state", print_up=(1, 0, 0),
+              note="trips its rack hook a minute before each show (part 2b): the time train decides when (rule 4)")
+        a.allow(nm, "state_arbor")
     idx = zdisc(24.0, 0.0, 3.0, bore=5.0 + parts.FITS.press) - zdisc(MAGNET[0] + 0.2, 3.0 - MAGNET[1] - 0.2, 3.1).moved(
         bd.Location((0, 9.0, 0)))
     a.add("index_disc", ox(idx.rotate(bd.Axis.Z, rot), xp["index"]), group="state", print_up=(1, 0, 0),
@@ -472,31 +477,30 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
     a.add("state_pinion_12", ox(gear(g12, 0.0, pw, 5.0, rot=rot), xp["p12"]), group="state", print_up=(1, 0, 0),
           note="pressed on the state arbor: the 12:1 motion work's input")
     r_lay = mesh_rotation(g12, g48, 0.0, rot)
-    lay = gear(g48, xp["p12"][0] - xp["hour_wheel"][0], xp["p12"][1] - xp["hour_wheel"][0], 4.0, "running", rot=r_lay)
-    lay += gear(g15, 0.0, xp["hour_wheel"][1] - xp["hour_wheel"][0], 4.0, "running", rot=r_lay)
-    lay += zdisc(12.0, xp["lay_hub"][0] - xp["hour_wheel"][0] - 0.01, xp["lay_hub"][1] - xp["hour_wheel"][0] + 0.01,
-                 bore=4.0 + parts.FITS.running)
-    a.add("lay_compound", on_x(lay, xp["hour_wheel"][0], lay_y, z), group="state", print_up=(-1, 0, 0),
-          note="48 + 15 in one print, "
-          "free on its stud")
+    x0 = xp["p12"][0]
+    lay = gear(g48, 0.0, xp["p12"][1] - x0, 4.0, "running", rot=r_lay)
+    lay += gear(g15, xp["hour_wheel"][0] - x0, xp["hour_wheel"][1] - x0, 4.0, "running", rot=r_lay)
+    lay += zdisc(12.0, xp["lay_hub"][0] - x0 - 0.01, xp["lay_hub"][1] - x0 + 0.01, bore=4.0 + parts.FITS.running)
+    a.add("lay_compound", on_x(lay, x0, lay_y, z), group="state", print_up=(1, 0, 0),
+          note="48 + 15 in one print, free on its stud")
     a.add("lay_stud", on_x(parts.rod(4.0, xp["lay_stud"][1] - xp["lay_stud"][0]), xp["lay_stud"][0], lay_y, z),
           material="steel", printed=False, group="state", note="Ø4 ground rod pressed in the left plate")
-    a.add("lay_starlock", on_x(zdisc(STARLOCK[4.0][0], 0, STARLOCK[4.0][1], bore=4.0), xp["p12"][1] + 0.3, lay_y, z),
+    a.add("lay_starlock", on_x(zdisc(STARLOCK[4.0][0], 0, STARLOCK[4.0][1], bore=4.0), xp["hour_wheel"][1] + 0.3, lay_y, z),
           material="steel", printed=False, group="state", note="Starlock for Ø4")
     r45 = mesh_rotation(g15, g45, 180.0, r_lay)
     hw = gear(g45, xp["hour_wheel"][0] - xp["tube"][0], xp["hour_wheel"][1] - xp["tube"][0], 5.0, "running", rot=r45)
     hw += zdisc(7.0, 0.0, xp["tube"][1] - xp["tube"][0], bore=5.0 + parts.FITS.running)
-    a.add("hour_wheel_45", ox(hw, xp["tube"]), group="state", print_up=(-1, 0, 0),
+    a.add("hour_wheel_45", ox(hw, xp["tube"]), group="state", print_up=(1, 0, 0),
           note="the hour wheel on its tube, free on the state arbor (1 turn in 12 h)")
     hs = arbor_cam(hour_snail_radius, 12.0, xp["snail_h"][1] - xp["snail_h"][0], bore=7.0 + parts.FITS.press)
-    hs -= zdisc(MAGNET[0] + 0.2, -0.1, MAGNET[1] + 0.2).moved(bd.Location((0, 7.0, 0)))
+    hs -= zdisc(MAGNET[0] + 0.2, -0.1, MAGNET[1] + 0.2).moved(bd.Location((0, -WITNESS_R, 0)))
     a.add("hour_snail", ox(hs.rotate(bd.Axis.Z, rot_h), xp["snail_h"]), group="state", print_up=(-1, 0, 0),
-          note="pressed on the hour wheel's tube; part 2b's hour rack falls on it: 1 to 12 strokes")
-    a.add("witness_magnet", ox(zdisc(MAGNET[0], 0.0, MAGNET[1]).moved(bd.Location((0, 7.0, 0))).rotate(
+          note="pressed on the hour wheel's tube; the hour rack falls on it: 1 to 12 strokes")
+    a.add("witness_magnet", ox(zdisc(MAGNET[0], 0.0, MAGNET[1]).moved(bd.Location((0, -WITNESS_R, 0))).rotate(
         bd.Axis.Z, rot_h), xp["snail_h"]), material="silver", printed=False, group="state")
     a.add("witness_hall", on_x(box(HALL[1], HALL[0], 0.0, HALL[2]).rotate(bd.Axis.Z, 90), xp["witness"][0], arbor_y,
-                               z + 7.0), material="green", printed=False, group="state",
-          note="witness Hall on the left plate: the hour snail at 12")
+                               z - WITNESS_R), material="green", printed=False, group="state",
+          note="witness Hall under the hour snail, on the strike frame: the snail's magnet passes it at 12:00")
     for x, y in (("age_cam", "state_arbor"), ("quarter_snail", "state_arbor"), ("index_disc", "state_arbor"),
                  ("index_magnet", "index_disc"), ("state_pinion_12", "state_arbor"), ("lay_compound", "lay_stud"),
                  ("lay_starlock", "lay_stud"), ("hour_wheel_45", "state_arbor"), ("hour_snail", "hour_wheel_45"),
@@ -504,7 +508,7 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
                  ("state_bearing_right", "state_arbor"), ("state_starlock", "state_arbor"),
                  ("state_starlock", "state_bearing_left"), ("lay_stud", "state_plate_left"),
                  ("state_bearing_left", "state_plate_left"), ("state_bearing_right", "state_block"),
-                 ("witness_hall", "state_plate_left"), ("index_hall", "state_block"),
+                 ("index_hall", "state_block"),
                  ("state_plate_left", "deck"), ("state_block", "deck"), ("state_motor_plate", "deck")):
         a.allow(x, y)
     # the frame: the left plate, the right block, the motor plate, each hanging from the deck
@@ -518,12 +522,15 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
             bd.Location((fx0, y0, z1)))
         return pl_
 
-    left = yz_plate(xp["plate_l"], arbor_y - 10.0, lay_y + 7.0, z - 9.0, DECK[0])
+    kh = S.feed_geometry(S.HOUR)["shaft"]                    # the hour strike shaft's bearing is in this plate too
+    left = yz_plate(xp["plate_l"], arbor_y - 10.0, kh[0] + 10.0, kh[1] - 10.0, DECK[0])
+    left -= on_x(zdisc(b85.od + parts.FITS.bearing_seat, -0.01, b85.width), xp["plate_l"][0], kh[0], kh[1])
+    left -= on_x(zdisc(6.5, -1, 6), xp["plate_l"][0], kh[0], kh[1])
     left -= ox(zdisc(b85.od + parts.FITS.bearing_seat, -0.01, b85.width), (xp["plate_l"][0], 0))
     left -= ox(zdisc(6.5, -1, 6), (xp["plate_l"][0], 0))
     left -= on_x(zdisc(4.0 + parts.FITS.press, -1, 6), xp["plate_l"][0], lay_y, z)
     a.add("state_plate_left", left, material="PETG", group="state", print_up=(0, 0, -1),
-          note="carries the arbor's left bearing, the lay stud and the witness Hall")
+          note="carries the arbor's left bearing and the lay stud")
     block = yz_plate(xp["block"], arbor_y - 10.0, arbor_y + 10.0, z - 9.0, DECK[0])
     block -= ox(zdisc(b85.od + parts.FITS.bearing_seat, xp["block"][1] - b85.width, xp["block"][1] + 0.01) , (0, 0))
     block -= ox(zdisc(6.5, xp["block"][0] - 1, xp["block"][1] + 1), (0, 0))
