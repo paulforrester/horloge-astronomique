@@ -56,6 +56,9 @@ adding precision later without rebuilding, is in
 | [`docs/m2-design.md`](docs/m2-design.md) | Phase 2: the M2 main dial, detailed: trains, worm-input differentials, centre stack, calendar ring and its New Year station, two-colour dial |
 | [`docs/m1-design.md`](docs/m1-design.md) | Phase 2: M1, the mean-time dial in the lion gallery, the legal-time hands (M1b) and the releases. Concept and detail design |
 | [`docs/e2-design.md`](docs/e2-design.md) | Phase 2: E2, the four ages and Death in the lower hall. Concept accepted; detail design part 1 (layout, ring, selection) and part 2a (stops, walk drive, state module) |
+| [`docs/m5-design.md`](docs/m5-design.md) | Phase 2: M5, the planetary dial and the Moon-phase globe. Concept accepted (PR #20) |
+| [`docs/m6-design.md`](docs/m6-design.md) | Phase 2: M6, the celestial globe (sidereal rotation; precession provided for). Concept accepted (PR #20) |
+| [`docs/m7-design.md`](docs/m7-design.md) | Phase 2: M7, the weekday carousel driven from M2's arbor W. Concept accepted (PR #20) |
 | [`docs/test-rig.md`](docs/test-rig.md) | Phase 2: the first print. One stepper driving the M1 motion work and a 24 h two-tube drive, with tolerance coupons |
 
 ## Tools
