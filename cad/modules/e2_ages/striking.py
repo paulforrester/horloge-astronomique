@@ -297,3 +297,40 @@ def release_geometry(t: TrainSpec) -> dict:
     f = press_drop / (press_drop + lobe)                  # the stud's place from the back nose
     stud = (press[0] + f * (front[0] - press[0]), press[1] + f * (front[1] - press[1]))
     return {"front": front, "press": press, "stud": stud, "ratio": lobe / press_drop, "hook_turn": hook_turn}
+
+
+# ------------------------------------------------------------------------------------------------ the rack springs
+# Each rack's toothed side outweighs its tail, so a spring pulls the spoke up (the tail down) [D: test_e2]. M2's
+# counting-lever return spring, accepted by Paul (D13): Sodemann E00940110500S, AISI 302, d 0.28, De 2.39,
+# L0 12.70 (inside the hooks), F0 0.22 N, R 0.17 N/mm, Ln 26.16 [S: ressorts-sodemann.fr/e00940110500s].
+RACK_SPRING = dict(part="Sodemann E00940110500S", L0=12.70, F0=0.22, R=0.17, Ln=26.16, De=2.39)
+SPRING_PIN_R = 10.0                          # the spring's pin on the spoke, from the rack's pivot
+SPRING_LENGTH_HOME = 20.0                    # hook to hook at home (gathered): stretched 7.3 mm
+
+
+def spring_points(t: TrainSpec, theta: float):
+    """(pin, anchor) of the rack spring with the rack at angle theta; the anchor lies straight above the pin at
+    home, so the spring stays nearly vertical."""
+    p = pivot()
+    th = rack_angles(t)
+    g_mid = ALPHA_H - (th[0] + th[-1]) / 2                  # the spoke's direction in the rack frame
+    pin = _add(p, unit(g_mid + theta), SPRING_PIN_R)
+    pin_home = _add(p, unit(g_mid + th[0]), SPRING_PIN_R)
+    anchor = (pin_home[0], pin_home[1] + SPRING_LENGTH_HOME)
+    return pin, anchor
+
+
+def spring_torque(t: TrainSpec, theta: float) -> float:
+    """N·mm the spring turns the rack CCW (tail down) at rack angle theta [D: F = F0 + R·stretch]."""
+    p = pivot()
+    pin, anc = spring_points(t, theta)
+    length = math.dist(pin, anc)
+    f = RACK_SPRING["F0"] + RACK_SPRING["R"] * (length - RACK_SPRING["L0"])
+    u = ((anc[0] - pin[0]) / length, (anc[1] - pin[1]) / length)
+    r = (pin[0] - p[0], pin[1] - p[1])
+    return f * (r[0] * u[1] - r[1] * u[0])
+
+
+def spring_stretch(t: TrainSpec, theta: float) -> float:
+    pin, anc = spring_points(t, theta)
+    return math.dist(pin, anc) - RACK_SPRING["L0"]

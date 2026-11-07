@@ -180,6 +180,23 @@ state module. Rows marked "counted" are already in the Batch 2 totals above.
 | Screws M2 × 6 + M2 heat-set inserts | A2 | 12 + 12 | the walk and program bearing blocks 2 + 2, the gearmotor bracket 2, the rod guides 4, the lock switch's bracket 2 | as Batch 1 |
 | Screws M3 × 8 + M3 heat-set inserts | A2 | 6 + 6 | the state module's left plate, right block and motor plate, 2 each, under the deck | as Batch 1 |
 
+### Batch 2 — E2 rows, detail design part 2b [E]
+
+From `cad/modules/e2_ages/strikers.py` (`docs/e2-design.md` §12): the quarter and hour counting trains.
+Rows marked "counted" are already in the Batch 2 totals above.
+
+| Item | Spec | Qty [E] | How the quantity was counted | Supplier |
+|---|---|---|---|---|
+| Bearing MR85ZZ | 5 × 8 × 2.5 | 4 | two per strike shaft | as Batch 1 |
+| Rod Ø5 | DIN 175 h9 | 0.1 m | the two strike shafts, ≈ 41 mm each | as Batch 1 |
+| Rod Ø3 | DIN 175 h9 | 0.1 m | the racks' common stud (≈ 51 mm), two hook studs and two release studs | as Batch 1 |
+| Rod Ø2 (or pins ISO 2338) | silver steel | 0.05 m | two feed-lever pins, two guard pins | as Batch 1 |
+| Micro metal gearmotor | 12 × 10 mm, Ø3 D-shaft, ≈ 40 rpm under load | counted (E2's quarter and hour trains) | one per strike shaft, through 12/24 | Gotronic (Pololu) ⚠ choose the ratio (e.g. 380:1 at reduced voltage) |
+| Subminiature roller-lever microswitch | as part 2a | counted (Batch 2 microswitches) | two lock switches, one cue switch | Gotronic ⚠ choose |
+| Slotted opto Vishay TCST1202 | as M2's E6 | counted (Batch 2 opto forks) | one per rack: home (gathered) | as the M2 row |
+| Screws M1.6 × 4 | A2 | 4 | the gearmotors' faces to their plates | ⚠ check the motor's face threads |
+| Screws M3 × 8 + M3 heat-set inserts | A2 | 8 + 8 | the middle and right strike plates and the two motor plates, 2 each, under the deck | as Batch 1 |
+
 ## Batch 3 — v1.5 / v2
 
 | Item | Qty [E] | Note |

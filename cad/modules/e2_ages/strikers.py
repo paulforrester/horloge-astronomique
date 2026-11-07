@@ -33,6 +33,9 @@ LOCK_R = 9.0                                 # lock cams
 CUE_R = 9.0
 LIFT_R = (7.0, 13.0)                         # lifter cams: base and top radii (part 2c sets the lift it needs)
 PLATE_T = 3.0
+TAIL_LEN = 1.0                               # the hook's tail, as a fraction of its arm
+SPRING_X = 3.0                               # the rack spring hangs this far to the -X side of the rack's mid-plane
+TAIL_LUMP = 3.0                              # the lump at the end of the hook's and the pawl's tails (radius)
 PAWL_TAIL = 1.0                              # the pawl's tail, as a fraction of its arm: its lump keeps it in the teeth,
 #                                              and the guard lifts it clear of the feed lever's and strap's bosses
 ARM_RISE = 5.0                               # the racks' tail arms run this far above the stud (clear of the snails)
@@ -67,7 +70,7 @@ def path(pts, w):
 
 
 def disc(c, r, n=64):
-    return Point(c).buffer(r, resolution=n // 4)
+    return Point(c).buffer(r, quad_segs=n // 4)
 
 
 def rot_about(poly, centre, ang_rad):
@@ -130,17 +133,19 @@ def rack_solid(t: S.TrainSpec, theta: float):
     rim = rot_about(rack_poly_rim(t), p, theta)
     th0 = S.rack_angles(t)[0]
     vane = rot_about(vane_poly(t), p, theta - th0)
+    pin, _ = S.spring_points(t, theta)
+    boss = disc(pin, 2.2).difference(disc(pin, (PIN_D + parts.FITS.press) / 2))
     vx = (t.x_rack - VANE["t"] / 2, t.x_rack + VANE["t"] / 2)
-    return yz_solid(body, *x_of(t, "rack")) + yz_solid(rim, *x_of(t, "rim")) + yz_solid(vane, *vx)
+    return (yz_solid(body.union(boss), *x_of(t, "rack")) + yz_solid(rim, *x_of(t, "rim"))
+            + yz_solid(vane, *vx))
 
 
 def hook_solid(t: S.TrainSpec, lift: float = 0.0):
     """The hook (engaged, or turned out by `lift` radians): body and hub beside the rim, tip finger in the rim's
     right half; a counterweight tail past the pivot keeps it in the teeth."""
+    body = hook_poly(t)
     hk = S.hook_geometry(t)
     q, tip = hk["pivot"], hk["tip"]
-    tail = S._add(q, (q[0] - tip[0], q[1] - tip[1]), 0.6)
-    body = unary_union([bar(q, tip, 2.4), disc(q, 3.0), disc(tail, 2.5), bar(q, tail, 2.4)])
     body = body.difference(disc(q, (STUD_D + parts.FITS.running) / 2))
     finger = disc(tip, 0.6).union(bar(tip, S._add(tip, (q[0] - tip[0], q[1] - tip[1]), 0.25), 1.2))
     body, finger = rot_about(body, q, lift), rot_about(finger, q, lift)
@@ -149,10 +154,9 @@ def hook_solid(t: S.TrainSpec, lift: float = 0.0):
 
 def pawl_solid(t: S.TrainSpec, lift: float):
     """The gathering pawl on the feed lever's pin, turned out by `lift` (at rest the guard holds it out)."""
+    body = pawl_poly(t)
     fg = S.feed_geometry(t)
     q, tip = fg["pin"], fg["tip"]
-    tail = S._add(q, (q[0] - tip[0], q[1] - tip[1]), PAWL_TAIL)
-    body = unary_union([bar(q, tip, 2.4), disc(q, 2.8), disc(tail, 2.4), bar(q, tail, 2.4)])
     body = body.difference(disc(q, (PIN_D + parts.FITS.running) / 2))
     finger = disc(tip, 0.6).union(bar(tip, S._add(tip, (q[0] - tip[0], q[1] - tip[1]), 0.25), 1.2))
     body, finger = rot_about(body, q, lift), rot_about(finger, q, lift)
@@ -293,6 +297,26 @@ def add_strike_trains(a, minutes: float, hours: float):
                        (f"{tag}_rack", f"{tag}_feed_lever"), (f"{tag}_pawl", f"{tag}_feed_lever"),
                        (f"{tag}_strap", f"{tag}_feed_lever")):
             a.allow(x_, y_)
+    for t in S.TRAINS:
+        th0 = S.rack_angles(t)[0]
+        pin, anc = S.spring_points(t, th0)
+        xs = t.x_rack - SPRING_X
+        a.add(f"{t.name}_spring_pin", x_rod(PIN_D, xs - S.RACK_SPRING["De"] / 2 - 0.3, t.x_rack + 1.5, pin),
+              material="steel", printed=False, group="strike", note="Ø2 pin in the rack's spoke: the spring's lower hook")
+        sp = bd.Cylinder(S.RACK_SPRING["De"] / 2, math.dist(pin, anc) - 3.0,
+                         align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)).moved(
+            bd.Location((xs, pin[0], pin[1] + 1.5)))
+        a.add(f"{t.name}_rack_spring", sp, material="steel", printed=False, group="strike",
+              note=f"{S.RACK_SPRING['part']}: pulls the spoke up, so the tail falls onto the snail")
+        plate_x = MIDDLE_X[0] if t is S.HOUR else RIGHT_X[0]
+        blk = Polygon([(anc[0] - 3, anc[1] - 1.5), (anc[0] + 3, anc[1] - 1.5), (anc[0] + 3, anc[1] + 4),
+                       (anc[0] - 3, anc[1] + 4)])
+        x0, x1 = sorted((t.x_rack - 4.0, plate_x))
+        a.add(f"{t.name}_spring_anchor", yz_solid(blk, x0, x1), material="PETG", group="strike",
+              note="the spring's upper hook catches its pin; screwed to the strike plate")
+        for x_, y_ in ((f"{t.name}_spring_pin", f"{t.name}_rack"), (f"{t.name}_rack_spring", f"{t.name}_spring_pin"),
+                       (f"{t.name}_rack_spring", f"{t.name}_spring_anchor")):
+            a.allow(x_, y_)
     a.add("rack_stud", x_rod(STUD_D, x_of(S.HOUR, "feed")[0] - 0.5, RIGHT_X[1], p), material="steel", printed=False,
           group="strike", note="Ø3 ground rod: both racks and both feed levers turn on it")
     data["pivot"] = [round(v, 2) for v in p]
@@ -301,7 +325,7 @@ def add_strike_trains(a, minutes: float, hours: float):
 
 # ------------------------------------------------------------------------------------------------ frame, shafts, drive
 OPTO = dict(L=11.9, W=6.3, H=10.8, gap=3.1, slit_h=3.8)    # Vishay TCST1202 [S: as M2's E6, e6.py]
-VANE = dict(r=18.0, t=1.5, out=7.0)                         # the home vane on each rack's spoke
+VANE = dict(r=19.0, t=1.5, out=10.0)                        # the home vane on each rack's spoke
 HOUR_MOTOR_PLATE_X = (-39.0, -36.0)
 QUARTER_MOTOR_PLATE_X = (46.0, 49.0)
 GEARMOTOR = dict(w=12.0, d=10.0, length=34.5, shaft_d=3.0, shaft_l=9.0)   # [E] ⚠ as the walk's, ≈ 40 rpm
@@ -352,7 +376,7 @@ def guard_point(t: S.TrainSpec, lift: float = 0.25):
     c, s_ = math.cos(lift), math.sin(lift)
     d = (tail[0] - q[0], tail[1] - q[1])
     tail_l = (q[0] + c * d[0] - s_ * d[1], q[1] + s_ * d[0] + c * d[1])
-    return (tail_l[0], tail_l[1] - 2.4 - 1.0)
+    return (tail_l[0], tail_l[1] - TAIL_LUMP - 1.0)
 
 
 def strike_layout():
@@ -504,3 +528,78 @@ def add_strike_frame(a):
     a.allow("hour_strike_shaft", "state_plate_left"); a.allow("hour_strike_shaft", "strike_plate_middle")
     a.allow("quarter_strike_shaft", "strike_plate_middle"); a.allow("quarter_strike_shaft", "strike_plate_right")
     return data
+
+
+# ------------------------------------------------------------------------------------------------ for the tests
+def snail_solid(t: S.TrainSpec, when: float):
+    """The snail at a given time: minutes (quarter snail) or hours (hour snail)."""
+    ys, zs = S.arbor_yz()
+    if t is S.QUARTER:
+        fn, period, rot, bore = S.quarter_snail_radius, 60.0, D.ARBOR_SENSE * 6.0 * when, 5.0 + parts.FITS.press
+    else:
+        fn, period, rot, bore = S.hour_snail_radius, 12.0, D.ARBOR_SENSE * 30.0 * when, 7.0 + parts.FITS.press
+    shape = D.arbor_cam(fn, period, 4.0, bore).rotate(bd.Axis.Z, rot)
+    return D.on_x(shape, t.x_rack - 2.0, ys, zs)
+
+
+def centroid_offset(poly, pivot_yz):
+    """(dy, dz) of a polygon's centroid from a pivot: dy > 0 puts its weight on the +Y side."""
+    c = poly.centroid
+    return (c.x - pivot_yz[0], c.y - pivot_yz[1])
+
+
+def hook_poly(t: S.TrainSpec):
+    """The hook's outline: arm to the tip, hub, and a weighted tail past the pivot (its weight turns the tip into
+    the teeth)."""
+    hk = S.hook_geometry(t)
+    q, tip = hk["pivot"], hk["tip"]
+    tail = S._add(q, (q[0] - tip[0], q[1] - tip[1]), TAIL_LEN)
+    return unary_union([bar(q, tip, 2.4), disc(q, 3.0), disc(tail, TAIL_LUMP), bar(q, tail, 2.4)])
+
+
+def pawl_poly(t: S.TrainSpec):
+    fg = S.feed_geometry(t)
+    q, tip = fg["pin"], fg["tip"]
+    tail = S._add(q, (q[0] - tip[0], q[1] - tip[1]), PAWL_TAIL)
+    return unary_union([bar(q, tip, 2.4), disc(q, 2.8), disc(tail, TAIL_LUMP), bar(q, tail, 2.4)])
+
+
+def yz_plot(path):
+    """Both trains seen along X: each rack at home and at its full count, the snail's largest step, the hook, the
+    pawl, the strike shaft and its largest cam, the release lever."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6.5))
+    for ax, t in zip(axes, S.TRAINS):
+        ys, zs = S.arbor_yz()
+        p = S.pivot()
+
+        def draw(poly, **kw):
+            polys = list(poly.geoms) if hasattr(poly, "geoms") else [poly]
+            for pg in polys:
+                x, y = pg.exterior.xy
+                ax.fill(x, y, alpha=kw.pop("alpha", 0.35), **kw)
+
+        ax.add_patch(plt.Circle((ys, zs), max(S.snail_radii(t)), fill=False, ls="--", lw=0.8))
+        ax.add_patch(plt.Circle((ys, zs), S.RELEASE_R[1], fill=False, ls=":", lw=0.8, color="g"))
+        th = S.rack_angles(t)
+        for ang, col, lab in ((th[0], "tab:blue", "home"), (th[-1], "tab:cyan", f"count {t.counts}")):
+            draw(rot_about(rack_poly_body(t), p, ang).union(rot_about(rack_poly_rim(t), p, ang)), color=col)
+            ax.plot([], [], color=col, lw=6, alpha=0.4, label=f"rack, {lab}")
+        draw(hook_poly(t), color="tab:red")
+        draw(rot_about(pawl_poly(t), S.feed_geometry(t)["pin"], 0.25), color="tab:purple")
+        k = S.feed_geometry(t)["shaft"]
+        ax.add_patch(plt.Circle(k, LIFT_R[1], fill=False, color="k", lw=0.8))
+        ax.plot(*k, "k+")
+        rg = S.release_geometry(t)
+        ax.plot([rg["front"][0], rg["stud"][0], rg["press"][0]], [rg["front"][1] + 1.2, rg["stud"][1], rg["press"][1] + 1.6],
+                color="tab:green", lw=2, label="release lever")
+        ax.axhline(-47, color="k", lw=1)
+        ax.set_title(f"{t.name} train (x {t.x_rack:+.1f}): the hook red, the pawl purple (held out)")
+        ax.set_xlabel("y (mm)"); ax.set_ylabel("z (mm)")
+        ax.set_aspect("equal"); ax.grid(True, lw=0.3); ax.set_xlim(-60, 60); ax.set_ylim(-115, -42)
+        ax.legend(fontsize=7, loc="lower left")
+    fig.tight_layout()
+    fig.savefig(path, dpi=110)
+    plt.close(fig)
