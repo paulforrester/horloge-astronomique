@@ -33,10 +33,12 @@ LOCK_R = 9.0                                 # lock cams
 CUE_R = 9.0
 LIFT_R = (7.0, 13.0)                         # lifter cams: base and top radii (part 2c sets the lift it needs)
 PLATE_T = 3.0
+PAWL_TAIL = 1.0                              # the pawl's tail, as a fraction of its arm: its lump keeps it in the teeth,
+#                                              and the guard lifts it clear of the feed lever's and strap's bosses
 ARM_RISE = 5.0                               # the racks' tail arms run this far above the stud (clear of the snails)
 MIDDLE_X = (2.0, 5.0)                        # the middle strike plate
 RIGHT_X = (27.6, 30.6)                       # the right strike plate
-GEAR_TEETH = (12, 36)                        # gearmotor pinion : strike shaft gear
+GEAR_TEETH = (12, 24)                        # gearmotor pinion : strike shaft gear (≈ 40 rpm -> 20 rpm)
 SWITCH = dict(l=12.8, w=5.8, h=6.5)          # subminiature microswitch [E]
 
 
@@ -126,7 +128,10 @@ def rack_solid(t: S.TrainSpec, theta: float):
     p = S.pivot()
     body = rot_about(rack_poly_body(t), p, theta)
     rim = rot_about(rack_poly_rim(t), p, theta)
-    return yz_solid(body, *x_of(t, "rack")) + yz_solid(rim, *x_of(t, "rim"))
+    th0 = S.rack_angles(t)[0]
+    vane = rot_about(vane_poly(t), p, theta - th0)
+    vx = (t.x_rack - VANE["t"] / 2, t.x_rack + VANE["t"] / 2)
+    return yz_solid(body, *x_of(t, "rack")) + yz_solid(rim, *x_of(t, "rim")) + yz_solid(vane, *vx)
 
 
 def hook_solid(t: S.TrainSpec, lift: float = 0.0):
@@ -146,7 +151,7 @@ def pawl_solid(t: S.TrainSpec, lift: float):
     """The gathering pawl on the feed lever's pin, turned out by `lift` (at rest the guard holds it out)."""
     fg = S.feed_geometry(t)
     q, tip = fg["pin"], fg["tip"]
-    tail = S._add(q, (q[0] - tip[0], q[1] - tip[1]), 0.6)
+    tail = S._add(q, (q[0] - tip[0], q[1] - tip[1]), PAWL_TAIL)
     body = unary_union([bar(q, tip, 2.4), disc(q, 2.8), disc(tail, 2.4), bar(q, tail, 2.4)])
     body = body.difference(disc(q, (PIN_D + parts.FITS.running) / 2))
     finger = disc(tip, 0.6).union(bar(tip, S._add(tip, (q[0] - tip[0], q[1] - tip[1]), 0.25), 1.2))
@@ -291,4 +296,211 @@ def add_strike_trains(a, minutes: float, hours: float):
     a.add("rack_stud", x_rod(STUD_D, x_of(S.HOUR, "feed")[0] - 0.5, RIGHT_X[1], p), material="steel", printed=False,
           group="strike", note="Ø3 ground rod: both racks and both feed levers turn on it")
     data["pivot"] = [round(v, 2) for v in p]
+    return data
+
+
+# ------------------------------------------------------------------------------------------------ frame, shafts, drive
+OPTO = dict(L=11.9, W=6.3, H=10.8, gap=3.1, slit_h=3.8)    # Vishay TCST1202 [S: as M2's E6, e6.py]
+VANE = dict(r=18.0, t=1.5, out=7.0)                         # the home vane on each rack's spoke
+HOUR_MOTOR_PLATE_X = (-39.0, -36.0)
+QUARTER_MOTOR_PLATE_X = (46.0, 49.0)
+GEARMOTOR = dict(w=12.0, d=10.0, length=34.5, shaft_d=3.0, shaft_l=9.0)   # [E] ⚠ as the walk's, ≈ 40 rpm
+
+
+def spoke_angle_home(t: S.TrainSpec) -> float:
+    th = S.rack_angles(t)
+    return S.ALPHA_H - (th[0] + th[-1]) / 2 + th[0]
+
+
+def vane_poly(t: S.TrainSpec):
+    """A tab on the spoke's CW side, at home inside the opto's gap; the rack only ever turns away (CCW) from it."""
+    p = S.pivot()
+    a = spoke_angle_home(t)
+    base = S._add(p, S.unit(a), VANE["r"])
+    cw = (math.sin(a), -math.cos(a))
+    tip = S._add(base, cw, VANE["out"])
+    return bar(base, tip, 4.0)
+
+
+def opto_solid(t: S.TrainSpec):
+    """The TCST1202 straddling the vane: its gap across X at the rack's mid-plane, its slit 2 mm in from the vane's
+    edge at home."""
+    p = S.pivot()
+    a = spoke_angle_home(t)
+    cw = (math.sin(a), -math.cos(a))
+    base = S._add(p, S.unit(a), VANE["r"])
+    centre = S._add(base, cw, VANE["out"] - OPTO["slit_h"] / 2 + 0.5)
+    from shapely import affinity
+    body = Polygon([(-OPTO["L"] / 2, -OPTO["H"] / 2), (OPTO["L"] / 2, -OPTO["H"] / 2), (OPTO["L"] / 2, OPTO["H"] / 2),
+                    (-OPTO["L"] / 2, OPTO["H"] / 2)])
+    body = affinity.translate(affinity.rotate(body, math.degrees(a), origin=(0, 0)), *centre)
+    xm = t.x_rack
+    g = OPTO["gap"] / 2
+    arms = yz_solid(body, xm - OPTO["W"] / 2, xm - g) + yz_solid(body, xm + g, xm + OPTO["W"] / 2)
+    # the arms' far ends join behind the vane's sweep (the floor of the U), away from the rack
+    floor = affinity.translate(affinity.rotate(Polygon([(-OPTO["L"] / 2, -OPTO["H"] / 2), (OPTO["L"] / 2, -OPTO["H"] / 2),
+                                                        (OPTO["L"] / 2, -OPTO["H"] / 2 + 2.0), (-OPTO["L"] / 2, -OPTO["H"] / 2 + 2.0)]),
+                                               math.degrees(a), origin=(0, 0)), *centre)
+    return arms, centre
+
+
+def guard_point(t: S.TrainSpec, lift: float = 0.25):
+    """Where the guard pin sits: just under the pawl's tail when the pawl is held out at rest."""
+    fg = S.feed_geometry(t)
+    q, tip = fg["pin"], fg["tip"]
+    tail = S._add(q, (q[0] - tip[0], q[1] - tip[1]), PAWL_TAIL)
+    c, s_ = math.cos(lift), math.sin(lift)
+    d = (tail[0] - q[0], tail[1] - q[1])
+    tail_l = (q[0] + c * d[0] - s_ * d[1], q[1] + s_ * d[0] + c * d[1])
+    return (tail_l[0], tail_l[1] - 2.4 - 1.0)
+
+
+def strike_layout():
+    """Shaft positions and the x ranges along each strike shaft."""
+    kh, kq = S.feed_geometry(S.HOUR)["shaft"], S.feed_geometry(S.QUARTER)["shaft"]
+    s12, s24 = pair_shifts(*GEAR_TEETH)
+    cd = centre_distance(Gear(GEAR_TEETH[0], 1.0, shift=s12), Gear(GEAR_TEETH[1], 1.0, shift=s24))
+    return {
+        "hour": dict(shaft=kh, x=(-35.8, MIDDLE_X[1] + 0.5), gear=(-33.2, -30.7), lock=(-35.5, -33.5),
+                     lift=(-3.4, -0.9), motor=(kh[0] + cd, kh[1]), motor_face=HOUR_MOTOR_PLATE_X[0],
+                     motor_dir=+1, bearings=((-30.0, -27.5), (MIDDLE_X[1] - 2.5, MIDDLE_X[1]))),
+        "quarter": dict(shaft=kq, x=(MIDDLE_X[0] - 0.5, 42.0), gear=(39.2, 41.7), cue=(31.0, 33.0), lock=(33.3, 35.3),
+                        lift=(35.6, 38.6), motor=(kq[0] + cd, kq[1]), motor_face=QUARTER_MOTOR_PLATE_X[1],
+                        motor_dir=-1, bearings=((MIDDLE_X[0], MIDDLE_X[0] + 2.5), (RIGHT_X[1] - 2.5, RIGHT_X[1]))),
+        "cd": cd}
+
+
+def plate_solid(x, outline_yz, holes=()):
+    poly = Polygon(outline_yz)
+    for c, d in holes:
+        poly = poly.difference(disc(c, d / 2))
+    return yz_solid(poly, *x)
+
+
+def add_strike_frame(a):
+    """Strike shafts, cams, gears, gearmotors, plates, guards, switches and optos."""
+    lay = strike_layout()
+    p = S.pivot()
+    b85 = BEARINGS["MR85ZZ"]
+    s12, s24 = pair_shifts(*GEAR_TEETH)
+    g12, g24 = Gear(GEAR_TEETH[0], 1.0, shift=s12), Gear(GEAR_TEETH[1], 1.0, shift=s24)
+    seat = b85.od + parts.FITS.bearing_seat
+    data = {"gear": f"{GEAR_TEETH[0]}/{GEAR_TEETH[1]}", "cd": round(lay["cd"], 3)}
+    for t in S.TRAINS:
+        tag, L = t.name, lay[t.name]
+        k = L["shaft"]
+        a.add(f"{tag}_strike_shaft", x_rod(SHAFT_D, L["x"][0], L["x"][1], k), material="steel", printed=False,
+              group="strike", note="Ø5 ground rod, one turn per stroke (3 s)")
+        for i, (x0, x1) in enumerate(L["bearings"]):
+            a.add(f"{tag}_strike_bearing_{i}", D.on_x(parts.bearing(b85), x0, k[0], k[1]), material="bearing",
+                  printed=False, group="strike", note="MR85ZZ")
+            a.allow(f"{tag}_strike_bearing_{i}", f"{tag}_strike_shaft")
+        a.allow(f"{tag}_eccentric", f"{tag}_strike_shaft")
+        # cams
+        a.add(f"{tag}_lock_cam", cam_solid(lock_radius, *L["lock"], k), group="strike",
+              note="its notch lets the lock switch's roller drop at the rest angle")
+        a.add(f"{tag}_lifter_cam", cam_solid(lift_radius, *L["lift"], k), group="strike",
+              note="lifts the striking figure and drops it at 1 s (part 2c takes the lift on)")
+        for nm in (f"{tag}_lock_cam", f"{tag}_lifter_cam"):
+            a.allow(nm, f"{tag}_strike_shaft")
+        if "cue" in L:
+            a.add(f"{tag}_cue_cam", cam_solid(cue_radius, *L["cue"], k), group="strike",
+                  note="closes E1's cue switch at the start of each pair: the genie strikes first")
+            a.allow(f"{tag}_cue_cam", f"{tag}_strike_shaft")
+        # gear and gearmotor (its pinion on the motor's D-shaft; the motor slides out along X)
+        ang_m = math.degrees(math.atan2(L["motor"][1] - k[1], L["motor"][0] - k[0]))
+        gear24 = spur_gear(g24, L["gear"][1] - L["gear"][0]) - parts.disc(SHAFT_D + parts.FITS.press, 20, z0=-5)
+        a.add(f"{tag}_strike_gear", D.on_x(gear24, L["gear"][0], k[0], k[1]), group="strike",
+              note=f"{GEAR_TEETH[1]} teeth, pressed on the strike shaft")
+        r12 = mesh_rotation(g24, g12, ang_m, 0.0)
+        pin12 = spur_gear(g12, L["gear"][1] - L["gear"][0]).rotate(bd.Axis.Z, r12) - parts.disc(
+            GEARMOTOR["shaft_d"] + parts.FITS.press, 20, z0=-5)
+        a.add(f"{tag}_motor_pinion", D.on_x(pin12, L["gear"][0], L["motor"][0], L["motor"][1]), group="strike",
+              note="pressed on the gearmotor's Ø3 D-shaft")
+        a.allow(f"{tag}_strike_gear", f"{tag}_strike_shaft")
+        gm = GEARMOTOR
+        face = L["motor_face"]
+        dirx = L["motor_dir"]                                  # +1: the shaft points +X (body on the -X side)
+        body = bd.Box(gm["length"], gm["w"], gm["d"], align=(bd.Align.MAX if dirx > 0 else bd.Align.MIN,
+                                                               bd.Align.CENTER, bd.Align.CENTER))
+        body = body.moved(bd.Location((face, L["motor"][0], L["motor"][1])))
+        shaft = x_rod(gm["shaft_d"], *(sorted((face, face + dirx * gm["shaft_l"]))), L["motor"])
+        a.add(f"{tag}_motor", body + shaft, material="black", printed=False, group="strike",
+              note="micro metal gearmotor ≈ 40 rpm [E] ⚠; slides out along X after two M2")
+        a.allow(f"{tag}_motor_pinion", f"{tag}_motor")
+        mp_x = HOUR_MOTOR_PLATE_X if t is S.HOUR else QUARTER_MOTOR_PLATE_X
+        my, mz = L["motor"]
+        if t is S.HOUR:
+            outline = [(my - 13, mz - 9), (my + 13, mz - 9), (my + 13, -47.0), (my - 13, -47.0)]
+        else:
+            outline = [(my - 13, mz - 9), (my + 13, mz - 9), (my + 13, -47.0), (36.0, -47.0), (36.0, -53.0),
+                       (26.0, -53.0), (26.0, -60.5), (my - 13, -60.5)]       # under the walk's lock cam
+        mplate = plate_solid(mp_x, outline, holes=[((my, mz), gm["shaft_d"] + 1.0)])
+        for dz in (-4.5, 4.5):
+            mplate -= x_rod(1.8, mp_x[0] - 1, mp_x[1] + 1, (my, mz + dz))
+        a.add(f"{tag}_motor_plate", mplate, material="PETG", group="strike",
+              note="the gearmotor's face screws to it (2 × M1.6); it hangs from the deck")
+        for x_, y_ in ((f"{tag}_motor", f"{tag}_motor_plate"), (f"{tag}_motor_plate", "deck")):
+            a.allow(x_, y_)
+        # lock switch outside the shaft's largest cam or gear, its roller lever reaching in to the lock cam
+        if t is S.HOUR:
+            ls_c, ls_a = (k[0] - 14.5 - SWITCH["h"] / 2, k[1]), 90.0
+        else:
+            ls_c, ls_a = (k[0], k[1] + 14.5 + SWITCH["h"] / 2), 0.0
+        ls_x = L["lock"][0] - 0.4 if t is S.HOUR else L["lock"][0]
+        a.add(f"{tag}_lock_switch", switch_solid(ls_c, ls_x, ls_a), material="black", printed=False,
+              group="strike", note="subminiature roller microswitch [E]: its roller drops into the lock cam's notch "
+                                   "at the rest angle")
+        # home opto and the rack's vane
+        arms, oc = opto_solid(t)
+        a.add(f"{tag}_home_opto", arms, material="black", printed=False, group="strike",
+              note="Vishay TCST1202: the rack's vane blocks it only when the rack is home (gathered)")
+        data[tag] = {"shaft": [round(v, 2) for v in k], "motor": [round(v, 2) for v in L["motor"]],
+                     "opto": [round(v, 2) for v in oc]}
+    # the cue switch (quarters)
+    Lq = lay["quarter"]
+    kq = Lq["shaft"]
+    a.add("quarter_cue_switch", switch_solid((kq[0], kq[1] - 14.5 - SWITCH["h"] / 2), Lq["cue"][0]),
+          material="black", printed=False, group="strike", note="E1's cue: closed once per pair [E]")
+    # plates: the middle and right strike plates
+    kh = lay["hour"]["shaft"]
+    hk_h, rg_h = S.hook_geometry(S.HOUR), S.release_geometry(S.HOUR)
+    mid = [(-25.0, -108.0), (36.0, -108.0), (36.0, -47.0), (-25.0, -47.0)]
+    a.add("strike_plate_middle", plate_solid(MIDDLE_X, mid, holes=[(kh, seat), (kq, seat), (p, STUD_D + parts.FITS.press),
+                                                                   (hk_h["pivot"], STUD_D + parts.FITS.press),
+                                                                   (rg_h["stud"], STUD_D + parts.FITS.press)]),
+          material="PETG", group="strike", note="hangs from the deck: the shafts' bearings and the hour train's studs")
+    hk_q, rg_q = S.hook_geometry(S.QUARTER), S.release_geometry(S.QUARTER)
+    right = [(-24.0, -108.0), (24.0, -108.0), (24.0, -47.0), (-14.0, -47.0), (-14.0, -59.0), (-24.0, -59.0)]
+    a.add("strike_plate_right", plate_solid(RIGHT_X, right, holes=[(kq, seat), (p, STUD_D + parts.FITS.press),
+                                                                   (hk_q["pivot"], STUD_D + parts.FITS.press),
+                                                                   (rg_q["stud"], STUD_D + parts.FITS.press)]),
+          material="PETG", group="strike", note="hangs from the deck: the quarter shaft's bearing and the quarter studs")
+    for nm in ("strike_plate_middle", "strike_plate_right"):
+        a.allow(nm, "deck"); a.allow(nm, "rack_stud")
+    # the guards: a fixed pin under each pawl's tail lifts the pawl at the end of the return stroke
+    for t, plate_x, plate in ((S.HOUR, -26.0, "state_plate_left"), (S.QUARTER, MIDDLE_X[1], "strike_plate_middle")):
+        g = guard_point(t)
+        x1 = x_of(t, "pawl")[1]
+        a.add(f"{t.name}_guard", x_rod(2.0, min(plate_x, x1), max(plate_x, x1), g), material="steel", printed=False,
+              group="strike", note="Ø2 pin: holds the gathering pawl out of the teeth at rest, so the rack can fall")
+        a.allow(f"{t.name}_guard", plate); a.allow(f"{t.name}_guard", f"{t.name}_pawl")
+    # the witness Hall's bracket, from the middle plate, under the hour snail's back
+    ys, zs = S.arbor_yz()
+    wb = Polygon([(-25.0, zs - 15.0), (-21.0, zs - 15.0), (-21.0, zs - 11.0), (-25.0, zs - 11.0)])
+    a.add("witness_bracket", yz_solid(wb, -18.5, MIDDLE_X[0]) + yz_solid(
+        Polygon([(ys - 4.0, zs - 15.0), (-21.0, zs - 15.0), (-21.0, zs - 11.0), (ys - 4.0, zs - 11.0)]), -18.5, -16.0),
+          material="PETG", group="strike", note="carries the witness Hall beside the hour snail")
+    a.allow("witness_bracket", "strike_plate_middle"); a.allow("witness_bracket", "witness_hall")
+    for t in S.TRAINS:
+        tag = t.name
+        plate = "strike_plate_middle" if t is S.HOUR else "strike_plate_right"
+        for part in (f"{tag}_hook_stud", f"{tag}_release_stud"):
+            a.allow(part, plate)
+    for i, plate in ((0, "state_plate_left"), (1, "strike_plate_middle")):
+        a.allow(f"hour_strike_bearing_{i}", plate)
+    for i, plate in ((0, "strike_plate_middle"), (1, "strike_plate_right")):
+        a.allow(f"quarter_strike_bearing_{i}", plate)
+    a.allow("hour_strike_shaft", "state_plate_left"); a.allow("hour_strike_shaft", "strike_plate_middle")
+    a.allow("quarter_strike_shaft", "strike_plate_middle"); a.allow("quarter_strike_shaft", "strike_plate_right")
     return data

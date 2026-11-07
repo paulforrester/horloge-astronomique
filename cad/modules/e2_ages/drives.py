@@ -522,7 +522,10 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
             bd.Location((fx0, y0, z1)))
         return pl_
 
-    left = yz_plate(xp["plate_l"], arbor_y - 10.0, lay_y + 7.0, z - 9.0, DECK[0])
+    kh = S.feed_geometry(S.HOUR)["shaft"]                    # the hour strike shaft's bearing is in this plate too
+    left = yz_plate(xp["plate_l"], arbor_y - 10.0, kh[0] + 10.0, kh[1] - 10.0, DECK[0])
+    left -= on_x(zdisc(b85.od + parts.FITS.bearing_seat, -0.01, b85.width), xp["plate_l"][0], kh[0], kh[1])
+    left -= on_x(zdisc(6.5, -1, 6), xp["plate_l"][0], kh[0], kh[1])
     left -= ox(zdisc(b85.od + parts.FITS.bearing_seat, -0.01, b85.width), (xp["plate_l"][0], 0))
     left -= ox(zdisc(6.5, -1, 6), (xp["plate_l"][0], 0))
     left -= on_x(zdisc(4.0 + parts.FITS.press, -1, 6), xp["plate_l"][0], lay_y, z)

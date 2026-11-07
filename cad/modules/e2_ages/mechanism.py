@@ -200,6 +200,7 @@ def build():
     adds += ad; cuts += cu
     data["stops"], data["drive"], data["state"] = d_stops, d_walk, d_state
     data["strike"] = K.add_strike_trains(a, MODEL_TIME[1], MODEL_TIME[0] + MODEL_TIME[1] / 60.0)
+    data["strike"]["frame"] = K.add_strike_frame(a)
     for s_ in adds:
         deck = deck + s_
     for c_ in cuts:
