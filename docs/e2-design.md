@@ -519,9 +519,11 @@ B (the waiting arm in). Program angles [D: `program.py`]:
 
 ### 11.5 The state module
 
+As designed in part 2a. Part 2b rearranged the arbor and reversed its turn (§12.6).
+
 | Item | Value |
 |---|---|
-| State arbor | Ø5 ground rod along X at y −42.85, z −81 (under the bell rod), x −31 to 79.5. Two MR85ZZ (the left plate and the right block); a Starlock at its left end. It turns at 1 rev/h legal time, anticlockwise seen from the motor |
+| State arbor | Ø5 ground rod along X at y −42.85, z −81 (under the bell rod), x −31 to 79.5. Two MR85ZZ (the left plate and the right block); a Starlock at its left end. It turns at 1 rev/h legal time; clockwise seen from the motor since part 2b (§12.2) |
 | Coupling (x 56.6–95.5) | the arbor is pressed into one end; the NEMA's D-shaft slides into a D socket at the other (slip fit, D16) |
 | Index (x 45.5–48.5) | a Ø24 disc with a magnet at R 9 (minute 0); the index Hall is on the right block |
 | Quarter snail (x 39.5–43.5) | radii 14, 12, 10, 8 for 1–4 pairs; each step is centred on its show |
@@ -634,8 +636,9 @@ It is a rack and snail, as the concept gate decided (§4.2, §4.4), adapted for 
    presses the rack hook out of the teeth.
    - This is the time train deciding *when*, as rule 4 asks.
    - The quarter cam has four lobes; the hour cam has one.
-2. **Fall.** The rack is tail-heavy, so it falls until its tail finger rests on the snail. The snail's step
-   sets how many teeth fall: 1–4 pairs, or 1–12 strokes.
+2. **Fall.** A spring pulls the rack's spoke up, so the rack turns until its tail finger rests on the snail.
+   The snail's step sets how many teeth fall: 1–4 pairs, or 1–12 strokes.
+   - The spring is needed because the toothed side outweighs the tail (§12.3).
 3. **Strike.** The controller runs the strike shaft, one turn per stroke (3 s), after the walk out. Each turn:
    - closes the cue switch (quarters only), so E1's genie strikes;
    - lifts the striking figure and drops it 1 s later (part 2c);
@@ -681,8 +684,9 @@ It is a rack and snail, as the concept gate decided (§4.2, §4.4), adapted for 
 
 | Part | What it is |
 |---|---|
-| Rack | printed lever (body 3 mm thick, teeth rim 8 mm). A tail arm, a finger and a weight lump on one side; a spoke and the toothed rim on the other; a vane for the home opto |
-| Hook | printed pawl on a Ø3 stud, its tip in the rim's right half; its tail lump keeps it in the teeth |
+| Rack | printed lever (body 3 mm thick, teeth rim 8 mm). A tail arm and finger on one side; a spoke and the toothed rim on the other; a vane for the home opto; a Ø2 pin for its spring |
+| Rack spring | Sodemann E00940110500S, the extension spring M2 already uses (accepted by Paul, D13). It hangs vertically from an anchor on the strike plate to the pin on the spoke, 10 mm from the pivot. Stretched 7.3 mm at home; quarters 12.2 → 9.0 N·mm and hours 10.9 → 5.2 N·mm from home to the full count, against the toothed side's weight of 0.13 and 0.48 N·mm [D] |
+| Hook | printed pawl on a Ø3 stud, its tip in the rim's right half; the lump on its tail keeps it in the teeth (its weight 0.9 mm on the far side of the pivot) |
 | Feed lever and pawl | printed lever on the rack's stud, carrying the gathering pawl on a Ø2 pin; the pawl works the rim's left half |
 | Eccentric and strap | eccentric on the strike shaft, throw 2.07 mm (quarters) and 2.02 mm (hours); a printed strap to the feed lever's pin |
 | Release lever | printed, on a Ø3 stud. Its front nose rides the release cam (R 10, lobe R 13); its back nose presses the hook out, 2.21:1 |
@@ -728,7 +732,10 @@ It is a rack and snail, as the concept gate decided (§4.2, §4.4), adapted for 
   - the strike cycle's timing (1 s, 3 s);
   - the gathering stroke gathers exactly one tooth;
   - the release lever lifts the hook clear.
-- **Gravity does the work:** the rack is tail-heavy; the hook and the pawl fall into the teeth.
+- **The racks fall and the pawls drop in:**
+  - each rack spring gives at least three times the toothed side's weight, plus 1 N·mm, at every count, within
+    the spring's range;
+  - the hooks' and pawls' weighted tails turn them into the teeth.
 - **The CAD:**
   - each rack rests on its snail at every count, touching only with its tail;
   - the hook locks, and lifted, the hook and the guard-held pawl let the rack fall to every count;
@@ -754,7 +761,8 @@ It is a rack and snail, as the concept gate decided (§4.2, §4.4), adapted for 
 **Estimates [E]:**
 - the strike gearmotors (≈ 40 rpm under load) ⚠;
 - the 2.5 mm tooth pitch with the 0.2 mm nozzle: the tolerance test sets it;
-- the pawls' and hooks' weights, which do the work of springs: to try on the test rig;
+- the pawls' and hooks' weights, which do the work of springs (a click spring each is the fallback): to try
+  on the test rig;
 - Death's cadence.
 
 **Decisions for Paul:**
@@ -766,3 +774,5 @@ It is a rack and snail, as the concept gate decided (§4.2, §4.4), adapted for 
 2. **A gathering pawl on an eccentric, instead of a one-tooth pallet.** Recommended: printable, and the same
    count.
 3. **Home detection by slotted opto** (as M2's E6), not microswitch. Recommended: it puts no force on the rack.
+4. **A rack spring each:** M2's Sodemann extension spring (D13). Recommended. A printed rack light enough to
+   fall by its own weight would be too weak, and a metal counterweight would need about 7 g on the hour rack.

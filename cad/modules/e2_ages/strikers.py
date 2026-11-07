@@ -140,6 +140,15 @@ def rack_solid(t: S.TrainSpec, theta: float):
             + yz_solid(vane, *vx))
 
 
+def tip_finger(t: S.TrainSpec, tip):
+    """The part of a hook or pawl that reaches into the rim's half: a rounded tip and a radial stem out past the
+    teeth, so nothing of it lies along the next tooth's slope."""
+    p = S.pivot()
+    a = math.atan2(tip[1] - p[1], tip[0] - p[0])
+    out = S._add(p, S.unit(a), S.r_tip(t) + 1.5)
+    return disc(tip, S.TIP_R).union(bar(tip, out, 2 * S.TIP_R))
+
+
 def hook_solid(t: S.TrainSpec, lift: float = 0.0):
     """The hook (engaged, or turned out by `lift` radians): body and hub beside the rim, tip finger in the rim's
     right half; a counterweight tail past the pivot keeps it in the teeth."""
@@ -147,7 +156,7 @@ def hook_solid(t: S.TrainSpec, lift: float = 0.0):
     hk = S.hook_geometry(t)
     q, tip = hk["pivot"], hk["tip"]
     body = body.difference(disc(q, (STUD_D + parts.FITS.running) / 2))
-    finger = disc(tip, 0.6).union(bar(tip, S._add(tip, (q[0] - tip[0], q[1] - tip[1]), 0.25), 1.2))
+    finger = tip_finger(t, tip)
     body, finger = rot_about(body, q, lift), rot_about(finger, q, lift)
     return yz_solid(body, *x_of(t, "hook")) + yz_solid(finger, x_of(t, "hook_tip")[0], x_of(t, "hook")[0] + 0.01)
 
@@ -158,7 +167,7 @@ def pawl_solid(t: S.TrainSpec, lift: float):
     fg = S.feed_geometry(t)
     q, tip = fg["pin"], fg["tip"]
     body = body.difference(disc(q, (PIN_D + parts.FITS.running) / 2))
-    finger = disc(tip, 0.6).union(bar(tip, S._add(tip, (q[0] - tip[0], q[1] - tip[1]), 0.25), 1.2))
+    finger = tip_finger(t, tip)
     body, finger = rot_about(body, q, lift), rot_about(finger, q, lift)
     return yz_solid(body, *x_of(t, "pawl")) + yz_solid(finger, x_of(t, "pawl")[1] - 0.01, x_of(t, "pawl_tip")[1])
 
@@ -326,6 +335,7 @@ def add_strike_trains(a, minutes: float, hours: float):
 # ------------------------------------------------------------------------------------------------ frame, shafts, drive
 OPTO = dict(L=11.9, W=6.3, H=10.8, gap=3.1, slit_h=3.8)    # Vishay TCST1202 [S: as M2's E6, e6.py]
 VANE = dict(r=19.0, t=1.5, out=10.0)                        # the home vane on each rack's spoke
+SLIT_IN = 0.5                                               # the opto's slit lies this far inside the vane's end
 HOUR_MOTOR_PLATE_X = (-39.0, -36.0)
 QUARTER_MOTOR_PLATE_X = (46.0, 49.0)
 GEARMOTOR = dict(w=12.0, d=10.0, length=34.5, shaft_d=3.0, shaft_l=9.0)   # [E] ⚠ as the walk's, ≈ 40 rpm
@@ -353,7 +363,8 @@ def opto_solid(t: S.TrainSpec):
     a = spoke_angle_home(t)
     cw = (math.sin(a), -math.cos(a))
     base = S._add(p, S.unit(a), VANE["r"])
-    centre = S._add(base, cw, VANE["out"] - OPTO["slit_h"] / 2 + 0.5)
+    end = S._add(base, cw, VANE["out"] + 2.0)
+    centre = S._add(end, cw, -SLIT_IN - OPTO["slit_h"] / 2 + OPTO["L"] / 2 - 1.0)   # the slit just inside the end
     from shapely import affinity
     body = Polygon([(-OPTO["L"] / 2, -OPTO["H"] / 2), (OPTO["L"] / 2, -OPTO["H"] / 2), (OPTO["L"] / 2, OPTO["H"] / 2),
                     (-OPTO["L"] / 2, OPTO["H"] / 2)])

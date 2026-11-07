@@ -229,6 +229,9 @@ PAWL_ARM = 9.0                               # gathering pawl tip to its pivot o
 FEED_STROKE = 1.6                            # the feed lever's rock, in teeth (gathers 1, overshoots 0.3 each way)
 FEED_REST = 0.3                              # the pawl rests this many teeth before the hooked face, lifted by the guard
 LINK = 20.0                                  # the eccentric's strap: strike shaft to the feed lever's pin
+TIP_R = 0.6                                  # the hook's and the pawl's rounded tips
+TIP_GAP = 0.65                               # the hook's tip centre, before the hooked face (along the pitch arc)
+TIP_LIFT = 1.0                               # the tips' centres above the tooth roots: clear of the next tooth's slope
 RELEASE_LIFT = 1.6                           # the hook is lifted this far at its tip to let the rack fall
 PRESS_AT = 0.6                               # the release lever presses the hook this far from its pivot to its tip
 X_PLANES = dict(                             # x ranges relative to each rack's mid-plane
@@ -262,8 +265,8 @@ def hook_geometry(t: TrainSpec) -> dict:
     """The hook: its tip sits just before the hooked tooth's radial face, its pivot along the teeth's motion
     (the face pushes the tip toward the pivot: it locks)."""
     p = pivot()
-    a_tip = ALPHA_H + 0.5 / t.r_teeth
-    tip = _add(p, unit(a_tip), r_root(t) + 0.3)
+    a_tip = ALPHA_H + TIP_GAP / t.r_teeth
+    tip = _add(p, unit(a_tip), r_root(t) + TIP_LIFT)
     q = _add(tip, ccw(ALPHA_H), HOOK_ARM)
     return {"tip": tip, "pivot": q, "a_tip": a_tip}
 
@@ -273,7 +276,7 @@ def feed_geometry(t: TrainSpec) -> dict:
     p = pivot()
     d = tooth_angle(t)
     a_rest = ALPHA_H + FEED_REST * d
-    tip = _add(p, unit(a_rest), r_root(t) + 0.3)
+    tip = _add(p, unit(a_rest), r_root(t) + TIP_LIFT)
     q = _add(tip, ccw(a_rest), PAWL_ARM)              # the pawl's pivot pin on the feed lever (and the strap's pin)
     rq = math.dist(p, q)
     a_q = math.atan2(q[1] - p[1], q[0] - p[0])

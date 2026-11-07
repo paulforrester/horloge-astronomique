@@ -195,6 +195,7 @@ Rows marked "counted" are already in the Batch 2 totals above.
 | Subminiature roller-lever microswitch | as part 2a | counted (Batch 2 microswitches) | two lock switches, one cue switch | Gotronic ⚠ choose |
 | Slotted opto Vishay TCST1202 | as M2's E6 | counted (Batch 2 opto forks) | one per rack: home (gathered) | as the M2 row |
 | Screws M1.6 × 4 | A2 | 4 | the gearmotors' faces to their plates | ⚠ check the motor's face threads |
+| Extension spring Sodemann E00940110500S | as the M2 row (D13) | 2 (+ 1 spare) | one rack spring per counting train | Sodemann (as the M2 row) |
 | Screws M3 × 8 + M3 heat-set inserts | A2 | 8 + 8 | the middle and right strike plates and the two motor plates, 2 each, under the deck | as Batch 1 |
 
 ## Batch 3 — v1.5 / v2

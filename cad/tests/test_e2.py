@@ -398,17 +398,19 @@ def test_the_hook_locks_and_the_lifted_parts_let_the_rack_fall(train):
 
 @pytest.mark.parametrize("train", S.TRAINS, ids=lambda t: t.name)
 def test_the_home_opto_sees_only_home(train):
+    """The vane moves along its own length as the rack turns: the beam crosses it just inside its end, so it is
+    blocked at home and clear once the rack has fallen one tooth."""
     p = S.pivot()
     vane_home = K.rot_about(K.vane_poly(train), p, 0.0)
     vane_one = K.rot_about(K.vane_poly(train), p, S.tooth_angle(train))
     # the fork's gap, in YZ: the arms' outline
-    a = S.spoke_angle_home(train)
+    a = K.spoke_angle_home(train)
     cw = (math.sin(a), -math.cos(a))
     base = S._add(p, S.unit(a), K.VANE["r"])
-    centre = S._add(base, cw, K.VANE["out"] - K.OPTO["slit_h"] / 2 + 0.5)
-    slit = K.disc(S._add(centre, cw, K.OPTO["slit_h"] / 2 - 1.0), 0.6)     # the beam, near the gap's floor
+    end = S._add(base, cw, K.VANE["out"] + 2.0)                              # the vane's rounded end
+    slit = K.disc(S._add(end, cw, -K.SLIT_IN), 0.25)                          # the beam: the slit is 0.5 wide [S]
     assert vane_home.intersects(slit)
-    assert not vane_one.intersects(slit)
+    assert not vane_one.intersects(slit.buffer(0.2))                         # clear by 0.2 at one tooth
 
 
 def test_the_racks_swing_clear_of_everything_fixed(built):
@@ -418,7 +420,7 @@ def test_the_racks_swing_clear_of_everything_fixed(built):
     for t in S.TRAINS:
         th = S.rack_angles(t)
         ok = {f"{t.name}_rack", "rack_stud", f"{t.name}_hook", f"{t.name}_feed_lever", f"{t.name}_snail",
-              f"{'hour' if t is S.HOUR else 'quarter'}_snail", f"{t.name}_pawl"}
+              f"{t.name}_pawl", f"{t.name}_spring_pin", f"{t.name}_rack_spring"}   # these move with it or touch it
         others = [i for i in a.items if i.name not in ok]
         for n in range(1, t.counts + 1):
             rack = K.rack_solid(t, th[n])
