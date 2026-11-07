@@ -684,9 +684,9 @@ It is a rack and snail, as the concept gate decided (§4.2, §4.4), adapted for 
 
 | Part | What it is |
 |---|---|
-| Rack | printed lever (body 3 mm thick, teeth rim 8 mm). A tail arm and finger on one side; a spoke and the toothed rim on the other; a vane for the home opto; a Ø2 pin for its spring |
+| Rack | printed lever (body 3 mm thick; teeth rim 5.5 mm, flush with the body's +X face so it prints flat), on the 0.2 mm nozzle. A tail arm and finger on one side; a spoke and the toothed rim on the other; a vane for the home opto; a Ø2 pin for its spring |
 | Rack spring | Sodemann E00940110500S, the extension spring M2 already uses (accepted by Paul, D13). It hangs vertically from an anchor on the strike plate to the pin on the spoke, 10 mm from the pivot. Stretched 7.3 mm at home; quarters 12.2 → 9.0 N·mm and hours 10.9 → 5.2 N·mm from home to the full count, against the toothed side's weight of 0.13 and 0.48 N·mm [D] |
-| Hook | printed pawl on a Ø3 stud, its tip in the rim's right half; the lump on its tail keeps it in the teeth (its weight 0.9 mm on the far side of the pivot) |
+| Hook | printed pawl on a Ø3 stud (0.2 mm nozzle). Its rounded tip sits in the notch before the hooked face, clear of the next tooth's slope, on a radial stem; the lump on its tail keeps it in the teeth (its weight 0.9 mm on the far side of the pivot) |
 | Feed lever and pawl | printed lever on the rack's stud, carrying the gathering pawl on a Ø2 pin; the pawl works the rim's left half |
 | Eccentric and strap | eccentric on the strike shaft, throw 2.07 mm (quarters) and 2.02 mm (hours); a printed strap to the feed lever's pin |
 | Release lever | printed, on a Ø3 stud. Its front nose rides the release cam (R 10, lobe R 13); its back nose presses the hook out, 2.21:1 |
@@ -743,6 +743,12 @@ It is a rack and snail, as the concept gate decided (§4.2, §4.4), adapted for 
   - the racks swing clear of everything fixed;
   - the strike gearmotors slide out;
   - no interference, and every part fits the bed.
+
+**Size and files.**
+- **Parts:** 164, of which 86 are printed. Every part fits the H2D's bed.
+- **Envelope:** unchanged (x −145 to 152, y −66.2 to 235, z −114 to 100).
+- **Print files:** 68 in `export/print/e2_ages/`.
+- **SketchUp:** both models now include the counting trains; the exploded view drops them 200 mm.
 
 ### 12.6 What changed in part 2a
 
