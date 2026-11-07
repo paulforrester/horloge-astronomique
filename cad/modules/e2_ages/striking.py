@@ -235,8 +235,9 @@ TIP_LIFT = 1.0                               # the tips' centres above the tooth
 RELEASE_LIFT = 1.6                           # the hook is lifted this far at its tip to let the rack fall
 PRESS_AT = 0.6                               # the release lever presses the hook this far from its pivot to its tip
 X_PLANES = dict(                             # x ranges relative to each rack's mid-plane
-    rack=(-1.5, 1.5), rim=(-4.0, 4.0),       # the teeth rim is wider than the rack: the pawl works its left half,
-    pawl_tip=(-4.0, -1.6), hook_tip=(1.6, 4.0),   # the hook its right half; their bodies lie beside the rim
+    rack=(-1.5, 1.5), rim=(-4.0, 1.5),       # the teeth rim is wider than the rack, flush with its +X face (it prints
+    pawl_tip=(-4.0, -1.6), hook_tip=(-1.3, 1.5),  # flat): the pawl works its -X part, the hook its +X part; their
+    #                                              bodies lie beside the rim
     pawl=(-6.7, -4.2), feed=(-9.5, -7.0), link=(-12.3, -9.8), hook=(4.3, 6.8), release=(4.3, 6.8))
 
 

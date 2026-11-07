@@ -273,16 +273,16 @@ def add_strike_trains(a, minutes: float, hours: float):
     for t in S.TRAINS:
         tag = t.name
         th = S.rack_angles(t)
-        a.add(f"{tag}_rack", rack_solid(t, th[0]), group="strike",
+        a.add(f"{tag}_rack", rack_solid(t, th[0]), group="strike", print_up=(-1, 0, 0), nozzle=0.2,
               note=f"{tag} rack, gathered: its tail falls onto the {tag} snail; {t.counts} teeth of pitch {S.PITCH}")
-        a.add(f"{tag}_feed_lever", feed_lever_solid(t), group="strike", note="rocked by the eccentric: gathers one "
+        a.add(f"{tag}_feed_lever", feed_lever_solid(t), group="strike", print_up=(1, 0, 0), note="rocked by the eccentric: gathers one "
               "tooth per turn of the strike shaft")
         pawl_lift = 0.25                                       # held out by the guard at rest [rad]
-        a.add(f"{tag}_pawl", pawl_solid(t, pawl_lift), group="strike", note="gathering pawl, on the feed lever's pin")
-        a.add(f"{tag}_hook", hook_solid(t, 0.0), group="strike", note="rack hook: holds each gathered tooth")
-        a.add(f"{tag}_strap", strap_solid(t), group="strike", note="strap from the eccentric to the feed lever's pin")
-        a.add(f"{tag}_eccentric", eccentric_solid(t), group="strike", note=f"throw {S.feed_geometry(t)['eccentric']:.2f} mm")
-        a.add(f"{tag}_release_lever", release_lever_solid(t), group="strike",
+        a.add(f"{tag}_pawl", pawl_solid(t, pawl_lift), group="strike", print_up=(1, 0, 0), nozzle=0.2, note="gathering pawl, on the feed lever's pin")
+        a.add(f"{tag}_hook", hook_solid(t, 0.0), group="strike", print_up=(-1, 0, 0), nozzle=0.2, note="rack hook: holds each gathered tooth")
+        a.add(f"{tag}_strap", strap_solid(t), group="strike", print_up=(1, 0, 0), note="strap from the eccentric to the feed lever's pin")
+        a.add(f"{tag}_eccentric", eccentric_solid(t), group="strike", print_up=(1, 0, 0), note=f"throw {S.feed_geometry(t)['eccentric']:.2f} mm")
+        a.add(f"{tag}_release_lever", release_lever_solid(t), group="strike", print_up=(1, 0, 0),
               note="its nose rides the release cam; the lobe tips it and it presses the hook out")
         fg, hk, rg = S.feed_geometry(t), S.hook_geometry(t), S.release_geometry(t)
         k = fg["shaft"]
@@ -321,7 +321,7 @@ def add_strike_trains(a, minutes: float, hours: float):
         blk = Polygon([(anc[0] - 3, anc[1] - 1.5), (anc[0] + 3, anc[1] - 1.5), (anc[0] + 3, anc[1] + 4),
                        (anc[0] - 3, anc[1] + 4)])
         x0, x1 = sorted((t.x_rack - 4.0, plate_x))
-        a.add(f"{t.name}_spring_anchor", yz_solid(blk, x0, x1), material="PETG", group="strike",
+        a.add(f"{t.name}_spring_anchor", yz_solid(blk, x0, x1), material="PETG", group="strike", print_up=(1, 0, 0),
               note="the spring's upper hook catches its pin; screwed to the strike plate")
         for x_, y_ in ((f"{t.name}_spring_pin", f"{t.name}_rack"), (f"{t.name}_rack_spring", f"{t.name}_spring_pin"),
                        (f"{t.name}_rack_spring", f"{t.name}_spring_anchor")):
@@ -432,25 +432,26 @@ def add_strike_frame(a):
             a.allow(f"{tag}_strike_bearing_{i}", f"{tag}_strike_shaft")
         a.allow(f"{tag}_eccentric", f"{tag}_strike_shaft")
         # cams
-        a.add(f"{tag}_lock_cam", cam_solid(lock_radius, *L["lock"], k), group="strike",
+        a.add(f"{tag}_lock_cam", cam_solid(lock_radius, *L["lock"], k), group="strike", print_up=(1, 0, 0),
               note="its notch lets the lock switch's roller drop at the rest angle")
-        a.add(f"{tag}_lifter_cam", cam_solid(lift_radius, *L["lift"], k), group="strike",
+        a.add(f"{tag}_lifter_cam", cam_solid(lift_radius, *L["lift"], k), group="strike", print_up=(1, 0, 0),
               note="lifts the striking figure and drops it at 1 s (part 2c takes the lift on)")
         for nm in (f"{tag}_lock_cam", f"{tag}_lifter_cam"):
             a.allow(nm, f"{tag}_strike_shaft")
         if "cue" in L:
-            a.add(f"{tag}_cue_cam", cam_solid(cue_radius, *L["cue"], k), group="strike",
+            a.add(f"{tag}_cue_cam", cam_solid(cue_radius, *L["cue"], k), group="strike", print_up=(1, 0, 0),
                   note="closes E1's cue switch at the start of each pair: the genie strikes first")
             a.allow(f"{tag}_cue_cam", f"{tag}_strike_shaft")
         # gear and gearmotor (its pinion on the motor's D-shaft; the motor slides out along X)
         ang_m = math.degrees(math.atan2(L["motor"][1] - k[1], L["motor"][0] - k[0]))
         gear24 = spur_gear(g24, L["gear"][1] - L["gear"][0]) - parts.disc(SHAFT_D + parts.FITS.press, 20, z0=-5)
-        a.add(f"{tag}_strike_gear", D.on_x(gear24, L["gear"][0], k[0], k[1]), group="strike",
+        a.add(f"{tag}_strike_gear", D.on_x(gear24, L["gear"][0], k[0], k[1]), group="strike", print_up=(1, 0, 0),
               note=f"{GEAR_TEETH[1]} teeth, pressed on the strike shaft")
         r12 = mesh_rotation(g24, g12, ang_m, 0.0)
         pin12 = spur_gear(g12, L["gear"][1] - L["gear"][0]).rotate(bd.Axis.Z, r12) - parts.disc(
             GEARMOTOR["shaft_d"] + parts.FITS.press, 20, z0=-5)
         a.add(f"{tag}_motor_pinion", D.on_x(pin12, L["gear"][0], L["motor"][0], L["motor"][1]), group="strike",
+              print_up=(1, 0, 0),
               note="pressed on the gearmotor's Ø3 D-shaft")
         a.allow(f"{tag}_strike_gear", f"{tag}_strike_shaft")
         gm = GEARMOTOR
@@ -473,7 +474,7 @@ def add_strike_frame(a):
         mplate = plate_solid(mp_x, outline, holes=[((my, mz), gm["shaft_d"] + 1.0)])
         for dz in (-4.5, 4.5):
             mplate -= x_rod(1.8, mp_x[0] - 1, mp_x[1] + 1, (my, mz + dz))
-        a.add(f"{tag}_motor_plate", mplate, material="PETG", group="strike",
+        a.add(f"{tag}_motor_plate", mplate, material="PETG", group="strike", print_up=(1, 0, 0),
               note="the gearmotor's face screws to it (2 × M1.6); it hangs from the deck")
         for x_, y_ in ((f"{tag}_motor", f"{tag}_motor_plate"), (f"{tag}_motor_plate", "deck")):
             a.allow(x_, y_)
@@ -504,13 +505,15 @@ def add_strike_frame(a):
     a.add("strike_plate_middle", plate_solid(MIDDLE_X, mid, holes=[(kh, seat), (kq, seat), (p, STUD_D + parts.FITS.press),
                                                                    (hk_h["pivot"], STUD_D + parts.FITS.press),
                                                                    (rg_h["stud"], STUD_D + parts.FITS.press)]),
-          material="PETG", group="strike", note="hangs from the deck: the shafts' bearings and the hour train's studs")
+          material="PETG", group="strike", print_up=(1, 0, 0),
+          note="hangs from the deck: the shafts' bearings and the hour train's studs")
     hk_q, rg_q = S.hook_geometry(S.QUARTER), S.release_geometry(S.QUARTER)
     right = [(-24.0, -108.0), (24.0, -108.0), (24.0, -47.0), (-14.0, -47.0), (-14.0, -59.0), (-24.0, -59.0)]
     a.add("strike_plate_right", plate_solid(RIGHT_X, right, holes=[(kq, seat), (p, STUD_D + parts.FITS.press),
                                                                    (hk_q["pivot"], STUD_D + parts.FITS.press),
                                                                    (rg_q["stud"], STUD_D + parts.FITS.press)]),
-          material="PETG", group="strike", note="hangs from the deck: the quarter shaft's bearing and the quarter studs")
+          material="PETG", group="strike", print_up=(1, 0, 0),
+          note="hangs from the deck: the quarter shaft's bearing and the quarter studs")
     for nm in ("strike_plate_middle", "strike_plate_right"):
         a.allow(nm, "deck"); a.allow(nm, "rack_stud")
     # the guards: a fixed pin under each pawl's tail lifts the pawl at the end of the return stroke
