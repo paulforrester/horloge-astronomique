@@ -47,7 +47,7 @@ class TrainSpec:
     x_rack: float                            # the rack's (and snail's) mid-plane
 
 
-QUARTER = TrainSpec("quarter", 4, 30.0, 14.0, 16.0)
+QUARTER = TrainSpec("quarter", 4, 30.0, 14.0, 20.0)
 HOUR = TrainSpec("hour", 12, 48.0, 20.0, -10.5)
 TRAINS = (QUARTER, HOUR)
 
@@ -220,3 +220,80 @@ def simulate_show(t: TrainSpec, count: int, start_tooth: int | None = None) -> S
         if tooth == 0:                       # home switch closed -> stop at the lock angle
             return ShowResult(turns, strokes, True)
     return ShowResult(turns, strokes, False)
+
+
+# ------------------------------------------------------------------------------------------------ layout (YZ)
+ALPHA_H = math.radians(-24.0)                # where the hook and the gathering pawl meet the teeth, seen from the pivot
+HOOK_ARM = 10.0                              # hook tip to hook pivot, along the teeth's motion
+PAWL_ARM = 9.0                               # gathering pawl tip to its pivot on the feed lever
+FEED_STROKE = 1.6                            # the feed lever's rock, in teeth (gathers 1, overshoots 0.3 each way)
+FEED_REST = 0.3                              # the pawl rests this many teeth before the hooked face, lifted by the guard
+LINK = 20.0                                  # the eccentric's strap: strike shaft to the feed lever's pin
+RELEASE_LIFT = 1.6                           # the hook is lifted this far at its tip to let the rack fall
+PRESS_AT = 0.6                               # the release lever presses the hook this far from its pivot to its tip
+X_PLANES = dict(                             # x ranges relative to each rack's mid-plane
+    rack=(-1.5, 1.5), rim=(-4.0, 4.0),       # the teeth rim is wider than the rack: the pawl works its left half,
+    pawl_tip=(-4.0, -1.6), hook_tip=(1.6, 4.0),   # the hook its right half; their bodies lie beside the rim
+    pawl=(-6.7, -4.2), feed=(-9.5, -7.0), link=(-12.3, -9.8), hook=(4.3, 6.8), release=(4.3, 6.8))
+
+
+def _add(p, q, s=1.0):
+    return (p[0] + s * q[0], p[1] + s * q[1])
+
+
+def unit(a: float):
+    return (math.cos(a), math.sin(a))
+
+
+def ccw(a: float):
+    """The direction a point at angle a (about the pivot) moves when the rack turns CCW (its tail falls)."""
+    return (-math.sin(a), math.cos(a))
+
+
+def r_tip(t: TrainSpec) -> float:
+    return t.r_teeth + TOOTH / 2
+
+
+def r_root(t: TrainSpec) -> float:
+    return t.r_teeth - TOOTH / 2
+
+
+def hook_geometry(t: TrainSpec) -> dict:
+    """The hook: its tip sits just before the hooked tooth's radial face, its pivot along the teeth's motion
+    (the face pushes the tip toward the pivot: it locks)."""
+    p = pivot()
+    a_tip = ALPHA_H + 0.5 / t.r_teeth
+    tip = _add(p, unit(a_tip), r_root(t) + 0.3)
+    q = _add(tip, ccw(ALPHA_H), HOOK_ARM)
+    return {"tip": tip, "pivot": q, "a_tip": a_tip}
+
+
+def feed_geometry(t: TrainSpec) -> dict:
+    """The feed lever (coaxial with the rack) and its gathering pawl, at rest (the end of the return stroke)."""
+    p = pivot()
+    d = tooth_angle(t)
+    a_rest = ALPHA_H + FEED_REST * d
+    tip = _add(p, unit(a_rest), r_root(t) + 0.3)
+    q = _add(tip, ccw(a_rest), PAWL_ARM)              # the pawl's pivot pin on the feed lever (and the strap's pin)
+    rq = math.dist(p, q)
+    a_q = math.atan2(q[1] - p[1], q[0] - p[0])
+    k = _add(q, ccw(a_q), -LINK)                       # the strike shaft: the strap pulls the pin along its arc
+    stroke = FEED_STROKE * d
+    return {"tip": tip, "pin": q, "r_pin": rq, "a_pin": a_q, "shaft": k, "stroke": stroke,
+            "eccentric": rq * stroke / 2, "a_rest": a_rest}
+
+
+def release_geometry(t: TrainSpec) -> dict:
+    """The release lever: its front nose rides on the release cam's top; its back nose presses the hook's tab down
+    (a point between the hook's pivot and tip: down there lifts the tip out)."""
+    ay, az = arbor_yz()
+    hk = hook_geometry(t)
+    front = (ay, az + RELEASE_R[0] + 0.0)
+    press = _add(hk["pivot"], ((hk["tip"][0] - hk["pivot"][0]) * PRESS_AT, (hk["tip"][1] - hk["pivot"][1]) * PRESS_AT))
+    # the hook must turn far enough to lift its tip RELEASE_LIFT radially: about RELEASE_LIFT / HOOK_ARM radians
+    hook_turn = RELEASE_LIFT / HOOK_ARM
+    press_drop = PRESS_AT * HOOK_ARM * hook_turn + 0.4    # at the press point, plus 0.4 of free play
+    lobe = RELEASE_R[1] - RELEASE_R[0]
+    f = press_drop / (press_drop + lobe)                  # the stud's place from the back nose
+    stud = (press[0] + f * (front[0] - press[0]), press[1] + f * (front[1] - press[1]))
+    return {"front": front, "press": press, "stud": stud, "ratio": lobe / press_drop, "hook_turn": hook_turn}

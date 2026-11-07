@@ -31,6 +31,7 @@ from cad.lib.hardware import BEARINGS
 from cad.modules.e2_ages import drives as D
 from cad.modules.e2_ages import layout as L
 from cad.modules.e2_ages import program as G
+from cad.modules.e2_ages import strikers as K
 from cad.modules.e2_ages.drives import age_cam_radius  # noqa: F401
 
 DECK = D.DECK                               # the module's deck plate (z)
@@ -198,6 +199,7 @@ def build():
     d_state, ad, cu = D.add_state_module(a, MODEL_TIME[1], MODEL_TIME[0] + MODEL_TIME[1] / 60.0, sb[1], sb[0])
     adds += ad; cuts += cu
     data["stops"], data["drive"], data["state"] = d_stops, d_walk, d_state
+    data["strike"] = K.add_strike_trains(a, MODEL_TIME[1], MODEL_TIME[0] + MODEL_TIME[1] / 60.0)
     for s_ in adds:
         deck = deck + s_
     for c_ in cuts:

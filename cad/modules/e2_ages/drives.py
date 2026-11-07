@@ -115,10 +115,14 @@ def age_cam_radius(minutes: float) -> float:
     return r0 - 3 * s + 3 * s * (m - 1.0) / 6.0 if m < 7.0 else r0
 
 
+ARBOR_SENSE = -1                             # the state arbor turns clockwise seen from its motor (+X): the snails' past
+#                                              steps, never their coming ones, pass under the racks' tail arms (§12)
+
+
 def arbor_cam(radius_of_time, period, t, bore=5.0 + parts.FITS.press):
-    """A cam on an arbor turning +360°/period: the local angle a passes the top (local +y) at time
-    (90 - a) / 360 · period, which is when its radius is radius_of_time(that time)."""
-    return profile_plate(lambda a: radius_of_time(((90.0 - a) % 360.0) / 360.0 * period), t, bore)
+    """A cam on the state arbor (or the hour tube), which turns ARBOR_SENSE·360° per period: the local angle a
+    passes the top (local +y) at the time when its radius is radius_of_time(that time)."""
+    return profile_plate(lambda a: radius_of_time((((a - 90.0) * -ARBOR_SENSE) % 360.0) / 360.0 * period), t, bore)
 
 
 # ------------------------------------------------------------------------------------------------ the stops
@@ -417,13 +421,15 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
     """The state arbor and everything on it, its frame plates, the NEMA 17 on its D16 adapter (to the right)."""
     z = STATE_Z
     b85 = BEARINGS["MR85ZZ"]
-    rot = 6.0 * minutes                                       # the arbor's angle (local, about +X)
-    rot_h = 30.0 * hours
+    rot = ARBOR_SENSE * 6.0 * minutes                         # the arbor's angle (local, about +X)
+    rot_h = ARBOR_SENSE * 30.0 * hours
     x_l, x_r = -31.0, 79.5                                    # the arbor's ends
     xp = dict(plate_l=(-30.0, -26.0), p12=(-25.7, -23.2), lay_hub=(-23.2, -22.9), hour_wheel=(-22.9, -20.4),
               lay_stud=(-30.0, -19.4), tube=(-22.9, -8.5), witness=(-15.8, -12.8),
-              snail_h=(S.HOUR.x_rack - 2.0, S.HOUR.x_rack + 2.0), release_h=(-6.2, -3.2),
-              snail_q=(S.QUARTER.x_rack - 2.0, S.QUARTER.x_rack + 2.0), release_q=(20.3, 23.3),
+              snail_h=(S.HOUR.x_rack - 2.0, S.HOUR.x_rack + 2.0),
+              release_h=(S.HOUR.x_rack + 4.3, S.HOUR.x_rack + 7.3),
+              snail_q=(S.QUARTER.x_rack - 2.0, S.QUARTER.x_rack + 2.0),
+              release_q=(S.QUARTER.x_rack + 4.3, S.QUARTER.x_rack + 7.3),
               age_cam=(cam_x - AGE_CAM["t"] / 2, cam_x + AGE_CAM["t"] / 2),
               index=(45.5, 48.5), index_hall=(49.0, 52.0), block=(52.3, 56.3), coupling=(56.6, 95.5),
               plate_r=(96.0, 100.0))
