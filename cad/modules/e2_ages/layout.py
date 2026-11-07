@@ -42,21 +42,51 @@ R_PATH = 121.0                              # the figures' path
 ANNULUS = (110.0, 134.0)                    # walking surface, flush with the floor (z -3 .. 0)
 FLOOR_GAP = 0.5                             # between the ring and the static floor, each side
 INNER_SKIRT = (108.0, 110.0, -16.0)         # r_in, r_out, z_bottom: the guide rollers run inside it
-OUTER_BODY = (127.0, 131.0, -28.0)          # r_in, r_out, z_bottom: carries the teeth and the pegs
+OUTER_BODY = (127.0, 131.0, -30.0)          # r_in, r_out, z_bottom: carries the teeth and the pegs
 TEETH = dict(z=264, m=1.0, face=(-8.0, -3.0))   # external teeth at the top of the outer body
 PEG = dict(d=2.5, r=(131.0, 135.0))         # radial pegs out of the outer body, one per age
-PEG_Z = (-12.0, -16.0, -20.0, -24.0)        # one height per age (child .. old man): 4 mm apart
+PEG_Z = (-12.0, -16.0, -20.0, -24.0)        # selection pegs: one height per age (child .. old man), 4 mm apart
+# Each age also has a waiting peg, as long as the selection pegs but below them all, about 35° behind it: when the
+# age stands at the waiting position (φ 45°) its waiting peg is at the waiting stop, next to the bell stop. So both
+# stops stand together at the bell station (part 2a, e2-design §10.8), on two shafts geared 1:1 in opposite senses:
+# each arm swings out downstream, so a held peg's own push helps its release.
+WAIT_PEG = dict(d=2.5, r=(131.0, 135.0), z=-28.0)
 
 # --- the stations (φ, degrees) ----------------------------------------------------------------------------
 PHI_WAIT = 45.0                             # the next age waits at the right doorway [S: photo]
 PHI_BELL = 15.0                             # the age strikes here, just right of the ages' bell [D: x ≈ 32]
 PHI_SPACING = 90.0                          # four ages
 PHI_REST = tuple(PHI_WAIT + PHI_SPACING * k for k in range(4))   # at rest, the next age (k = 0) waits
+# the stops (part 2a): two vertical shafts at R 141, the bell shaft upstream; each arm reaches in to R 132.2
+STOP = dict(r=141.0, tip=132.2, w=2.0, h=2.5, wait_z=(-30.0, -26.0), swing=70.0, gear_teeth=12, gap=0.2)
+
+
+def stop_delta() -> float:
+    """Degrees by which a caught peg rests upstream of its arm's centreline [D]."""
+    return math.degrees((PEG["d"] / 2 + STOP["w"] / 2 + STOP["gap"]) / STOP["tip"])
+
+
+def stop_spacing() -> float:
+    """The two stop shafts' centre distance: a pair of 12-tooth gears at m 1 with the library's shifts [D]."""
+    from cad.lib.gears import Gear, centre_distance, pair_shifts
+    s1, s2 = pair_shifts(STOP["gear_teeth"], STOP["gear_teeth"])
+    return centre_distance(Gear(STOP["gear_teeth"], 1.0, shift=s1), Gear(STOP["gear_teeth"], 1.0, shift=s2))
+
+
+def stop_phis() -> dict:
+    """φ of each stop arm's centreline, and of the station where its peg rests [D]."""
+    d = stop_delta()
+    bell = PHI_BELL - d
+    wait = bell - 2 * math.degrees(math.asin(stop_spacing() / 2 / STOP["r"]))
+    return {"bell_arm": bell, "wait_arm": wait, "bell_station": PHI_BELL, "wait_station": wait + d}
+
+
+WAIT_PEG_OFFSET = stop_phis()["wait_station"] - PHI_WAIT    # a waiting peg trails its age by this (deg, < 0)
 
 # --- the walk [S: Paul's observation, 6 Nov 2026; D: below] ------------------------------------------------
 WALK_ON_S = 10.0                            # [S] from the last stroke past Death to the left doorway
 RING_SPEED = (PHI_BELL - (PHI_WAIT - PHI_SPACING)) / WALK_ON_S   # [D] 60° in 10 s = 6°/s = 1 rpm
-PHASE_TRAVEL = dict(A=40.0, B=70.0)         # ring travel per program phase, slip margin included [D, below]
+PHASE_TRAVEL = dict(A=40.0, B=70.0)         # the most the ring can turn in each phase [D: program.ring_travel_limits]
 
 
 def polar(phi_deg: float, r: float, centre=C) -> tuple[float, float]:
@@ -120,7 +150,6 @@ def walk_timing() -> dict:
     out = (PHI_WAIT - PHI_BELL) / RING_SPEED
     on = (PHI_BELL - (PHI_WAIT - PHI_SPACING)) / RING_SPEED
     return {"walk_out_s": out, "walk_on_s": on,
-            "program_turn_s": (PHASE_TRAVEL["A"] + PHASE_TRAVEL["B"]) / RING_SPEED,
             "slip_A_deg": PHASE_TRAVEL["A"] - (PHI_WAIT - PHI_BELL),
             "slip_B_deg": PHASE_TRAVEL["B"] - (PHI_BELL - (PHI_WAIT - PHI_SPACING))}
 

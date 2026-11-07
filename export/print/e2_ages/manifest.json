@@ -1,7 +1,7 @@
 {
  "model": "e2_ages",
- "unique_parts": 15,
- "printed_parts": 25,
+ "unique_parts": 43,
+ "printed_parts": 54,
  "sets": {},
  "parts": [
   {
@@ -93,7 +93,7 @@
    "size": [
     8.0,
     8.0,
-    37.0
+    40.0
    ],
    "note": "",
    "file": "island_post_0.stl",
@@ -115,7 +115,7 @@
    "size": [
     5.0,
     5.0,
-    37.0
+    40.0
    ],
    "note": "",
    "file": "floor_post_0.stl",
@@ -173,11 +173,11 @@
    "size": [
     268.0,
     268.0,
-    28.0
+    30.0
    ],
-   "note": "turntable \u00d8268: walking surface flush with the floor, 264 teeth, one peg per age at its own height (the selection)",
+   "note": "turntable \u00d8268: walking surface flush with the floor, 264 teeth; per age a selection peg at its own height and a waiting peg below them all",
    "file": "ring.stl",
-   "overhang_mm2": 31.0,
+   "overhang_mm2": 62.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true
@@ -195,7 +195,7 @@
    "size": [
     5.5,
     8.0,
-    33.0
+    36.0
    ],
    "note": "",
    "file": "support_post_0.stl",
@@ -216,7 +216,7 @@
     18.1,
     4.6
    ],
-   "note": "walk pinion on the clutch shaft (the clutch is part 2)",
+   "note": "pressed on the top of the walk shaft: turns the ring",
    "file": "walk_pinion_16.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
@@ -225,18 +225,18 @@
   },
   {
    "names": [
-    "bell_finger"
+    "bell_arm"
    ],
    "material": "PLA",
    "nozzle": 0.4,
    "set": "",
    "size": [
-    11.4,
-    5.0,
+    12.4,
+    7.0,
     2.5
    ],
-   "note": "at the selected age's peg height; swung in for the walk out only (program cam, part 2)",
-   "file": "bell_finger.stl",
+   "note": "pressed on the square rod: catches only the selected age's peg",
+   "file": "bell_arm.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
    "fits_dual": true,
@@ -244,18 +244,342 @@
   },
   {
    "names": [
-    "waiting_finger"
+    "bell_collar"
    ],
    "material": "PLA",
    "nozzle": 0.4,
    "set": "",
    "size": [
-    9.3,
-    9.5,
-    16.0
+    10.0,
+    10.0,
+    1.2
    ],
-   "note": "spans every peg height; in at rest and for the walk on",
-   "file": "waiting_finger.stl",
+   "note": "pressed on the sleeve above the deck: it rests on the deck",
+   "file": "bell_collar.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "wait_arm"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    6.0,
+    11.8,
+    16.7
+   ],
+   "note": "pressed on its shaft: catches any waiting peg; its hub rests on the deck",
+   "file": "wait_arm.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "wait_gear_crank"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    14.5,
+    14.5,
+    4.0
+   ],
+   "note": "12 teeth and the crank (r 5) in one print, pressed on the waiting shaft",
+   "file": "wait_gear_crank.stl",
+   "overhang_mm2": 6.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "bell_sleeve"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    14.3,
+    14.3,
+    21.5
+   ],
+   "note": "12 teeth and the keyed sleeve in one print: turns in the deck, opposite to the waiting shaft; the square rod slides in it",
+   "file": "bell_sleeve.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "push_rod"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    38.0,
+    51.0,
+    2.2
+   ],
+   "note": "the program cam's follower: slides in two guides; its yoke turns the crank",
+   "file": "push_rod.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "rod_guide_0",
+    "rod_guide_1"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    13.6,
+    12.8,
+    10.0
+   ],
+   "note": "hangs from the deck (two M2 into inserts)",
+   "file": "rod_guide_0.stl",
+   "overhang_mm2": 42.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "walk_bearing_block"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    18.0,
+    18.0,
+    4.0
+   ],
+   "note": "the walk shaft's lower bearing: screwed under the deck (2 x M2)",
+   "file": "walk_bearing_block.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "walk_spacer"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    7.5,
+    7.5,
+    1.0
+   ],
+   "note": "on the top bearing's inner race",
+   "file": "walk_spacer.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "walk_compound"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    25.4,
+    25.4,
+    6.0
+   ],
+   "note": "24 + 12' in one print, free on the walk shaft: the clutch's driven member",
+   "file": "walk_compound.stl",
+   "overhang_mm2": 39.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "walk_hub"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    12.0,
+    12.0,
+    2.0
+   ],
+   "note": "pressed on the walk shaft: the clutch's friction face",
+   "file": "walk_hub.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "walk_motor_pinion_12"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    14.2,
+    14.2,
+    2.5
+   ],
+   "note": "pressed on the gearmotor's \u00d83 D-shaft",
+   "file": "walk_motor_pinion_12.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "walk_motor_bracket"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    27.7,
+    28.7,
+    37.5
+   ],
+   "note": "holds the gearmotor; two M2 screws under the deck: undo them and the motor drops out with its pinion",
+   "file": "walk_motor_bracket.stl",
+   "overhang_mm2": 66.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "program_gear_72"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    73.4,
+    73.4,
+    2.5
+   ],
+   "note": "pressed on the program shaft: one turn per show",
+   "file": "program_gear_72.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "program_bearing_block"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    18.0,
+    18.0,
+    4.2
+   ],
+   "note": "the program shaft's upper bearing: screwed on the deck (2 x M2)",
+   "file": "program_bearing_block.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "program_cam"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    47.0,
+    47.0,
+    4.3
+   ],
+   "note": "grooved underneath: the push rod's follower runs in it (pressure angle \u2264 36\u00b0 [D])",
+   "file": "program_cam.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "lock_cam"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    24.0,
+    24.0,
+    2.0
+   ],
+   "note": "two notches (end of phase A, end of the show): the microswitch stops the walk motor",
+   "file": "lock_cam.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "lock_switch_bracket"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    12.6,
+    12.1,
+    6.8
+   ],
+   "note": "hangs from the deck; the switch screws to it (2 x M2)",
+   "file": "lock_switch_bracket.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "bell_hall_post"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    6.0,
+    6.0,
+    36.5
+   ],
+   "note": "",
+   "file": "bell_hall_post.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
    "fits_dual": true,
@@ -269,13 +593,222 @@
    "nozzle": 0.4,
    "set": "",
    "size": [
-    5.0,
-    32.0,
-    35.6
+    35.4,
+    30.8,
+    5.0
    ],
-   "note": "on the state arbor, 1 rev/h legal time: sets the bell finger's height (4 steps of 4 mm, a ramp back from the old man to the child)",
+   "note": "sets the bell rod's height: 4 steps of 4 mm, a ramp back from the old man to the child",
    "file": "age_cam.stl",
-   "overhang_mm2": 128.0,
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_snail"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    25.6,
+    23.1,
+    4.0
+   ],
+   "note": "part 2b's quarter rack falls on it: 1 to 4 pairs",
+   "file": "quarter_snail.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "index_disc"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    24.0,
+    24.0,
+    3.0
+   ],
+   "note": "its magnet passes the index Hall at minute 0",
+   "file": "index_disc.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "state_pinion_12"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    14.6,
+    14.6,
+    2.5
+   ],
+   "note": "pressed on the state arbor: the 12:1 motion work's input",
+   "file": "state_pinion_12.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "lay_compound"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    49.3,
+    49.3,
+    5.3
+   ],
+   "note": "48 + 15 in one print, free on its stud",
+   "file": "lay_compound.stl",
+   "overhang_mm2": 61.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hour_wheel_45"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    46.7,
+    46.7,
+    12.2
+   ],
+   "note": "the hour wheel on its tube, free on the state arbor (1 turn in 12 h)",
+   "file": "hour_wheel_45.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hour_snail"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    35.2,
+    31.0,
+    4.0
+   ],
+   "note": "pressed on the hour wheel's tube; part 2b's hour rack falls on it: 1 to 12 strokes",
+   "file": "hour_snail.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "state_plate_left"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    10.0,
+    47.0,
+    43.0
+   ],
+   "note": "carries the arbor's left bearing, the lay stud and the witness Hall",
+   "file": "state_plate_left.stl",
+   "overhang_mm2": 37.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "state_block"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    10.0,
+    20.0,
+    43.0
+   ],
+   "note": "the arbor's right bearing and the index Hall",
+   "file": "state_block.stl",
+   "overhang_mm2": 24.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "state_coupling"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    12.0,
+    12.0,
+    38.9
+   ],
+   "note": "pressed on the arbor; the NEMA 17's D-shaft slides into its D socket (D16: plugs in from the right)",
+   "file": "state_coupling.stl",
+   "overhang_mm2": 19.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "state_motor_adapter"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    66.0,
+    42.3,
+    7.0
+   ],
+   "note": "D16 adapter: screwed to the motor at the bench",
+   "file": "state_motor_adapter.stl",
+   "overhang_mm2": 361.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "state_motor_plate"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    11.0,
+    42.3,
+    64.5
+   ],
+   "note": "the motor's plate: its adapter's boss locates in it; two M3 heat-set inserts",
+   "file": "state_motor_plate.stl",
+   "overhang_mm2": 106.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true
@@ -292,9 +825,9 @@
     297.0,
     4.0
    ],
-   "note": "the module's deck: rollers, posts and drives stand on it",
+   "note": "the module's deck: rollers, posts, stops and drives stand on it; the state module hangs under it",
    "file": "deck.stl",
-   "overhang_mm2": 0.0,
+   "overhang_mm2": 17.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true

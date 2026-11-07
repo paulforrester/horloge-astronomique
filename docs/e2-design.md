@@ -267,6 +267,13 @@ original's separate trains, and it gives the simplest mechanisms.
    Death's bone strikes directly (§7.4).
 6. **Depth:** the faithful ring (≈ 243 mm deep), to be checked against the case in the detail
    design (§7.3).
+7. **The stop fingers are swung by a program cam on the walk train** (Paul, 6 Nov 2026, choosing A
+   over two micro servos).
+   - The cam turns once per show, through a 1:5 pair; a rocker and two rods swing both fingers.
+   - Two notches on the cam stop the walk motor at the end of each phase.
+   - A Hall at the bell station, with a magnet in each age's base, tells the controller whether an
+     age was caught, so it knows whether to strike or run another turn (§10.3).
+   - Part 2a refines how: two stop shafts geared 1:1, one push rod, a 1:6 program pair (§11.1).
 
 ## 10. Detail design, part 1: the layout, the ring and the selection
 
@@ -277,7 +284,8 @@ The detail design comes in three parts, so each can be checked before the next:
    - the two stop fingers, and the age cam that sets the bell finger's height;
    - a simulation of the walk over every case.
 
-   The drives that part 2 details are placeholders, at their true places, so their space is held.
+   The drives that part 2 details were placeholders, at their true places, so their space was held.
+   Part 2a has replaced them (§11).
 2. **The drives:**
    - the walk train's slip clutch and program cam, and the fingers' linkages;
    - the state module: the quarter snail, the 12:1 motion work, the hour snail and the sensors;
@@ -313,7 +321,7 @@ waits at the right doorway, and the old man stands at the left one.
 |---|---|
 | Walking surface | annulus R 108–134, z −3 to 0, flush with the floor, 0.5 mm gap each side |
 | Inner skirt | R 108–110, from the surface down to z −16; the guide rollers run inside it |
-| Outer body | R 127–131, down to z −28; it carries the teeth and the pegs |
+| Outer body | R 127–131, down to z −30 (part 2a: −28 before the waiting pegs); it carries the teeth and the pegs |
 | Teeth | 264, module 1, z −8 to −3 |
 | Walk pinion | 16, at C + 140 mm at −60° (under the front floor, right); profile shifts −0.064/+0.064 |
 | Selection pegs | one per age, Ø2.5, radial from R 131 to 135, at its own height: child −12, youth −16, man −20, old man −24 |
@@ -349,7 +357,7 @@ waits at the right doorway, and the old man stands at the left one.
   - So skipped shows correct themselves, with the skipped ages walking past silently.
 - **Timing** [D: from Paul's 10 s walk on]:
   - the ring turns at 6°/s (1 rpm);
-  - the walk out takes 5 s and the walk on 10 s; a program turn takes 18.3 s.
+  - the walk out takes 5 s and the walk on 10 s. (Part 2a gives the full program's timing: §11.3.)
   - The pinion turns at 16.5 rpm. A walk gearmotor of ≈ 33 rpm through 12/24 gives that. Part 2
     chooses the motor (⚠ a micro metal gearmotor of the 1000:1 HP 6 V class, about 32 rpm [E]).
 
@@ -391,11 +399,208 @@ The model's envelope [D] is:
 
 ### 10.7 Open items for part 2
 
-- The walk train: the gearmotor (⚠ choose from the maker's table), the slip clutch, the program
-  cam and its lock switch, and the fingers' linkages.
+- The walk train (decided: a program cam, §9.7): the gearmotor (⚠ choose from the maker's table),
+  the slip clutch, the program cam with its two lock notches, the rocker and rods to the fingers,
+  and the Hall that says an age was caught at the bell.
 - The state module: the snails, the 12:1, and the index and witness Halls.
 - The quarter and hour trains: racks, gathering pallets, lifters, E1's cue switch, the lock
   switches, and Death's arm.
 - The figures' arms and push pins, which are lifted at the bell station from below the ring.
 - **The bells ⚠:** Ø21 brass bowl bells, to source.
 - The hall's vault and side walls, and where E2 ends and the case begins (D12 R5).
+
+## 11. Detail design, part 2a: the stops, the walk drive and the state module
+
+Paul chose the program cam on the walk train (§9.7). Part 2a details it, the walk drive around it,
+and the state module. Part 2b follows: the quarter and hour trains, Death's arm, and the ages' arms
+and push pins. Part 3 is the figures.
+
+Model:
+- `cad/modules/e2_ages/drives.py`: the CAD;
+- `cad/modules/e2_ages/program.py`: the program's geometry and timing, with no CAD;
+- `mechanism.py` assembles them with part 1.
+
+The model shows the rest state at 12:10, program angle 0 (state B).
+
+<p align="center"><img src="img/e2/e2_stops.png" width="480" alt="E2 part 2a: the two stop shafts with their arms, the keyed sleeve and the square rod, the stop gears and crank, the push rod in its guides, the program cam and gear 72, the walk shaft with its clutch and pinion, the gearmotor in its bracket, the bell-station Hall on its post"> <img src="img/e2/e2_drives.png" width="440" alt="E2 part 2a with the hall, the ring and the figures hidden: the stops and the walk drive above, the state module below along X with the motion work at the left, the age cam under the bell rod, the snails, the index, the coupling and the NEMA 17 at the right"></p>
+
+### 11.1 What changed from the plan in §9.7, and why
+
+- **Two stop shafts, geared together, instead of one shaft or a rocker with two rods.**
+  - **Both stops now stand together at the bell station.** Each age gets a second peg, its
+    *waiting peg*. It is as long as the selection pegs but lower than all of them (z −28), and it
+    sits 35.1° behind its age. When an age stands at the right doorway (φ 45°), its waiting peg is
+    at the waiting stop, next to the bell stop. So no rods run across the front of the hall.
+  - **Why not one shaft:** a first version put both arms on one shaft, and it would have pushed the
+    waiting age back about 2° (about 4 mm at the figure) at the start of every show.
+    - An arm that pivots outside the ring must swing out *downstream* to let a held peg go.
+      Otherwise it shoves the peg back against the clutch.
+    - A single shaft swings one way and then the other, so one of its two arms would always
+      release upstream.
+  - **The fix:** the arms are on two shafts 12.5 mm apart, coupled by a pair of 12-tooth gears
+    under the deck.
+    - The shafts turn in opposite senses, so each arm swings out downstream.
+    - The held peg's own push then helps it go.
+- **The program pair is 12'/72 (1:6), not 1:5, and each change of state takes 45° of the
+  program.**
+  - A 5° change would make the follower rise its full travel in 1.5 mm of cam, a pressure angle
+    over 80°. With 45° changes the largest pressure angle is 35.8° [D].
+  - The longer changes cost ring travel, so a program turn now carries the ring 130.9° instead
+    of 109°. The phases' limits still come out at 40.0° and 70.0°, as in part 1.
+- **One push rod drives a crank on the waiting shaft**, with no rocker. The rod is a radial
+  translating follower of the program cam.
+- **The deck is 3 mm lower** (z −47 to −43), so the walk clutch's hub clears the waiting pegs.
+- **The ring's outer body now reaches z −30**, down from −28, to carry the waiting pegs.
+- **A drawing fix:** part 1 drew the age cam turned by 45 minutes against its follower. Its numbers
+  and tests were not affected. Part 2a draws every cam on the state arbor in its true phase.
+
+### 11.2 The stops
+
+| Item | Value | Tag |
+|---|---|---|
+| Bell stop's shaft | 3 × 3 brass square rod at R 141, φ 13.94°, at (33.96, −42.85). It slides in a keyed sleeve; the sleeve and its 12-tooth gear are one print, turning in the deck, with a collar pressed on above the deck. The rod's foot rides on the age cam | [D] |
+| Bell arm | pressed on the rod at the selected peg's height (child −12 … old man −24); 2.5 high, 2 wide, tip at R 132.2 | [D] |
+| Waiting stop's shaft | Ø3 ground rod at R 141, φ 8.85°, at (21.69, −45.32). It is 12.52 mm from the bell shaft, the 12/12 pair's centre distance | [D] |
+| Waiting arm | z −30 to −26, tip at R 132.2; its hub rests on the deck | [D] |
+| Pegs | all Ø2.5, from R 131 to 135. Selection pegs at z −12, −16, −20, −24; waiting pegs at −28, 35.09° behind their age | [D] |
+| Where a peg rests | 1.06° upstream of its arm (the peg's radius, half the arm and a 0.2 mm gap): the bell station at φ 15.00°, the waiting station at φ 9.91° | [D] |
+| Swing | 70°. An arm holds with at least 1 mm overlap while swung less than 36.2°. It lets every peg by when swung more than 49.9° (tip at R 135.5). Fully out, the tip is at R 138.2 | [D] |
+| Heights apart | the old man's bell arm (−25.25 to −22.75) clears the waiting arm (top −26) and the waiting pegs (top −26.75) | [D] |
+| Crank | r 5 on the waiting shaft, under its gear; a Ø2 steel pin runs in the push rod's yoke | [D] |
+| Push rod | 5 × 2.2 PETG bar, 49.5 mm from the follower pin to the crank pin, in two guides under the deck. The Ø2.5 follower pin runs in the program cam's groove | [D] |
+
+### 11.3 The program
+
+One program turn per show. The stops' swing ψ is 0 in state A (the bell arm in) and 70° in state
+B (the waiting arm in). Program angles [D: `program.py`]:
+
+| Program angle | Phase | What happens |
+|---|---|---|
+| 0–45° | BA | harmonic swing from B to A. At 22.0° the bell arm can hold; at 28.8° the waiting arm lets the waiting age go |
+| 45–138.75° | A | the walk out. The lock switch stops the motor at 138.75° for the strikes |
+| 138.75–183.75° | AB | at 160.8° the waiting arm can hold; at 167.6° the bell arm lets the struck age go |
+| 183.75–360° | B | the walk on. The lock switch stops the motor at 360°: rest |
+
+- **Ring travel [D]:** 0.3636° of ring per program degree (6 × 16 / 264).
+  - In phase A the ring can turn at most 40.0°; it needs 30°.
+  - In phase B it can turn at most 70.0°; it needs 60°.
+  - In a skipped show it runs free for 48.0° before the waiting arm can hold again. The next
+    waiting peg is 90° away.
+  - The lock switch may close up to 4° of program early. Each phase still keeps at least 5° of
+    clutch slip (tested).
+- **The program cam:** Ø47 × 4.3, with a groove 2.8 wide and 1.8 deep underneath. The groove's
+  radius runs from 20.0 (state A) to 14.3 (state B). Its largest pressure angle is 35.8°.
+- **The lock cam:** R 12, with two notches 1.5 deep (a 4° ramp, then a 16° flat) starting at the
+  two stop angles. A subminiature roller-lever microswitch reads it, on a bracket under the deck.
+- **Timing [D: `program.timing`, with the gearmotor at ≈ 32 rpm [E]]:** the ring turns at
+  5.82°/s and the program at 16°/s.
+
+| Step | s |
+|---|---|
+| Hold before the walk out (the stops change over) | 1.80 |
+| Walk out, 30° | 5.16 |
+| Clutch slip, then the motor stops: the strikes | 1.72 |
+| Hold after the strikes (the stops change over) | 1.80 |
+| Walk on, 60° (Paul: ≈ 10 s) | 10.31 |
+| Clutch slip, then the motor stops: rest | 1.72 |
+| **Program turn (motor running)** | **22.50** |
+
+### 11.4 The walk drive
+
+| Item | Value |
+|---|---|
+| Walk shaft | Ø5 ground rod at (70.00, −27.24), z −51.4 to −3.4, in two MR85ZZ: one in the deck's top face, one in a block screwed under the deck. A Starlock under the lower bearing |
+| Slip clutch, bottom up | a spacer on the top bearing's inner race (z −43 to −42); the wave washer (−42 to −41.4); the compound 24 + 12', free on the shaft (−41.4 to −35.4, with a Ø8 friction boss on top); the Ø12 hub pressed on the shaft (−35.4 to −33.4) |
+| Walk pinion 16 | pressed on the top of the shaft, z −8 to −3.4; it drives the ring's 264 |
+| Gearmotor | micro metal gearmotor ⚠ (12 × 10 × 34.5 [E], Ø3 D-shaft) under the deck, at 50° from the walk shaft (81.57, −13.45). Its 12-tooth pinion drives the compound's 24 (cd 18) through a Ø16 hole in the deck |
+| Gearmotor bracket | a sleeve round the gearbox, a lip under it, a flange under the deck (2 × M2). Undo the two screws and the motor drops out with its pinion (tested) |
+| Program shaft | Ø5 at (55.64, 12.22), 42 mm from the walk shaft at 110° (12'/72). Gear 72 above the deck (z −38.5 to −36.0). Two MR85ZZ: one in the deck's bottom face, one in a block screwed on the deck. The program cam (−51.6 to −47.3) and the lock cam (−58 to −56) below |
+| Bell-station Hall | a DRV5032 board under the ring at φ 15°, R 123.5, on a post from the deck. A Ø5 × 2 magnet sits in the ring under each age (R 123.5), clear of the support rollers' track (R 115.5–120.5) |
+
+### 11.5 The state module
+
+| Item | Value |
+|---|---|
+| State arbor | Ø5 ground rod along X at y −42.85, z −81 (under the bell rod), x −31 to 79.5. Two MR85ZZ (the left plate and the right block); a Starlock at its left end. It turns at 1 rev/h legal time, anticlockwise seen from the motor |
+| Coupling (x 56.6–95.5) | the arbor is pressed into one end; the NEMA's D-shaft slides into a D socket at the other (slip fit, D16) |
+| Index (x 45.5–48.5) | a Ø24 disc with a magnet at R 9 (minute 0); the index Hall is on the right block |
+| Quarter snail (x 39.5–43.5) | radii 14, 12, 10, 8 for 1–4 pairs; each step is centred on its show |
+| Age cam (x 31.46–36.46) | radii 20, 16, 12, 8 and the ramp (§10.3), under the bell rod |
+| Motion work 12:1 | 12/48 · 15/45, centre distance 30, as in M1. The pinion 12 is on the arbor (x −13.2 to −10.7). The lay compound (48 + 15) turns on a Ø4 stud fixed in the left plate at y −12.85. The hour wheel 45 is at the end of its tube, free on the arbor |
+| Hour snail | pressed on the hour wheel's tube; radius 20 − 0.9 (n − 1) for n strokes, each step centred on its hour. A magnet in the snail at 12; the witness Hall is on the left plate |
+| Frame | the left plate, the right block and the motor plate hang from the deck on flanges (M3 into inserts) |
+| Stepper | NEMA 17 on its D16 adapter, on the motor plate's right face (x 100). Undo two M3 and draw it out to the right (tested) |
+
+### 11.6 Size and parts
+
+- **Envelope [D]:**
+  - x: −145 to 152 (297 mm);
+  - y: −66.2 to 235; the hour wheel reaches 4 mm in front of the deck;
+  - z: −114 to 100; the bottom is the motor adapter's lower ear.
+- **Parts:** 106, of which 54 are printed. Every printed part fits the H2D's bed.
+- **Print files:** `export/print/e2_ages/`. The deck now prints flat: its bearing bosses became
+  separate blocks.
+- **SketchUp:** `export/sketchup/e2_ages.dae` and `e2_ages_exploded.dae`.
+
+### 11.7 Checks
+
+`cad/tests/test_e2.py`, 41 tests: part 1's, rewritten for the stops, plus these.
+- **The program:**
+  - the phase travel the walk simulation uses is the program's;
+  - the margins: at least 5° of slip in each phase with the switch 4° early; the skipped show;
+    a program turn carries the ring at least a quarter turn;
+  - one arm always holds, or can hold, through each change;
+  - the cam's pressure angle is at most 40°;
+  - the lock switch closes only at the two stops.
+- **The trains:**
+  - the walk train's speed and the 1:6 program pair;
+  - the 12:1 motion work;
+  - the show timing;
+  - the snails' counts.
+- **The stops:**
+  - the bell arm catches only the selected peg and no waiting peg; swung out, it catches none;
+  - the waiting arm catches every waiting peg and no selection peg; swung out, it catches none;
+  - the waiting peg puts its age in the doorway;
+  - the shafts' spacing is the gears' centre distance;
+  - each arm swings out downstream.
+- **The model:**
+  - no interference, and every part fits the bed;
+  - the NEMA withdraws to the right;
+  - the gearmotor drops out with its pinion and bracket;
+  - the rest state: the waiting arm is 0.2 mm in front of the child's waiting peg, and the bell
+    arm is clear.
+
+### 11.8 Estimates to confirm, and decisions
+
+**Estimates [E]:**
+- **The gearmotor ⚠:** a 1000:1 micro metal gearmotor (12 × 10 mm, Ø3 D-shaft), about 32 rpm
+  under this load.
+  - Check its length (34.5 mm) and its shaft (9 mm) against the chosen motor's drawing.
+  - The controller trims the walk on to 10 s with the H-bridge's PWM.
+- **The clutch:** its preload (the wave washer) and its slip torque are set on the test rig.
+- **Small parts:** check the microswitch, the Starlocks and the wave washer against the parts
+  chosen.
+- **Press fits:** printed parts are pressed on ground rods, as in M1; the tolerance test sets the
+  fits.
+
+**Decisions (settled, Paul, PR #17, 6 Nov 2026):**
+1. **Two geared stop shafts (§11.1): kept**, instead of one shaft or a rocker with two rods. It is
+   the only layout here in which neither arm pushes a peg back.
+2. **The holds: 45° per change of state, kept.** The cam's pressure angle stays at 36°. The cost is
+   two holds:
+   - each show starts with a 1.8 s hold before the waiting age moves. The controller starts the
+     walk motor 1.8 s earlier, so the show's timing is unchanged;
+   - the struck age stands 1.8 s after its last stroke before it walks on.
+
+   (30° changes would have given about 1.2 s, with the cam at about 47°.)
+3. **The module's size below the floor: left until the case is designed.** It reaches 114 mm down
+   (the NEMA adapter's lower ear), and its front is at y −66. Check both against the case when its
+   design fixes them (still TBD).
+
+### 11.9 Open items for part 2b
+
+- The quarter and hour striking trains: racks on the two snails, gathering pallets, lifters, lock
+  switches, and E1's cue switch.
+- Death's arm, and the ages' arms with their push pins (lifted at the bell station from below the
+  ring).
+- **The bells ⚠:** to source.

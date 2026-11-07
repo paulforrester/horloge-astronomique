@@ -148,15 +148,37 @@ from behind on adapter plates (D16, `docs/m1-design.md` §10).
 
 ### Batch 2 — E2 rows, detail design part 1 [E]
 
-Quantities from `cad/modules/e2_ages/` (`docs/e2-design.md` §10). Part 2 adds the drives' parts.
+Quantities from `cad/modules/e2_ages/` (`docs/e2-design.md` §10). Part 2a updates the two rod rows
+and adds the drives' parts below.
 
 | Item | Spec | Qty [E] | How the quantity was counted | Supplier |
 |---|---|---|---|---|
 | Bearing 688ZZ | 8 × 16 × 5 | 7 | the ring: 4 support rollers, 3 guide rollers | as Batch 1 |
 | Rod Ø8 | DIN 175 h9 | 0.15 m | 7 roller studs | as Batch 1 |
-| Rod Ø3 | DIN 175 h9 | 0.15 m | the two stop fingers' shafts | as Batch 1 |
-| Rod Ø5 | DIN 175 h9 | 0.15 m | the walk shaft, the state arbor | as Batch 1 |
+| Rod Ø3 | DIN 175 h9 | 0.05 m | the waiting stop's shaft, 25 mm (part 2a) [D: model] | as Batch 1 |
+| Rod Ø5 | DIN 175 h9 | 0.25 m | the walk shaft 48 mm, the program shaft 22 mm, the state arbor 110.5 mm (part 2a) [D: model] | as Batch 1 |
 | Bells | small brass bowl bells, Ø ≈ 21 mm, about 15 mm deep, mouth down | 2 (+ 1 spare) | the ages' bell and Death's bell [E: photo] | ⚠ not yet found; to source |
+
+### Batch 2 — E2 rows, detail design part 2a [E]
+
+From `cad/modules/e2_ages/drives.py` (`docs/e2-design.md` §11): the stops, the walk drive and the
+state module. Rows marked "counted" are already in the Batch 2 totals above.
+
+| Item | Spec | Qty [E] | How the quantity was counted | Supplier |
+|---|---|---|---|---|
+| Bearing MR85ZZ | 5 × 8 × 2.5 | 6 | the walk shaft 2, the program shaft 2, the state arbor 2 | as Batch 1 |
+| Rod Ø4 | DIN 175 h9 | 0.05 m | the lay stud, 20 mm | as Batch 1 |
+| Brass square rod | 3 × 3 mm | 0.1 m | the bell stop's shaft, 50 mm (it slides in a keyed sleeve) | ⚠ model-making suppliers stock it (e.g. Albion Alloys); to source in France |
+| Steel pins | Ø2 × 6 and Ø2.5 × 6, ISO 2338 m6 (or cut from silver steel) | 1 + 1 | the crank pin; the push rod's follower pin | as Batch 1 |
+| Push-on lock washers | Starlock type for Ø5 / for Ø4 | 2 / 1 (+ spares) | the walk shaft and the state arbor / the lay stud | as the M2 row (Bossard Starlock 6110, ⚠ verify the sizes) |
+| Wave washer | for Ø5, OD ≤ 10 | 1 (+ spares) | the walk clutch's preload | Accu FR (as the M1 row) ⚠ load to set on the test rig |
+| Micro metal gearmotor | 12 × 10 mm, Ø3 D-shaft, ≈ 32 rpm under load (1000:1 HP 6 V class) | counted (one of the 8 DC gearmotors) | E2's walk | Gotronic (Pololu) ⚠ check its length (34.5 mm modelled) and shaft (9 mm) |
+| Subminiature roller-lever microswitch | about 12.8 × 5.8 × 6.5 mm | counted (Batch 2 microswitches) | the walk program's lock | Gotronic ⚠ choose |
+| Hall switch DRV5032 | on a small board, as Batch 1 | counted (3 of Batch 2's Halls) | the bell station, the state index, the hour witness | as Batch 1 |
+| Magnets | NdFeB disc 5 × 2 mm | 6 | 4 in the ring (one under each age), the index, the witness | as Batch 1 |
+| NEMA 17, TMC2209, D16 mount set | as the D16 row | counted | E2's state arbor | as Batch 1 |
+| Screws M2 × 6 + M2 heat-set inserts | A2 | 12 + 12 | the walk and program bearing blocks 2 + 2, the gearmotor bracket 2, the rod guides 4, the lock switch's bracket 2 | as Batch 1 |
+| Screws M3 × 8 + M3 heat-set inserts | A2 | 6 + 6 | the state module's left plate, right block and motor plate, 2 each, under the deck | as Batch 1 |
 
 ## Batch 3 — v1.5 / v2
 
