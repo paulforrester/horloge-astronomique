@@ -38,7 +38,7 @@ adding precision later without rebuilding, is in
 | 0 | Specification, research, decisions | **Done** (PR #1, PR #2). D1–D12 all accepted, including D12: a wooden case |
 | 1 | Ratio engineering and tooth-strength check: `tools/ratios/`, tests, `spec/clock.yaml`, `docs/gear-trains.md` | **Done** (PR #3) |
 | 2 | Parametric CAD: shared library, main-dial feasibility, test rig, then every module and the case | **In progress**: library, feasibility and test rig done (PR #4); M2 main dial done (PRs #5–#10); M1 time and release: concept accepted (PR #11); M1 detail design done (PR #13); motors plug in from behind (D16, PRs #13–#14); E2 ages and Death: concept accepted (PR #15); E2 detail design part 1 done (PR #16); **E2 part 2a (the stops, the walk drive, the state module) for review** |
-| 3 | Electronics, firmware skeleton, accelerated-time simulator validated against an ephemeris | — |
+| 3 | Electronics, firmware skeleton, accelerated-time simulator validated against an ephemeris | **In progress**: design gate (PR #19); F2–F10 accepted, F1 (PCB or perfboard) open |
 | Local | Tolerance tests, printing, woodworking, bring-up | Later |
 
 ## Documents

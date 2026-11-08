@@ -818,14 +818,19 @@ change; each is listed again in the PR's "Decisions needed".
 7. **Architecture §12** says the firmware is a PlatformIO project; F7 proposes Arduino IDE /
    `arduino-cli`. If accepted, that line changes when this merges.
 
-## 14. Decisions needed from Paul
+## 14. Decisions (Paul, PR #19, 8 Nov 2026)
 
-Each becomes "D-next (firmware)" in `docs/decisions.md` when accepted.
+**F2–F10: accepted as recommended.** **F1: open**: the bench prototype comes first in any case;
+Paul is looking into what a PCB takes, with hobby perfboard (option B) as the fallback. They are
+recorded as "D-next (firmware)" in `docs/decisions.md`; the number is given when this PR merges.
 
 **F1. How the controller is built.**
 - Options: A, a carrier PCB with sockets for plug-in modules; B, hand-wired stripboard; C, a
   printer board plus the ESP32; D, a full custom PCB (§3.2).
 - **Recommendation: A**, after a bench prototype with the same modules.
+- **Status: open** (Paul, PR #19: "I'll have to research this and see what it will take to produce
+  a PCB. Worst case, this will be a PC board constructed from hobbist Perf board."). Nothing
+  before the bench prototype depends on it.
 
 **F2. Event-motor drive.**
 - Options: A, one PCA9685 with one channel per motor through DRV8833s; B, the ESP32's own PWM;
@@ -834,33 +839,40 @@ Each becomes "D-next (firmware)" in `docs/decisions.md` when accepted.
   line, and is safe at power-up. The PCA9685's PWM is audible (≤ 1.5 kHz), so it only switches
   motors on and brakes them; E2's walk, which needs its speed trimmed, gets a native PWM pin at
   ≥ 20 kHz.
+- **Status: accepted** (Paul, PR #19, 8 Nov 2026).
 
 **F3. RTC.**
 - Options: A, RV-3028-C7 with a supercapacitor; B, a DS3231 module (§3.6).
 - **Recommendation: A**, by a small margin: in a heated room its error is close to the DS3231's,
   the firmware trims it from NTP, and it needs no battery.
+- **Status: accepted**: RV-3028-C7 (Paul, PR #19, 8 Nov 2026).
 
 **F4. The motor phase through a power cut.**
 - Options: A, step to phase zero on power-fail (≈ 2 mF, or the PSU's 55 ms hold-up); B, restore
   the phase at power-up by stepping with the bridges off, the TMC2209 datasheet's own method (§9.4).
 - **Recommendation: B**, confirmed on the rig, with A's capacitor footprint kept as a fallback.
+- **Status: accepted**: B, confirmed on the rig (Paul, PR #19, 8 Nov 2026).
 
 **F5. Power rails.**
 - Options: one 5 V rail for logic and event motors (architecture §11), or a separate 6 V rail for
   the motors (§3.7).
 - **Recommendation: separate 6 V**, for the motors' rated speed and a quiet logic rail.
+- **Status: accepted**: a separate 6 V rail (Paul, PR #19, 8 Nov 2026).
 
 **F6. Quiet hours.**
 - What window (legal time), and which shows go silent? The faithful minimum silences only the
   ages and the genie; Death strikes day and night [S: DA p. 58, 65].
 - **Recommendation:** 22:00–07:00 [E: a common night], silencing the ages, the genie and Death,
   with the faithful setting one switch away in Home Assistant. Paul to choose the hours.
+- **Status: accepted**: 22:00–07:00 legal time, the ages, the genie and Death silent; settable
+  from Home Assistant (Paul, PR #19, 8 Nov 2026).
 
 **F7. Firmware toolchain.**
 - Options: Arduino IDE 2 with the Arduino-ESP32 core, and `arduino-cli` for headless builds; or
   PlatformIO (architecture §12).
 - **Recommendation: Arduino IDE / `arduino-cli`.** It is Paul's tool, and the same sketch builds
   in both. The board-independent core does not depend on either.
+- **Status: accepted**: Arduino IDE / `arduino-cli` (Paul, PR #19, 8 Nov 2026).
 
 **F8. When a show faults, and the door.**
 - Options for a fault: the show stays off until acknowledged, or it retries at its next time.
@@ -868,12 +880,17 @@ Each becomes "D-next (firmware)" in `docs/decisions.md` when accepted.
   only reported.
 - **Recommendation:** off until acknowledged; an open door skips the shows (E6 and E5 still run:
   they are slow and stateful).
+- **Status: accepted** (Paul, PR #19, 8 Nov 2026).
 
 **F9. Where the sensor and event data live.**
 - Options: new append-only `sensors:` and `events:` sections in `spec/clock.yaml` (P5), or a
   firmware-only configuration file.
 - **Recommendation: `spec/clock.yaml`**, so the firmware, the simulator and the CAD read the same
   numbers.
+- **Status: accepted** (Paul, PR #19, 8 Nov 2026). The sections are added in the firmware-core
+  PR, append-only.
 
 **F10. Approve the simulator plan and its error budgets (§11)**, including DE440s as the
 reference and the v1.5 rows left TBD until M3 and the mobile horizon are designed.
+
+**Status: accepted** (Paul, PR #19, 8 Nov 2026).
