@@ -362,8 +362,18 @@ def test_the_releases_turn_each_hook_clear(train):
     arm = K.qrel_arm_poly() if train is S.QUARTER else K.trip_arm_b_poly()
     hook = K.hook_poly(train)
     assert arm.distance(hook) == pytest.approx(K.REL_GAP, abs=0.02)
-    gaps = [arm.distance(K.rot_about(hook, hk["pivot"], x / 100)) for x in range(0, 31)]
+    ride = S.hook_turn_to_clear(train) + 0.03                  # more than riding over a tooth's tip ever turns it
+    gaps = [arm.distance(K.rot_about(hook, hk["pivot"], ride * k / 20)) for k in range(21)]
     assert all(b >= a - 1e-6 for a, b in zip(gaps, gaps[1:]))
+    # pushed out, the hook touches its arm only at the contact, and overtravel only takes it away
+    if train is S.QUARTER:
+        a, b, c, d = S.RELEASE_WINDOW
+        arm_out = K.rot_about(arm, K.qrel_shaft(), K.qrel_turn((b + c) / 2))
+    else:
+        arm_out = K.rot_about(arm, K.TRIP["shaft"], -K.trip_turn(S.rack_angles(S.QUARTER)[-1]))
+    turn = _released_turn(train)
+    for extra in (0.0, 0.02, 0.05):
+        assert arm_out.intersection(K.rot_about(hook, hk["pivot"], turn + extra)).area < 1e-6
 
 
 def test_the_quarter_release_follows_the_window():
