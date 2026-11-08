@@ -511,8 +511,10 @@ modules are not designed yet.
 - **A coincidence that cannot happen:** E6 runs at mean midnight, 23:29 CET or 00:29 CEST. That is
   never on a quarter of legal time [D: 29 min is not a multiple of 15]. The sequencer still
   queues events rather than assuming it.
-- **The sequencer is data-driven.** Each step is a row: which motor, what starts it, what it waits
-  for. Changing the order is a configuration change and a test, not new code.
+- **The sequencer is one function** (`firmware/core/show_chain.cpp`), step by step in DA's order,
+  with a test per order. A table of rows was planned here; written out, the chain's few
+  conditions (cues, windows, the quiet-hours fall-backs) read more clearly as code. Changing the
+  order is a small change to that function and its tests.
 
 ### 7.4 E6, the calendar advance
 
@@ -829,8 +831,11 @@ change to 2100, year ends, leap days) and compares with the Python. Any differen
 
 ### 12.3 PR plan after this gate
 
-1. **Firmware core and host tests** (`firmware/core`, `hal`, `tests`), and the sketch that wires
-   it to the rig's hardware. No PCB yet.
+1. **Firmware core and host tests** (`firmware/core`, `hal`, `tests`, `spec_gen`), and F9's
+   sections in `spec/clock.yaml`. **Done in the PR after the gate.** The sketch and the board layer
+   move to step 1b, with the bench prototype: they can only be tested on its hardware.
+1b. **The sketch and `board/`** (TMC2209, PCA9685, MCP23017, RV-3028-C7, FRAM, Wi-Fi), compiled
+   with `arduino-cli`, for the bench prototype.
 2. **The simulator** (`sim/`), the train and event checks, the report and the setting sheet.
 3. **The carrier PCB** in KiCad, after the bench prototype (F1).
 4. v1.5 checks (rows 15–18) when M3 and the v1.5 M2 parts are designed.
