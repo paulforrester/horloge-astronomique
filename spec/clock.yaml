@@ -432,3 +432,67 @@ trains:
     max_stage_ratio: 161
     accuracy: {max_drift_deg_per_century: 0.002}
     note: "Two single-start worms (driver 1 = worm). 1/25760 per year vs 1/25771.6: 0.045 % fast, i.e. about 0.0006°/century"
+
+# ---------------- Controller, sensors and events (Phase 3, F9: Paul, PR #19, 8 Nov 2026) ----------------
+# Read by firmware/spec_gen/gen_spec.py (the firmware header) and by sim/. docs/firmware-design.md.
+controller:
+  usteps_per_motor_rev: 3200        # 200 full steps x 1/16 (architecture §3)
+  mean_time_offset_s: 1860          # [D] Strasbourg mean time = UT + 31.00 min: 7.7506° x 240 s/° (D2)
+  catch_up_usteps_per_s: 3200       # 60 rpm at the motor (architecture §8)
+  # Stepper sockets on the carrier, in order: UART bus and address (firmware-design §3.3).
+  axes:
+    - {id: M1,       time: mean,  bus: 1, addr: 0}
+    - {id: M1b,      time: legal, bus: 1, addr: 1}
+    - {id: E2_state, time: legal, bus: 1, addr: 2}
+    - {id: M2,       time: mean,  bus: 1, addr: 3}
+    - {id: M5,       time: mean,  bus: 2, addr: 0}
+    - {id: M6,       time: mean,  bus: 2, addr: 1}
+    - {id: M3,       time: mean,  bus: 2, addr: 2, version: v1.5}
+
+# Every switch the controller reads (firmware-design §3.5). kind: index | witness | trigger | lock | home | cue | other.
+# window_half_min: a release window's half-width [E] (docs/m1-design.md §9.4, scales with HALL_RANGE).
+sensors:
+  - {id: M1.quarters,      module: M1,  kind: trigger, part: DRV5032FC, window_half_min: 2.94}
+  - {id: M1b.hour,         module: M1,  kind: trigger, part: DRV5032FC, window_half_min: 2.01, note: "also M1b's index"}
+  - {id: M1b.noon,         module: M1,  kind: trigger, part: DRV5032FC, window_half_min: 35.3}
+  - {id: M1.index,         module: M1,  kind: index,   part: DRV5032FC}
+  - {id: M1.gilt_witness,  module: M1,  kind: witness, part: DRV5032FC}
+  - {id: M1b.silver_witness, module: M1, kind: witness, part: DRV5032FC}
+  - {id: M2.index,         module: M2,  kind: index,   part: DRV5032FC, note: "mean midnight; releases E6"}
+  - {id: M2.moon_witness,  module: M2,  kind: witness, part: DRV5032FC}
+  - {id: E6.home,          module: M2,  kind: lock,    part: DRV5032FC}
+  - {id: E6.stop_lever,    module: M2,  kind: other,   part: TCST1202, note: "beam blocked at rest (m2-design §6)"}
+  - {id: M2.march1_witness, module: M2, kind: witness, part: TCRT5000}
+  - {id: E2.state_index,   module: E2,  kind: index,   part: DRV5032FC}
+  - {id: E2.hour_witness,  module: E2,  kind: witness, part: DRV5032FC}
+  - {id: E2.bell_station,  module: E2,  kind: other,   part: DRV5032FC}
+  - {id: E2.walk_lock,     module: E2,  kind: lock,    part: microswitch}
+  - {id: E2.quarter_lock,  module: E2,  kind: lock,    part: microswitch}
+  - {id: E2.hour_lock,     module: E2,  kind: lock,    part: microswitch}
+  - {id: E2.cue,           module: E2,  kind: cue,     part: microswitch, note: "cues E1's genie"}
+  - {id: E2.quarter_home,  module: E2,  kind: home,    part: TCST1202, note: "e2-design §12, PR #21"}
+  - {id: E2.hour_home,     module: E2,  kind: home,    part: TCST1202, note: "e2-design §12, PR #21"}
+  - {id: E1.bell_lock,     module: E1,  kind: lock,    part: TBD}
+  - {id: E1.hourglass_lock, module: E1, kind: lock,    part: TBD}
+  - {id: E3.lock,          module: E3,  kind: lock,    part: TBD}
+  - {id: E3.cue,           module: E3,  kind: cue,     part: TBD, note: "figures 4, 8, 12; cues E4"}
+  - {id: E4.lock,          module: E4,  kind: lock,    part: TBD}
+  - {id: M5.index,         module: M5,  kind: index,   part: DRV5032FC}
+  - {id: M5.earth_witness, module: M5,  kind: witness, part: DRV5032FC}
+  - {id: M6.index,         module: M6,  kind: index,   part: DRV5032FC}
+  - {id: M6.globe_witness, module: M6,  kind: witness, part: DRV5032FC}
+  - {id: M7.carousel_witness, module: M7, kind: witness, part: DRV5032FC}
+  - {id: case.door,        module: case, kind: other,  part: microswitch}
+
+# Each event motor's nominal run, for its timeout (2 x nominal [E]) and the sequencer's lead.
+# nominal_s: null where the module is not designed yet (a 60 s timeout until then).
+events:
+  - {id: E2.walk_a,   motor: E2.walk,     nominal_s: 8.68,  tag: D, source: "e2-design §11.3: 1.80 + 5.16 + 1.72 s"}
+  - {id: E2.walk_b,   motor: E2.walk,     nominal_s: 13.83, tag: D, source: "e2-design §11.3: 1.80 + 10.31 + 1.72 s"}
+  - {id: E2.quarters, motor: E2.quarters, nominal_s: 3.0, per: pair,   tag: S, source: "a pair every 3 s (Paul, e2-design §2)"}
+  - {id: E2.hours,    motor: E2.hours,    nominal_s: 3.0, per: stroke, tag: S, source: "one stroke every 3 s (Paul, PR #21, 8 Nov 2026; e2-design §2, §12.4)"}
+  - {id: E6.division, motor: E6,          nominal_s: 0.6,  tag: E, source: "one turn at 100 rpm, Pololu #994 no-load [S: pololu.com/product/994]; slower under load"}
+  - {id: E1.bell,     motor: E1.bell,     nominal_s: null}
+  - {id: E1.hourglass, motor: E1.hourglass, nominal_s: null}
+  - {id: E3.procession, motor: E3,        nominal_s: null}
+  - {id: E4.crow,     motor: E4,          nominal_s: null}

@@ -56,7 +56,7 @@ adding precision later without rebuilding, is in
 | [`docs/m2-design.md`](docs/m2-design.md) | Phase 2: the M2 main dial, detailed: trains, worm-input differentials, centre stack, calendar ring and its New Year station, two-colour dial |
 | [`docs/m1-design.md`](docs/m1-design.md) | Phase 2: M1, the mean-time dial in the lion gallery, the legal-time hands (M1b) and the releases. Concept and detail design |
 | [`docs/e2-design.md`](docs/e2-design.md) | Phase 2: E2, the four ages and Death in the lower hall. Concept accepted; detail design part 1 (layout, ring, selection), part 2a (stops, walk drive, state module) and part 2b (counting trains) |
-| [`docs/e1-design.md`](docs/e1-design.md) | Phase 2: E1, the two genies beside the mean-time dial: the bell genie (A1) and the hourglass genie (A2). Concept for review |
+| [`docs/e1-design.md`](docs/e1-design.md) | Phase 2: E1, the two genies beside the mean-time dial: the bell genie (A1) and the hourglass genie (A2). Concept accepted (one motor, a count wheel, a cross shaft); detail design part 1 (trains, strike, glass drive) |
 | [`docs/m5-design.md`](docs/m5-design.md) | Phase 2: M5, the planetary dial and the Moon-phase globe. Concept accepted (PR #20) |
 | [`docs/m6-design.md`](docs/m6-design.md) | Phase 2: M6, the celestial globe (sidereal rotation; precession provided for). Concept accepted (PR #20) |
 | [`docs/m7-design.md`](docs/m7-design.md) | Phase 2: M7, the weekday carousel driven from M2's arbor W. Concept accepted (PR #20); detail design for review |
@@ -83,6 +83,12 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 
 ```bash
 python3 tools/envelope/plate_measurements.py # stage heights estimated from the lithograph
+```
+
+Firmware core host tests (Phase 3; see [`firmware/README.md`](firmware/README.md); needs g++ or clang++):
+
+```bash
+.venv/bin/python -m pytest firmware
 ```
 
 CAD (build123d, its own venv; see [`cad/README.md`](cad/README.md)):

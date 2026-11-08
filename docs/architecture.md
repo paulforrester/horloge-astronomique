@@ -182,6 +182,12 @@ train's warning, release and locking.
   - The replica chains its event motors the same way: each one's lock switch cues the next
     through the controller. So the order on the hour is: genie and age quarters → (hourglass,
     during the age's walk on) → Death → (at noon) Apostles and rooster.
+- **E1, as designed** (`docs/e1-design.md` §15–16; Paul, PR #18): **one forward-only gearmotor** drives both
+  genies through a **count wheel** (1:20). Each E2 cue runs it one turn, one stroke. On the hour, after the
+  genie's tenth stroke, the controller runs it to the count wheel's home: ten silent turns in which a mutilated
+  gear turns a cross shaft behind M1, and the glass turns half a turn, alternately. So the two E1 rows above
+  share one motor, and the event-motor count in §10 is E1 ×1. E1's count stays in step if quiet hours skip whole
+  cycles (:15 … :00); after a skip in mid-cycle, the missing strokes run alone before the next show.
 
 ## 6. Homing and zero sensing
 
