@@ -251,6 +251,7 @@ trains:
     stages: [[12, 84]]
     accuracy: {exact: true}
     note: "Drive to the weekday carousel (M7)"
+    # M7 carries W to the carousel 1:1 (bevel 20/20, spur 85/85): no ratio, error 0 (docs/m7-design.md §13)
   - id: M2.node_cam
     indication: I5
     version: v1.5

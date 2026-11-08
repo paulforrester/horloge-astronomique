@@ -37,6 +37,7 @@ def _models():
     from cad.modules.m1_time import mechanism as m1
     from cad.modules.m2_main_dial import e6
     from cad.modules.m2_main_dial import full as m2_full
+    from cad.modules.m7_weekdays import mechanism as m7
     from cad.modules.test_rig import coupons, rig
     return {
         "tolerance_coupons": lambda: coupons.build(),
@@ -45,6 +46,7 @@ def _models():
         "e2_ages": lambda: e2.build()[0],
         "m2_main_dial": lambda: m2_full.build()[0],
         "m2_e6_fallback_pawl": lambda: e6.fallback_assembly(),    # Paul: keep design A (crank and pawl)
+        "m7_weekdays": lambda: m7.build()[0],
     }
 
 

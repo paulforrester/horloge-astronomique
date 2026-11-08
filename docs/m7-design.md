@@ -1,11 +1,12 @@
-# M7 weekday carousel: concept gate
+# M7 weekday carousel: concept gate and detail design
 
 Phase 2, module M7: the seven chariots of the days of the week, which turn on a circular rail
 under the lion gallery, above the main dial. M7 has no stepper. It takes M2's weekday arbor W,
 which turns once in 7 days, and carries that motion up to the carousel.
 
-**Status: concept accepted** (Paul, PR #20, 7 Nov 2026; the decisions are in §9). The detail
-design follows in its own PR. Nothing is modelled yet. Tags as in `docs/reference-notes.md`.
+**Status: detail design for review (§13).** The concept was accepted (Paul, PR #20, 7–8 Nov 2026;
+the decisions are in §9, the photograph's measurements in §12). Tags as in
+`docs/reference-notes.md`.
 
 <p align="center"><img src="img/m7/m7_concept.png" width="900" alt="Schematic: the carousel in plan with seven chariots and the three openings; side view of the drive from M2's arbor W up to the turntable"></p>
 
@@ -275,3 +276,106 @@ uncertainty].
 - **Figures.** Seven parametric groups, ≈ 62 mm long and ≈ 60 mm tall. Their likenesses are a
   detail-design question; IMG_0766 shows Venus, Saturn and Jupiter. The other four need a
   photograph on another day, or the books.
+
+## 13. Detail design
+
+`cad/modules/m7_weekdays/mechanism.py`, with `cad/lib/bevel.py` (new, additive) for the bevel pair.
+Tests: `cad/tests/test_m7.py`, `cad/tests/test_bevel.py`. Coordinates are M2's: origin at the main
+dial's centre on its face, +X right, +Y up, +Z towards the viewer; the dial's centre is ≈ 213 mm
+above the floor [E].
+
+<p align="center"><img src="img/m7/m7_front.png" width="440" alt="Model, front: the turntable with seven placeholder chariots above the deck; the bracket and stub below at the left, at W"> <img src="img/m7/m7_three_quarter.png" width="440" alt="Model, three-quarter from above"></p>
+<p align="center"><img src="img/m7/m7_drive.png" width="440" alt="Model, the drive: the bracket at W, the lay shaft, the 85-tooth lay gear, the rail and the Hall"> <img src="img/m7/m7_exploded.png" width="440" alt="Model, exploded up the carousel's axis"></p>
+
+*The model at the moment of Paul's photograph: Friday 30 Oct 2026, 10:08 CET, which is 09:06
+Bordeaux mean time, 2.9 h before mean noon. Venus's chariot is 6.2° short of the front, so it sits
+just left of centre and reaches the centre at 13:02 CET. The figures are placeholders.*
+
+### 13.1 The drive, from W to the turntable
+
+| Part | Where (mm) | What |
+|---|---|---|
+| Dog hub on W | W's last 8 mm, z −139 … −131, at (−75.5, 57.9) | pressed on M2's arbor W; one dog. It is supplied with M7, so M2 needs no change |
+| Dog sleeve | z −146.6 … −139.6, on the stub | one slot for the dog. Slide it back to free M7; push it on to key it. **One position only**, so M7 comes out and goes back without losing the day (P4) |
+| Stub, Ø5 × 49 mm | z −189 … −140, in two MR85ZZ in the bracket's walls | carries bevel A |
+| Bevel A, 20 teeth, module 1.0 | large end z −156, apex z −166 on W's axis | straight bevel, 45° pitch cone, 4.5 mm face |
+| Bevel B, 20 teeth | on the vertical lay shaft, large end Y 67.9, apex at W's height | 1:1 with A, shafts at 90° |
+| Lay shaft, Ø5 × 109 mm | at (X −75.5, Z −166), Y 64 … 173 | MR85ZZ in the bracket's bridge (Y 74–78) and in the deck (Y 161–165) |
+| Lay gear 85 | Y 167 … 171, above the deck | 1:1 to the turntable hub's 85 |
+| Turntable hub | axis at (X 0, Z −127.0), Y 167 … 179 | the 85-tooth wheel, a Ø60 seat, the 84-tooth spline and the seat of a 61806 bearing, in one print. It turns on the 61806 on a Ø30 post that stands on the deck |
+| Turntable (spider) | Y 173 … 177, Ø210 | seven spokes and a rim, R 85–105; its centre is an internal 84-tooth spline that drops over the hub's |
+
+- **Positions.** The spur pair fixes the turntable's axis: 85 mm from the lay shaft [D: m 1.0,
+  (85 + 85)/2], on the centreline, so Z = −166 + √(85² − 75.5²) = −127.0 [D]. Then:
+  - the front chariot's centre is at Z −27;
+  - the front of the chariots is at Z ≈ −15, behind M2's calendar ring and its carrier
+    (z −11 … 0).
+- **Ratio.** 20/20 × 85/85 = 1. With `M2.weekday` 12/84 the carousel turns once in 7 mean days
+  exactly: **ratio error 0** (the test checks it).
+- **Sense** [D, `senses()` in the model; tested]:
+  - The hands turn clockwise, so W turns counter-clockwise seen from the front (+1 about +Z), §2.
+  - Bevel B's body is above the apex and A's in front of it. At the pitch point the two surface
+    speeds match only if the lay shaft turns −1 about +Y.
+  - The spur pair reverses that, so **the carousel turns +1 about +Y: counter-clockwise from
+    above**, as the photograph requires (§1).
+- **The bevel generator** (`cad/lib/bevel.py`). Straight bevels by Tredgold's back-cone method: the
+  large end has the tooth of a 28-tooth spur gear (20 / cos 45°), and every point runs straight to
+  the apex.
+  - The library test runs a 1:1 pair through three positions with no interference.
+  - Turning one gear 1.5° either way makes them clash, so the pair is engaged with its 0.15 mm
+    backlash.
+
+### 13.2 The frame and the turntable
+
+- **The bracket** (PETG): two walls carrying the stub's bearings, a bridge carrying the lay
+  shaft's lower bearing, and side cheeks clear of bevel B. A spine (z −193 … −189) rises from it
+  to the deck. Two tabs take 2 × M5 to the works' internal frame (D12 R5), as on M1 and M2.
+- **The deck** (PETG, 250 × 235 × 4 mm, Y 161–165) carries:
+  - the turntable's Ø30 post;
+  - the lay shaft's upper bearing;
+  - three posts under the rail, behind the visible arc;
+  - the Hall's post.
+  Its front edge is at Z −15. It sits on the spine.
+- **The rail** (decorative) is a 3 mm ring at R 112, 0.5 mm below the chariots' outer wheels.
+- **Setting** (§4.4): lift the turntable off the hub's spline, turn it, and drop it back. The 84
+  teeth are 84 positions, 2 h of carousel each.
+- **The witness**: a 5 × 2 magnet in the turntable under Apollo's chariot. It passes a DRV5032 on
+  a post at the front, 1 mm below, once a week at Sunday's Bordeaux mean noon.
+
+### 13.3 Checks (`python -m cad.modules.m7_weekdays.mechanism`, `pytest cad/tests/test_m7.py`)
+
+| Check | Result |
+|---|---|
+| Interference, every pair (M2's arbor W, back plate and calendar ring included as reference shapes) | **none** |
+| Bed fit, single and dual nozzle | every printed part fits; the largest are the deck (250 × 235) and the rail (Ø227) |
+| Ratio | 1:1 in M7; one turn in 7 days exactly |
+| Sense | counter-clockwise from above |
+| Meshes engaged | bevel pair (±1.5°), spur pair (0.4 mm towards each other clashes) |
+| Phase | at its mean noon the day's chariot is at the front; tomorrow's is on the left, yesterday's on the right |
+| Clearances | deck behind z −13; figures' tops at ≈ 450 mm above the floor, under M1's lowest part (≈ 479 mm); the drive behind W's end |
+| Envelope | X −125 … +125 (the deck), Y 46 … 237, Z −250 … −15 in M7's own parts |
+
+### 13.4 Print and SketchUp files
+
+- `export/print/m7_weekdays/`: 12 distinct STLs for 18 prints, with a manifest README. The seven
+  chariots are one placeholder printed seven times until the figures are modelled.
+  - Every part is posed flat, with little or no overhang.
+  - The bracket's 600 mm² and the turntable hub's 579 mm² are bridges over bearing seats; the
+    hub's 1 mm cap over its 61806 also holds the bearing in.
+  - The deck and the bracket are PETG (structural); the rest is PLA.
+- `export/sketchup/m7_weekdays.dae` and `m7_weekdays_exploded.dae` (apart up the carousel's axis).
+
+### 13.5 Open items
+
+1. **The figures.** Seven placeholder groups (≈ 62 mm long, ≈ 60 mm tall). The photograph shows
+   Venus, Saturn and Jupiter. The other four need photographs taken on other days, or the books.
+   They will be modelled as separate figure prints on the same pads.
+2. **The case.** M7 needs about 235 mm of depth behind the facade (Z −15 to −250) and the cavity
+   with its two niches (§12). Removal is upward and forward once the sleeve is slid back; the
+   panel that allows it belongs to the case design.
+3. **Fits** wait for the tolerance coupons: the stub's flat and the sleeve, the spline, and the
+   bearing seats.
+4. **M2's model reports the wrong sense for W.** `cad/modules/m2_main_dial/mechanism.py` sets
+   `sense["W"] = -sense["I"]`, but its geometry meshes W from S (12/84), which gives W = −S = +I.
+   M2's geometry and its document (§3 item 2) are right; only that line of its report is
+   inverted. It is M2's file, so it is not edited here.

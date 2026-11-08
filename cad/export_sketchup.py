@@ -27,6 +27,7 @@ from cad.modules.m1_time import mechanism as m1
 from cad.modules.m2_main_dial import e6
 from cad.modules.m2_main_dial import feasibility
 from cad.modules.m2_main_dial import full as m2_full
+from cad.modules.m7_weekdays import mechanism as m7
 from cad.modules.test_rig import coupons, rig
 
 MODELS = {
@@ -38,6 +39,7 @@ MODELS = {
     "m2_e6_fallback_pawl": lambda: e6.fallback_assembly(),
     "test_rig": lambda: rig.build()[0],
     "tolerance_coupons": lambda: coupons.build(),
+    "m7_weekdays": lambda: m7.build()[0],
 }
 TOLERANCE = {"m2_main_dial": 0.3}      # mm chord error; the whole module is large
 _M2_MECH = ("centre", "centre_wheels", "trains", "shafts", "differentials", "interfaces", "drive", "sensors",
@@ -54,6 +56,9 @@ EXPLODE = {                             # model -> exploded() arguments (front o
                              "state": -130.0}, spread=1.0, use_item_explode=False),
     "tolerance_coupons": dict(spread=0.0),     # gears lift off the board by their own explode vectors
     "m2_e6_fallback_pawl": dict(spread=1.5, use_item_explode=False),   # its layers come apart along the shafts
+    "m7_weekdays": dict(axis=1, offsets={"figures": 120.0, "carousel": 60.0, "drive": -30.0, "frame": -15.0},
+                        item_offsets={"turntable": 85.0, "magnet_sunday": 85.0, "brg_turntable_61806": 40.0,
+                                      "rail": 25.0}, spread=0.0, use_item_explode=False),   # apart up the carousel's axis
 }
 
 
