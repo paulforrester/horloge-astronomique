@@ -1070,6 +1070,7 @@ where used elsewhere.
 - **The cadence of a pair** [S: Paul, PR #15, 6 Nov 2026]. The genie's bell sounds first. One second
   later the age beside Death strikes its bell: the old man, at the noon show. Then there is a
   two-second pause, and the pair repeats, four times for the old man.
+- **Death's cadence** [S: Paul, PR #21, 8 Nov 2026]: one stroke on its bell every 3 seconds.
 - **The walk and the hour** [S: Paul, PR #15, 6 Nov 2026, from his video].
   - After the old man's fourth stroke he starts walking. It takes about 10 seconds to reach the
     other side of Death, and then the next age comes into view.

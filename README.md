@@ -37,7 +37,7 @@ adding precision later without rebuilding, is in
 |---|---|---|
 | 0 | Specification, research, decisions | **Done** (PR #1, PR #2). D1–D12 all accepted, including D12: a wooden case |
 | 1 | Ratio engineering and tooth-strength check: `tools/ratios/`, tests, `spec/clock.yaml`, `docs/gear-trains.md` | **Done** (PR #3) |
-| 2 | Parametric CAD: shared library, main-dial feasibility, test rig, then every module and the case | **In progress**: library, feasibility and test rig done (PR #4); M2 main dial done (PRs #5–#10); M1 time and release: concept accepted (PR #11); M1 detail design done (PR #13); motors plug in from behind (D16, PRs #13–#14); E2 ages and Death: concept accepted (PR #15); E2 detail design part 1 done (PR #16); **E2 part 2a (the stops, the walk drive, the state module) for review** |
+| 2 | Parametric CAD: shared library, main-dial feasibility, test rig, then every module and the case | **In progress**: library, feasibility and test rig done (PR #4); M2 main dial done (PRs #5–#10); M1 time and release: concept accepted (PR #11); M1 detail design done (PR #13); motors plug in from behind (D16, PRs #13–#14); E2 ages and Death: concept accepted (PR #15); E2 detail design part 1 done (PR #16); E2 part 2a done (PR #17); **E2 part 2b (the quarter and hour counting trains) for review** |
 | 3 | Electronics, firmware skeleton, accelerated-time simulator validated against an ephemeris | **In progress**: design gate (PR #19), F1–F10 accepted |
 | Local | Tolerance tests, printing, woodworking, bring-up | Later |
 
@@ -55,7 +55,7 @@ adding precision later without rebuilding, is in
 | [`docs/main-dial-feasibility.md`](docs/main-dial-feasibility.md) | Phase 2: does everything fit behind the 287.5 mm main dial? Layout, checks, eclipse-display options |
 | [`docs/m2-design.md`](docs/m2-design.md) | Phase 2: the M2 main dial, detailed: trains, worm-input differentials, centre stack, calendar ring and its New Year station, two-colour dial |
 | [`docs/m1-design.md`](docs/m1-design.md) | Phase 2: M1, the mean-time dial in the lion gallery, the legal-time hands (M1b) and the releases. Concept and detail design |
-| [`docs/e2-design.md`](docs/e2-design.md) | Phase 2: E2, the four ages and Death in the lower hall. Concept accepted; detail design part 1 (layout, ring, selection) and part 2a (stops, walk drive, state module) |
+| [`docs/e2-design.md`](docs/e2-design.md) | Phase 2: E2, the four ages and Death in the lower hall. Concept accepted; detail design part 1 (layout, ring, selection), part 2a (stops, walk drive, state module) and part 2b (counting trains) |
 | [`docs/e1-design.md`](docs/e1-design.md) | Phase 2: E1, the two genies beside the mean-time dial: the bell genie (A1) and the hourglass genie (A2). Concept for review |
 | [`docs/m5-design.md`](docs/m5-design.md) | Phase 2: M5, the planetary dial and the Moon-phase globe. Concept accepted (PR #20) |
 | [`docs/m6-design.md`](docs/m6-design.md) | Phase 2: M6, the celestial globe (sidereal rotation; precession provided for). Concept accepted (PR #20) |
