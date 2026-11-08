@@ -91,6 +91,12 @@ Firmware core host tests (Phase 3; see [`firmware/README.md`](firmware/README.md
 .venv/bin/python -m pytest firmware
 ```
 
+Simulator (Phase 3; see [`sim/README.md`](sim/README.md); `--sky` needs Skyfield and downloads DE440s):
+
+```bash
+.venv/bin/python -m sim validate --years 100 --sky --write
+```
+
 CAD (build123d, its own venv; see [`cad/README.md`](cad/README.md)):
 
 ```bash

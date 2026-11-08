@@ -4,3 +4,5 @@ pyyaml>=6
 pytest>=8
 # CAD (Phase 2, D1): see tools/toolchain-check/README.md
 # build123d, bd_warehouse, trimesh, pycollada
+# Simulator sky gaps (Phase 3, optional; downloads JPL DE440s on first use)
+skyfield>=1.49

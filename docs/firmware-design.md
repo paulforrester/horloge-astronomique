@@ -776,6 +776,10 @@ sets every output exactly at T_set from the ephemeris.
 
 - **Runs.** A one-year run at 6-hour steps for the fine checks; 2026–2126 at daily steps for
   drift (Skyfield inside the kernel's range, mean elements beyond).
+- **Two extra budget terms, found when the checks first ran** (step 2): the reference's own
+  uncertainty (the spec's tropical-year precision and the T² terms of Meeus' mean elements,
+  0.0015°/century for the Sun, 0.005 for the Moon, 0.001 for sidereal time [D: `sim/validate.py`]),
+  and ΔT's growth for the Moon (0.02°/century [E]), a real error of a UT-driven clock.
 - **Output:** a generated report, `sim/report.md`, with one table row per check: pass or fail,
   the worst value and when it occurred, and the sky gap. It is regenerated, like
   `docs/gear-trains.md`.
