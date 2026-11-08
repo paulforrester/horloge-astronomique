@@ -1,7 +1,7 @@
 {
  "model": "e2_ages",
- "unique_parts": 43,
- "printed_parts": 54,
+ "unique_parts": 70,
+ "printed_parts": 87,
  "sets": {},
  "parts": [
   {
@@ -435,7 +435,9 @@
   },
   {
    "names": [
-    "walk_motor_pinion_12"
+    "walk_motor_pinion_12",
+    "quarter_motor_pinion",
+    "hour_motor_pinion"
    ],
    "material": "PLA",
    "nozzle": 0.4,
@@ -549,6 +551,25 @@
   },
   {
    "names": [
+    "release_cam"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    32.0,
+    32.0,
+    3.0
+   ],
+   "note": "grooved underneath: in phase A it rocks the quarter release shaft, whose arm turns the quarter hook out (part 2b)",
+   "file": "release_cam.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
     "lock_switch_bracket"
    ],
    "material": "PETG",
@@ -612,7 +633,7 @@
    "nozzle": 0.4,
    "set": "",
    "size": [
-    25.6,
+    25.3,
     23.1,
     4.0
    ],
@@ -690,7 +711,7 @@
    "size": [
     46.7,
     46.7,
-    12.2
+    14.4
    ],
    "note": "the hour wheel on its tube, free on the state arbor (1 turn in 12 h)",
    "file": "hour_wheel_45.stl",
@@ -707,11 +728,11 @@
    "nozzle": 0.4,
    "set": "",
    "size": [
-    35.2,
-    31.0,
+    32.9,
+    28.2,
     4.0
    ],
-   "note": "pressed on the hour wheel's tube; part 2b's hour rack falls on it: 1 to 12 strokes",
+   "note": "pressed on the hour wheel's tube; the hour rack falls on it: 1 to 12 strokes",
    "file": "hour_snail.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
@@ -727,12 +748,12 @@
    "set": "",
    "size": [
     10.0,
-    47.0,
-    43.0
+    87.7,
+    60.2
    ],
-   "note": "carries the arbor's left bearing, the lay stud and the witness Hall",
+   "note": "carries the arbor's left bearing and the lay stud",
    "file": "state_plate_left.stl",
-   "overhang_mm2": 37.0,
+   "overhang_mm2": 62.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true
@@ -809,6 +830,504 @@
    "note": "the motor's plate: its adapter's boss locates in it; two M3 heat-set inserts",
    "file": "state_motor_plate.stl",
    "overhang_mm2": 106.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_rack"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    33.0,
+    55.1,
+    5.5
+   ],
+   "note": "quarter rack, gathered: its tail falls onto the quarter snail; 4 teeth of pitch 2.5",
+   "file": "quarter_rack.stl",
+   "overhang_mm2": 38.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_feed_lever"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    10.2,
+    38.3,
+    2.5
+   ],
+   "note": "rocked by the eccentric: gathers one tooth per turn of the strike shaft",
+   "file": "quarter_feed_lever.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_pawl",
+    "hour_pawl"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    22.0,
+    7.1,
+    5.1
+   ],
+   "note": "gathering pawl, on the feed lever's pin",
+   "file": "quarter_pawl.stl",
+   "overhang_mm2": 1.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_hook"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    22.5,
+    12.3,
+    8.1
+   ],
+   "note": "rack hook: holds each gathered tooth",
+   "file": "quarter_hook.stl",
+   "overhang_mm2": 1.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_strap"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    32.6,
+    15.6,
+    2.5
+   ],
+   "note": "strap from the eccentric to the feed lever's pin",
+   "file": "quarter_strap.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_eccentric",
+    "hour_eccentric"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    12.0,
+    12.0,
+    2.5
+   ],
+   "note": "throw 2.11 mm",
+   "file": "quarter_eccentric.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hour_rack"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    56.9,
+    69.1,
+    5.5
+   ],
+   "note": "hour rack, gathered: its tail falls onto the hour snail; 12 teeth of pitch 2.5",
+   "file": "hour_rack.stl",
+   "overhang_mm2": 38.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hour_feed_lever"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    17.5,
+    54.8,
+    2.5
+   ],
+   "note": "rocked by the eccentric: gathers one tooth per turn of the strike shaft",
+   "file": "hour_feed_lever.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hour_hook"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    23.5,
+    14.8,
+    8.1
+   ],
+   "note": "rack hook: holds each gathered tooth",
+   "file": "hour_hook.stl",
+   "overhang_mm2": 1.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hour_strap"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    32.1,
+    15.6,
+    2.5
+   ],
+   "note": "strap from the eccentric to the feed lever's pin",
+   "file": "hour_strap.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_spring_anchor"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    5.5,
+    6.0,
+    11.6
+   ],
+   "note": "the spring's upper hook catches its pin; screwed to the strike plate",
+   "file": "quarter_spring_anchor.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hour_spring_anchor"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    5.5,
+    6.0,
+    16.5
+   ],
+   "note": "the spring's upper hook catches its pin; screwed to the strike plate",
+   "file": "hour_spring_anchor.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_lock_cam",
+    "hour_lock_cam"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    18.0,
+    17.9,
+    2.0
+   ],
+   "note": "its notch lets the lock switch's roller drop at the rest angle",
+   "file": "quarter_lock_cam.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_lifter_cam"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    19.2,
+    14.0,
+    3.0
+   ],
+   "note": "lifts the striking figure and drops it at 1 s (part 2c takes the lift on)",
+   "file": "quarter_lifter_cam.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_cue_cam"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    18.0,
+    19.5,
+    2.0
+   ],
+   "note": "closes E1's cue switch at the start of each pair: the genie strikes first",
+   "file": "quarter_cue_cam.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_strike_gear",
+    "hour_strike_gear"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    25.4,
+    25.4,
+    2.5
+   ],
+   "note": "24 teeth, pressed on the strike shaft",
+   "file": "quarter_strike_gear.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_motor_plate"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    52.2,
+    26.0,
+    3.0
+   ],
+   "note": "the gearmotor's face screws to it (2 \u00d7 M1.6); it hangs from the deck",
+   "file": "quarter_motor_plate.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hour_lifter_cam"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    19.2,
+    14.0,
+    2.5
+   ],
+   "note": "lifts the striking figure and drops it at 1 s (part 2c takes the lift on)",
+   "file": "hour_lifter_cam.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hour_motor_plate"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    59.2,
+    26.0,
+    3.0
+   ],
+   "note": "the gearmotor's face screws to it (2 \u00d7 M1.6); it hangs from the deck",
+   "file": "hour_motor_plate.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "strike_plate_middle"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    61.0,
+    61.0,
+    3.0
+   ],
+   "note": "hangs from the deck: the shafts' bearings, the hour train's studs, the hour trip shaft and its stop",
+   "file": "strike_plate_middle.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "strike_plate_right"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    61.0,
+    52.5,
+    3.0
+   ],
+   "note": "hangs from the deck: the quarter shaft's bearing, the quarter studs and both release shafts",
+   "file": "strike_plate_right.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "witness_bracket"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    20.5,
+    25.8,
+    4.0
+   ],
+   "note": "carries the witness Hall beside the hour snail",
+   "file": "witness_bracket.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_release_arm"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    15.8,
+    6.6,
+    2.9
+   ],
+   "note": "pressed on the release shaft: in phase A it pushes the quarter hook's weighted tail, and the hook turns out",
+   "file": "quarter_release_arm.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_release_follower"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    12.7,
+    6.4,
+    8.7
+   ],
+   "note": "pressed on the release shaft: its \u00d82 pin runs in the release disc's groove",
+   "file": "quarter_release_follower.stl",
+   "overhang_mm2": 4.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hour_trip_arm_a"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    14.0,
+    16.8,
+    5.4
+   ],
+   "note": "pressed on the trip shaft: the quarter rack's pin lifts its shoe past three pairs",
+   "file": "hour_trip_arm_a.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hour_trip_arm_b"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    8.0,
+    12.4,
+    7.8
+   ],
+   "note": "pressed on the trip shaft: pushes the hour hook's tab, and the hook turns out",
+   "file": "hour_trip_arm_b.stl",
+   "overhang_mm2": 0.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true
