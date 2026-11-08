@@ -158,6 +158,14 @@ train's warning, release and locking.
       stops change over. It comes before the age's strokes, so the controller, which knows the
       time from the RTC, starts it that much before the quarter is due;
     - phase B, the walk on (≈ 13.8 s), follows the strokes.
+  - **E2's racks are released by its walk train** (`docs/e2-design.md` §12.1; Paul, PR #21,
+    8 Nov 2026): a groove on the program shaft drops the quarter rack in phase A, and at the fourth
+    quarter the quarter rack trips the hour rack. The controller still starts each train from the
+    time base; it does not release anything. A walk stopped for quiet hours therefore silences
+    Death too (`docs/firmware-design.md` F6), and a silent walk (catch-up) leaves the racks down on
+    their snails, which is harmless. It is close to the original's chaining, where the ages' train
+    releases the quarter train and, once it has finished, the hour train [S: DA p. 64–66, quoted
+    below]; here the hour rack is released through the quarter rack instead.
 - **Original drive, for comparison.** "Ce régulateur déclanche toutes les cinq secondes un rouage moteur qui met en mouvement toute la partie astronomique" (the regulator releases the astronomical train every 5 s) [S: ELS i1]. The replica's steppers step every 1.125 s.
 - **Faithful ordering.** The original chains its motors in exactly this way [S: DA p. 64–66]:
   - "quand l'heure doit sonner, le moteur central détend le second moteur (ou rouage des quatre

@@ -13,7 +13,8 @@ Walk drive (one DC gearmotor; three event motors, §9.2):
   16 is pressed on the top of the shaft and turns the ring;
 - the compound's 12' drives the program gear 72 (1:6): one program turn per show. Below the deck the program
   shaft carries the grooved program cam and the lock cam with two notches; a microswitch stops the motor at the
-  end of each phase;
+  end of each phase. Under them, part 2b's grooved release disc rocks the quarter release shaft in phase A
+  (Paul, PR #21: the walk train releases the racks);
 - a Hall under the ring at the bell station sees a magnet under each age: an age was caught.
 
 State module (E2's own stepper, 1 rev/h legal time, decided at the M1 gate; D16: it plugs in from the right):
@@ -331,7 +332,8 @@ def add_walk_drive(a, theta: float):
     a.allow("walk_motor_bracket", "walk_motor"); a.allow("walk_motor_bracket", "deck")
     cuts.append(at(zdisc(16.0, DECK[0] - 1, DECK[1] + 1), wm))
     # the program shaft: gear 72 above the deck, the program cam and the lock cam below; two MR85ZZ
-    a.add("program_shaft", at(parts.rod(5.0, lv["g12p"][1] - lb["lock_cam"][0], z0=lb["lock_cam"][0]), P),
+    z_bot = S.RELEASE_DISC_Z[0]                                # down to the release disc (part 2b)
+    a.add("program_shaft", at(parts.rod(5.0, lv["g12p"][1] - z_bot, z0=z_bot), P),
           material="steel", printed=False, group="drive", note="Ø5 ground rod")
     r72 = mesh_rotation(g["g12p"], g["g72"], G.PROG_DIR, 0.0)
     a.add("program_gear_72", at(gear(g["g72"], *lv["g12p"], 5.0, rot=r72) + zdisc(10.0, lv["g12p"][0], lv["g12p"][1],
@@ -384,7 +386,19 @@ def add_walk_drive(a, theta: float):
         bd.Location((0, 0, lb["lock_cam"][0])))
     a.add("lock_cam", at(lk.rotate(bd.Axis.Z, rot_c), P), group="drive",
           note="two notches (end of phase A, end of the show): the microswitch stops the walk motor")
-    for nm in ("program_gear_72", "program_cam", "lock_cam"):
+    # the release disc (part 2b, Paul PR #21): its groove moves the quarter release shaft's follower in phase A
+    ang_f = 90.0                                                # the follower lies on the +Y side of the shaft
+    z0r, z1r = S.RELEASE_DISC_Z
+    gr = S.RELEASE_GROOVE
+    r_out = max(S.RELEASE_GROOVE_R) + gr["width"] / 2 + 1.5
+    rel = zdisc(2 * r_out, z0r, z1r, bore=5.0 + parts.FITS.press)
+    outer = profile_plate(lambda a_: S.release_groove_radius(a_ - ang_f) + gr["width"] / 2, gr["depth"] + 0.01, 0.0)
+    inner = profile_plate(lambda a_: S.release_groove_radius(a_ - ang_f) - gr["width"] / 2, gr["depth"] + 0.02, 0.0)
+    rel -= (outer - inner).moved(bd.Location((0, 0, z0r - 0.01)))
+    a.add("release_cam", at(rel.rotate(bd.Axis.Z, rot_c), P), group="drive", print_up=(0, 0, -1),
+          note="grooved underneath: in phase A it rocks the quarter release shaft, whose arm turns the quarter hook "
+               "out (part 2b)")
+    for nm in ("program_gear_72", "program_cam", "lock_cam", "release_cam"):
         a.allow(nm, "program_shaft")
     a.allow("program_cam", "follower_pin")
     # the lock microswitch: its roller in the notch at rest
@@ -427,9 +441,7 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
     xp = dict(plate_l=(-30.0, -26.0), p12=(-25.7, -23.2), lay_hub=(-23.2, -22.9), hour_wheel=(-22.9, -20.4),
               lay_stud=(-30.0, -19.4), tube=(-22.9, -8.5), witness=(-15.8, -12.8),
               snail_h=(S.HOUR.x_rack - 2.0, S.HOUR.x_rack + 2.0),
-              release_h=(S.HOUR.x_rack + 4.3, S.HOUR.x_rack + 7.3),
               snail_q=(S.QUARTER.x_rack - 2.0, S.QUARTER.x_rack + 2.0),
-              release_q=(S.QUARTER.x_rack + 4.3, S.QUARTER.x_rack + 7.3),
               age_cam=(cam_x - AGE_CAM["t"] / 2, cam_x + AGE_CAM["t"] / 2),
               index=(45.5, 48.5), index_hall=(49.0, 52.0), block=(52.3, 56.3), coupling=(56.6, 95.5),
               plate_r=(96.0, 100.0))
@@ -446,11 +458,6 @@ def add_state_module(a, minutes: float, hours: float, arbor_y: float, cam_x: flo
     a.add("quarter_snail", ox(arbor_cam(quarter_snail_radius, 60.0, xp["snail_q"][1] - xp["snail_q"][0]).rotate(
         bd.Axis.Z, rot), xp["snail_q"]), group="state", print_up=(1, 0, 0),
           note="part 2b's quarter rack falls on it: 1 to 4 pairs")
-    for nm, fn, xr in (("release_cam_hour", S.hour_release_radius, xp["release_h"]),
-                       ("release_cam_quarter", S.quarter_release_radius, xp["release_q"])):
-        a.add(nm, ox(arbor_cam(fn, 60.0, xr[1] - xr[0]).rotate(bd.Axis.Z, rot), xr), group="state", print_up=(1, 0, 0),
-              note="trips its rack hook a minute before each show (part 2b): the time train decides when (rule 4)")
-        a.allow(nm, "state_arbor")
     idx = zdisc(24.0, 0.0, 3.0, bore=5.0 + parts.FITS.press) - zdisc(MAGNET[0] + 0.2, 3.0 - MAGNET[1] - 0.2, 3.1).moved(
         bd.Location((0, 9.0, 0)))
     a.add("index_disc", ox(idx.rotate(bd.Axis.Z, rot), xp["index"]), group="state", print_up=(1, 0, 0),

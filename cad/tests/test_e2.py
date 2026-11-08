@@ -276,38 +276,53 @@ def test_every_count_is_struck_and_the_rack_comes_home(train):
         assert res.strokes == n and res.rack_home and res.turns == n
 
 
+def _release_lead_min() -> float:
+    """Minutes before the strikes start that the walk drops the racks [D: the walk starts phase A early]."""
+    rt = S.release_times_s()
+    return (rt["strikes"] - rt["lift"]) / 60.0
+
+
 def test_each_show_reads_the_right_step():
-    """The rack falls a minute before the show and is gathered within the next half minute: the snail shows the
-    show's count throughout (quarters: n pairs at the n-th quarter; hours: H strokes at H o'clock)."""
+    """The walk drops the racks a few seconds before the strikes; the quarters are gathered within half a minute and
+    Death's strokes within the minute after: the snail shows the show's count throughout (quarters: n pairs at the
+    n-th quarter; hours: H strokes at H o'clock)."""
+    lead = _release_lead_min()
+    assert lead < 0.2
     for q, n in ((15, 1), (30, 2), (45, 3), (60, 4)):
-        for m in (q - S.RELEASE_LEAD_MIN, q - 0.5, q, q + 0.5):
+        for m in (q - lead, q, q + 0.5):
             assert S.quarter_snail_radius(m) == pytest.approx(S.snail_radii(S.QUARTER)[n - 1])
     for h in range(1, 13):
-        for t in (h - S.RELEASE_LEAD_MIN / 60, h, h + 0.6 / 60):
+        for t in (h - lead / 60, h, h + 1.0 / 60):
             assert S.hour_snail_radius(t) == pytest.approx(S.snail_radii(S.HOUR)[h - 1])
 
 
 @pytest.mark.parametrize("fn,period,steps", [(S.quarter_snail_radius, 60.0, 3600), (S.hour_snail_radius, 12.0, 7200)])
 def test_the_snails_never_rise_steeply(fn, period, steps):
-    """A rack left down (quiet hours, a fault) rests on its snail: the snail may drop away from it, but where it
-    rises it is a gentle ramp, so the tail is lifted, never struck. Ramps ≤ 2 mm per minute of time."""
+    """A rack left down (a fault: a show walked but not struck) rests on its snail: the snail may drop away from it,
+    but where it rises it is a gentle ramp, so the tail is lifted, never struck. Ramps ≤ 2 mm per minute of time."""
     dt = period / steps
     per_min = dt * (60.0 if period == 12.0 else 1.0)
     rises = [fn((i + 1) * dt) - fn(i * dt) for i in range(steps)]
     assert max(rises) <= 2.0 * per_min + 1e-9
 
 
-def test_the_releases_come_just_before_each_show():
-    """The quarter release cam lifts once per quarter, the hour release once per hour, each in the minute before
-    the show and down again before it: the rack has fallen when the controller starts the walk."""
-    lifted_q = [m / 10 for m in range(600) if S.quarter_release_lift(m / 10)]
-    lifted_h = [m / 10 for m in range(600) if S.hour_release_lift(m / 10)]
-    assert len(lifted_q) == 4 * len(lifted_h) > 0
-    for m in lifted_q:
-        assert (m % 15) >= 15 - S.RELEASE_LEAD_MIN and (m % 15) + 0.25 <= 15
-    for m in lifted_h:
-        assert m >= 60 - S.RELEASE_LEAD_MIN
-    assert max(S.quarter_release_radius(m / 10) for m in range(600)) == S.RELEASE_R[1]
+def test_the_walk_releases_inside_phase_a():
+    """Paul, PR #21: the walk train releases the racks. The release groove moves only inside phase A, after the
+    stops have let the waiting age go, and is back at its rest radius at least a second before the lock notch,
+    where the strikes start; at rest and through phase B it holds its rest radius. Its pressure angle stays under
+    30°."""
+    a, b, c, d = S.RELEASE_WINDOW
+    assert G.events()["wait_lets_go"] < a < b <= c < d < G.LOCK_N
+    rt = S.release_times_s()
+    assert rt["strikes"] - rt["back"] >= 1.0
+    r0, r1 = S.RELEASE_GROOVE_R
+    for t in [x / 4 for x in range(1440)]:
+        r = S.release_groove_radius(t)
+        if not a <= t <= d:
+            assert r == pytest.approx(r0)
+        assert min(r0, r1) - 1e-9 <= r <= max(r0, r1) + 1e-9
+    assert S.release_groove_radius((b + c) / 2) == pytest.approx(r1)
+    assert S.release_pressure_angle_max() < 30.0
 
 
 def test_the_strike_cycle_timing():
@@ -325,16 +340,58 @@ def test_the_gathering_stroke_gathers_exactly_one_tooth():
     assert 1.15 <= push <= 1.85
 
 
-@pytest.mark.parametrize("train", S.TRAINS, ids=lambda t: t.name)
-def test_the_release_lever_lifts_the_hook_clear(train):
-    rg = S.release_geometry(train)
-    lobe = S.RELEASE_R[1] - S.RELEASE_R[0]
-    press_drop = lobe / rg["ratio"] - 0.4                       # less the free play
-    turn = press_drop / (S.PRESS_AT * S.HOOK_ARM)
-    assert S.HOOK_ARM * turn >= S.TOOTH + 0.3
-
-
 from cad.modules.e2_ages import strikers as K  # noqa: E402
+
+
+def _released_turn(train) -> float:
+    """How far each hook is turned out at the height of its release [D]: the quarter hook by the walk's release arm
+    (the groove's hold), the hour hook by the trip (the quarter rack at four pairs)."""
+    if train is S.QUARTER:
+        a, b, c, d = S.RELEASE_WINDOW
+        return K.qrel_hook_turn((b + c) / 2)
+    return K.trip_hook_turn(S.rack_angles(S.QUARTER)[-1])
+
+
+@pytest.mark.parametrize("train", S.TRAINS, ids=lambda t: t.name)
+def test_the_releases_turn_each_hook_clear(train):
+    """Released, each hook's tip clears the teeth's tips by RELEASE_CLEAR plus 0.03 rad of margin; at rest each
+    release arm stands REL_GAP off its hook, and a hook riding over the teeth as they are gathered (turning out)
+    only moves away from it."""
+    assert _released_turn(train) >= S.hook_turn_to_clear(train) + 0.03
+    hk = S.hook_geometry(train)
+    arm = K.qrel_arm_poly() if train is S.QUARTER else K.trip_arm_b_poly()
+    hook = K.hook_poly(train)
+    assert arm.distance(hook) == pytest.approx(K.REL_GAP, abs=0.02)
+    gaps = [arm.distance(K.rot_about(hook, hk["pivot"], x / 100)) for x in range(0, 31)]
+    assert all(b >= a - 1e-6 for a, b in zip(gaps, gaps[1:]))
+
+
+def test_the_quarter_release_follows_the_window():
+    """The walk's release arm turns the quarter hook out only inside the window, holds it out while the groove
+    holds, and lets it back in fully before the window ends."""
+    a, b, c, d = S.RELEASE_WINDOW
+    for t in range(0, 360, 2):
+        turn = K.qrel_hook_turn(float(t))
+        if t <= a or t >= d:
+            assert turn == 0.0, t
+    for t in (b, (b + c) / 2, c):
+        assert K.qrel_hook_turn(t) >= S.hook_turn_to_clear(S.QUARTER) + 0.03
+
+
+def test_the_hour_trip_works_only_at_the_fourth_quarter():
+    """The quarter rack's pin clears arm A at one to three pairs (by gap3 at three); at four pairs it turns the trip
+    shaft and the hour hook comes out. The first pair gathered lowers the pin again: the hour hook falls back in.
+    The trip shaft's weight holds it on its stop with three times the friction of its bearings."""
+    th = S.rack_angles(S.QUARTER)
+    for n in range(0, 4):
+        assert K.trip_turn(th[n]) == 0.0 and K.trip_hook_turn(th[n]) == 0.0
+    pin3 = K.disc(K.trip_pin_centre(th[3]), K.PIN_D / 2)
+    assert K.trip_arm_a_poly().distance(pin3) == pytest.approx(K.TRIP["gap3"], abs=0.02)
+    assert K.trip_hook_turn(th[4]) >= S.hook_turn_to_clear(S.HOUR) + 0.03
+    bal = K.trip_balance()
+    assert bal["torque"] >= 3.0 * bal["friction"]
+    # at rest arm B leans on its stop
+    assert K.trip_arm_b_poly().distance(K.disc(K.trip_stop_centre(), K.PIN_D / 2)) < 0.02
 
 
 @pytest.mark.parametrize("train", S.TRAINS, ids=lambda t: t.name)
@@ -362,14 +419,16 @@ def test_the_racks_fall_and_the_pawls_drop_in(train):
 @pytest.mark.parametrize("train", S.TRAINS, ids=lambda t: t.name)
 def test_the_rack_rests_on_its_snail_at_every_count(train):
     """At each count the tail rests on its step (touching, no overlap), and nothing else of the rack meets the
-    snail, from the release (a minute before) until gathered (half a minute after)."""
+    snail, from the release (seconds before the show) until gathered (half a minute after for the quarters, a
+    minute for Death's strokes)."""
     th = S.rack_angles(train)
+    lead = _release_lead_min()
     for n in range(1, train.counts + 1):
         rack = K.rack_solid(train, th[n])
         if train is S.QUARTER:
-            times = [((15 * n) - 1.0) % 60.0, ((15 * n) + 0.5) % 60.0]
+            times = [((15 * n) - lead) % 60.0, ((15 * n) + 0.5) % 60.0]
         else:
-            times = [(n - 1.0 / 60) % 12.0, (n + 0.5 / 60) % 12.0]
+            times = [(n - lead / 60) % 12.0, (n + 1.0 / 60) % 12.0]
         for when in times:
             snail = K.snail_solid(train, when)
             assert (rack & snail).volume < 0.05, (n, when)
@@ -385,7 +444,7 @@ def test_the_hook_locks_and_the_lifted_parts_let_the_rack_fall(train):
     hook = K.hook_solid(train, 0.0)
     assert (hook & K.rack_solid(train, th[0])).volume < 1e-3
     assert (hook & K.rack_solid(train, th[0] + 0.35 * d)).volume > 1e-3
-    hook_out = K.hook_solid(train, S.release_geometry(train)["hook_turn"])
+    hook_out = K.hook_solid(train, _released_turn(train))
     pawl_out = K.pawl_solid(train, 0.25)
     for k in range(0, train.counts + 1):
         for frac in (0.0, 0.5):
@@ -420,7 +479,8 @@ def test_the_racks_swing_clear_of_everything_fixed(built):
     for t in S.TRAINS:
         th = S.rack_angles(t)
         ok = {f"{t.name}_rack", "rack_stud", f"{t.name}_hook", f"{t.name}_feed_lever", f"{t.name}_snail",
-              f"{t.name}_pawl", f"{t.name}_spring_pin", f"{t.name}_rack_spring"}   # these move with it or touch it
+              f"{t.name}_pawl", f"{t.name}_spring_pin", f"{t.name}_rack_spring",
+              "quarter_trip_pin"}                                              # these move with it or touch it
         others = [i for i in a.items if i.name not in ok]
         for n in range(1, t.counts + 1):
             rack = K.rack_solid(t, th[n])
@@ -440,3 +500,53 @@ def test_the_strike_gearmotors_slide_out(built):
               allowed=("hour_motor_plate",))
     _withdraw(a, ["quarter_motor", "quarter_motor_pinion"], [(dx, 0, 0) for dx in (0.2, 3.0, 12.0)],
               allowed=("quarter_motor_plate",))
+
+
+def _clear_of(a, moving: dict, skip: set):
+    """Each moving solid touches no assembly part outside `skip`."""
+    others = [i for i in a.items if i.name not in skip]
+    for nm, sol in moving.items():
+        mb = sol.bounding_box()
+        for o in others:
+            ob = o.shape.bounding_box()
+            if mb.max.X < ob.min.X or ob.max.X < mb.min.X or mb.max.Y < ob.min.Y or ob.max.Y < mb.min.Y or \
+                    mb.max.Z < ob.min.Z or ob.max.Z < mb.min.Z:
+                continue
+            assert (sol & o.shape).volume < 1e-3, (nm, o.name)
+
+
+def _about_x(shape, yz, rad):
+    return shape.rotate(bd.Axis((0, yz[0], yz[1]), (1, 0, 0)), math.degrees(rad))
+
+
+def test_the_release_parts_move_clear(built):
+    """Through the release window the quarter release arm, its follower and the turned-out quarter hook meet only
+    their own shaft, stud and plates; the follower's nub rides in the groove without touching its walls. At four
+    pairs the trip pin, the tripped arms and the turned-out hour hook meet nothing else either."""
+    a, _ = built
+    P = G.plan()["program"]
+    q = K.qrel_shaft()
+    disc0 = a["release_cam"].shape
+    for t in (40.0, 50.0, 65.0, 72.0, 90.0, 100.0):
+        turn = K.qrel_turn(t)
+        fol = _about_x(a["quarter_release_follower"].shape, q, turn)
+        disc_t = disc0.rotate(bd.Axis((P[0], P[1], 0), (0, 0, 1)), -t)
+        assert (fol & disc_t).volume < 1e-3, t
+        moving = {"quarter_release_arm": _about_x(a["quarter_release_arm"].shape, q, turn), "follower": fol,
+                  "quarter_hook": K.hook_solid(S.QUARTER, K.qrel_hook_turn(t))}
+        _clear_of(a, moving, {"quarter_release_arm", "quarter_release_follower", "quarter_release_shaft",
+                              "quarter_hook", "quarter_hook_stud", "strike_plate_right", "quarter_motor_plate",
+                              "release_cam", "quarter_rack"})
+    th = S.rack_angles(S.QUARTER)
+    sh = K.TRIP["shaft"]
+    for n in range(1, 5):
+        pin = a["quarter_trip_pin"].shape.rotate(bd.Axis((0, *S.pivot()), (1, 0, 0)), math.degrees(th[n] - th[0]))
+        skip = {"quarter_trip_pin", "quarter_rack"} | ({"hour_trip_arm_a"} if n == 4 else set())
+        _clear_of(a, {"pin": pin}, skip)
+    turn = K.trip_turn(th[4])
+    moving = {"arm_a": _about_x(a["hour_trip_arm_a"].shape, sh, -turn),
+              "arm_b": _about_x(a["hour_trip_arm_b"].shape, sh, -turn),
+              "hour_hook": K.hook_solid(S.HOUR, K.trip_hook_turn(th[4]))}
+    _clear_of(a, moving, {"hour_trip_arm_a", "hour_trip_arm_b", "hour_trip_shaft", "hour_trip_stop", "hour_hook",
+                          "hour_hook_stud", "strike_plate_middle", "strike_plate_right", "quarter_trip_pin",
+                          "hour_rack", "quarter_rack"})

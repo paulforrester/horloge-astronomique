@@ -5,8 +5,11 @@ Each train is a classic rack and snail (concept gate §4.2, §4.4), adapted for 
   are on an arc at a larger radius, so a fine snail step becomes a printable tooth (pitch 2.5 mm);
 - the **gathering pawl** rides on a feed lever, coaxial with the rack, which an eccentric on the strike shaft
   rocks once per stroke. Each rock gathers one tooth; the rack hook catches it;
-- the **rack hook** holds the rack between strokes. A release cam on the state arbor (the time train, rule 4)
-  lifts it a minute before each show, and the rack falls onto the snail: that sets the count;
+- the **rack hook** holds the rack between strokes. The walk train releases it (Paul, PR #21): a groove on the
+  program shaft rocks a release shaft in phase A of every show, its arm turns the quarter hook out, and the quarter
+  rack falls onto its snail: that sets the count. At the fourth quarter the quarter rack falls far enough for a pin
+  on it to rock the hour trip shaft, which turns the hour hook out: the hour rack falls too. A show that does not
+  walk (quiet hours) strikes nothing, Death included;
 - the strike shaft turns once per stroke (3 s). Its cams close the cue switch (E1's genie, quarters only), lift
   the striking figure (part 2c), and stop the train at the lock switch when the rack is home.
 
@@ -30,8 +33,6 @@ HOME_GAP = 1.0                               # a gathered rack's tail clears the
 FEED_OVERSHOOT = 1.4                         # the gathering pawl's stroke, in teeth
 CYCLE_S = 3.0                                # one strike-shaft turn: a genie-and-age pair [S: Paul, 6 Nov 2026]
 DEATH_CYCLE_S = 3.0                          # one turn per hour stroke [E: Paul to time it from his video]
-RELEASE_LEAD_MIN = 1.0                       # the release cams drop the racks this long before each show
-RELEASE_WIDTH_MIN = 0.5                      # each release lobe holds the hook up this long
 
 
 def arbor_yz():
@@ -140,44 +141,73 @@ def hour_snail_radius(hours: float) -> float:
     return r[hour_count(h) - 1]
 
 
-# ------------------------------------------------------------------------------------------------ the releases
-RELEASE_R = (10.0, 13.0)                     # the release cams' base and lobe radii
-RELEASE_RISE_MIN = 0.5                       # the lobe's rise is a ramp: the riding follower is lifted, not struck
+# ------------------------------------------------------------------------------------------------ the release
+# Paul, PR #21 (8 Nov 2026), decision 1: the walk train releases the racks. A grooved disc under the program shaft's
+# lock cam moves the follower of the quarter release shaft once per program turn, inside phase A (the walk out),
+# and back before the lock notch at LOCK_N, where the strikes begin.
+RELEASE_WINDOW = (30.0, 65.0, 80.0, 115.0)   # program degrees: the groove leaves its rest radius, reaches its release
+#                                              radius, holds it, and is back [D: the margins in test_e2]
+RELEASE_GROOVE_R = (13.2, 11.0)              # the groove's radius under the follower: at rest, and releasing
+RELEASE_DISC_Z = (-62.0, -59.0)              # the release disc, on the program shaft under its lock cam
+RELEASE_GROOVE = dict(depth=1.6, width=2.4)  # cut into the disc's underside; the follower's nub is 2.0 wide
+RELEASE_CLEAR = 0.3                          # a released hook's tip clears the teeth's tips by at least this
 
 
-def _release_radius(m: float, period: float) -> float:
-    start = period - RELEASE_LEAD_MIN
-    r0, r1 = RELEASE_R
-    t = m % period
-    if start - RELEASE_RISE_MIN <= t < start:
-        return r0 + (r1 - r0) * (t - start + RELEASE_RISE_MIN) / RELEASE_RISE_MIN
-    if start <= t < start + RELEASE_WIDTH_MIN:
-        return r1
-    return r0
+def release_groove_radius(theta: float) -> float:
+    """The release groove's radius under its follower at program angle theta [D]: harmonic rise and fall, so the
+    follower is eased, never struck."""
+    a, b, c, d = RELEASE_WINDOW
+    r0, r1 = RELEASE_GROOVE_R
+    t = theta % 360.0
+    if a <= t < b:
+        f = 0.5 - 0.5 * math.cos(math.pi * (t - a) / (b - a))
+    elif b <= t < c:
+        f = 1.0
+    elif c <= t < d:
+        f = 0.5 + 0.5 * math.cos(math.pi * (t - c) / (d - c))
+    else:
+        f = 0.0
+    return r0 + (r1 - r0) * f
 
 
-def quarter_release_radius(minutes: float) -> float:
-    """The quarter release cam under its follower: four lobes, one before each quarter."""
-    return _release_radius(minutes, 15.0)
+def release_pressure_angle_max(samples: int = 3600) -> float:
+    """The release groove's largest pressure angle (deg) for its follower, which moves along the radius [D]."""
+    worst, h = 0.0, 360.0 / samples
+    for i in range(samples):
+        t = i * h
+        r = release_groove_radius(t)
+        dr = (release_groove_radius(t + h / 2) - release_groove_radius(t - h / 2)) / math.radians(h)
+        worst = max(worst, math.degrees(math.atan2(abs(dr), r)))
+    return worst
 
 
-def hour_release_radius(minutes: float) -> float:
-    """The hour release cam: one lobe, before the hour."""
-    return _release_radius(minutes, 60.0)
+def release_times_s(motor_rpm: float = G.MOTOR_RPM) -> dict:
+    """Seconds from the start of a show's walk (phase A): the follower starts to move, the hook is out, the hook
+    starts back, the hook is in, and the program stops at LOCK_N (the strikes start) [D: program.timing]."""
+    dps = G.timing(motor_rpm)["program_deg_s"]
+    a, b, c, d = RELEASE_WINDOW
+    return {"lift": a / dps, "out": b / dps, "drop": c / dps, "back": d / dps, "strikes": G.LOCK_N / dps}
 
 
-def quarter_release_lift(minutes: float) -> bool:
-    """The quarter release cam (4 lobes on the state arbor) holds the hook up for RELEASE_WIDTH_MIN, starting
-    RELEASE_LEAD_MIN before each quarter."""
-    m = minutes % 15.0
-    start = 15.0 - RELEASE_LEAD_MIN
-    return start <= m < start + RELEASE_WIDTH_MIN
+def hook_tip_turned(t: TrainSpec, turn: float):
+    """The hook tip's centre with the hook turned out (CCW) by `turn` radians."""
+    hk = hook_geometry(t)
+    q, tip = hk["pivot"], hk["tip"]
+    c, s = math.cos(turn), math.sin(turn)
+    d = (tip[0] - q[0], tip[1] - q[1])
+    return (q[0] + c * d[0] - s * d[1], q[1] + s * d[0] + c * d[1])
 
 
-def hour_release_lift(minutes: float) -> bool:
-    m = minutes % 60.0
-    start = 60.0 - RELEASE_LEAD_MIN
-    return start <= m < start + RELEASE_WIDTH_MIN
+def hook_turn_to_clear(t: TrainSpec) -> float:
+    """The least turn (rad) that lifts the hook's tip RELEASE_CLEAR above the teeth's tips [D]."""
+    lo, hi = 0.0, 0.6
+    for _ in range(60):
+        m = (lo + hi) / 2
+        if math.dist(pivot(), hook_tip_turned(t, m)) - TIP_R >= r_tip(t) + RELEASE_CLEAR:
+            hi = m
+        else:
+            lo = m
+    return hi
 
 
 # ------------------------------------------------------------------------------------------------ one show
@@ -232,13 +262,11 @@ LINK = 20.0                                  # the eccentric's strap: strike sha
 TIP_R = 0.6                                  # the hook's and the pawl's rounded tips
 TIP_GAP = 0.65                               # the hook's tip centre, before the hooked face (along the pitch arc)
 TIP_LIFT = 1.0                               # the tips' centres above the tooth roots: clear of the next tooth's slope
-RELEASE_LIFT = 1.6                           # the hook is lifted this far at its tip to let the rack fall
-PRESS_AT = 0.6                               # the release lever presses the hook this far from its pivot to its tip
 X_PLANES = dict(                             # x ranges relative to each rack's mid-plane
     rack=(-1.5, 1.5), rim=(-4.0, 1.5),       # the teeth rim is wider than the rack, flush with its +X face (it prints
     pawl_tip=(-4.0, -1.6), hook_tip=(-1.3, 1.5),  # flat): the pawl works its -X part, the hook its +X part; their
     #                                              bodies lie beside the rim
-    pawl=(-6.7, -4.2), feed=(-9.5, -7.0), link=(-12.3, -9.8), hook=(4.3, 6.8), release=(4.3, 6.8))
+    pawl=(-6.7, -4.2), feed=(-9.5, -7.0), link=(-12.3, -9.8), hook=(4.3, 6.8))
 
 
 def _add(p, q, s=1.0):
@@ -285,22 +313,6 @@ def feed_geometry(t: TrainSpec) -> dict:
     stroke = FEED_STROKE * d
     return {"tip": tip, "pin": q, "r_pin": rq, "a_pin": a_q, "shaft": k, "stroke": stroke,
             "eccentric": rq * stroke / 2, "a_rest": a_rest}
-
-
-def release_geometry(t: TrainSpec) -> dict:
-    """The release lever: its front nose rides on the release cam's top; its back nose presses the hook's tab down
-    (a point between the hook's pivot and tip: down there lifts the tip out)."""
-    ay, az = arbor_yz()
-    hk = hook_geometry(t)
-    front = (ay, az + RELEASE_R[0] + 0.0)
-    press = _add(hk["pivot"], ((hk["tip"][0] - hk["pivot"][0]) * PRESS_AT, (hk["tip"][1] - hk["pivot"][1]) * PRESS_AT))
-    # the hook must turn far enough to lift its tip RELEASE_LIFT radially: about RELEASE_LIFT / HOOK_ARM radians
-    hook_turn = RELEASE_LIFT / HOOK_ARM
-    press_drop = PRESS_AT * HOOK_ARM * hook_turn + 0.4    # at the press point, plus 0.4 of free play
-    lobe = RELEASE_R[1] - RELEASE_R[0]
-    f = press_drop / (press_drop + lobe)                  # the stud's place from the back nose
-    stud = (press[0] + f * (front[0] - press[0]), press[1] + f * (front[1] - press[1]))
-    return {"front": front, "press": press, "stud": stud, "ratio": lobe / press_drop, "hook_turn": hook_turn}
 
 
 # ------------------------------------------------------------------------------------------------ the rack springs

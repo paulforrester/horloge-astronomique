@@ -3,10 +3,18 @@
 Each train, at rest (rack gathered, the strike shaft at its lock angle):
 - the rack on the common stud, its tail finger above the snail, its teeth rim on the far side;
 - the feed lever on the same stud, its gathering pawl lifted by the guard, the strap from the eccentric;
-- the hook in the hooked tooth's space; the release lever riding on the release cam on the state arbor;
+- the hook in the hooked tooth's space, its weighted tail held in; the release arms clear of it;
 - the strike shaft (Ø5, two MR85ZZ) with its eccentric, lock cam, lifter cam (part 2c takes the lift on), and
   (quarters) the cue cam; a gearmotor drives it through 12/36;
 - the lock, home and cue microswitches.
+
+The releases (Paul, PR #21, decision 1: the walk train releases the racks):
+- the quarter release shaft (Ø3, along X) carries a follower whose nub runs in the release disc's groove under the
+  walk's program shaft, and an arm beside the quarter hook. In phase A of every show the groove rocks the shaft and
+  the arm pushes the hook's weighted tail: the hook turns out and the quarter rack falls onto its snail;
+- the hour trip shaft (Ø3, along X): a pin in the quarter rack lifts its arm A only when the rack falls past three
+  pairs (the fourth quarter); its arm B then pushes a tab on the hour hook, which turns out, and the hour rack
+  falls. The first pair gathered lowers the pin again and the hour hook drops back in.
 
 Shapes are drawn in the YZ plane (local x -> global Y, local y -> global Z) and extruded along X.
 """
@@ -103,7 +111,12 @@ def rack_poly_body(t: S.TrainSpec):
     spoke_end = S._add(p, S.unit(g_mid), t.r_teeth - 3.0)
     spoke = bar(p, spoke_end, 4.0)
     hub = disc(p, 4.0)
-    body = unary_union([arm, finger, weight, spoke, hub]).difference(disc(p, (STUD_D + parts.FITS.running) / 2))
+    parts_ = [arm, finger, weight, spoke, hub]
+    if t is S.QUARTER:
+        parts_.append(trip_lobe_poly(t))
+    body = unary_union(parts_).difference(disc(p, (STUD_D + parts.FITS.running) / 2))
+    if t is S.QUARTER:
+        body = body.difference(disc(trip_pin_centre(S.rack_angles(t)[0], frame=True), (PIN_D + parts.FITS.press) / 2))
     return body
 
 
@@ -208,17 +221,6 @@ def eccentric_solid(t: S.TrainSpec):
     return yz_solid(body, *x_of(t, "link"))
 
 
-def release_lever_solid(t: S.TrainSpec):
-    rg = S.release_geometry(t)
-    front, press, stud = rg["front"], rg["press"], rg["stud"]
-    nose_f = (front[0], front[1] + 1.2)                     # rides on the cam's base circle
-    nose_b = (press[0], press[1] + 1.2 + 0.4)               # 0.4 above the hook's press point at rest
-    body = unary_union([path([nose_f, (front[0] + 4.0, front[1] + 4.0), stud, (press[0] - 6.0, press[1] + 1.6),
-                              nose_b], 2.4), disc(stud, 3.0), disc(nose_f, 1.2), disc(nose_b, 1.2)])
-    body = body.difference(disc(stud, (STUD_D + parts.FITS.running) / 2))
-    return yz_solid(body, *x_of(t, "release"))
-
-
 def cam_solid(radius_of_deg, x0, x1, centre, rot_deg=0.0, bore=SHAFT_D + parts.FITS.press, n=360):
     pts = []
     for i in range(n):
@@ -282,12 +284,10 @@ def add_strike_trains(a, minutes: float, hours: float):
         a.add(f"{tag}_hook", hook_solid(t, 0.0), group="strike", print_up=(-1, 0, 0), nozzle=0.2, note="rack hook: holds each gathered tooth")
         a.add(f"{tag}_strap", strap_solid(t), group="strike", print_up=(1, 0, 0), note="strap from the eccentric to the feed lever's pin")
         a.add(f"{tag}_eccentric", eccentric_solid(t), group="strike", print_up=(1, 0, 0), note=f"throw {S.feed_geometry(t)['eccentric']:.2f} mm")
-        a.add(f"{tag}_release_lever", release_lever_solid(t), group="strike", print_up=(1, 0, 0),
-              note="its nose rides the release cam; the lobe tips it and it presses the hook out")
-        fg, hk, rg = S.feed_geometry(t), S.hook_geometry(t), S.release_geometry(t)
+        fg, hk = S.feed_geometry(t), S.hook_geometry(t)
         k = fg["shaft"]
         data[tag] = {"shaft_yz": [round(v, 2) for v in k], "hook_pivot": [round(v, 2) for v in hk["pivot"]],
-                     "feed_pin": [round(v, 2) for v in fg["pin"]], "release_stud": [round(v, 2) for v in rg["stud"]],
+                     "feed_pin": [round(v, 2) for v in fg["pin"]],
                      "snail_radii": [round(r, 3) for r in S.snail_radii(t)],
                      "rack_angles_deg": [round(math.degrees(v), 2) for v in th]}
         # pins and studs
@@ -296,13 +296,10 @@ def add_strike_trains(a, minutes: float, hours: float):
         hx = (x_of(t, "hook")[0], MIDDLE_X[0] if t is S.HOUR else RIGHT_X[0])
         a.add(f"{tag}_hook_stud", x_rod(STUD_D, hx[0], hx[1], hk["pivot"]), material="steel", printed=False,
               group="strike")
-        a.add(f"{tag}_release_stud", x_rod(STUD_D, x_of(t, "release")[0], hx[1], rg["stud"]), material="steel",
-              printed=False, group="strike")
         for x_, y_ in ((f"{tag}_pawl", f"{tag}_feed_pin"), (f"{tag}_feed_lever", f"{tag}_feed_pin"),
                        (f"{tag}_strap", f"{tag}_feed_pin"), (f"{tag}_strap", f"{tag}_eccentric"),
-                       (f"{tag}_hook", f"{tag}_hook_stud"), (f"{tag}_release_lever", f"{tag}_release_stud"),
+                       (f"{tag}_hook", f"{tag}_hook_stud"),
                        (f"{tag}_hook", f"{tag}_rack"), (f"{tag}_rack", "rack_stud"), (f"{tag}_feed_lever", "rack_stud"),
-                       (f"{tag}_release_lever", f"release_cam_{tag}"), (f"{tag}_release_lever", f"{tag}_hook"),
                        (f"{tag}_rack", f"{tag}_feed_lever"), (f"{tag}_pawl", f"{tag}_feed_lever"),
                        (f"{tag}_strap", f"{tag}_feed_lever")):
             a.allow(x_, y_)
@@ -326,6 +323,11 @@ def add_strike_trains(a, minutes: float, hours: float):
         for x_, y_ in ((f"{t.name}_spring_pin", f"{t.name}_rack"), (f"{t.name}_rack_spring", f"{t.name}_spring_pin"),
                        (f"{t.name}_rack_spring", f"{t.name}_spring_anchor")):
             a.allow(x_, y_)
+    pin = trip_pin_centre(S.rack_angles(S.QUARTER)[0])
+    a.add("quarter_trip_pin", x_rod(PIN_D, x_of(S.QUARTER, "rack")[0], TRIP_X_A[1] - 0.2, pin), material="steel",
+          printed=False, group="strike", note="Ø2 pin pressed in the quarter rack's lobe: past three pairs it lifts "
+                                              "the hour trip's arm A")
+    a.allow("quarter_trip_pin", "quarter_rack")
     a.add("rack_stud", x_rod(STUD_D, x_of(S.HOUR, "feed")[0] - 0.5, RIGHT_X[1], p), material="steel", printed=False,
           group="strike", note="Ø3 ground rod: both racks and both feed levers turn on it")
     data["pivot"] = [round(v, 2) for v in p]
@@ -470,8 +472,11 @@ def add_strike_frame(a):
             outline = [(my - 13, mz - 9), (my + 13, mz - 9), (my + 13, -47.0), (my - 13, -47.0)]
         else:
             outline = [(my - 13, mz - 9), (my + 13, mz - 9), (my + 13, -47.0), (36.0, -47.0), (36.0, -53.0),
-                       (26.0, -53.0), (26.0, -60.5), (my - 13, -60.5)]       # under the walk's lock cam
-        mplate = plate_solid(mp_x, outline, holes=[((my, mz), gm["shaft_d"] + 1.0)])
+                       (27.5, -53.0), (27.5, -63.5), (my - 13, -63.5)]       # under the walk's lock and release cams
+        holes = [((my, mz), gm["shaft_d"] + 1.0)]
+        if t is S.QUARTER:
+            holes.append((qrel_shaft(), STUD_D + parts.FITS.running))      # the quarter release shaft
+        mplate = plate_solid(mp_x, outline, holes=holes)
         for dz in (-4.5, 4.5):
             mplate -= x_rod(1.8, mp_x[0] - 1, mp_x[1] + 1, (my, mz + dz))
         a.add(f"{tag}_motor_plate", mplate, material="PETG", group="strike", print_up=(1, 0, 0),
@@ -500,20 +505,23 @@ def add_strike_frame(a):
           material="black", printed=False, group="strike", note="E1's cue: closed once per pair [E]")
     # plates: the middle and right strike plates
     kh = lay["hour"]["shaft"]
-    hk_h, rg_h = S.hook_geometry(S.HOUR), S.release_geometry(S.HOUR)
+    hk_h = S.hook_geometry(S.HOUR)
     mid = [(-25.0, -108.0), (36.0, -108.0), (36.0, -47.0), (-25.0, -47.0)]
     a.add("strike_plate_middle", plate_solid(MIDDLE_X, mid, holes=[(kh, seat), (kq, seat), (p, STUD_D + parts.FITS.press),
                                                                    (hk_h["pivot"], STUD_D + parts.FITS.press),
-                                                                   (rg_h["stud"], STUD_D + parts.FITS.press)]),
+                                                                   (TRIP["shaft"], TRIP_D + parts.FITS.running),
+                                                                   (trip_stop_centre(), PIN_D + parts.FITS.press)]),
           material="PETG", group="strike", print_up=(1, 0, 0),
-          note="hangs from the deck: the shafts' bearings and the hour train's studs")
-    hk_q, rg_q = S.hook_geometry(S.QUARTER), S.release_geometry(S.QUARTER)
-    right = [(-24.0, -108.0), (24.0, -108.0), (24.0, -47.0), (-14.0, -47.0), (-14.0, -59.0), (-24.0, -59.0)]
+          note="hangs from the deck: the shafts' bearings, the hour train's studs, the hour trip shaft and its stop")
+    hk_q = S.hook_geometry(S.QUARTER)
+    right = [(-24.0, -108.0), (24.0, -108.0), (24.0, -79.0), (28.5, -79.0), (28.5, -65.0), (24.0, -65.0), (24.0, -47.0),
+             (-14.0, -47.0), (-14.0, -59.0), (-24.0, -59.0)]
     a.add("strike_plate_right", plate_solid(RIGHT_X, right, holes=[(kq, seat), (p, STUD_D + parts.FITS.press),
                                                                    (hk_q["pivot"], STUD_D + parts.FITS.press),
-                                                                   (rg_q["stud"], STUD_D + parts.FITS.press)]),
+                                                                   (TRIP["shaft"], TRIP_D + parts.FITS.running),
+                                                                   (qrel_shaft(), STUD_D + parts.FITS.running)]),
           material="PETG", group="strike", print_up=(1, 0, 0),
-          note="hangs from the deck: the quarter shaft's bearing and the quarter studs")
+          note="hangs from the deck: the quarter shaft's bearing, the quarter studs and both release shafts")
     for nm in ("strike_plate_middle", "strike_plate_right"):
         a.allow(nm, "deck"); a.allow(nm, "rack_stud")
     # the guards: a fixed pin under each pawl's tail lifts the pawl at the end of the return stroke
@@ -533,8 +541,7 @@ def add_strike_frame(a):
     for t in S.TRAINS:
         tag = t.name
         plate = "strike_plate_middle" if t is S.HOUR else "strike_plate_right"
-        for part in (f"{tag}_hook_stud", f"{tag}_release_stud"):
-            a.allow(part, plate)
+        a.allow(f"{tag}_hook_stud", plate)
     for i, plate in ((0, "state_plate_left"), (1, "strike_plate_middle")):
         a.allow(f"hour_strike_bearing_{i}", plate)
     for i, plate in ((0, "strike_plate_middle"), (1, "strike_plate_right")):
@@ -542,6 +549,245 @@ def add_strike_frame(a):
     a.allow("hour_strike_shaft", "state_plate_left"); a.allow("hour_strike_shaft", "strike_plate_middle")
     a.allow("quarter_strike_shaft", "strike_plate_middle"); a.allow("quarter_strike_shaft", "strike_plate_right")
     return data
+
+
+# ------------------------------------------------------------------------------------------------ the releases
+REL_GAP = 0.4                                # each release arm clears its hook (or the hook's tab) by this at rest
+REL_W = 2.5                                  # the release arms' width
+SLEEVE_R = 2.4                               # the release arms' hub sleeves (they locate the shafts along X)
+QREL_Z = -72.0                               # the quarter release shaft's height
+NUB = dict(w=2.0, h=1.8)                     # the follower's nub in the release groove: width (Y) and height
+TRIP = dict(shaft=(19.0, -67.0),             # the hour trip shaft (y, z)
+            pin_r=28.0, pin_deg=-13.0,       # the quarter rack's trip pin: radius and angle at home (from +Y)
+            gap3=0.6,                        # at three pairs the pin clears arm A by this
+            shoe=(6.5, 12.0),                # arm A's level shoe over the pin's path (y range)
+            b_len=8.5,                       # arm B, along the line from the shaft to the hour hook's pivot
+            tab_len=7.5, tab_w=2.4,          # the hour hook's tab, toward the trip shaft
+            stop_at=4.5)                     # the rest stop's place along arm B
+TRIP_X_A = (21.8, 24.0)                      # arm A, beside the quarter rack (its +X face is at x_rack + 1.5)
+TRIP_D = 2.0                                 # the trip shaft: Ø2, light, so its weight's friction stays small
+TRIP_LUMP = 3.8                              # arm A's counterweight (radius): the shaft's rest bias
+HOUR_TAIL_LUMP = 4.0                         # the hour hook's tail lump: it also balances the tab
+
+
+def _rot(pt, centre, ang):
+    c, s_ = math.cos(ang), math.sin(ang)
+    d = (pt[0] - centre[0], pt[1] - centre[1])
+    return (centre[0] + c * d[0] - s_ * d[1], centre[1] + s_ * d[0] + c * d[1])
+
+
+def qrel_shaft():
+    """The quarter release shaft (y, z): the follower's arm stands upright half way through its stroke [D]."""
+    P = S.G.plan()["program"]
+    r0, r1 = S.RELEASE_GROOVE_R
+    return (P[1] + (r0 + r1) / 2, QREL_Z)
+
+
+def qrel_nub_base():
+    """The follower nub's base centre at rest (y, z): under the groove's rest radius, 0.4 under the disc."""
+    P = S.G.plan()["program"]
+    return (P[1] + S.RELEASE_GROOVE_R[0], S.RELEASE_DISC_Z[0] - 0.4)
+
+
+def qrel_turn(theta: float) -> float:
+    """The quarter release shaft's turn (rad, CCW seen from +X, from rest) at program angle theta [D]."""
+    P = S.G.plan()["program"]
+    q, b = qrel_shaft(), qrel_nub_base()
+    arm = math.dist(q, b)
+    a_rest = math.asin((b[0] - q[0]) / arm)
+    a_now = math.asin((P[1] + S.release_groove_radius(theta) - q[0]) / arm)
+    return a_rest - a_now
+
+
+def qrel_arm_poly():
+    """The release arm beside the quarter hook (rest pose): up from the shaft, then a finger toward -Y whose end
+    stands REL_GAP off the hook's weighted tail, at the tail's height."""
+    q = qrel_shaft()
+    hk = S.hook_geometry(S.QUARTER)
+    tail = S._add(hk["pivot"], (hk["pivot"][0] - hk["tip"][0], hk["pivot"][1] - hk["tip"][1]), TAIL_LEN)
+    face_y = tail[0] + TAIL_LUMP + REL_GAP
+    return unary_union([disc(q, 3.0), path([q, (q[0], tail[1]), (face_y + REL_W / 2, tail[1])], REL_W)])
+
+
+def qrel_follower_poly():
+    """The follower (rest pose): an arm up from the shaft to the nub, which rises into the groove."""
+    q, b = qrel_shaft(), qrel_nub_base()
+    top = (b[0], b[1] - REL_W / 2)
+    nub = bar(top, (b[0], b[1] + NUB["h"] - NUB["w"] / 2), NUB["w"])
+    return unary_union([disc(q, 3.0), bar(q, top, REL_W), nub])
+
+
+def trip_pin_centre(theta: float, frame: bool = False):
+    """The quarter rack's trip pin (y, z) with the rack at angle theta; frame=True gives it in the rack's own frame
+    (theta = 0), as the rack's outline is drawn."""
+    p = S.pivot()
+    th0 = S.rack_angles(S.QUARTER)[0]
+    a = math.radians(TRIP["pin_deg"]) + ((0.0 if frame else theta) - th0)
+    return S._add(p, S.unit(a), TRIP["pin_r"])
+
+
+def trip_lobe_poly(t: S.TrainSpec):
+    """The quarter rack's lobe for the trip pin (rack frame): from the rim's CCW end (its spare tooth) on to the
+    pin. Only CCW of the rim, so the hook and the pawl never meet it."""
+    p = S.pivot()
+    th0 = S.rack_angles(t)[0]
+    g0 = S.ALPHA_H - th0 + S.tooth_angle(t)                    # the spare tooth's face, rack frame
+    pin = trip_pin_centre(th0, frame=True)
+    gp = math.atan2(pin[1] - p[1], pin[0] - p[0])
+    r0, r1 = TRIP["pin_r"] - 2.4, TRIP["pin_r"] + 2.2
+    arc = [S._add(p, S.unit(g), r1) for g in np.linspace(g0, gp, 12)]
+    arc += [S._add(p, S.unit(g), r0) for g in np.linspace(gp, g0, 12)]
+    return Polygon(arc).buffer(0).union(disc(pin, 2.6))
+
+
+def trip_axis():
+    """The unit vector from the trip shaft to the hour hook's pivot, and its CCW normal (the side arm B lies on)."""
+    sh, h = TRIP["shaft"], S.hook_geometry(S.HOUR)["pivot"]
+    d = math.dist(sh, h)
+    u = ((h[0] - sh[0]) / d, (h[1] - sh[1]) / d)
+    return u, (-u[1], u[0])
+
+
+def trip_arm_a_poly():
+    """Arm A (rest pose): from the shaft to a level shoe over the trip pin's path, its underside gap3 above the pin
+    at three pairs; a lump on the shoe keeps the shaft on its stop."""
+    sh = TRIP["shaft"]
+    c3 = trip_pin_centre(S.rack_angles(S.QUARTER)[3])
+    zc = c3[1] + PIN_D / 2 + TRIP["gap3"] + REL_W / 2
+    y0, y1 = TRIP["shoe"]
+    lump = disc(((y0 + y1) / 2, zc + REL_W / 2 + TRIP_LUMP - 1.3), TRIP_LUMP)
+    return unary_union([disc(sh, 3.0), path([sh, (y1, zc), (y0, zc)], REL_W), lump])
+
+
+def trip_arm_b_off() -> float:
+    """Arm B runs parallel to the shaft-to-pivot line, this far to its CCW-normal side: REL_GAP off the tab."""
+    return TRIP["tab_w"] / 2 + REL_W / 2 + REL_GAP
+
+
+def trip_arm_b_poly():
+    """Arm B (rest pose): a short dog-leg out of the hub, then along the shaft-to-pivot line, beside the hour hook's
+    tab (on its CCW-normal side); its end is the contact."""
+    u, n = trip_axis()
+    sh = TRIP["shaft"]
+    off = trip_arm_b_off()
+    knee = S._add(S._add(sh, u, 2.0), n, off)
+    tip = S._add(S._add(sh, u, TRIP["b_len"]), n, off)
+    return unary_union([disc(sh, 3.0), path([sh, knee, tip], REL_W)])
+
+
+def trip_tab_poly():
+    """The hour hook's tab: from its pivot toward the trip shaft."""
+    u, _ = trip_axis()
+    h = S.hook_geometry(S.HOUR)["pivot"]
+    return bar(h, S._add(h, u, -TRIP["tab_len"]), TRIP["tab_w"])
+
+
+def trip_stop_centre():
+    """The trip shaft's rest stop (a Ø2 pin): arm B leans on it, the shaft's weight turning it CCW."""
+    u, n = trip_axis()
+    return S._add(S._add(TRIP["shaft"], u, TRIP["stop_at"]), n, trip_arm_b_off() + REL_W / 2 + PIN_D / 2)
+
+
+def _push_turn(pusher, hook_poly_, centre, hi=0.6):
+    """The least CCW turn of a hook (about centre) that clears a pusher: where the pusher leaves it [D]."""
+    lo = 0.0
+    if not pusher.intersects(hook_poly_):
+        return 0.0
+    for _ in range(50):
+        m = (lo + hi) / 2
+        if pusher.intersects(rot_about(hook_poly_, centre, m)):
+            lo = m
+        else:
+            hi = m
+    return hi
+
+
+def qrel_hook_turn(theta: float) -> float:
+    """How far the quarter release arm turns the quarter hook out at program angle theta [D]."""
+    q = qrel_shaft()
+    arm = rot_about(qrel_arm_poly(), q, qrel_turn(theta))
+    return _push_turn(arm, hook_poly(S.QUARTER), S.hook_geometry(S.QUARTER)["pivot"])
+
+
+def trip_turn(theta_q: float) -> float:
+    """How far (rad, CW seen from +X) the quarter rack's pin, the rack at angle theta_q, turns the trip shaft [D]."""
+    sh = TRIP["shaft"]
+    pin = disc(trip_pin_centre(theta_q), PIN_D / 2)
+    arm = trip_arm_a_poly()
+    if not arm.intersects(pin):
+        return 0.0
+    lo, hi = 0.0, 0.6
+    for _ in range(50):
+        m = (lo + hi) / 2
+        if rot_about(arm, sh, -m).intersects(pin):
+            lo = m
+        else:
+            hi = m
+    return hi
+
+
+def trip_hook_turn(theta_q: float) -> float:
+    """How far the trip turns the hour hook out with the quarter rack at angle theta_q [D]."""
+    arm = rot_about(trip_arm_b_poly(), TRIP["shaft"], -trip_turn(theta_q))
+    return _push_turn(arm, hook_poly(S.HOUR), S.hook_geometry(S.HOUR)["pivot"])
+
+
+def trip_balance() -> dict:
+    """The trip shaft's rest bias [D]: its printed arms' weight moment about the shaft (PLA; negative turns it CCW,
+    onto its stop), against the friction of its whole weight (arms and Ø2 steel shaft) in the plates' holes
+    [E: μ 0.3 on the shaft's radius]. N·mm."""
+    sh = TRIP["shaft"]
+    moment = mass = 0.0
+    for poly, tk in ((trip_arm_a_poly(), TRIP_X_A[1] - TRIP_X_A[0]), (trip_arm_b_poly(), S.X_PLANES["hook"][1] - S.X_PLANES["hook"][0])):
+        moment += poly.area * tk * (poly.centroid.x - sh[0]) * 1.24e-3          # g·mm
+        mass += poly.area * tk * 1.24e-3
+    shaft_len = RIGHT_X[1] - (S.HOUR.x_rack + S.X_PLANES["hook"][0])
+    mass += math.pi * TRIP_D ** 2 / 4 * shaft_len * 7.85e-3                      # g
+    g = 9.81e-3                                                                   # N per g
+    return {"torque": -moment * g, "friction": 0.3 * mass * g * TRIP_D / 2, "mass_g": mass}
+
+
+def add_releases(a):
+    """The quarter release (from the walk's program shaft) and the hour trip (from the quarter rack)."""
+    P = S.G.plan()["program"]
+    q = qrel_shaft()
+    hx = x_of(S.QUARTER, "hook")
+    fx = (P[0] - 1.5, P[0] + 1.5)
+    a.add("quarter_release_shaft", x_rod(STUD_D, hx[0], fx[1], q), material="steel", printed=False, group="strike",
+          note="Ø3 ground rod in the right strike plate and the quarter motor plate: the walk's release groove "
+               "rocks it")
+    arm = yz_solid(qrel_arm_poly(), *hx) + yz_solid(disc(q, SLEEVE_R), hx[1] - 0.01, RIGHT_X[0] - 0.4)
+    a.add("quarter_release_arm", arm - x_rod(STUD_D + parts.FITS.press, hx[0] - 1, RIGHT_X[0], q), group="strike",
+          print_up=(1, 0, 0), note="pressed on the release shaft: in phase A it pushes the quarter hook's weighted "
+                                    "tail, and the hook turns out")
+    mpx = QUARTER_MOTOR_PLATE_X
+    fol = yz_solid(qrel_follower_poly(), *fx) + yz_solid(disc(q, SLEEVE_R), mpx[1] + 0.4, fx[0] + 0.01)
+    a.add("quarter_release_follower", fol - x_rod(STUD_D + parts.FITS.press, mpx[1], fx[1] + 1, q), group="strike",
+          print_up=(-1, 0, 0), note="pressed on the release shaft: its nub runs in the release disc's groove")
+    for x_, y_ in (("quarter_release_arm", "quarter_release_shaft"),
+                   ("quarter_release_follower", "quarter_release_shaft"),
+                   ("quarter_release_shaft", "strike_plate_right"), ("quarter_release_shaft", "quarter_motor_plate")):
+        a.allow(x_, y_)
+    # the hour trip
+    sh = TRIP["shaft"]
+    bx = x_of(S.HOUR, "hook")
+    a.add("hour_trip_shaft", x_rod(TRIP_D, bx[0], RIGHT_X[1], sh), material="steel", printed=False, group="strike",
+          note="Ø2 steel rod turning in the middle and right strike plates: the quarter rack's pin rocks it at the "
+               "fourth quarter")
+    arm_a = yz_solid(trip_arm_a_poly(), *TRIP_X_A) + yz_solid(disc(sh, SLEEVE_R), TRIP_X_A[1] - 0.01, RIGHT_X[0] - 0.4)
+    a.add("hour_trip_arm_a", arm_a - x_rod(TRIP_D + parts.FITS.press, TRIP_X_A[0] - 1, RIGHT_X[0], sh), group="strike",
+          print_up=(1, 0, 0), note="pressed on the trip shaft: the quarter rack's pin lifts its shoe past three pairs")
+    arm_b = yz_solid(trip_arm_b_poly(), *bx) + yz_solid(disc(sh, SLEEVE_R), bx[1] - 0.01, MIDDLE_X[0] - 0.4)
+    a.add("hour_trip_arm_b", arm_b - x_rod(TRIP_D + parts.FITS.press, bx[0] - 1, MIDDLE_X[0], sh), group="strike",
+          print_up=(1, 0, 0), note="pressed on the trip shaft: pushes the hour hook's tab, and the hook turns out")
+    a.add("hour_trip_stop", x_rod(PIN_D, bx[0], MIDDLE_X[1], trip_stop_centre()), material="steel", printed=False,
+          group="strike", note="Ø2 pin pressed in the middle plate: arm B rests on it")
+    for x_, y_ in (("hour_trip_arm_a", "hour_trip_shaft"), ("hour_trip_arm_b", "hour_trip_shaft"),
+                   ("hour_trip_shaft", "strike_plate_middle"), ("hour_trip_shaft", "strike_plate_right"),
+                   ("hour_trip_stop", "strike_plate_middle"), ("hour_trip_stop", "hour_trip_arm_b")):
+        a.allow(x_, y_)
+    return {"quarter_release_shaft": [round(v, 2) for v in q], "hour_trip_shaft": list(sh),
+            "trip_pin_home": [round(v, 2) for v in trip_pin_centre(S.rack_angles(S.QUARTER)[0])]}
 
 
 # ------------------------------------------------------------------------------------------------ for the tests
@@ -568,7 +814,11 @@ def hook_poly(t: S.TrainSpec):
     hk = S.hook_geometry(t)
     q, tip = hk["pivot"], hk["tip"]
     tail = S._add(q, (q[0] - tip[0], q[1] - tip[1]), TAIL_LEN)
-    return unary_union([bar(q, tip, 2.4), disc(q, 3.0), disc(tail, TAIL_LUMP), bar(q, tail, 2.4)])
+    lump = HOUR_TAIL_LUMP if t is S.HOUR else TAIL_LUMP
+    parts_ = [bar(q, tip, 2.4), disc(q, 3.0), disc(tail, lump), bar(q, tail, 2.4)]
+    if t is S.HOUR:
+        parts_.append(trip_tab_poly())                       # the hour trip's arm B pushes it
+    return unary_union(parts_)
 
 
 def pawl_poly(t: S.TrainSpec):
@@ -580,7 +830,8 @@ def pawl_poly(t: S.TrainSpec):
 
 def yz_plot(path):
     """Both trains seen along X: each rack at home and at its full count, the snail's largest step, the hook, the
-    pawl, the strike shaft and its largest cam, the release lever."""
+    pawl, the strike shaft and its largest cam; the release arm (quarters) or the trip's arms (hours), at rest and
+    released."""
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -596,7 +847,6 @@ def yz_plot(path):
                 ax.fill(x, y, alpha=kw.pop("alpha", 0.35), **kw)
 
         ax.add_patch(plt.Circle((ys, zs), max(S.snail_radii(t)), fill=False, ls="--", lw=0.8))
-        ax.add_patch(plt.Circle((ys, zs), S.RELEASE_R[1], fill=False, ls=":", lw=0.8, color="g"))
         th = S.rack_angles(t)
         for ang, col, lab in ((th[0], "tab:blue", "home"), (th[-1], "tab:cyan", f"count {t.counts}")):
             draw(rot_about(rack_poly_body(t), p, ang).union(rot_about(rack_poly_rim(t), p, ang)), color=col)
@@ -606,9 +856,23 @@ def yz_plot(path):
         k = S.feed_geometry(t)["shaft"]
         ax.add_patch(plt.Circle(k, LIFT_R[1], fill=False, color="k", lw=0.8))
         ax.plot(*k, "k+")
-        rg = S.release_geometry(t)
-        ax.plot([rg["front"][0], rg["stud"][0], rg["press"][0]], [rg["front"][1] + 1.2, rg["stud"][1], rg["press"][1] + 1.6],
-                color="tab:green", lw=2, label="release lever")
+        if t is S.QUARTER:
+            q = qrel_shaft()
+            turn = max(qrel_turn(a_) for a_ in range(0, 360, 2))
+            draw(qrel_arm_poly(), color="tab:green")
+            draw(rot_about(qrel_arm_poly(), q, turn), color="tab:olive", alpha=0.25)
+            ax.plot([], [], color="tab:green", lw=6, alpha=0.4, label="release arm (rest; olive: releasing)")
+            draw(disc(trip_pin_centre(th[0]), PIN_D / 2), color="k")
+            draw(disc(trip_pin_centre(th[-1]), PIN_D / 2), color="k")
+            draw(trip_arm_a_poly(), color="tab:orange")
+            ax.plot([], [], color="tab:orange", lw=6, alpha=0.4, label="hour trip arm A, the trip pin (black)")
+        else:
+            sh = TRIP["shaft"]
+            draw(trip_arm_b_poly(), color="tab:orange")
+            draw(rot_about(trip_arm_b_poly(), sh, -trip_turn(S.rack_angles(S.QUARTER)[-1])), color="tab:brown",
+                 alpha=0.25)
+            draw(disc(trip_stop_centre(), PIN_D / 2), color="k")
+            ax.plot([], [], color="tab:orange", lw=6, alpha=0.4, label="hour trip arm B (rest; brown: tripped), stop")
         ax.axhline(-47, color="k", lw=1)
         ax.set_title(f"{t.name} train (x {t.x_rack:+.1f}): the hook red, the pawl purple (held out)")
         ax.set_xlabel("y (mm)"); ax.set_ylabel("z (mm)")
