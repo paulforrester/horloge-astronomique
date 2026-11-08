@@ -38,7 +38,7 @@ adding precision later without rebuilding, is in
 | 0 | Specification, research, decisions | **Done** (PR #1, PR #2). D1–D12 all accepted, including D12: a wooden case |
 | 1 | Ratio engineering and tooth-strength check: `tools/ratios/`, tests, `spec/clock.yaml`, `docs/gear-trains.md` | **Done** (PR #3) |
 | 2 | Parametric CAD: shared library, main-dial feasibility, test rig, then every module and the case | **In progress**: library, feasibility and test rig done (PR #4); M2 main dial done (PRs #5–#10); M1 time and release: concept accepted (PR #11); M1 detail design done (PR #13); motors plug in from behind (D16, PRs #13–#14); E2 ages and Death: concept accepted (PR #15); E2 detail design part 1 done (PR #16); **E2 part 2a (the stops, the walk drive, the state module) for review** |
-| 3 | Electronics, firmware skeleton, accelerated-time simulator validated against an ephemeris | — |
+| 3 | Electronics, firmware skeleton, accelerated-time simulator validated against an ephemeris | **In progress**: design gate (PR #19), F1–F10 accepted |
 | Local | Tolerance tests, printing, woodworking, bring-up | Later |
 
 ## Documents
@@ -57,6 +57,7 @@ adding precision later without rebuilding, is in
 | [`docs/m1-design.md`](docs/m1-design.md) | Phase 2: M1, the mean-time dial in the lion gallery, the legal-time hands (M1b) and the releases. Concept and detail design |
 | [`docs/e2-design.md`](docs/e2-design.md) | Phase 2: E2, the four ages and Death in the lower hall. Concept accepted; detail design part 1 (layout, ring, selection) and part 2a (stops, walk drive, state module) |
 | [`docs/test-rig.md`](docs/test-rig.md) | Phase 2: the first print. One stepper driving the M1 motion work and a 24 h two-tube drive, with tolerance coupons |
+| [`docs/firmware-design.md`](docs/firmware-design.md) | Phase 3 gate: controller hardware, firmware structure (time law, step scheduler, event motors and the show chain, summer time, quiet hours, catch-up, faults, MQTT, OTA), the simulator and its ephemeris checks, tests, decisions F1–F10 |
 
 ## Tools
 
