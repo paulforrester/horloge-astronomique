@@ -5,7 +5,7 @@ gallery. The genie on the left (A1) strikes his hand bell with his sceptre, once
 the age's strokes. The genie on the right (A2) turns his hourglass each hour, half a turn,
 alternately right and left.
 
-**Status: concept settled, one follow-up question (§15.4).** Paul answered the first round on PR #18
+**Status: concept settled (§12, §15); ready to merge.** Paul answered the first round on PR #18
 (8 Nov 2026; §12), and the second round in chat (8 Nov 2026; §15): **one forward-only motor, a
 count wheel, and a rigid cross shaft to the glass.** Nothing is modelled yet. Tags as in `docs/reference-notes.md`: [S] sourced, [D] derived,
 [E] estimate, [?] unclear.
@@ -454,9 +454,11 @@ step).
 - **A count wheel gets out of step if a show is skipped in mid-cycle,** after a power cut, a fault
   or catch-up. The count wheel is then behind, and the glass would wait for strokes that never
   come. That is a count-wheel clock's classic fault: it strikes wrong until it is struck through.
-  - **Correction (§15.4):** at the next hour show, after the old man's last stroke, the controller
-    runs the count wheel on to home. The missing strokes sound first, then the glass turns. At
-    most nine extra strokes, once, after a fault.
+  - **Correction (§15.4, decided B):** a minute before the next quarter, at E2's resync
+    (`docs/firmware-design.md` §7.5), the controller runs the count wheel on to where it should
+    stand. The missing strokes sound on their own. If an hour was missed, the count wheel passes
+    through its silent half on the way, so the glass turns too. At most nine strokes, once, after a
+    fault.
   - The count wheel cannot get ahead: a stroke happens only on a cue.
 
 **15.4 One question: when to make up the strokes after a fault.**
@@ -468,6 +470,9 @@ step).
 | C. Not at all | — | — | The glass would turn in the wrong place for good. Not acceptable. |
 
 **Recommended: A.**
+
+**Decided: B** (Paul, PR #18, 8 Nov 2026: "Lets go with B, play them alone a minute before the
+next quarter."). The next show then starts with the count wheel in step.
 
 **15.5 What changes from §13.**
 - **No one-way bearings and no reversing motor.** The count wheel, the silencing cam and the
