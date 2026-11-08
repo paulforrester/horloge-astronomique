@@ -86,6 +86,7 @@ who strikes at 12:00, waits at the right. Photograph: Tangopaso, Wikimedia Commo
 | Turntable that fits these positions | four ages 90° apart on a ring of R ≈ 121 mm, its centre ≈ 94 mm behind Death; the front of the ring ≈ 27 mm in front of Death; **≈ 243 mm deep in all** | [D: a circle through both doorways (±0.42 of the hall's width, at Death's depth) and 0.15 of the width in front of Death; the photograph's rest positions (±0.41 and −0.46 of the width) fall at ±45° on it] |
 | Stroke cadence | **the genie strikes, the age strikes 1 s later, then a 2 s pause; repeated n times.** So a pair every 3 s, and the old man's four pairs take ≈ 10 s from the genie's first stroke to his last | [S: Paul's observation, 6 Nov 2026]; [D: 3 × 3 s + 1 s] |
 | Walk duration | **the walk on takes ≈ 10 s**: from the old man's last stroke, past Death to the left doorway. The next age comes into view at the right during the same move. The walk out, from the right doorway to the bell, was not timed; at the same speed it would take ≈ 6 s | [S: Paul's observation, 6 Nov 2026]; [E: 34° of the ring's 56° walk on, at its 5.6°/s (§2 geometry), 34/56 × 10 s] |
+| Death's cadence | **one stroke every 3 s** | [S: Paul, PR #21, 8 Nov 2026] |
 | What follows the walk | **Death starts the hour as soon as the walk ends.** The hourglass turns "au dernier coup des quatre quarts", so it runs during the walk | [S: Paul, 6 Nov 2026; DA p. 51] |
 | How the original moves the ages | not described in DA; Ungerer 1922 and Bach et al. 1992 may show it | [?]: the books are still to obtain |
 | State arbor | 1 rev/h, legal time; quarter snail 1:1; hour snail through 12:1 (12/48 · 15/45, as M1's motion work) | [S: M1 gate, decision 1; architecture §3] |
@@ -735,7 +736,7 @@ It is a rack and snail, as the concept gate decided (§4.2, §4.4), adapted for 
 ### 12.4 Timing
 
 - A pair every 3 s, with the age 1 s after the cue (Paul).
-- Death's strokes: also one per 3 s, **[E]: Paul to time it from his video**.
+- Death's strokes: one every 3 s [S: Paul, PR #21, 8 Nov 2026]. So twelve at noon take 33 s from the first to the last [D: 11 × 3 s].
 - **The release, in a show's walk** (at the walk motor's estimated 32 rpm, §11.8) [D: `release_times_s`]:
 
   | Seconds into phase A | |
@@ -810,8 +811,9 @@ It is a rack and snail, as the concept gate decided (§4.2, §4.4), adapted for 
 - the strike gearmotors (≈ 40 rpm under load) ⚠;
 - the 2.5 mm tooth pitch with the 0.2 mm nozzle: the tolerance test sets it;
 - the pawls', hooks' and the hour trip's weights, which do the work of springs (a click spring each is the
-  fallback): to try on the test rig;
-- Death's cadence.
+  fallback): to try on the test rig.
+
+**Now sourced:** Death's cadence, one stroke every 3 s (Paul, PR #21, 8 Nov 2026; §12.4).
 
 **Decisions (settled, Paul, PR #21, 8 Nov 2026):**
 1. **The walk train releases the racks.** Paul: "Lets try for the walk train described. I'm okay with Death not

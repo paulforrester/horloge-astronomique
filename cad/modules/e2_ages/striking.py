@@ -32,7 +32,7 @@ RACK_PIVOT_Z = -67.0                         # both racks share one stud
 HOME_GAP = 1.0                               # a gathered rack's tail clears the snail by about one step
 FEED_OVERSHOOT = 1.4                         # the gathering pawl's stroke, in teeth
 CYCLE_S = 3.0                                # one strike-shaft turn: a genie-and-age pair [S: Paul, 6 Nov 2026]
-DEATH_CYCLE_S = 3.0                          # one turn per hour stroke [E: Paul to time it from his video]
+DEATH_CYCLE_S = 3.0                          # one turn per hour stroke [S: Paul, PR #21, 8 Nov 2026]
 
 
 def arbor_yz():

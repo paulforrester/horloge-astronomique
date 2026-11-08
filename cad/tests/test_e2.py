@@ -326,9 +326,10 @@ def test_the_walk_releases_inside_phase_a():
 
 
 def test_the_strike_cycle_timing():
-    """Paul's cadence: a pair every 3 s, the age 1 s after the genie. The cue closes first, the figure drops at 1 s,
-    the pawl gathers after the drop, and the lock closes last."""
+    """Paul's cadence: a pair every 3 s, the age 1 s after the genie; Death one stroke every 3 s. The cue closes
+    first, the figure drops at 1 s, the pawl gathers after the drop, and the lock closes last."""
     assert S.CYCLE_S == pytest.approx(3.0)
+    assert S.DEATH_CYCLE_S == pytest.approx(3.0)
     assert S.stroke_time_s() == pytest.approx(1.0)
     assert S.CUE[0] < S.LIFT[0] < S.LIFT[1] < S.LIFT[2] < S.FEED[0] < S.FEED[1] < S.LOCK[0]
 
