@@ -5,9 +5,9 @@ gallery. The genie on the left (A1) strikes his hand bell with his sceptre, once
 the age's strokes. The genie on the right (A2) turns his hourglass each hour, half a turn,
 alternately right and left.
 
-**Status: concept, second round.** Paul answered the first round on PR #18 (8 Nov 2026; §12). He
-chose **one motor with a selector**, so §13 works out that concept and asks two new questions.
-Nothing is modelled yet. Tags as in `docs/reference-notes.md`: [S] sourced, [D] derived,
+**Status: concept settled, one follow-up question (§15.4).** Paul answered the first round on PR #18
+(8 Nov 2026; §12), and the second round in chat (8 Nov 2026; §15): **one forward-only motor, a
+count wheel, and a rigid cross shaft to the glass.** Nothing is modelled yet. Tags as in `docs/reference-notes.md`: [S] sourced, [D] derived,
 [E] estimate, [?] unclear.
 
 <p align="center"><img src="img/e1/original_genies.jpg" width="640" alt="The original lion gallery on 30 Oct 2026 at 10:10 CET: on the left the genie with his hand bell held up and the striker low in his other hand; in the middle the mean-time dial; on the right the genie holding the hourglass upright in both hands"></p>
@@ -392,9 +392,96 @@ fallback** if no straight route is free.
 - **Shared files:** architecture §10's "one direction", and its E1×1–2 count, change only once
   Paul approves 13.1 A. The note goes in that PR as an append-only line.
 
-## 14. Decisions needed from Paul (second round)
+## 14. Decisions needed from Paul (second round) — answered, §15
 
 1. **The selector (13.1):** A, the direction selects (forward for the bell, reverse for the glass),
    with an exception to "one direction" for this one event motor. *Recommended.*
 2. **The link (13.2):** A, a rigid cross shaft, routed under or behind M1 in the detail design,
    with a flexible shaft as the fallback. *Recommended.*
+
+## 15. Decisions, second round (Paul, 8 Nov 2026), and the count-wheel concept
+
+1. **The selector: B, a count wheel**, "if possible": Paul thinks it truer to the original design.
+   It is possible. §15.1–15.3 show how, with one forward-only motor.
+2. **The link: A, a rigid Ø 5 cross shaft** to the glass genie, routed under or behind M1 in the
+   detail design. A flexible shaft is the fallback.
+
+Since PR #21 the glass turns only in the hour show (§12, item 5), so the count wheel no longer
+conflicts with decision 5. §13.1 listed two snags for B. §15.2 answers the first (a count wheel
+needs a selector) without a second actuator. §15.3 deals with the second (the count can get out of
+step).
+
+**15.1 The train.**
+- **One gearmotor** at ≈ 200 rpm under load [E], forward only. The architecture's "one direction"
+  stands; no exception is needed.
+- **The bell shaft** turns 1:1 with the motor. It carries the bell's snail cam (one stroke per
+  turn, §4.2) and the **bell lock** (one notch).
+- **The count wheel** is geared 1:20 from the bell shaft (e.g. 12/48 · 12/60 [D: 12/48 × 12/60 =
+  1/20]). It turns **once per hour's work: 20 bell-shaft turns.**
+  - **0–180°: ten stroke turns** [D: 1 + 2 + 3 + 4 = 10 strokes an hour; 10 × 18° = 180°].
+  - **180–360°: ten silent turns, the glass.** The motor runs on for ten more bell-shaft turns,
+    3.0 s [D: 10 / 200 rpm × 60]. That is Paul's ≈ 3 s.
+  - A switch at 360° is the **count wheel's home**: the hour's work is done.
+
+**15.2 The selector, without a second actuator.** Both jobs come off the count wheel itself:
+- **A silencing cam** on the count wheel, over 180–360°, holds the sceptre's lever clear of the
+  snail. The bell shaft turns ten times without a stroke. This is the "strike/silent" lever of a
+  bracket clock, worked by the count wheel instead of by hand.
+- **A mutilated gear** on the count wheel, toothed over 180–360° only, turns the cross shaft half a
+  turn (a 1:1 pair). Over 0–180° plain locking arcs hold the cross shaft still. The cross shaft
+  carries the half turn to the crank, yoke, rack and pinion at the glass (§4.3, §13.2).
+- **The engagement is gentle.** The teeth meet when the crank is at a dead centre, where the
+  glass's speed is zero [D: the glass's angle is 90° × (1 − cos θ), so its rate is zero at θ = 0
+  and 180°].
+- **So the moment of the turn is set mechanically:** the glass can only move after the tenth
+  stroke, "au dernier coup des quatre quarts" [S: DA p. 51].
+
+**15.3 The controller, and what happens after skipped shows.**
+- **On each E2 cue:** run until the bell lock closes (one turn, one stroke). As before.
+- **On the hour,** when E2's quarter train locks: run until the count wheel's home switch closes.
+  If the count is right, that is exactly the ten silent turns: the glass turns, and the bell is
+  silent.
+- **The firmware knows the count.** It counts the bell lock's closings since home, so it always
+  knows where the count wheel stands. The two switches are the two E1 inputs the firmware already
+  plans (`docs/firmware-design.md` §4, E1 row).
+- **Quiet hours keep it in step if they skip whole cycles.** A cycle is :15, :30, :45 and the
+  :00 that ends it. The window must start after an :00 show and end before a :15 show. Example: the
+  22:00 show runs, then 22:15 to 07:00 are silent, then 07:15 strikes again. **This is a rule for
+  the firmware's quiet-hours setting** (`docs/firmware-design.md` §8.3, default 22:00–07:00).
+- **The hourglass is no longer a separate quiet-hours class.** It now runs with the genie, which
+  is in E2's class. Firmware §8.3 lists it separately; that line should follow when E1's detail
+  design is merged.
+- **A count wheel gets out of step if a show is skipped in mid-cycle,** after a power cut, a fault
+  or catch-up. The count wheel is then behind, and the glass would wait for strokes that never
+  come. That is a count-wheel clock's classic fault: it strikes wrong until it is struck through.
+  - **Correction (§15.4):** at the next hour show, after the old man's last stroke, the controller
+    runs the count wheel on to home. The missing strokes sound first, then the glass turns. At
+    most nine extra strokes, once, after a fault.
+  - The count wheel cannot get ahead: a stroke happens only on a cue.
+
+**15.4 One question: when to make up the strokes after a fault.**
+
+| Option | What is heard | For | Against |
+|---|---|---|---|
+| **A. At the next hour show** | the missing strokes run on after the old man's fourth pair, then the glass turns | Sounds like part of the show. As a count-wheel clock corrects itself. Rare: only after a fault or a power cut in mid-cycle. | Up to nine extra genie strokes, once, without the age answering |
+| B. At E2's resync, before the next quarter | the strokes run on alone a minute before the show (firmware §7.5) | The next show is already right | A burst of strokes out of the blue |
+| C. Not at all | — | — | The glass would turn in the wrong place for good. Not acceptable. |
+
+**Recommended: A.**
+
+**15.5 What changes from §13.**
+- **No one-way bearings and no reversing motor.** The count wheel, the silencing cam and the
+  mutilated pair are printed.
+- **BOM** (§9), as the detail design will enter it [E]:
+  - DC gearmotors: **E1 ×1** (Batch 2 total 7 + 1);
+  - two switches: the bell lock and the count wheel's home (microswitches, or a Hall and a magnet
+    for the home);
+  - the Ø 5 cross shaft, ≈ 0.25 m, and two single-dog couplings (printed);
+  - the bells: E1's slightly lower than E2's (§12, item 4);
+  - a miniature hourglass with red sand; the sceptre's spring.
+- **Shared files, in the detail-design PR** (append-only): architecture §10, E1 ×1; firmware's
+  quiet-hours rule for whole cycles; BOM rows.
+
+**Next:** the detail design, part 1, in a new PR once this one is merged: the bell cassette with the
+motor, the count wheel and the silencing cam; the cross shaft; the glass cassette. Placeholder
+figures, with tests, print and SketchUp files.
