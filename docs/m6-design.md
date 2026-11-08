@@ -196,8 +196,8 @@ Both fit inside the v1 provision. Nothing needs deciding before v2.
 ## 11. Decisions (accepted as recommended, Paul, PR #20, 7 Nov 2026)
 
 1. **Drive: A, a pedestal under the globe** holding the stepper and the sidereal train (§5).
-2. **Meridian: A, parallel to the facade** (§6). **Revision proposed after the photographs: A′, square to the facade with
-   the north pole towards the case, as the original (§14.3).**
+2. **Meridian: A, parallel to the facade** (§6). **Revised after the photographs: A′, square to the facade with
+   the north pole towards the case, as the original (§14.3), approved by Paul on 8 Nov 2026.**
 3. **Stars: A, two-colour print with gilt inlay**; the magnitude limit from the smallest
    printable dot (§7). Which constellation set to draw is still open: proposed in the detail PR.
 4. **Precession provision: A**, an equatorial frame with a star shell on its ecliptic axis and a
@@ -290,5 +290,5 @@ on the crop.
 
 **Recommendation: A′.** Everything else in §11 stands.
 
-**Decision needed from Paul:** A′ instead of the accepted A (§11 item 2). If he is at the
-cathedral again, a photograph from the side would settle the pole's direction.
+**Decided: A′** (Paul, 8 Nov 2026: "I approve the M5 & M6 proposals"). It replaces A in §11 item 2.
+The pole's direction, towards the case, is a parameter; a photograph from the side would confirm it.

@@ -249,8 +249,8 @@ To size from a photograph (§10), all parameters until then:
 1. **The planetarium Moon's sense** (§3): accept the idler fix. Ratio and tooth counts are
    unchanged; the `spec/clock.yaml` note gains one line in the detail PR.
 2. **The Moon round the Earth: A**, the accepted epicyclic plus the idler, on a covered Earth
-   arm, with the fixed wheel behind the Sun disc (§5). **Revision proposed after the photographs:
-   A′, the central disc as the Earth's drum (§14.4).**
+   arm, with the fixed wheel behind the Sun disc (§5). **Revised after the photographs: A′, the central
+   disc as the Earth's drum (§14.4), approved by Paul on 8 Nov 2026.**
 3. **Module 0.8** for the planet and Moon trains, **1.0** for the year train and the motor
    reduction (§6).
 4. **The Moon globe: B**, a daily belt up to a small cassette behind the lunette (§7).
@@ -367,5 +367,5 @@ The photograph suggests the answer: the Ø 95 mm raised disc.
 Fall back to module 0.5 with 12 mm faces if no better train is found. The Earth tube is now
 Ø7 instead of Ø4, which is stiffer for its 139 N·mm.
 
-**Decision needed from Paul:** A′ instead of the accepted A (§11 item 2). Everything else in §11
-stands.
+**Decided: A′** (Paul, 8 Nov 2026: "I approve the M5 & M6 proposals"). It replaces A in §11 item 2.
+Everything else in §11 stands.
