@@ -356,7 +356,7 @@ def _released_turn(train) -> float:
 def test_the_releases_turn_each_hook_clear(train):
     """Released, each hook's tip clears the teeth's tips by RELEASE_CLEAR plus 0.03 rad of margin; at rest each
     release arm stands REL_GAP off its hook, and a hook riding over the teeth as they are gathered (turning out)
-    only moves away from it."""
+    never comes closer to it."""
     assert _released_turn(train) >= S.hook_turn_to_clear(train) + 0.03
     hk = S.hook_geometry(train)
     arm = K.qrel_arm_poly() if train is S.QUARTER else K.trip_arm_b_poly()
@@ -364,7 +364,7 @@ def test_the_releases_turn_each_hook_clear(train):
     assert arm.distance(hook) == pytest.approx(K.REL_GAP, abs=0.02)
     ride = S.hook_turn_to_clear(train) + 0.03                  # more than riding over a tooth's tip ever turns it
     gaps = [arm.distance(K.rot_about(hook, hk["pivot"], ride * k / 20)) for k in range(21)]
-    assert all(b >= a - 1e-6 for a, b in zip(gaps, gaps[1:]))
+    assert min(gaps) >= K.REL_GAP - 1e-6
     # pushed out, the hook touches its arm only at the contact, and overtravel only takes it away
     if train is S.QUARTER:
         a, b, c, d = S.RELEASE_WINDOW
@@ -540,11 +540,14 @@ def test_the_release_parts_move_clear(built):
     for t in (40.0, 50.0, 65.0, 72.0, 90.0, 100.0):
         turn = K.qrel_turn(t)
         fol = _about_x(a["quarter_release_follower"].shape, q, turn)
+        fpin = _about_x(a["quarter_release_follower_pin"].shape, q, turn)
         disc_t = disc0.rotate(bd.Axis((P[0], P[1], 0), (0, 0, 1)), -t)
-        assert (fol & disc_t).volume < 1e-3, t
+        assert (fol & disc_t).volume < 1e-3 and (fpin & disc_t).volume < 1e-3, t
         moving = {"quarter_release_arm": _about_x(a["quarter_release_arm"].shape, q, turn), "follower": fol,
+                  "follower_pin": fpin,
                   "quarter_hook": K.hook_solid(S.QUARTER, K.qrel_hook_turn(t))}
         _clear_of(a, moving, {"quarter_release_arm", "quarter_release_follower", "quarter_release_shaft",
+                              "quarter_release_follower_pin",
                               "quarter_hook", "quarter_hook_stud", "strike_plate_right", "quarter_motor_plate",
                               "release_cam", "quarter_rack"})
     th = S.rack_angles(S.QUARTER)

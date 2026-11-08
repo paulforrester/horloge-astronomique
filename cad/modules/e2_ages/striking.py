@@ -149,7 +149,7 @@ RELEASE_WINDOW = (30.0, 65.0, 80.0, 115.0)   # program degrees: the groove leave
 #                                              radius, holds it, and is back [D: the margins in test_e2]
 RELEASE_GROOVE_R = (13.2, 11.0)              # the groove's radius under the follower: at rest, and releasing
 RELEASE_DISC_Z = (-62.0, -59.0)              # the release disc, on the program shaft under its lock cam
-RELEASE_GROOVE = dict(depth=1.6, width=2.4)  # cut into the disc's underside; the follower's nub is 2.0 wide
+RELEASE_GROOVE = dict(depth=1.6, width=2.6)  # cut into the disc's underside; the follower's pin is Ø2
 RELEASE_CLEAR = 0.3                          # a released hook's tip clears the teeth's tips by at least this
 
 

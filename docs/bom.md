@@ -190,7 +190,7 @@ Rows marked "counted" are already in the Batch 2 totals above.
 | Bearing MR85ZZ | 5 × 8 × 2.5 | 4 | two per strike shaft | as Batch 1 |
 | Rod Ø5 | DIN 175 h9 | 0.1 m | the two strike shafts, ≈ 41 mm each | as Batch 1 |
 | Rod Ø3 | DIN 175 h9 | 0.15 m | the racks' common stud (≈ 51 mm), two hook studs (≈ 12 mm), the quarter release shaft (≈ 33 mm; PR #21 review) | as Batch 1 |
-| Rod Ø2 (or pins ISO 2338) | silver steel | 0.15 m | two feed-lever pins, two guard pins, two spring pins (≈ 54 mm); the hour trip shaft (≈ 37 mm), its stop pin and the quarter rack's trip pin (≈ 17 mm; PR #21 review) | as Batch 1 |
+| Rod Ø2 (or pins ISO 2338) | silver steel | 0.15 m | two feed-lever pins, two guard pins, two spring pins (≈ 54 mm); the hour trip shaft (≈ 37 mm), its stop pin, the quarter rack's trip pin and the release follower's pin (≈ 25 mm; PR #21 review) | as Batch 1 |
 | Micro metal gearmotor | 12 × 10 mm, Ø3 D-shaft, ≈ 40 rpm under load | counted (E2's quarter and hour trains) | one per strike shaft, through 12/24 | Gotronic (Pololu) ⚠ choose the ratio (e.g. 380:1 at reduced voltage) |
 | Subminiature roller-lever microswitch | as part 2a | counted (Batch 2 microswitches) | two lock switches, one cue switch | Gotronic ⚠ choose |
 | Slotted opto Vishay TCST1202 | as M2's E6 | counted (Batch 2 opto forks) | one per rack: home (gathered) | as the M2 row |

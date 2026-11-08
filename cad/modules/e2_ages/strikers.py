@@ -556,7 +556,8 @@ REL_GAP = 0.4                                # each release arm clears its hook 
 REL_W = 2.5                                  # the release arms' width
 SLEEVE_R = 2.4                               # the release arms' hub sleeves (they locate the shafts along X)
 QREL_Z = -72.0                               # the quarter release shaft's height
-NUB = dict(w=2.0, h=1.8)                     # the follower's nub in the release groove: width (Y) and height
+FOLLOWER = dict(t=5.0, block=(5.0, 4.0), pin_in=3.0)   # the follower: thickness (X), its top block (Y, Z), and
+#                                                        how deep its Ø2 pin is pressed in
 TRIP = dict(shaft=(19.0, -67.0),             # the hour trip shaft (y, z)
             pin_r=28.0, pin_deg=-13.0,       # the quarter rack's trip pin: radius and angle at home (from +Y)
             gap3=0.6,                        # at three pairs the pin clears arm A by this
@@ -583,16 +584,22 @@ def qrel_shaft():
     return (P[1] + (r0 + r1) / 2, QREL_Z)
 
 
-def qrel_nub_base():
-    """The follower nub's base centre at rest (y, z): under the groove's rest radius, 0.4 under the disc."""
+def qrel_pin_ref():
+    """The follower pin's centre at rest (y, z), half way up the groove, under its rest radius."""
     P = S.G.plan()["program"]
-    return (P[1] + S.RELEASE_GROOVE_R[0], S.RELEASE_DISC_Z[0] - 0.4)
+    return (P[1] + S.RELEASE_GROOVE_R[0], S.RELEASE_DISC_Z[0] + S.RELEASE_GROOVE["depth"] / 2)
+
+
+def qrel_rest_tilt() -> float:
+    """The follower's lean at rest (rad, toward +Y): it stands upright half way through its stroke."""
+    q, b = qrel_shaft(), qrel_pin_ref()
+    return math.asin((b[0] - q[0]) / math.dist(q, b))
 
 
 def qrel_turn(theta: float) -> float:
     """The quarter release shaft's turn (rad, CCW seen from +X, from rest) at program angle theta [D]."""
     P = S.G.plan()["program"]
-    q, b = qrel_shaft(), qrel_nub_base()
+    q, b = qrel_shaft(), qrel_pin_ref()
     arm = math.dist(q, b)
     a_rest = math.asin((b[0] - q[0]) / arm)
     a_now = math.asin((P[1] + S.release_groove_radius(theta) - q[0]) / arm)
@@ -609,12 +616,29 @@ def qrel_arm_poly():
     return unary_union([disc(q, 3.0), path([q, (q[0], tail[1]), (face_y + REL_W / 2, tail[1])], REL_W)])
 
 
-def qrel_follower_poly():
-    """The follower (rest pose): an arm up from the shaft to the nub, which rises into the groove."""
-    q, b = qrel_shaft(), qrel_nub_base()
-    top = (b[0], b[1] - REL_W / 2)
-    nub = bar(top, (b[0], b[1] + NUB["h"] - NUB["w"] / 2), NUB["w"])
-    return unary_union([disc(q, 3.0), bar(q, top, REL_W), nub])
+def qrel_follower_solids():
+    """The follower and its Ø2 steel pin, at rest: drawn upright (the pin straight up into the groove, half way
+    through the stroke), then leaned to the rest radius. The pin is round, so the groove's slope never pinches it."""
+    P = S.G.plan()["program"]
+    q, b = qrel_shaft(), qrel_pin_ref()
+    up = (q[0], q[1] + math.dist(q, b))                       # the pin's reference point, upright
+    bw, bh = FOLLOWER["block"]
+    top = S.RELEASE_DISC_Z[0] - 0.5                           # the block's top, under the disc
+    block = Polygon([(up[0] - bw / 2, top - bh), (up[0] + bw / 2, top - bh), (up[0] + bw / 2, top),
+                     (up[0] - bw / 2, top)])
+    body = unary_union([disc(q, 3.0), bar(q, (up[0], top - bh + 1.0), REL_W), block])
+    fx = (P[0] - FOLLOWER["t"] / 2, P[0] + FOLLOWER["t"] / 2)
+    sol = yz_solid(body, *fx)
+    pin_top = S.RELEASE_DISC_Z[0] + S.RELEASE_GROOVE["depth"] - 0.2
+    pin_z0 = top - FOLLOWER["pin_in"]
+    pin = bd.Cylinder(PIN_D / 2, pin_top - pin_z0, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN)).moved(
+        bd.Location((P[0], up[0], pin_z0)))
+    hole = bd.Cylinder((PIN_D + parts.FITS.press) / 2, pin_top - pin_z0, align=(bd.Align.CENTER, bd.Align.CENTER,
+                                                                                 bd.Align.MIN)).moved(
+        bd.Location((P[0], up[0], pin_z0)))
+    axis = bd.Axis((0, q[0], q[1]), (1, 0, 0))
+    lean = -math.degrees(qrel_rest_tilt())                     # CW: the rest radius is the larger one
+    return (sol - hole).rotate(axis, lean), pin.rotate(axis, lean)
 
 
 def trip_pin_centre(theta: float, frame: bool = False):
@@ -752,7 +776,7 @@ def add_releases(a):
     P = S.G.plan()["program"]
     q = qrel_shaft()
     hx = x_of(S.QUARTER, "hook")
-    fx = (P[0] - 1.5, P[0] + 1.5)
+    fx = (P[0] - FOLLOWER["t"] / 2, P[0] + FOLLOWER["t"] / 2)
     a.add("quarter_release_shaft", x_rod(STUD_D, hx[0], fx[1], q), material="steel", printed=False, group="strike",
           note="Ø3 ground rod in the right strike plate and the quarter motor plate: the walk's release groove "
                "rocks it")
@@ -761,11 +785,15 @@ def add_releases(a):
           print_up=(1, 0, 0), note="pressed on the release shaft: in phase A it pushes the quarter hook's weighted "
                                     "tail, and the hook turns out")
     mpx = QUARTER_MOTOR_PLATE_X
-    fol = yz_solid(qrel_follower_poly(), *fx) + yz_solid(disc(q, SLEEVE_R), mpx[1] + 0.4, fx[0] + 0.01)
+    fol, fpin = qrel_follower_solids()
+    fol = fol + yz_solid(disc(q, SLEEVE_R), mpx[1] + 0.4, fx[0] + 0.01)
     a.add("quarter_release_follower", fol - x_rod(STUD_D + parts.FITS.press, mpx[1], fx[1] + 1, q), group="strike",
-          print_up=(-1, 0, 0), note="pressed on the release shaft: its nub runs in the release disc's groove")
+          print_up=(-1, 0, 0), note="pressed on the release shaft: its Ø2 pin runs in the release disc's groove")
+    a.add("quarter_release_follower_pin", fpin, material="steel", printed=False, group="strike",
+          note="Ø2 steel pin pressed upright in the follower's block: it runs in the release groove")
     for x_, y_ in (("quarter_release_arm", "quarter_release_shaft"),
                    ("quarter_release_follower", "quarter_release_shaft"),
+                   ("quarter_release_follower_pin", "quarter_release_follower"),
                    ("quarter_release_shaft", "strike_plate_right"), ("quarter_release_shaft", "quarter_motor_plate")):
         a.allow(x_, y_)
     # the hour trip

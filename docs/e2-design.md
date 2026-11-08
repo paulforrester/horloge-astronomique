@@ -710,8 +710,8 @@ It is a rack and snail, as the concept gate decided (§4.2, §4.4), adapted for 
 | Hook | printed pawl on a Ø3 stud (0.2 mm nozzle). Its rounded tip sits in the notch before the hooked face, clear of the next tooth's slope, on a radial stem; the lump on its tail keeps it in the teeth (its weight 0.9 mm on the far side of the pivot) |
 | Feed lever and pawl | printed lever on the rack's stud, carrying the gathering pawl on a Ø2 pin; the pawl works the rim's left half |
 | Eccentric and strap | eccentric on the strike shaft, throw 2.07 mm (quarters) and 2.02 mm (hours); a printed strap to the feed lever's pin |
-| Release disc | printed, pressed on the walk's program shaft under its lock cam (z −62 to −59, R 15.9). Its groove (1.6 deep, 2.4 wide, underneath) runs at R 13.2 except in the release window, where it eases to R 11.0 and back: rise 30–65°, hold to 80°, back by 115° of the program (harmonic; pressure angle 25.1° [D]) |
-| Quarter release shaft | Ø3 rod at (24.32, −72), turning in the right strike plate and the quarter motor plate. Its follower (x 54.1–57.1) stands under the disc; a 2 mm nub on its top runs in the groove. Its arm (beside the quarter hook) ends 0.4 mm off the hook's weighted tail. The groove turns it 13.1°: the hook turns out 0.199 rad, its tip 1.18 mm above the teeth's tips (0.11 rad is enough) [D]. Positively driven both ways |
+| Release disc | printed, pressed on the walk's program shaft under its lock cam (z −62 to −59, R 16). Its groove (1.6 deep, 2.6 wide, underneath) runs at R 13.2 except in the release window, where it eases to R 11.0 and back: rise 30–65°, hold to 80°, back by 115° of the program (harmonic; pressure angle 25.1° [D]) |
+| Quarter release shaft | Ø3 rod at (24.32, −72), turning in the right strike plate and the quarter motor plate. Its follower (5 mm thick, under the disc) carries a Ø2 steel pin, pressed upright in its top block, that runs in the groove: a round pin, so the groove's slope never pinches it (0.15 mm clear all round, tested). Its arm (beside the quarter hook) ends 0.4 mm off the hook's weighted tail. The groove turns it 13.1°: the hook turns out 0.199 rad, its tip 1.18 mm above the teeth's tips (0.11 rad is enough) [D]. Positively driven both ways |
 | Trip pin | Ø2 pin in a lobe of the quarter rack, R 28 from the stud, beyond the rim's spare tooth (the hook and the pawl never reach it). From three to four pairs it rises 2.33 mm |
 | Hour trip shaft | Ø2 rod at (19, −67), turning in the middle and right strike plates. Arm A (x 21.8–24, beside the quarter rack) has a level shoe 0.6 mm above the pin at three pairs; at four pairs the pin turns the shaft 9.7°. Arm B (beside the hour hook) runs along the line to the hour hook's pivot and ends 0.4 mm off a tab on the hook: the hook turns out 0.192 rad [D]. A lump on arm A holds arm B on a Ø2 stop pin, with 3.3 times its bearings' friction [D; E: μ 0.3] |
 | Hour hook's tab | 7.5 mm, toward the trip shaft; the hook's tail lump grows to R 4 to keep its weight 0.9 mm on the far side of its pivot |
@@ -780,7 +780,7 @@ It is a rack and snail, as the concept gate decided (§4.2, §4.4), adapted for 
   - the hook locks, and lifted, the hook and the guard-held pawl let the rack fall to every count;
   - the home opto sees only home;
   - the racks swing clear of everything fixed;
-  - the release parts move clear: through the window, the release arm, its follower (the nub never touches the
+  - the release parts move clear: through the window, the release arm, its follower (its pin never touches the
     groove's walls) and the turned-out quarter hook; at every count, the trip pin; at four pairs, the tripped
     arms and the turned-out hour hook;
   - the strike gearmotors slide out;
