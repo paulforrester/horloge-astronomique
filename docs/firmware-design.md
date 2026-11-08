@@ -836,7 +836,8 @@ change to 2100, year ends, leap days) and compares with the Python. Any differen
    sections in `spec/clock.yaml`. **Done in the PR after the gate.** The sketch and the board layer
    move to step 1b, with the bench prototype: they can only be tested on its hardware.
 1b. **The sketch and `board/`** (TMC2209, PCA9685, MCP23017, RV-3028-C7, FRAM, Wi-Fi), compiled
-   with `arduino-cli`, for the bench prototype.
+   with `arduino-cli`, for the bench prototype. Moving them here was accepted by Paul (PR #22, 8 Nov 2026: "It is okay
+   to proceed to bench prototype step (1b)").
 2. **The simulator** (`sim/`), the train and event checks, the report and the setting sheet.
 3. **The carrier PCB** in KiCad, after the bench prototype (F1).
 4. v1.5 checks (rows 15–18) when M3 and the v1.5 M2 parts are designed.
