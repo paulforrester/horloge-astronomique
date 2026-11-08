@@ -180,6 +180,26 @@ state module. Rows marked "counted" are already in the Batch 2 totals above.
 | Screws M2 × 6 + M2 heat-set inserts | A2 | 12 + 12 | the walk and program bearing blocks 2 + 2, the gearmotor bracket 2, the rod guides 4, the lock switch's bracket 2 | as Batch 1 |
 | Screws M3 × 8 + M3 heat-set inserts | A2 | 6 + 6 | the state module's left plate, right block and motor plate, 2 each, under the deck | as Batch 1 |
 
+### Batch 2 — controller rows from the Phase 3 gate [E]
+
+From `docs/firmware-design.md` §3–4 (decisions F2–F5, accepted 8 Nov 2026, PR #19). Where a row
+below gives a different quantity from a row above, this one is newer: MCP23017 3, not 2; DRV8833
+5, not 4. F1 (accepted): a carrier PCB, ordered after the bench prototype; its row is added with the KiCad PR.
+
+| Item | Spec | Qty [E] | How the quantity was counted | Supplier |
+|---|---|---|---|---|
+| MCP23017 I/O expander | I²C, 16 I/O, breakout | 3 (supersedes 2) | 31 inputs in v1, 37 by v2, plus spares (firmware-design §3.5) | Mouser FR ⚠ |
+| PCA9685 PWM expander | I²C, 16 channels, breakout | 1 | one channel per event motor, 9 by v2 (§3.4) | Mouser FR / Gotronic ⚠ |
+| DRV8833 dual H-bridge | breakout; check it uses the PWP package (1.5 A RMS per bridge [S: TI SLVSAR1E p. 1]) | 5 (supersedes 4) | 9 motors by v2, 2 per board, 1 spare channel | Gotronic / Mouser FR ⚠ |
+| Buck converter 24 → 6 V | ≥ 5 A | 1 | event-motor rail (F5) | ⚠ to choose |
+| Buck converter 24 → 5 V | ≥ 2 A | (counted: Batch 1 row) | logic rail | as Batch 1 |
+| RTC | RV-3028-C7 breakout with supercapacitor | 1 | F3 (replaces the "or DS3231" choice in Batch 1) | Mouser FR / Melopero ⚠ |
+| FRAM | MB85RC256V, 32 KB I²C, breakout (Adafruit #1895 class) | 1 (+ the Batch 1 one for the rig) | state record (firmware-design §9.4) | Mouser FR ⚠ |
+| Hall switch variant | **DRV5032FC**: omnipolar, open drain, 20 Hz [S: TI SLVSDC7H Table 4-1] | — | names the variant for the Batch 1 and 2 Hall rows | as Batch 1 |
+| Comparator + divider | 24 V power-fail detect, threshold ≈ 20 V | 1 | firmware-design §3.7 | ⚠ to choose |
+| Electrolytic capacitor | 35 V, 470 µF (fit); footprint for 2 × 2200 µF (fallback, F4) | 1 (+ 2 if the fallback is needed) | power-fail hold-up | local / RS FR |
+| Module connectors | Molex Micro-Fit 3.0 dual-row pairs (JST-XH for small counts), keyed per module | ≈ 10 pairs, 4–22 pins | per-module table, firmware-design §4 | ⚠ to choose; check the current rating |
+
 ## Batch 3 — v1.5 / v2
 
 | Item | Qty [E] | Note |

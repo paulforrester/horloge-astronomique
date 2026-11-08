@@ -31,6 +31,7 @@ from behind) was accepted on 5 Nov 2026.
 | D14 | When the shows run: mean time or legal time (revises D2 item 2) | **Legal time**: the quarters at :15, :30, :45 and :00 of CET/CEST, the noon show at 12:00 | **Accepted** 4 Nov 2026 (Paul, PR #11) | Phase 2 (M1) |
 | D15 | The noon procession: Christ and the Apostles, or a personal set | **Astronomy and time**: twelve figures from Pythagoras to Einstein pass **Urania**, on the original's mechanism | **Accepted** 4 Nov 2026 (Paul, PR #11) | Phase 2 (E3) |
 | D16 | How a stepper is reached for service | **Plug-in from behind**: each motor on a printed adapter plate, held by 2 × M3 into heat-set inserts; its drive part slides on the D-shaft and is held by stops | **Accepted** 5 Nov 2026 (Paul, PR #13) | every stepper module (M1 and M2 done) |
+| D-next (firmware) | Controller and firmware, Phase 3 gate (F1–F10 in `docs/firmware-design.md` §14) | **F2–F10 as recommended**: PCA9685 + DRV8833 event drive (E2 walk on native PWM), RV-3028-C7, phase restored at power-up, separate 6 V motor rail, quiet hours 22:00–07:00 (ages, genie, Death), Arduino IDE / `arduino-cli`, faulted shows off until acknowledged, `sensors:`/`events:` in `spec/clock.yaml`, the simulator plan. F1: a carrier PCB drawn in KiCad, after a bench prototype | **Accepted** 8 Nov 2026 (Paul, PR #19 and chat) | Phase 3 |
 | D-next (M5–M7) | Mean time: Strasbourg or Bordeaux (revises D2 items 1 and 5) | **Bordeaux mean time**, "the sky over this house"; the shows stay on legal time (D14) | **Accepted** 8 Nov 2026 (Paul, PR #20) | Phase 3 (firmware constant) |
 
 Plus **Blockers** at the end: the network allowlist and the documents to obtain.
@@ -830,6 +831,23 @@ attribute (a telescope, a pendulum, an armillary sphere), so it reads at 57 mm.
   module (`docs/m2-design.md` §2, `cad/lib/motor_mount.py`).
 - New modules (E2's state stepper, M5, M6) start with it.
 
+## D-next (firmware) — Controller and firmware: the Phase 3 gate
+
+**Status: Accepted, 8 Nov 2026** (Paul, PR #19: "F2-F10. approve your recommendations."; F1 in chat: "Lets plan for your approach of you drawing the board in KiCad").
+The options and trade-offs are in `docs/firmware-design.md` §14; this record lists the outcome.
+
+| # | Decision | Outcome |
+|---|---|---|
+| F1 | How the controller is built | A bench prototype first, then a carrier PCB with plug-in modules, drawn in KiCad in the cloud. Hobby perfboard stays the fallback. Maker to choose at order time (Aisler recommended) |
+| F2 | Event-motor drive | One PCA9685 switching DRV8833 bridges, one channel per motor (on or brake, no audible PWM); E2's walk on a native PWM pin at ≥ 20 kHz |
+| F3 | RTC | RV-3028-C7 with a supercapacitor, trimmed from NTP |
+| F4 | Motor phase through a power cut | Restore it at power-up (TMC2209 datasheet method: step with ENN high until MSCNT matches), confirmed on the rig; hold-up capacitor footprint kept as a fallback |
+| F5 | Power rails | 24 → 5 V for logic; a separate 24 → 6 V rail for the event motors |
+| F6 | Quiet hours | 22:00–07:00 legal time; the ages, the genie and Death silent; settable from Home Assistant. Since E2's racks are released by the walk train (PR #21), Death is silent whenever the ages are |
+| F7 | Toolchain | Arduino IDE 2 with the Arduino-ESP32 core; `arduino-cli` for headless builds. This supersedes "PlatformIO project" in architecture §12 |
+| F8 | Faults and the door | A faulted show stays off until acknowledged; an open door skips the shows (E5 and E6 still run) |
+| F9 | Sensor and event data | New `sensors:` and `events:` sections in `spec/clock.yaml`, append-only |
+| F10 | Simulator | The plan and error budgets of `docs/firmware-design.md` §11, with Skyfield and DE440s as the reference |
 ## D-next (M5–M7) — Mean time: Strasbourg or Bordeaux (revises D2)
 
 **Status: Accepted, 8 Nov 2026** (Paul, PR #20: "We are basing the localtime on Bordeaux, not
