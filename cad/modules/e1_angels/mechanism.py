@@ -37,7 +37,7 @@ SEAT_Y = {"bell": 14.0, "glass": 20.0}         # [E] docs/e1-design.md §2
 FIG_X = {"bell": -85.0, "glass": 88.0}
 SHOULDER = (-101.0, 47.0)                      # the sceptre arm's pivot (x, y) [E]
 BELL = dict(x=-84.0, y=47.5, z=19.0, d=20.0, h=15.0)   # Ø20 bell, mouth down [E]; E1's tone: §12 item 4
-GLASS = dict(x=83.0, y=59.0, z=16.0, h=19.0, d=9.0)    # bought miniature hourglass [E]
+GLASS = dict(x=83.0, y=59.0, z=16.0, h=19.0, d=9.0)    # printed, painted hourglass (Paul, 8 Nov 2026) [E]
 STRIKE_GAP = 0.5                               # the striker's tip stops this far from the bell (banking)
 WIRE_D = 0.5
 GEARMOTOR = dict(w=12.0, d=10.0, length=34.5, shaft_d=3.0, shaft_l=9.0)   # [E] ⚠ as E2's: check the chosen motor
@@ -516,10 +516,11 @@ def build():
     a.add("forearms_and_frame", frame_g, group="figures", print_up=(0, 0, -1),
           note="the forearms and the glass's frame in one print (Paul: the forearms turn the glass)")
     a.allow("forearms_and_frame", "glass_arbor"); a.allow("forearms_and_frame", "figure_glass")
-    hg = bd.Cone(GLASS["d"] / 2, 0.8, GLASS["h"] / 2, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN))
+    hg = bd.Cone(GLASS["d"] / 2, 1.5, GLASS["h"] / 2, align=(bd.Align.CENTER, bd.Align.CENTER, bd.Align.MIN))
     hg = (hg + hg.mirror(bd.Plane.XY)).rotate(bd.Axis.X, -90).moved(bd.Location((gx, gy, gzc)))
-    a.add("hourglass", hg, material="ghost", printed=False, group="figures",
-          note="bought miniature hourglass, red sand, ≈ 20 mm ⚠ to source")
+    a.add("hourglass", hg, material="PLA", group="figures", print_up=(0, 1, 0), nozzle=0.2,
+          note="printed and painted (red sand in the lower bulb), glued into the frame: not a real glass "
+               "(Paul, 8 Nov 2026); Ø3 neck")
     a.allow("hourglass", "forearms_and_frame")
     return a, data
 

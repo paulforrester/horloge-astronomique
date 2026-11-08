@@ -5,8 +5,9 @@ gallery. The genie on the left (A1) strikes his hand bell with his sceptre, once
 the age's strokes. The genie on the right (A2) turns his hourglass each hour, half a turn,
 alternately right and left.
 
-**Status: detail design, part 1, decisions settled (§16.8); for merge.** The concept was settled on PR #18 (Paul, 7–8
-Nov 2026; §12, §15): **one forward-only motor, a count wheel, and a rigid cross shaft to the glass.**
+**Status: detail design part 1 merged (PR #23). The hourglass is a printed, painted figure (§17.1). The bells
+are for decision (§17.2).** The concept was settled on PR #18 (Paul, 7–8 Nov 2026; §12, §15): **one
+forward-only motor, a count wheel, and a rigid cross shaft to the glass.**
 Tags as in `docs/reference-notes.md`: [S] sourced, [D] derived,
 [E] estimate, [?] unclear.
 
@@ -587,7 +588,7 @@ Module 1.0, backlash 0.15, faces 3 mm, as M1. Bearings: eight MR85ZZ in the two 
 | The glass's angle | 90° (1 − cos θ) for the crank's angle θ: 0 → 180°, then back 180 → 0° the next hour | [D] |
 | An overrun of 5° at the crank | **0.34°** at the glass | [D] |
 | Time | ten silent turns, **3.0 s** at 200 rpm (Paul: about 3 s) | [D]; the speed [E] |
-| Forearms and frame | one print on the arbor's front end; the bought hourglass sits in the frame | [E] its size: 19 × 9 mm |
+| Forearms and frame | one print on the arbor's front end; the printed hourglass is glued into the frame (§17.1) | [E] its size: 19 × 9 mm |
 
 ### 16.6 Size and parts
 
@@ -662,3 +663,83 @@ Module 1.0, backlash 0.15, faces 3 mm, as M1. Bearings: eight MR85ZZ in the two 
      (tested). Nothing above it is in the way: the plinth and the shoulder bracket are further forward.
 2. **The glass tower's tall plate: A, keep one plate** (Paul, PR #23: "Go with A -- keep it"). It carries the
    slider's guides, both of the glass arbor's arms and the crank block.
+## 17. The hourglass and the bells (8 Nov 2026)
+
+### 17.1 The hourglass: printed and painted (Paul, 8 Nov 2026)
+
+- Paul: "The miniature hourglass is not real. It is just a painted figure."
+- So it is a **printed part**, `hourglass` in the model: two cones, 19 × 9 mm [E, §2], with a Ø3 neck so it prints
+  and handles safely. It prints upright with the 0.2 mm nozzle, is painted (the red sand in its lower bulb) and
+  is glued into the forearms' frame.
+- It still turns with the forearms, as decided (§12, item 3).
+- **BOM:** the "miniature hourglass" row is gone; nothing to buy.
+- The superseded options in §8 item 3 and §9 are left as written; this section replaces them.
+
+### 17.2 The bells: buy, or make?
+
+**What is needed** (D8: real small bells, struck mechanically).
+
+| Bell | Module | Size at 1:8 | Pitch |
+|---|---|---|---|
+| The genie's hand bell | E1 | ≈ Ø 20 mm, held up by its handle [E, §2] | **a little lower than the ages' bell** [S: Paul, PR #18] |
+| The ages' bell, at the viewer's right of Death | E2 | ≈ Ø 21 mm, mouth down on a bracket [E: `docs/e2-design.md` §2] | a little higher than the genie's |
+| Death's bell, at the viewer's left | E2 | ≈ Ø 21 mm [E: same] | not stated; the hours |
+
+One decision covers all three, so the purchase can be made in one order. E2's own files are not changed here.
+
+**What the search found** (8 Nov 2026). Search snippets only [Sn]: open each page before ordering.
+- **Pressed brass clock bells, Ø 32 mm and up.**
+  - Boley (Germany, EU): a polished pressed brass bell, **Ø 32 × 13 mm**, item 095010, with a 5 × 5 mm square
+    hole. Boley says the 32/36 mm pair is tuned for a "bim-bam" [Sn: https://boley.de/en/shop/240.bells;
+    https://flume.de].
+  - Cousins (UK): pressed brass bells Ø 32–70 mm, made in Germany [Sn: Cousins 2018 clock-parts catalogue,
+    https://www.cousinsuk.com/PDF/products/8670_Cousins%202018%20CLOCK%20PARTS%20Catalogue.pdf]. UK means customs
+    and VAT on delivery (BOM, Batch 1 notes).
+  - **No clock-parts seller found offers anything smaller than 32 mm.** These are made to ring well, but they
+    are 1.5 times the scale size.
+- **Small decorative brass bells, 18–25 mm.**
+  - German shops list open brass bells for dogs or hunting, "Ortungsglöckchen", at **18 and 25 mm**
+    [Sn: https://www.ebay.de].
+  - Dregeno (Germany) lists a brass decorative bell **2.0 × 2.0 cm**, ≈ 5 g [Sn:
+    https://www.dregeno.de/haendler/en/h16-10/].
+  - These are the right size, but not made for tone. Their sound is unknown until heard. Remove the clapper.
+- **Making them on Paul's drill press.**
+  - An Instructables project makes miniature brass bells from brass rod on a drill press with files and a
+    hacksaw blade: the rod turns in the chuck, and is filed to shape and drilled out [Sn:
+    https://www.instructables.com/Miniature-Brass-Bell-on-a-Drill-Press/].
+  - That suits Paul's workshop (a drill press, no lathe; CLAUDE.md).
+  - **Tuning is possible.** Filing the wall thinner lowers the note. For one shape and metal the pitch goes
+    roughly as wall thickness over diameter squared [E: thin-shell scaling, §12 item 4]. So the genie's bell can
+    be filed until it sits just below the ages' bell.
+  - A Ø 20–22 mm rod is wider than a drill-press chuck (typically 13–16 mm [E]). Turn a shank on one end first,
+    or start from Ø 25 mm rod and file it down.
+  - Brass round bar CuZn39Pb3 (free-cutting) is a stock metric item in France [E: a supplier to choose].
+
+**Options.**
+
+| Option | For | Against |
+|---|---|---|
+| **A. Buy small decorative bells (18–25 mm), several of each, and choose by ear** | Cheap; the right size; quick. Buying 6–8 bells in two or three sizes makes a pitch pair likely | Unknown quality: they may clunk or ring short. Mounts sized only once they are in hand |
+| B. Buy pressed clock bells (Boley Ø 32 / 36 mm) | Made to ring, sold as tuned pairs, in the EU | 1.5–1.7 times the scale size: too big to be held by a 78 mm genie or to hang beside a 78 mm Death. They would have to be hidden, with a printed bell in view, against Paul's decision that the arm strikes the bell in its hand (§12 item 2) |
+| C. Make them from brass rod on the drill press | The exact size and shape of the original; tunable by filing; a satisfying shop job | A few hours per bell; hollowing a deep bell on a drill press needs care; the tone is learnt by trial |
+| D. Hidden tuned rods (clock gongs) behind printed bells | Clear, tunable tone | Not bells; not what D8 or Paul's decision describes |
+
+**Recommendation: A first, with C as the fallback, both in the Batch 1 noise test.**
+- **Buy a sample set now:** 6–8 small brass bells in 18, 20 and 25 mm, plus one Boley Ø 32 bell as a known-good
+  reference for tone.
+- **In the local phase,** strike each with a printed striker, and pick:
+  - the ages' bell;
+  - Death's bell;
+  - one a little lower for the genie.
+- **If none rings well,** make the three from brass rod on the drill press (C), and file the genie's thinner
+  until it sits below the ages'.
+- **The CAD keeps every bell's size a parameter.** Mounts are sized once the bells are in hand.
+
+**BOM impact (if A is accepted).**
+- Batch 1 gains a bell sample set.
+- The Batch 2 bell rows stay (E1 1 + 1, E2 2 + 1) until the choice is made.
+- With C: brass round bar CuZn39Pb3, Ø 25 mm, ≈ 0.2 m.
+
+**Decision needed from Paul.**
+1. **The bells:** A, a sample set of small brass bells chosen by ear, with C (made on the drill press) as the
+   fallback. *Recommended.* Or B, or C at once.

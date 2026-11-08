@@ -1,7 +1,7 @@
 {
  "model": "e1_angels",
- "unique_parts": 33,
- "printed_parts": 36,
+ "unique_parts": 34,
+ "printed_parts": 37,
  "sets": {},
  "parts": [
   {
@@ -630,6 +630,25 @@
    "note": "the forearms and the glass's frame in one print (Paul: the forearms turn the glass)",
    "file": "forearms_and_frame.stl",
    "overhang_mm2": 281.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hourglass"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    9.0,
+    9.0,
+    19.0
+   ],
+   "note": "printed and painted (red sand in the lower bulb), glued into the frame: not a real glass (Paul, 8 Nov 2026); \u00d83 neck",
+   "file": "hourglass.stl",
+   "overhang_mm2": 0.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true
