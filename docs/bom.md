@@ -68,7 +68,7 @@ ordering.
 | MCP23017 I/O expander | I²C | 2 | about 27 inputs (architecture §10) | Mouser FR |
 | Hall switches + magnets | as Batch 1 | 20 + 30 | ~6 index + ~8 witness + ~6 trigger sensors | as Batch 1 |
 | Opto forks / microswitches | as Batch 1 | 6 / 10 | ~6 event locks + door + spares | Gotronic |
-| DC gearmotors | as Batch 1 | 8 + 1 spare | E1 ×2 (bell, glass), E2 ×3 (walk, quarters, hours: `docs/e2-design.md` §6), E3, E4, E6 (calendar advance, as in the original) | Gotronic (Pololu) |
+| DC gearmotors | as Batch 1 | 7 + 1 spare | E1 ×1 (bell and glass on one motor, a count wheel: `docs/e1-design.md` §15), E2 ×3 (walk, quarters, hours: `docs/e2-design.md` §6), E3, E4, E6 (calendar advance, as in the original) | Gotronic (Pololu) |
 | H-bridges | DRV8833-class dual | 4 | 2 motors each (8 motors) | Gotronic / Mouser FR |
 | Sound (D8) | DFPlayer-Mini-class module + small speaker | 1 | rooster crow | TBD |
 | Bells | small, for the angel, the ages and Death | TBD (≥ 2) | strokes and bells TBD (inventory A3/A4) | TBD |
@@ -199,6 +199,31 @@ below gives a different quantity from a row above, this one is newer: MCP23017 3
 | Comparator + divider | 24 V power-fail detect, threshold ≈ 20 V | 1 | firmware-design §3.7 | ⚠ to choose |
 | Electrolytic capacitor | 35 V, 470 µF (fit); footprint for 2 × 2200 µF (fallback, F4) | 1 (+ 2 if the fallback is needed) | power-fail hold-up | local / RS FR |
 | Module connectors | Molex Micro-Fit 3.0 dual-row pairs (JST-XH for small counts), keyed per module | ≈ 10 pairs, 4–22 pins | per-module table, firmware-design §4 | ⚠ to choose; check the current rating |
+
+### Batch 2 — E1 rows, detail design part 1 [E]
+
+From `cad/modules/e1_angels/mechanism.py` (`docs/e1-design.md` §16): the bell tower, the cross shaft, the glass
+tower. Rows marked "counted" are already in the Batch 2 totals above. E1 now needs one gearmotor, not two. The
+H-bridge row's four duals keep a spare channel.
+
+| Item | Spec | Qty [E] | How the quantity was counted | Supplier |
+|---|---|---|---|---|
+| Bearing MR85ZZ | 5 × 8 × 2.5 | 10 | the bell tower's four arbors 2 each; the crank's stub 2 | as Batch 1 |
+| Bearing MR63ZZ | 3 × 6 × 2.5 | 4 | the shoulder arbor 2; the glass arbor 2 | as Batch 1 |
+| Rod Ø5 | DIN 175 h9 | 0.35 m | bell shaft 34, intermediate 31, count arbor 31, left stub 36, cross shaft 166, right stub 15.5 mm [D: model] | as Batch 1 |
+| Rod Ø4 | DIN 175 h9 | 0.2 m | the slider rod, 192 mm [D: model] | as Batch 1 |
+| Rod Ø3 | DIN 175 h9 | 0.2 m | the glass arbor 120, the shoulder arbor 49, the lever's pivot pin 9 mm [D: model] | as Batch 1 |
+| Steel pin | Ø3 × 7.5, ISO 2338 m6 (or cut from silver steel) | 1 | the crank pin | as Batch 1 |
+| Steel wire | Ø0.5, stainless or piano wire | 0.2 m | the follower lever to the shoulder lever (≈ 70 mm) | model shops ⚠ |
+| Extension spring | small steel, Ø ≈ 2.4, ≈ 9 mm long (D13) | 1 (+ 2 spares) | the sceptre's flick; rate set on the test bell | Sodemann / Accu FR ⚠ choose |
+| Leaf spring | thin spring steel strip, 0.2–0.3 × 2 mm | 1 (+ spares) | the cross shaft's detent | ⚠ to choose |
+| Bell | small brass bell, Ø ≈ 20–25, **a little lower in pitch than E2's** (`docs/e1-design.md` §12) | 1 (+ 1 spare) | the genie's hand bell. Buy a few candidates with E2's and choose by ear | ⚠ not yet found; to source |
+| Miniature hourglass | red sand, ≈ 19–20 mm tall, ≈ 9 mm wide | 1 (+ 1 spare) | the glass genie's glass | ⚠ to source (charm or pendant sellers, EU) |
+| Micro metal gearmotor | ≈ 200 rpm under load (100:1 HP 6 V class) | counted (one of the 7 DC gearmotors) | E1, bell and glass | Gotronic (Pololu) ⚠ check the speed under load |
+| Subminiature roller-lever microswitch | as E2's | counted (2 of Batch 2's microswitches) | the bell lock, the count wheel's home | Gotronic ⚠ choose |
+| Screws M3 × 30 + nuts | A2 | 4 + 4 | the bell tower's four pillars | as Batch 1 |
+| Screws M2 × 6 + M2 heat-set inserts | A2 | 10 + 10 | the gearmotor bracket 2, the two switches 4, the slider's guides 4 | as Batch 1 |
+| Screws M3 × 8 + M3 heat-set inserts | A2 | 8 + 8 | the shoulder bracket 2, the crank block 2, the glass arbor's arms 4 | as Batch 1 |
 
 ## Batch 3 — v1.5 / v2
 

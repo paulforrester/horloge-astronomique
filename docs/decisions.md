@@ -32,6 +32,7 @@ from behind) was accepted on 5 Nov 2026.
 | D15 | The noon procession: Christ and the Apostles, or a personal set | **Astronomy and time**: twelve figures from Pythagoras to Einstein pass **Urania**, on the original's mechanism | **Accepted** 4 Nov 2026 (Paul, PR #11) | Phase 2 (E3) |
 | D16 | How a stepper is reached for service | **Plug-in from behind**: each motor on a printed adapter plate, held by 2 × M3 into heat-set inserts; its drive part slides on the D-shaft and is held by stops | **Accepted** 5 Nov 2026 (Paul, PR #13) | every stepper module (M1 and M2 done) |
 | D-next (firmware) | Controller and firmware, Phase 3 gate (F1–F10 in `docs/firmware-design.md` §14) | **F2–F10 as recommended**: PCA9685 + DRV8833 event drive (E2 walk on native PWM), RV-3028-C7, phase restored at power-up, separate 6 V motor rail, quiet hours 22:00–07:00 (ages, genie, Death), Arduino IDE / `arduino-cli`, faulted shows off until acknowledged, `sensors:`/`events:` in `spec/clock.yaml`, the simulator plan. F1: a carrier PCB drawn in KiCad, after a bench prototype | **Accepted** 8 Nov 2026 (Paul, PR #19 and chat) | Phase 3 |
+| D-next (E1) | The genies: motors, selector, link | **One forward-only gearmotor with a count wheel** (10 strokes, then 10 silent turns that turn the glass); a rigid cross shaft behind M1; the sceptre arm strikes the hand bell; a Scotch yoke, rack and pinion turn the forearms and glass; make-up strokes alone before the next show after a fault | **Accepted** 8 Nov 2026 (Paul, PR #18 and chat) | Phase 2 (E1) |
 
 Plus **Blockers** at the end: the network allowlist and the documents to obtain.
 
@@ -847,6 +848,25 @@ The options and trade-offs are in `docs/firmware-design.md` §14; this record li
 | F8 | Faults and the door | A faulted show stays off until acknowledged; an open door skips the shows (E5 and E6 still run) |
 | F9 | Sensor and event data | New `sensors:` and `events:` sections in `spec/clock.yaml`, append-only |
 | F10 | Simulator | The plan and error budgets of `docs/firmware-design.md` §11, with Skyfield and DE440s as the reference |
+
+## D-next (E1) — The genies: one motor and a count wheel
+
+**Status: Accepted, 8 Nov 2026** (Paul, PR #18 and chat). The options and trade-offs are in `docs/e1-design.md`
+§5–8 and §13–15; this record lists the outcome.
+
+| # | Decision | Outcome |
+|---|---|---|
+| 1 | Motors | One event motor for both genies ("truer to the original design") |
+| 2 | Selector | A count wheel, 1:20 on the bell shaft: ten strokes, then ten silent turns (a silencing cam) in which a mutilated gear turns the glass. The motor runs forward only |
+| 3 | Link to the glass | A rigid Ø5 cross shaft behind M1, below M1's motor adapters |
+| 4 | The strike | The genie's arm holding the striker moves and strikes the real bell in its hand |
+| 5 | The glass | Scotch yoke, rack and pinion; the forearms turn with the glass, in the facade plane, in about 3 s |
+| 6 | Sizes and parts | Figures 78 mm; E1's bell a little lower than E2's (sized or chosen by ear); a bought miniature hourglass |
+| 7 | Night | The glass turns when Death strikes; since PR #21 that is when the ages run |
+| 8 | After a fault in mid-cycle | The missing strokes run alone a minute before the next quarter (at E2's resync) |
+
+**Consequences.** The event-motor count drops to 7 + 1 (BOM). Quiet hours must skip whole cycles (:15 … :00) to
+keep E1's count; the firmware's F6 window should start after a :00 show and end before a :15 show.
 
 ## Blockers (not decisions, but they need Paul)
 

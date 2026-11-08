@@ -5,9 +5,9 @@ gallery. The genie on the left (A1) strikes his hand bell with his sceptre, once
 the age's strokes. The genie on the right (A2) turns his hourglass each hour, half a turn,
 alternately right and left.
 
-**Status: concept settled (§12, §15); ready to merge.** Paul answered the first round on PR #18
-(8 Nov 2026; §12), and the second round in chat (8 Nov 2026; §15): **one forward-only motor, a
-count wheel, and a rigid cross shaft to the glass.** Nothing is modelled yet. Tags as in `docs/reference-notes.md`: [S] sourced, [D] derived,
+**Status: detail design, part 1, for review (§16).** The concept was settled on PR #18 (Paul, 7–8
+Nov 2026; §12, §15): **one forward-only motor, a count wheel, and a rigid cross shaft to the glass.**
+Tags as in `docs/reference-notes.md`: [S] sourced, [D] derived,
 [E] estimate, [?] unclear.
 
 <p align="center"><img src="img/e1/original_genies.jpg" width="640" alt="The original lion gallery on 30 Oct 2026 at 10:10 CET: on the left the genie with his hand bell held up and the striker low in his other hand; in the middle the mean-time dial; on the right the genie holding the hourglass upright in both hands"></p>
@@ -490,3 +490,165 @@ next quarter."). The next show then starts with the count wheel in step.
 **Next:** the detail design, part 1, in a new PR once this one is merged: the bell cassette with the
 motor, the count wheel and the silencing cam; the cross shaft; the glass cassette. Placeholder
 figures, with tests, print and SketchUp files.
+
+## 16. Detail design, part 1: the trains, the strike, the glass drive
+
+Model:
+- `cad/modules/e1_angels/program.py`: the count wheel's program, the lever, the silencing and the glass, with no
+  CAD;
+- `cad/modules/e1_angels/mechanism.py`: the CAD.
+
+The figures are placeholders at their decided size; the sculpted figures come in a later part. The model shows
+the rest state at home: the arm cocked (low), the count wheel at 0, the crank at its lower dead centre, the glass
+upright.
+
+Frame: M1's (`docs/m1-design.md` §9.2): origin at the dial's centre on its face, +X right, +Y up, +Z towards the
+viewer.
+
+<p align="center"><img src="img/e1/e1_front.png" width="760" alt="E1 from the front: the bell genie's tower on the left with the gearmotor sticking out to the left, the cross shaft behind M1's position, the glass tower on the right with its tall plate, the slider rod and the rack; placeholder figures on their plinths"></p>
+
+<p align="center"><img src="img/e1/e1_bell_tower.png" width="480" alt="The bell tower from inside, plates hidden: the bell shaft with the snail, the follower lever and its wire up to the shoulder lever on the shoulder bracket, the intermediate 48 + 12, the count wheel 60, the mutilated sector and the cross gear 36"> <img src="img/e1/e1_glass_drive.png" width="440" alt="The glass drive from inside, its plate hidden: the cross shaft and its crank in the crank block, the yoke on the slider rod, the rack at the top meshing the glass arbor's pinion"></p>
+
+<p align="center"><img src="img/e1/e1_three_quarter.png" width="640" alt="E1 from behind, figures hidden: the bell tower with its two plates, the gearmotor and its bracket; the cross shaft; the glass tower's plate with the slider, rack and the glass arbor's arms"></p>
+
+### 16.1 Layout, and why
+
+- **Two towers and a shaft.** The bell tower (left, x −119 to −88) holds the motor and all the trains. The glass
+  tower (right, x 88 to 119) holds only the crank, yoke, rack and pinion. A Ø5 cross shaft joins them.
+- **The cross shaft runs behind M1, at y −65.1, z −106.8** [D: 36 mm from W at 228°].
+  - M1's motor adapters reach down to y −55.5. A Ø12 coupling on the shaft tops out at −59.1, so **M1's motors
+    still draw straight out backwards** (D16; tested).
+  - It stays out of M7's gallery below: nothing of E1 goes lower than y −110.
+- **The towers are outboard of M1's back plate** (x −81 to 83). The bell tower's inner plate is 7 mm clear of it.
+  The E1 model is checked against the M1 model: no part touches.
+- **The arbors in the bell tower run along X.** So the count wheel can drive the cross shaft directly, and the
+  planes stack between two plates as in a clock.
+
+### 16.2 The bell tower
+
+| Axis (y, z) | Carries, plane by plane (inner to outer) | Turns |
+|---|---|---|
+| B (−7, −46), bell shaft | the snail; the 12; the lock cam; the gearmotor's coupling outside | once per stroke (0.30 s) |
+| I (−5.23, −75.95) | 48 + 12 in one print | 1 in 4 |
+| W (−41, −80), count arbor | the silencing cam; the mutilated sector 36 (18 teeth); the count wheel 60; the home cam | 1 in 20 |
+| C (−65.09, −106.75), cross shaft's stub | the 36; the detent disc; out to the coupling | half a turn per hour |
+| PF (−20, −62) | the follower lever's Ø3 pin, pressed in the inner plate | — |
+
+| Pair | Teeth | Centre (mm) | Shift | Ratio |
+|---|---|---|---|---|
+| B → I | 12 / 48 | 30.000 | +0.298 / −0.298 | |
+| I → W | 12 / 60 | 36.000 | +0.298 / −0.298 | (12/48)(12/60) = **1/20 exactly** [D] |
+| W → C | sector 36 (18 teeth) / 36 | 36.000 | 0 | 1:1 while engaged: 18 × 10° = 180° [D] |
+
+Module 1.0, backlash 0.15, faces 3 mm, as M1. Bearings: eight MR85ZZ in the two plates.
+
+**The planes, along X:** inner plate −91 to −88; the follower lever −94.5 to −92; the snail and the silencing cam
+−98.5 to −95.5; the sector and the cross gear −102.5 to −99.5; the 60 and I's 12 −106.5 to −103.5; I's 48 and B's 12
+−110.5 to −107.5; the lock, home and detent cams −114.5 to −111.5; outer plate −119 to −116.
+
+### 16.3 The strike
+
+| Item | Value | Tag |
+|---|---|---|
+| Snail | R 11 dwell (the rest is here); the drop at 30°; R 7 dwell to 60°; harmonic rise to R 11 at 280° | [D] `program.py` |
+| Latency, cue to stroke | 30° of the bell shaft: **0.025 s** at 200 rpm | [D]; the motor's speed [E] |
+| Pressure angle on the rise | 8.6° | [D] |
+| Follower lever | straight, along z: the roller 16 mm in front of the pivot, the wire's hole 36 in front, the silencing pin 18 behind. The roller and the pin reach into the cams' plane on axles | [D] |
+| The bank | the spring flicks the arm until the roller is 0.4 mm short of R 7 | [D] |
+| Wire | Ø0.5 steel, the follower lever's tip to the shoulder lever: it only pulls (cocking). The pull is **8.1 mm** [D: 3.6 × 36 / 16] | [D] |
+| Shoulder lever | 15.5 mm, so the pull cocks the arm **30°** [D: 8.1 / 0.524] | [D] |
+| Arm | the arm and the striker in one print, on a Ø3 shoulder arbor in two MR63ZZ. Struck, its tip stops **0.5 mm** from the bell's rim (tested); cocked, it is well clear | [D]; the gap is set on the test bell |
+| Spring | a small steel extension spring (D13) from the shoulder lever up to a post on the bracket | [E]: the rate is set on the test rig |
+
+### 16.4 The count wheel, the silencing and the home
+
+- **Ten strokes, then ten silent turns** (tested over all 20 turns).
+- **The silencing cam** is cut as the envelope of the pin's circle, not as a point contact. Without that, the
+  pin's 2 mm width would let a sharp cam push it back as the cam turns away.
+  - It clears the pin by at least 0.3 mm through every stroke of the hour (count angle 0.5–170°), with the arm
+    at its bank.
+  - It holds the roller off the snail at every silent drop. Over the count angle 183–353° it holds the roller the
+    full 0.5 mm.
+  - It lifts and lowers the lever **only on the snail's high dwell** (u ≥ 280°), so the arm never twitches.
+- **The home cam's notch is 18° wide** (count angle 351–9°), so only the twentieth turn's lock falls in it.
+- **The detent:** a two-notch disc on the cross shaft's stub and a leaf spring hold the crank at a dead centre
+  between hours. The sector's first tooth then always finds its gap.
+
+### 16.5 The glass
+
+| Item | Value | Tag |
+|---|---|---|
+| Pinion | 12 teeth, module 1.0, shift +0.298, on a Ø3 glass arbor through the chest. The arbor runs back to z −109 in two MR63ZZ, on two arms from the glass tower's plate | [D] |
+| Crank radius | **9.425 mm = π · 6 / 2**, so its 18.85 mm stroke is half a turn of the pinion [D] | [D] |
+| Yoke and rack | one slider: a Ø4 rod in two guides, the yoke at its foot, the rack (12 teeth) at its top. At rest a rack gap faces the pinion's tooth 0 [D: the rack starts 9 pitches below the glass's centre] | [D] |
+| The glass's angle | 90° (1 − cos θ) for the crank's angle θ: 0 → 180°, then back 180 → 0° the next hour | [D] |
+| An overrun of 5° at the crank | **0.34°** at the glass | [D] |
+| Time | ten silent turns, **3.0 s** at 200 rpm (Paul: about 3 s) | [D]; the speed [E] |
+| Forearms and frame | one print on the arbor's front end; the bought hourglass sits in the frame | [E] its size: 19 × 9 mm |
+
+### 16.6 Size and parts
+
+- **Envelope [D]:** x −165.5 to 121.8 (the gearmotor sticks out 47 mm left of the bell tower); y −110 to 95;
+  z −126 to 29 (the bell at the front).
+- **Parts:** 70, of which 35 are printed. Every printed part fits the H2D's bed and meshes clean.
+- **Print files:** `export/print/e1_angels/` (32 files for 35 prints).
+- **SketchUp:** `export/sketchup/e1_angels.dae` and `e1_angels_exploded.dae` (pulled apart along X).
+
+### 16.7 Checks
+
+`cad/tests/test_e1.py`, 22 tests.
+- **The program:**
+  - the 1/20 ratio;
+  - the centre distances;
+  - the sector's 18 teeth;
+  - the latency;
+  - the pressure angle;
+  - ten strokes, then ten silent turns;
+  - the silencing cam's clearances and holds;
+  - the ramps on the high dwell;
+  - the home notch;
+  - the wire's pull.
+- **The glass:**
+  - 2r = π · r_p;
+  - it alternates;
+  - it turns only in the silent half, in 3.0 s;
+  - the overrun error.
+- **The controller** (`program.simulate`):
+  - a normal day stays in step;
+  - quiet hours that skip whole cycles keep the count;
+  - a skip in mid-cycle is made up on its own before the next show (§15.4 B). If the hour itself was lost, the
+    glass turns in the make-up.
+- **The model:**
+  - no interference, and every part fits the bed;
+  - E1 is clear of M1;
+  - M1's motors still draw out backwards;
+  - the gearmotor slides out to the left;
+  - the arm is shown cocked, and struck its tip is 0.2–1.0 mm from the bell.
+
+### 16.8 Estimates to confirm, and decisions
+
+**Estimates [E]:**
+- **The gearmotor ⚠:** ≈ 200 rpm under load, for example a 100:1 HP 6 V micro metal gearmotor, as in Batch 1.
+  The timing scales with it. Firmware F2 drives the event motors on or off, with no PWM, so the time is set by
+  choosing the ratio. A 75:1 or 150:1 of the same family moves it ±25 % or so [E].
+- **The sceptre's spring and the bank:** set on the test bell, for a clean ring.
+- **The detent's leaf spring:** shown as a placeholder.
+- **Press fits and bearing seats:** wait for the tolerance coupons, as everywhere.
+- **The plinths:** simple blocks for now. Their shape follows the case's cornice when it is designed.
+
+**Interfaces to note (no other module's file is changed here):**
+- **Firmware** (`docs/firmware-design.md` §8.3, F6: quiet hours 22:00–07:00):
+  - for E1's count, the 22:00 show must run in full, and 07:00 must be silent with the rest of its cycle (§15.3);
+  - E1's make-up strokes run at E2's resync (§7.5 there; §15.4 B here);
+  - E1's two switches are the bell lock and the home switch.
+- **M5:** the glass tower's plate and slider reach y 95 at x 116–119, z −121 to −20. The genies' heads reach
+  ≈ 76–92 mm above the dial's centre, in front of M5's band.
+- **The case:** the gallery's bay must take E1 from x −166 to 122 and back to z −126.
+
+**Decisions for Paul:**
+1. **The gearmotor sticking out on the left.** It is coaxial with the bell shaft, 47 mm outboard of the tower.
+   - **A. Keep it** (recommended): straight drive, no extra gears, and it slides out to the left for service.
+   - B. Fold it inside the tower with a 1:1 pair, at the cost of 2 gears and ≈ 15 mm more depth.
+2. **The glass tower's tall plate** (y −110 to 95). It carries the slider and both of the glass arbor's arms.
+   - **A. Keep one plate** (recommended): simple and stiff.
+   - B. Two smaller brackets, if the case's cornice needs room.
