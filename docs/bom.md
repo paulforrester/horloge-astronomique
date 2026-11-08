@@ -235,8 +235,8 @@ H-bridge row's four duals keep a spare channel.
 | Steel wire | Ø0.5, stainless or piano wire | 0.2 m | the follower lever to the shoulder lever (≈ 70 mm) | model shops ⚠ |
 | Extension spring | small steel, Ø ≈ 2.4, ≈ 9 mm long (D13) | 1 (+ 2 spares) | the sceptre's flick; rate set on the test bell | Sodemann / Accu FR ⚠ choose |
 | Leaf spring | thin spring steel strip, 0.2–0.3 × 2 mm | 1 (+ spares) | the cross shaft's detent | ⚠ to choose |
-| Bell | small brass bell, Ø ≈ 20–25, **a little lower in pitch than E2's** (`docs/e1-design.md` §12) | 1 (+ 1 spare) | the genie's hand bell. Buy a few candidates with E2's and choose by ear | ⚠ not yet found; to source |
-| Miniature hourglass | red sand, ≈ 19–20 mm tall, ≈ 9 mm wide | 1 (+ 1 spare) | the glass genie's glass | ⚠ to source (charm or pendant sellers, EU) |
+| Bell | small brass bell, Ø ≈ 20–25, **a little lower in pitch than E2's** (`docs/e1-design.md` §12) | 1 (+ 1 spare) | the genie's hand bell. Buy or make: for decision (`docs/e1-design.md` §17.2) | ⚠ to decide |
+| Hourglass | — | — | printed and painted, not bought (Paul, 8 Nov 2026; `docs/e1-design.md` §17.1) | — |
 | Micro metal gearmotor | ≈ 200 rpm under load (100:1 HP 6 V class) | counted (one of the 7 DC gearmotors) | E1, bell and glass | Gotronic (Pololu) ⚠ check the speed under load |
 | Subminiature roller-lever microswitch | as E2's | counted (2 of Batch 2's microswitches) | the bell lock, the count wheel's home | Gotronic ⚠ choose |
 | Screws M3 × 30 + nuts | A2 | 4 + 4 | the bell tower's four pillars | as Batch 1 |
