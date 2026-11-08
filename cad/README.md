@@ -24,6 +24,7 @@ python3 -m venv .venv-cad && .venv-cad/bin/pip install -r cad/requirements.txt
 | `hardware.py` | Bought parts from D4: Ø3/5/8 rods, 0.45 mm-wall brass tubes in 1 mm steps (`tube_stack` telescopes them with 0.10 mm clearance), the bearing set, M2–M5 screws and heat-set inserts. Nominal sizes until the parts are measured. |
 | `parts.py` | Rods, tubes, bearings, hubs, gears on hubs, bearing-seat cuts, plates, discs, standoffs, hands, radial cams and cam pressure angle. Printed fits live in one place (`FITS`, [E] until the tolerance test). |
 | `assembly.py` | Named-part assemblies with the checks every module must report: exact **interference** volumes (pairs declared as intended contact are skipped), **bed fit** against the H2D (single and dual nozzle), export to **STL / 3MF / STEP / DAE** (named nodes, mm, Z up, for SketchUp), and **PNG renders** (assembly and exploded). |
+| `bevel.py` | Straight bevel gears (Tredgold's back-cone method), module and backlash as parameters; added for M7's 1:1 right-angle drive. `cad/tests/test_bevel.py` runs a pair clear and checks it is engaged |
 
 ## Validation
 
@@ -53,6 +54,7 @@ python3 -m venv .venv-cad && .venv-cad/bin/pip install -r cad/requirements.txt
 | `m2_main_dial/feasibility.py` | Layout study, accepted: [`docs/main-dial-feasibility.md`](../docs/main-dial-feasibility.md) |
 | `m2_main_dial/mechanism.py`, `calendar.py`, `calendar_logic.py`, `dial.py`, `full.py` | M2 detailed design, proposed: [`docs/m2-design.md`](../docs/m2-design.md). `python -m cad.modules.m2_main_dial.full` checks the whole module |
 | `test_rig/rig.py`, `test_rig/coupons.py` | Test rig and tolerance coupons (with a worm test since PR #5): [`docs/test-rig.md`](../docs/test-rig.md). `python -m cad.modules.test_rig.rig` checks the rig and writes renders to `export/test_rig/` |
+| `m7_weekdays/mechanism.py` | M7 weekday carousel, detailed design for review: [`docs/m7-design.md`](../docs/m7-design.md) §13. `python -m cad.modules.m7_weekdays.mechanism` checks it and writes renders to `export/m7_weekdays/` |
 
 ## Print files
 

@@ -200,6 +200,22 @@ below gives a different quantity from a row above, this one is newer: MCP23017 3
 | Electrolytic capacitor | 35 V, 470 µF (fit); footprint for 2 × 2200 µF (fallback, F4) | 1 (+ 2 if the fallback is needed) | power-fail hold-up | local / RS FR |
 | Module connectors | Molex Micro-Fit 3.0 dual-row pairs (JST-XH for small counts), keyed per module | ≈ 10 pairs, 4–22 pins | per-module table, firmware-design §4 | ⚠ to choose; check the current rating |
 
+### Batch 2 — M7 rows from the detailed design [E]
+
+Quantities from `cad/modules/m7_weekdays/` (`docs/m7-design.md` §13). They count towards the
+"ground rod, brass tube, bearings, fasteners" and "Hall switches + magnets" rows above. M7 has no
+motor: it is driven by M2's arbor W.
+
+| Item | Spec | Qty [E] | How the quantity was counted | Supplier |
+|---|---|---|---|---|
+| Ground rod Ø5 | DIN 175 h9 | 0.16 m | stub 49 mm, lay shaft 109 mm [D: model] | as Batch 1 |
+| Bearing MR85ZZ | 5 × 8 × 2.5 | 4 | stub ×2, lay shaft ×2 | as Batch 1 |
+| Bearing 61806 | 30 × 42 × 7, thin section | 1 | the turntable, on the deck's Ø30 post | as the D4 set (123roulement / RS FR ⚠ check) |
+| Hall switch DRV5032 + magnet 5 × 2 | as Batch 1 | 1 + 1 | the Sunday witness (counted in Batch 2's 20 + 30) | as Batch 1 |
+| Screws + washers M5 | M5 × 16, ISO 7380, A2 | 2 | the bracket's tabs to the works' internal frame (D12 R5) | as Batch 1 |
+| Screws M3 + heat-set inserts | M3 × 10, ISO 7380 | 4 + 4 | the deck to the spine [E: not yet modelled as holes] | as Batch 1 |
+| Filament | PETG (deck, bracket), PLA (gears, turntable, rail, figures) | ≈ 0.3 kg | [E: 546 cm³ of printed parts in the model × 1.25 g/cm³ = 0.68 kg if solid; about 40–50 % of that with walls and 20 % infill] | as Batch 1 |
+
 ## Batch 3 — v1.5 / v2
 
 | Item | Qty [E] | Note |

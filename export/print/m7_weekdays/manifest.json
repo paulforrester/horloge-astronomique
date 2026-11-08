@@ -1,0 +1,242 @@
+{
+ "model": "m7_weekdays",
+ "unique_parts": 12,
+ "printed_parts": 18,
+ "sets": {},
+ "parts": [
+  {
+   "names": [
+    "dog_hub_on_W"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    12.0,
+    14.5,
+    11.0
+   ],
+   "note": "pressed on M2's arbor W; its single dog keys the carousel's phase (P4)",
+   "file": "dog_hub_on_W.stl",
+   "overhang_mm2": 8.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "dog_sleeve"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    12.0,
+    12.0,
+    7.0
+   ],
+   "note": "slides on the stub's flat; pull it back to free M7, push it on to key it (one position)",
+   "file": "dog_sleeve.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "bevel_A_20"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    21.4,
+    21.4,
+    6.7
+   ],
+   "note": "on the stub; 1:1 to bevel B",
+   "file": "bevel_A_20.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "bevel_B_20"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    21.2,
+    21.2,
+    9.2
+   ],
+   "note": "on the lay shaft",
+   "file": "bevel_B_20.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "bracket"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    70.0,
+    115.1,
+    46.1
+   ],
+   "note": "stub bearings, lay shaft's lower bearing; the spine carries the deck; tabs: 2 x M5 to the works' frame (D12 R5)",
+   "file": "bracket.stl",
+   "overhang_mm2": 600.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "deck"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    250.0,
+    235.0,
+    18.0
+   ],
+   "note": "carries the turntable's post, the lay shaft's upper bearing, the rail and the Hall",
+   "file": "deck.stl",
+   "overhang_mm2": 3.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "lay_gear_85"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    87.0,
+    87.0,
+    4.0
+   ],
+   "note": "",
+   "file": "lay_gear_85.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "turntable_hub"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    87.0,
+    87.0,
+    12.0
+   ],
+   "note": "85-tooth wheel, the 61806 seat and the 84-tooth setting spline, one print",
+   "file": "turntable_hub.stl",
+   "overhang_mm2": 579.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "turntable"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    210.0,
+    210.0,
+    4.0
+   ],
+   "note": "lift it off the spline, turn it, drop it back: one spline tooth = 2 h of carousel (setting)",
+   "file": "turntable.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "chariot_0",
+    "chariot_1",
+    "chariot_2",
+    "chariot_3",
+    "chariot_4",
+    "chariot_5",
+    "chariot_6"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    29.6,
+    57.1,
+    60.0
+   ],
+   "note": "Apollo (Sunday) \u2014 placeholder group, likeness to come",
+   "file": "chariot_0.stl",
+   "overhang_mm2": 303.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "rail"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    227.0,
+    227.0,
+    3.0
+   ],
+   "note": "decorative: the outer wheels stand 0.5 mm above it",
+   "file": "rail.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hall_post"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    10.0,
+    8.0,
+    4.0
+   ],
+   "note": "",
+   "file": "hall_post.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  }
+ ]
+}
