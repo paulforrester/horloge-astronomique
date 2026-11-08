@@ -881,6 +881,11 @@ assigned when the PR merges.
   `docs/e2-design.md`, the inventory, the reference notes) are left as their owners wrote them;
   this record supersedes them. The firmware's mean-time constant is set from this record in
   Phase 3. M7's 33.3 min setting offset becomes zero (`docs/m7-design.md` §9).
+- **Firmware (merged from PR #19 after this record was drafted).** `docs/firmware-design.md` sets
+  the mean-time modules to τ = UTC + 1860 s (Strasbourg). Under this decision it becomes
+  **τ = UTC − 137 s** [D: −0.57° × 240 s/° = −136.8 s; Bordeaux house at 0.57° W,
+  `docs/reference-notes.md` and `tools/phase0/derivations.py`]. The longitude should be refined to
+  the house's own coordinates. That edit belongs to the firmware track; it is flagged on PR #20.
 
 ## Blockers (not decisions, but they need Paul)
 
