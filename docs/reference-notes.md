@@ -1092,3 +1092,25 @@ where used elsewhere.
 - **Timing.** The noon show runs at about 12:30 CET, because the clock shows Strasbourg mean time.
   This is already in D2: mean noon is 12:29 CET [D: LMT = UT + 31 min].
 
+
+## Paul's photographs IMG_0762–0764 and IMG_0766, full resolution (added 8 Nov 2026)
+
+Committed by Paul to `docs/img/photos/` (PR #20). Measured in `docs/m5-design.md` §14,
+`docs/m6-design.md` §14 and `docs/m7-design.md` §12; the main results:
+
+- **Planetary dial** [S: IMG_0766; E: sizes]. The six spheres stand at the planets' mean
+  heliocentric longitudes for 30 Oct 2026, 09:08 UT, within 6° [D], so the dial shows mean
+  motions. The zodiac is graduated 0–360 counter-clockwise, Bélier (0°) at the right. Orbit radii
+  at 1:8 ≈ 15, 25, 42.5, 62, 85 and 132 mm. A raised dark central disc ≈ 0.76 m (≈ Ø 95 mm at
+  1:8); the gilt Sun only ≈ 0.15 m. The field is dark slate today (DA: azure).
+- **Moon globe** [S: IMG_0766]. Gilt with a dark crescent on the right, on a starry blue ground;
+  the Moon was waning gibbous (19.2 days [D]).
+- **Weekday chariots** [S: IMG_0766; E: sizes]. The day's chariot stands in the open between two
+  arched niches in the cavity's back wall; its neighbours show through the niches. Chariot ≈
+  0.50 m long, ≈ 0.48 m tall with its figure; the niche chariots ≈ 0.61 m either side; carousel
+  radius ≈ 0.8 m (≈ 100 mm at 1:8).
+- **Celestial globe** [S: IMG_0762–0764; E: sizes]. Four columns on a round stone plinth carry a
+  wide horizon ring (≈ 1.4 m). A brass meridian ring lettered "PÔLE BORÉAL" and "ZÉNITH"; a large
+  hour ring at the pole (≈ half the globe); silvered graduated circles that turn with the globe.
+  Constellation figures are drawn in outline. The meridian ring runs square to the facade, the
+  north pole apparently raised towards the case [E: two oblique views].

@@ -32,6 +32,7 @@ from behind) was accepted on 5 Nov 2026.
 | D15 | The noon procession: Christ and the Apostles, or a personal set | **Astronomy and time**: twelve figures from Pythagoras to Einstein pass **Urania**, on the original's mechanism | **Accepted** 4 Nov 2026 (Paul, PR #11) | Phase 2 (E3) |
 | D16 | How a stepper is reached for service | **Plug-in from behind**: each motor on a printed adapter plate, held by 2 × M3 into heat-set inserts; its drive part slides on the D-shaft and is held by stops | **Accepted** 5 Nov 2026 (Paul, PR #13) | every stepper module (M1 and M2 done) |
 | D-next (firmware) | Controller and firmware, Phase 3 gate (F1–F10 in `docs/firmware-design.md` §14) | **F2–F10 as recommended**: PCA9685 + DRV8833 event drive (E2 walk on native PWM), RV-3028-C7, phase restored at power-up, separate 6 V motor rail, quiet hours 22:00–07:00 (ages, genie, Death), Arduino IDE / `arduino-cli`, faulted shows off until acknowledged, `sensors:`/`events:` in `spec/clock.yaml`, the simulator plan. F1: a carrier PCB drawn in KiCad, after a bench prototype | **Accepted** 8 Nov 2026 (Paul, PR #19 and chat) | Phase 3 |
+| D-next (M5–M7) | Mean time: Strasbourg or Bordeaux (revises D2 items 1 and 5) | **Bordeaux mean time**, "the sky over this house"; the shows stay on legal time (D14) | **Accepted** 8 Nov 2026 (Paul, PR #20) | Phase 3 (firmware constant) |
 
 Plus **Blockers** at the end: the network allowlist and the documents to obtain.
 
@@ -847,6 +848,44 @@ The options and trade-offs are in `docs/firmware-design.md` §14; this record li
 | F8 | Faults and the door | A faulted show stays off until acknowledged; an open door skips the shows (E5 and E6 still run) |
 | F9 | Sensor and event data | New `sensors:` and `events:` sections in `spec/clock.yaml`, append-only |
 | F10 | Simulator | The plan and error budgets of `docs/firmware-design.md` §11, with Skyfield and DE440s as the reference |
+## D-next (M5–M7) — Mean time: Strasbourg or Bordeaux (revises D2)
+
+**Status: Accepted, 8 Nov 2026** (Paul, PR #20: "We are basing the localtime on Bordeaux, not
+Strasbourg", then "I'd prefer to use the 'the sky over this house' approach"). The number is
+assigned when the PR merges.
+
+**Context.**
+- D2 set the dials' time to **Strasbourg** mean time (items 1, 2 and 5) because "the noon show is
+  important", and only the sky (sunrise/sunset, the globe) to Bordeaux.
+- D14 has since moved every show to legal time, so the noon show no longer depends on mean time.
+- The mean-time offset is one firmware constant (architecture P1). No gear, cam or printed part
+  depends on it [D: a search of `cad/`, `spec/`, `firmware/` and `sim/` finds it only in a
+  comment in `cad/modules/m1_time/mechanism.py`].
+
+**Decision: Bordeaux mean time for the whole clock.**
+- Mean time = **UT − 2.28 min** [D: D2, Bordeaux longitude]. Mean noon is 13:02 CET / 14:02 CEST.
+- So the gilt mean-time hands (M1), the main dial's apparent time, Sun and Moon hands (M2), the
+  calendar ring's midnight and the weekday carousel (M7) all refer to Bordeaux.
+- The globe (M6) was already on Bordeaux sidereal time; unchanged.
+- **D2's sub-question (ii) falls away.** The mobile horizon no longer needs the fixed 33.3 min
+  longitude offset: dial and sky are now on the same meridian, so it is symmetric about the dial's
+  noon and still means "the Sun is up outside".
+- The shows stay on legal time (D14): quarters on the quarter, noon show at 12:00 CET/CEST.
+
+**Consequences.**
+- The gilt hands read 1 h 02 min behind legal time in winter and 2 h 02 min in summer
+  (Strasbourg's would be 29 min and 1 h 29 min). The silver legal-time hands (M1b) are unchanged.
+- The calendar ring and the carousel change over at Bordeaux mean midnight: 01:02 CET, 02:02 CEST.
+- The replica's gilt hands read 33.3 min behind the cathedral's. Accepted for consistency.
+- Documents that still say "Strasbourg mean time" or "12:29" (D2, `docs/m1-design.md`,
+  `docs/e2-design.md`, the inventory, the reference notes) are left as their owners wrote them;
+  this record supersedes them. The firmware's mean-time constant is set from this record in
+  Phase 3. M7's 33.3 min setting offset becomes zero (`docs/m7-design.md` §9).
+- **Firmware (merged from PR #19 after this record was drafted).** `docs/firmware-design.md` sets
+  the mean-time modules to τ = UTC + 1860 s (Strasbourg). Under this decision it becomes
+  **τ = UTC − 137 s** [D: −0.57° × 240 s/° = −136.8 s; Bordeaux house at 0.57° W,
+  `docs/reference-notes.md` and `tools/phase0/derivations.py`]. The longitude should be refined to
+  the house's own coordinates. That edit belongs to the firmware track; it is flagged on PR #20.
 
 ## Blockers (not decisions, but they need Paul)
 
