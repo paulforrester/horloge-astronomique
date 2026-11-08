@@ -325,6 +325,11 @@ No stepper, no Hall sensor and no new controller channel type.
        phase. The CAD keeps the bell's size a parameter.
    - A bought miniature hourglass with red sand.
 5. **Night:** the glass turns every hour that Death strikes, day and night.
+   - **Update, 8 Nov 2026** [S: Paul, PR #21]: E2's walk train now releases E2's racks, so
+     **Death does not strike during quiet hours** ("I'm okay with Death not striking during the
+     quiet time at night"). So under this decision the glass does not turn in quiet hours either.
+     In practice the glass now turns exactly when the hour show runs, after the genie's fourth
+     stroke.
 6. **Interface with E2: as recommended.** The genie–age gap is ≈ 0.7–0.9 s; E2 is not changed.
 
 The open questions in §2 about the sceptre arm, the forearms and the turn's time are answered by
@@ -334,9 +339,11 @@ items 2 and 3.
 
 **What one motor has to do.**
 - **Bell:** one fast stroke per cue, ≤ 0.3 s after it, up to four times at 3 s intervals.
-- **Glass:** one slow half turn, ≈ 3 s, once an hour, day and night (decision 5). At night the
-  bell is silent while the glass still turns, so **the glass cannot depend on the bell's
-  strokes.**
+- **Glass:** one slow half turn, ≈ 3 s, once an hour, whenever Death strikes (decision 5). Since
+  PR #21, Death is silent in quiet hours (§12, item 5). So the glass only ever turns after the
+  genie's four strokes on the hour, and quiet hours no longer separate the two.
+- **But the glass still should not be counted from the bell's strokes.** A quarter skipped in the
+  middle of an hour (a fault, a power cut, catch-up) would put a stroke count out of step.
 - **One speed serves both** [D]. With the gearmotor at ≈ 200 rpm under load [E]:
   - the bell cam turns 1:1, once in 0.3 s;
   - the glass's crank turns through 20:1 (for example 12/48 · 12/60). Half a crank turn is then
@@ -348,11 +355,12 @@ the genies are driven.
 | Option | How | For | Against |
 |---|---|---|---|
 | **A. The direction selects** | Forward strikes the bell; reverse turns the glass. Each output sits on its own one-way needle bearing (e.g. HF0612, Ø 6 bore ⚠ verify), so the other output stands still. Each has its own lock switch. Firmware: forward until the bell's lock closes, or reverse until the glass's lock closes. | Two parts make the selector, and both are bought, metric and silent. The glass is free of the bell's count, so it turns at night and after any skipped quarter. The dual H-bridge already reverses: no new hardware. | **The motor runs both ways.** Architecture §10 says "DC gearmotors, one direction". That rule protects steppers' backlash (CLAUDE.md rule 3); an event motor's direction does not touch any time train. Needs Paul's approval to note the exception there. |
-| B. A count wheel | Forward only. The genie strikes 10 times an hour [D: 1 + 2 + 3 + 4]. A count wheel on the bell train releases the glass at every 10th stroke, which is "au dernier coup des quatre quarts". | The most clock-like: one direction, the moment set mechanically, as a striking train's count wheel | **The glass cannot turn at night**, when the genie is silent (against decision 5). Any skipped quarter puts the count out, and putting it right means ringing the bell. The released glass needs its own slow train, which the same motor must also drive. |
+| B. A count wheel | Forward only. The genie strikes 10 times an hour [D: 1 + 2 + 3 + 4]. A count wheel on the bell train releases the glass at every 10th stroke, which is "au dernier coup des quatre quarts". | The most clock-like: one direction, the moment set mechanically, as a striking train's count wheel. Since PR #21 it no longer conflicts with decision 5 (§12, item 5). | Any quarter skipped mid-hour puts the count out, and putting it right means ringing the bell. **It still needs a selector:** the glass's 3 s turn is ≈ 10 motor turns, and the bell cam, on the same motor, would strike on each of them. So B is a count wheel *plus* A or C. |
 | C. A shift actuator | Forward only. A small servo or solenoid moves a dog between the bell cam and the glass's train | Forward only; any order | A second actuator and channel, and a sensor to confirm the shift. A solenoid that only moves a dog is not against D8, but it is one more part to fail. |
 
-**Recommended: A.** It is the simplest selector, and the only one that keeps decision 5 and stays
-right after skipped shows.
+**Recommended: A.** It is the simplest selector, and it stays right after skipped shows. *(Checked
+again after PR #21: the night argument is gone, since the glass and the bell now run in the same
+hours. A is still recommended, for the two reasons in B's row.)*
 
 **13.2 Question 2: how the drive crosses to the far genie.**
 - **The motor and the selector go in the bell genie's cassette, on the left.** The bell needs the
