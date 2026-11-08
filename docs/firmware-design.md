@@ -50,7 +50,7 @@ Tags as in `docs/reference-notes.md`: [S] sourced (with link), [D] derived (calc
 | Board | A carrier PCB with sockets: the DevKit, 8 stepsticks and breakout modules plug in. Prototype first on the bench with the same modules (F1) | §3.2 |
 | Stepper drivers | 7 TMC2209 in v1.5 (6 in v1) on two UART buses, 4 addresses each; 8 sockets. STEP per driver; DIR fixed in hardware, direction set by the driver's `shaft` bit | §3.3 |
 | Event motors | 9 channels in v2 (8 in v1). DRV8833 H-bridges switched by one PCA9685, one line per motor; E2's walk on a native PWM pin (F2) | §3.4 |
-| Inputs | 35 by v2 (29 in v1): three MCP23017 (48 inputs), not two (BOM change, §13) | §3.5 |
+| Inputs | 37 by v2 (31 in v1): three MCP23017 (48 inputs), not two (BOM change, §13) | §3.5 |
 | RTC | RV-3028-C7 with a supercapacitor, trimmed from NTP (F3) | §3.6 |
 | Storage | I²C FRAM, MB85RC256V class, two alternating records with CRC | §3.6, §9.4 |
 | Power | Mean Well LRS-100-24 (Batch 1); 24 → 5 V for logic; a separate 24 → 6 V buck for the event motors (F5); power-fail detection and bulk capacitance | §3.7 |
@@ -67,7 +67,7 @@ Architecture §10 was written in Phase 0. The module designs since then change t
   `docs/e2-design.md` §4.1). M3 makes 7 in v1.5.
 - **Event motors: 8 in v1** (BOM Batch 2): E1 × 2 (bell, hourglass), E2 × 3 (walk, quarters,
   hours), E3, E4, E6. E5 makes 9 in v2.
-- **Inputs: 35 by v2**, not 27 (§3.5).
+- **Inputs: 37 by v2**, not 27 (§3.5).
 - **The releases are on legal time** (D14), on M1b. Architecture §9's sentence "The automata follow
   mean time" predates D14; D14 governs.
 - **E2's walk runs in two phases** around the strokes, and the controller starts phase A
@@ -132,6 +132,33 @@ D3 chose the ESP32-S3. This section only checks that it has enough resources.
    breadboard or jumper wires. It proves every circuit and the firmware before a PCB is ordered.
 2. **Carrier PCB**: drawn in KiCad in a later cloud PR, after the bench prototype works. Made in
    the EU (for example Aisler, Germany) or by JLCPCB, at Paul's choice.
+
+**What making the PCB involves (F1, accepted).**
+
+| Step | Who | What |
+|---|---|---|
+| Schematic | cloud | KiCad (free). Drawn from the working bench prototype. Paul reviews a PDF |
+| Layout | cloud | Sockets, connectors and tracks; KiCad's design-rule check run headless. Paul reviews a 3D render and a 1:1 print |
+| Fabrication files | cloud | Gerber and drill files in one zip, committed with the PR, like the print files |
+| Order | Paul | Upload the zip; check the maker's online viewer; standard options (2 layers, 1.6 mm, lead-free finish) |
+| Assembly | Paul | About 200 through-hole joints [E]: sockets, connectors, resistors, capacitors. No surface-mount parts |
+| Bring-up | Paul, with a checklist and a test sketch | One module at a time |
+
+**Fabricators that take small batches** [Sn: from general knowledge, not checked in this session;
+prices, minimums, delivery and VAT handling to be checked when ordering ⚠]:
+
+| Maker | Where | Small batch | For | Against |
+|---|---|---|---|---|
+| **Aisler** | Germany | 3 boards | EU: VAT included, no customs; fast post to France; checks the files on upload | Dearer per board |
+| Eurocircuits | Belgium | from 1 board (pooled prototypes) | EU; strong design checks | Dearer still; aimed at professionals |
+| Multi-CB | Germany | small runs | EU | Fewer hobby conveniences |
+| **JLCPCB** | China | 5 boards | Cheapest; KiCad plug-in to export the files | Shipping and VAT to add; 1–2 weeks with fast post |
+| PCBWay | China | 5 boards | Cheap; good hobby support | as JLCPCB |
+
+**Recommendation: Aisler for the first board.** It is in the EU (rule: source in France/EU where
+possible), with no customs, and it checks the files on upload. JLCPCB is a cheaper alternative
+for a re-spin, if one is needed. The KiCad files suit every maker, so the choice can wait until
+the board is drawn.
 
 ### 3.3 Stepper drivers
 
@@ -199,7 +226,7 @@ with a pull-up. They are read by MCP23017 expanders with interrupt outputs (INTA
 |---|---|---|---|
 | M1 cassette (M1 and M1b) | quarters, hour (M1b index), noon, M1 index, gilt witness, silver witness (`docs/m1-design.md` §9.4) | 6 | 6 |
 | M2 | index, Moon-tube witness, E6 home, E6 stop-lever opto, 1 March opto (`docs/m2-design.md` §8) | 5 | 7 (+ node witness, year-end trigger) |
-| E2 | state index, hour-snail witness, bell-station Hall, walk lock, quarter lock, hour lock, E1 cue (`docs/e2-design.md` §3, §11) | 7 | 7 |
+| E2 | state index, hour-snail witness, bell-station Hall, walk lock, quarter lock, hour lock, E1 cue, quarter-rack home opto, hour-rack home opto (`docs/e2-design.md` §3, §11; §12 on PR #21) | 9 | 9 |
 | E1 | bell lock, hourglass lock | 2 | 2 |
 | E3 | lock, cue (figures 4, 8, 12) | 2 | 2 |
 | E4 | lock | 1 | 1 |
@@ -209,10 +236,10 @@ with a pull-up. They are read by MCP23017 expanders with interrupt outputs (INTA
 | M3 (v1.5) | index, two witnesses (architecture §6) | — | 3 |
 | M4 / E5 (v2) | E5 lock | — | 1 |
 | Case | door switch | 1 | 1 |
-| **Total** | | **29** | **35** |
+| **Total** | | **31** | **37** |
 
 - E2 part 2b and E1, E3, E4 are not designed yet, so their counts may grow. **Three MCP23017
-  give 48 inputs**: 13 to spare at v2. Two (BOM Batch 2) would leave 3 in v1 and too few in v2.
+  give 48 inputs**: 11 to spare at v2. Two (BOM Batch 2) would leave 1 in v1 and too few in v2.
 - **Which DRV5032:** the **FC** variant: omnipolar (either magnet face works), open drain, 20 Hz
   sampling, 1.65–5.5 V [S: [DRV5032 SLVSDC7H](https://www.ti.com/lit/ds/symlink/drv5032.pdf), Table 4-1, p. 2]. BOM to
   name it (§13). Its 20 Hz sampling means an edge is seen up to 50 ms late [D: 1/20 Hz]. That is
@@ -286,7 +313,7 @@ easily and comes in 2–24 pins ⚠ (rating to check against the part chosen).
 |---|---|---|
 | M1 (M1 + M1b) | 16 | 2 steppers (8), 6 Hall signals, 3.3 V, GND |
 | M2 | 14 (v1.5: 16) | stepper (4), E6 motor (2), 5 sensor signals, opto LED supply, 3.3 V, GND |
-| E2 | 22 | state stepper (4), 3 gearmotors (6), 7 signals, 3.3 V, GND, 2 spare |
+| E2 | 24 | state stepper (4), 3 gearmotors (6), 9 signals, opto LED supply, 3.3 V, GND, 2 spare |
 | E1 | 8 | 2 gearmotors (4), 2 locks, 3.3 V, GND |
 | E3 + E4 | 10 | 2 gearmotors (4), 3 signals, 3.3 V, GND, 1 spare (speaker pair if D8's fallback is used: +2) |
 | M5 | 8 | stepper (4), 2 signals, 3.3 V, GND |
@@ -436,6 +463,10 @@ IDLE ──release──▶ LEAVING ──lock opens──▶ RUNNING ──lock
   [E] and learns the real time (a running mean) so the sequencer's lead times adapt.
 - **Multi-stop trains.** E2's walk stops twice per program turn (at 138.75° and 360°). Its state
   machine knows which phase it is in, and FRAM records it.
+- **E2's counting trains** (quarters, hours) stop on two conditions: the rack's home opto is
+  blocked (the count is gathered), and then the lock switch closes (`docs/e2-design.md` §12.1,
+  PR #21). The state machine waits for the opto first, so the lock's closings during the count
+  pass through.
 - **E6** is a variant (§7.4).
 
 ### 7.2 Inputs and debouncing
@@ -511,6 +542,10 @@ skipped shows the wrong age would be waiting, so the controller runs the walk tr
 - as many program turns as there are skipped ages, modulo 4;
 - without strikes.
 
+**E2's racks after a silent walk.** If the walk runs without a show, a rack it releases stays
+down on its snail. The snails are ramped, so nothing jams, and the next show strikes the count due
+then (`docs/e2-design.md` §12, PR #21). The firmware does nothing special.
+
 The firmware knows how many: it records in FRAM which age the ring holds at the waiting
 position, and the bell-station Hall confirms each age's arrival. One question is open for E2
 part 2b: how the firmware finds the ring's age if FRAM is lost (§13).
@@ -553,7 +588,13 @@ part 2b: how the firmware finds the ring's age if FRAM is lost (§13).
 - **Per show class:** the ages and the bell genie; the hourglass; Death; the noon show (it never
   falls in a night window, but the setting exists); the rooster.
 - **The faithful minimum** is the ages silenced at night while Death strikes day and night
-  [S: DA p. 58, 65]. The default window and which classes it silences are Paul's choice (F6).
+  [S: DA p. 58, 65].
+- **E2 goes silent as a whole.** E2's racks are released by its walk train (Paul, PR #21,
+  8 Nov 2026, as reported by the E2 session; `docs/e2-design.md` §12). With the walk stopped at night,
+  nothing releases Death's rack, so **Death cannot strike while the ages are silent**. The
+  E2 classes (the ages and genie, Death) are therefore one setting. Paul: "I'm okay with Death not
+  striking during the quiet time at night". The faithful minimum above is not available.
+- **The default** is F6: 22:00–07:00, E2 silent.
 - **From Home Assistant:** the window, the classes, and a "quiet now" switch until the next
   morning.
 
@@ -805,8 +846,9 @@ change; each is listed again in the PR's "Decisions needed".
 2. **E2 part 2b:** how does the controller learn which age the ring holds if FRAM is lost? For
    example, a second Hall at the bell station reading a code magnet under one age only. Today the
    four magnets are alike (`docs/e2-design.md` §11.4).
-3. **E2 part 2b:** please give the cue switch's timing relative to the age's stroke, and the hour
-   train's stroke cadence, so the sequencer's timeouts follow the design.
+3. **E2 part 2b:** answered on PR #21 (`docs/e2-design.md` §12.4): a pair every 3 s, the age 1 s
+   after the cue; Death one stroke per 3 s [E: Paul to time it]. The sequencer's timeouts follow
+   those.
 4. **E1:** the genie's stroke must land well within ≈ 1 s of E2's cue (`docs/e2-design.md` §2),
    and E1's lock must close before the next cue (3 s later). Proposed target: stroke within
    0.5 s of the cue [E].
@@ -820,17 +862,17 @@ change; each is listed again in the PR's "Decisions needed".
 
 ## 14. Decisions (Paul, PR #19, 8 Nov 2026)
 
-**F2–F10: accepted as recommended.** **F1: open**: the bench prototype comes first in any case;
-Paul is looking into what a PCB takes, with hobby perfboard (option B) as the fallback. They are
+**All accepted as recommended.** F2–F10 on PR #19; F1 in chat the same day, after he asked what a
+PCB involves (§3.2). They are
 recorded as "D-next (firmware)" in `docs/decisions.md`; the number is given when this PR merges.
 
 **F1. How the controller is built.**
 - Options: A, a carrier PCB with sockets for plug-in modules; B, hand-wired stripboard; C, a
   printer board plus the ESP32; D, a full custom PCB (§3.2).
 - **Recommendation: A**, after a bench prototype with the same modules.
-- **Status: open** (Paul, PR #19: "I'll have to research this and see what it will take to produce
-  a PCB. Worst case, this will be a PC board constructed from hobbist Perf board."). Nothing
-  before the bench prototype depends on it.
+- **Status: accepted: A** (Paul, chat, 8 Nov 2026: "Lets plan for your approach of you drawing the
+  board in KiCad"). Hobby perfboard stays the fallback (Paul, PR #19). The bench prototype
+  comes first.
 
 **F2. Event-motor drive.**
 - Options: A, one PCA9685 with one channel per motor through DRV8833s; B, the ESP32's own PWM;
@@ -865,7 +907,8 @@ recorded as "D-next (firmware)" in `docs/decisions.md`; the number is given when
 - **Recommendation:** 22:00–07:00 [E: a common night], silencing the ages, the genie and Death,
   with the faithful setting one switch away in Home Assistant. Paul to choose the hours.
 - **Status: accepted**: 22:00–07:00 legal time, the ages, the genie and Death silent; settable
-  from Home Assistant (Paul, PR #19, 8 Nov 2026).
+  from Home Assistant (Paul, PR #19, 8 Nov 2026). Since PR #21 Death is silent whenever the ages
+  are, so the "faithful setting" no longer exists (§8.3).
 
 **F7. Firmware toolchain.**
 - Options: Arduino IDE 2 with the Arduino-ESP32 core, and `arduino-cli` for headless builds; or

@@ -184,11 +184,11 @@ state module. Rows marked "counted" are already in the Batch 2 totals above.
 
 From `docs/firmware-design.md` §3–4 (decisions F2–F5, accepted 8 Nov 2026, PR #19). Where a row
 below gives a different quantity from a row above, this one is newer: MCP23017 3, not 2; DRV8833
-5, not 4. The carrier PCB or perfboard depends on F1, which is open.
+5, not 4. F1 (accepted): a carrier PCB, ordered after the bench prototype; its row is added with the KiCad PR.
 
 | Item | Spec | Qty [E] | How the quantity was counted | Supplier |
 |---|---|---|---|---|
-| MCP23017 I/O expander | I²C, 16 I/O, breakout | 3 (supersedes 2) | 29 inputs in v1, 35 by v2, plus spares (firmware-design §3.5) | Mouser FR ⚠ |
+| MCP23017 I/O expander | I²C, 16 I/O, breakout | 3 (supersedes 2) | 31 inputs in v1, 37 by v2, plus spares (firmware-design §3.5) | Mouser FR ⚠ |
 | PCA9685 PWM expander | I²C, 16 channels, breakout | 1 | one channel per event motor, 9 by v2 (§3.4) | Mouser FR / Gotronic ⚠ |
 | DRV8833 dual H-bridge | breakout; check it uses the PWP package (1.5 A RMS per bridge [S: TI SLVSAR1E p. 1]) | 5 (supersedes 4) | 9 motors by v2, 2 per board, 1 spare channel | Gotronic / Mouser FR ⚠ |
 | Buck converter 24 → 6 V | ≥ 5 A | 1 | event-motor rail (F5) | ⚠ to choose |
