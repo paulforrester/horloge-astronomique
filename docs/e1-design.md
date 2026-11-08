@@ -5,7 +5,7 @@ gallery. The genie on the left (A1) strikes his hand bell with his sceptre, once
 the age's strokes. The genie on the right (A2) turns his hourglass each hour, half a turn,
 alternately right and left.
 
-**Status: detail design, part 1, for review (§16).** The concept was settled on PR #18 (Paul, 7–8
+**Status: detail design, part 1, decisions settled (§16.8); for merge.** The concept was settled on PR #18 (Paul, 7–8
 Nov 2026; §12, §15): **one forward-only motor, a count wheel, and a rigid cross shaft to the glass.**
 Tags as in `docs/reference-notes.md`: [S] sourced, [D] derived,
 [E] estimate, [?] unclear.
@@ -647,7 +647,7 @@ Module 1.0, backlash 0.15, faces 3 mm, as M1. Bearings: eight MR85ZZ in the two 
   ≈ 76–92 mm above the dial's centre, in front of M5's band.
 - **The case:** the gallery's bay must take E1 from x −166 to 122 and back to z −126.
 
-**Decisions for Paul:**
+**Decisions (settled, Paul, PR #23, 8 Nov 2026):**
 1. **The gearmotor: B, folded inside the bell tower** (Paul, PR #23: "Fold it inside the bell tower").
    - It now lies along X **above the plates' top edge**, behind the plinth (y 8 to 18, z −52 to −40). A 20/20
      pair in its own plane drives the bell shaft 1:1, so the timing is unchanged.
@@ -660,6 +660,5 @@ Module 1.0, backlash 0.15, faces 3 mm, as M1. Bearings: eight MR85ZZ in the two 
    - **What it gained.** The whole module is 39 mm narrower: its left end moves from x −165.5 to −126.5.
    - **Service.** Undo the saddle's four M2 screws and lift the saddle, the motor and its pinion straight up
      (tested). Nothing above it is in the way: the plinth and the shoulder bracket are further forward.
-2. **The glass tower's tall plate** (y −110 to 95). It carries the slider and both of the glass arbor's arms.
-   - **A. Keep one plate** (recommended): simple and stiff.
-   - B. Two smaller brackets, if the case's cornice needs room.
+2. **The glass tower's tall plate: A, keep one plate** (Paul, PR #23: "Go with A -- keep it"). It carries the
+   slider's guides, both of the glass arbor's arms and the crank block.
