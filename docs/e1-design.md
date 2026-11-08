@@ -443,7 +443,7 @@ step).
   silent.
 - **The firmware knows the count.** It counts the bell lock's closings since home, so it always
   knows where the count wheel stands. The two switches are the two E1 inputs the firmware already
-  plans (`docs/firmware-design.md` §4, E1 row).
+  plans (`docs/firmware-design.md` §3.5, E1 row).
 - **Quiet hours keep it in step if they skip whole cycles.** A cycle is :15, :30, :45 and the
   :00 that ends it. The window must start after an :00 show and end before a :15 show. Example: the
   22:00 show runs, then 22:15 to 07:00 are silent, then 07:15 strikes again. **This is a rule for
