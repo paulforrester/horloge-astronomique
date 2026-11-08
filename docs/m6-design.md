@@ -196,7 +196,8 @@ Both fit inside the v1 provision. Nothing needs deciding before v2.
 ## 11. Decisions (accepted as recommended, Paul, PR #20, 7 Nov 2026)
 
 1. **Drive: A, a pedestal under the globe** holding the stepper and the sidereal train (§5).
-2. **Meridian: A, parallel to the facade** (§6).
+2. **Meridian: A, parallel to the facade** (§6). **Revision proposed after the photographs: A′, square to the facade with
+   the north pole towards the case, as the original (§14.3).**
 3. **Stars: A, two-colour print with gilt inlay**; the magnitude limit from the smallest
    printable dot (§7). Which constellation set to draw is still open: proposed in the detail PR.
 4. **Precession provision: A**, an equatorial frame with a star shell on its ecliptic axis and a
@@ -234,3 +235,60 @@ No interface change is needed: M6 shares no shaft with any module.
 | Connector | 1 | already counted |
 
 The shell's two colours (blue and gold PLA) are already in use for M2.
+
+## 14. Measured from Paul's photographs (8 Nov 2026), and one change to propose
+
+<p align="center"><img src="img/m6/original_globe.jpg" width="500" alt="The celestial globe on 30 Oct 2026, seen from the front right: dark star globe, wide horizon ring on four columns, graduated brass meridian ring lettered POLE BOREAL, a large hour ring at the pole, silvered graduated circles turning with the globe, round stone plinth"></p>
+
+*IMG_0762 (Paul, 30 Oct 2026), crop. IMG_0763 and IMG_0764 show it from the front left.*
+
+**14.1 What the photographs show** [S: IMG_0762–0764].
+- **The globe:** dark blue-black, with many gilt stars of several sizes, and the constellation
+  figures drawn in faint outline as well as named. So the original draws figures, not only lines.
+- **The horizon ring:** a wide, flat, dark-bronze ring, carried on **four columns** with square,
+  carved pedestals and small capitals, standing on a low **round stone plinth**.
+- **The meridian ring:** a wide brass ring, graduated, lettered "PÔLE BORÉAL" near the pole and
+  "ZÉNITH".
+- **The hour ring:** a large separate ring at the north pole, graduated in Roman numerals,
+  about **half the globe's diameter**.
+- **Rings that turn with the globe:** silvered, graduated 0–360 by tens. One passes low across the
+  front, another crosses over the top from the pole. These are the colures and the equator that
+  DA says turn with the sphere. **This confirms §8 A** (rings on a frame, not paint).
+
+**14.2 Sizes** [E ±15–20 %, oblique views]. Scale: the globe, 0.84 m [S: ELS], ≈ 460 px across
+on the crop.
+
+| Item | Original | 1:8 |
+|---|---|---|
+| Globe | 0.84 m [S] | Ø 105 mm |
+| Horizon ring, outside | ≈ 1.4 m | **≈ Ø 170 mm** |
+| Hour ring at the pole | ≈ 0.5 of the globe | **≈ Ø 55–60 mm** |
+| Globe's centre above the floor (horizon plane) | ≈ 1.0–1.2 m | **≈ 125–150 mm** |
+| Round plinth | ≈ 1.6–2.0 m | ≈ Ø 200–250 mm (weak: mostly out of frame) |
+
+- So §4.4's hour ring (≈ Ø 25 mm) is replaced by **≈ Ø 58 mm**. At that size one minute of
+  sidereal time is 0.13 mm of arc [D: π × 58 / 1440].
+- The vitrine (§9) must take the Ø 170 mm horizon ring: **≈ Ø 190 mm inside** [E], not 150.
+- The pedestal (§5 A) fits inside the plinth's ≈ 125 mm of height under the horizon ring. The
+  NEMA 17 (≈ 48 mm long) lies in it, and the columns stand round it.
+
+**14.3 The change to propose: which way the meridian faces.**
+- The accepted §6 A puts the meridian ring parallel to the facade. **The original does not.**
+  Its meridian ring runs front to back, square to the facade.
+  - [E, from two oblique views] In IMG_0762, taken from the front right, the pole's hour ring
+    appears at the globe's upper right. In IMG_0763/0764, taken from the front left, it appears at
+    the upper left. A pole raised **towards the case** projects that way from both sides; a pole
+    along the facade would appear on the same side in both.
+  - The silvered colure dips lowest at the front, as a circle through both poles does when the
+    south pole points down and forwards. That agrees.
+- **So the north pole rises towards the clock, and the visitor faces the globe's southern side.**
+
+| Option | For | Against |
+|---|---|---|
+| **A′. Meridian square to the facade, north pole towards the case (proposed)** | As the original. The visitor sees the stars that cross the meridian to the south, which is where most of the sky's motion is seen. Same footprint: the horizon ring is round. | The pole and its hour ring are at the back, so the hour ring is read at an angle from the front. A side view of the original would confirm the direction. |
+| A. Parallel to the facade (accepted) | The hour ring is seen side-on and read easily | Not the original |
+
+**Recommendation: A′.** Everything else in §11 stands.
+
+**Decision needed from Paul:** A′ instead of the accepted A (§11 item 2). If he is at the
+cathedral again, a photograph from the side would settle the pole's direction.

@@ -249,7 +249,8 @@ To size from a photograph (§10), all parameters until then:
 1. **The planetarium Moon's sense** (§3): accept the idler fix. Ratio and tooth counts are
    unchanged; the `spec/clock.yaml` note gains one line in the detail PR.
 2. **The Moon round the Earth: A**, the accepted epicyclic plus the idler, on a covered Earth
-   arm, with the fixed wheel behind the Sun disc (§5).
+   arm, with the fixed wheel behind the Sun disc (§5). **Revision proposed after the photographs:
+   A′, the central disc as the Earth's drum (§14.4).**
 3. **Module 0.8** for the planet and Moon trains, **1.0** for the year train and the motor
    reduction (§6).
 4. **The Moon globe: B**, a daily belt up to a small cassette behind the lunette (§7).
@@ -284,3 +285,87 @@ To size from a photograph (§10), all parameters until then:
 | Screws, heat-set inserts | small | from the Batch 1 assortments |
 
 The 0.2 mm nozzle is already on the list for M2.
+
+## 14. Measured from Paul's photograph (8 Nov 2026), and one change to propose
+
+<p align="center"><img src="img/m5/original_planetary.jpg" width="600" alt="The planetary dial on 30 Oct 2026 at 10:08 CET: gilt zodiac band with French sign names, dark field, raised central disc, small gilt Sun, seven small spheres on thin arms"> <img src="img/m5/original_moon_globe.jpg" width="300" alt="The Moon globe in its lunette on 30 Oct 2026: gilt with a dark crescent on the right, on a starry blue ground"></p>
+
+*IMG_0766 (Paul, 30 Oct 2026, 10:08 CET = 09:08 UT), crops: the planetary dial and the Moon
+globe.*
+
+**14.1 Which sphere is which.** I computed the planets' heliocentric mean longitudes for the
+moment of the photograph from JPL's elements (Table 1, plus the precession to the date) and
+measured each sphere's angle on the dial [D: angles from the Sun's centre, 0° at the right,
+counter-clockwise, the vertical stretched by 1/0.86 to undo the upward view (the zodiac circle
+measures 1080 px across and ≈ 930 px high)]:
+
+| Sphere | Angle on the dial | Mean longitude, 30 Oct 2026 09:08 UT [D] | Difference |
+|---|---|---|---|
+| Mercury | ≈ 39° | 33.0° | +6° |
+| Venus | ≈ 44° | 41.4° | +3° |
+| Earth (with the Moon beside it) | ≈ 36° | 38.7° | −3° |
+| Mars | ≈ 85° | 90.8° | −6° |
+| Jupiter | ≈ 123° | 128.9° | −6° |
+| Saturn | ≈ 15° | 18.3° | −3° |
+
+- Every sphere sits within 6° of its planet's mean longitude: the identification is certain,
+  and the reading error (a few degrees at these small radii, in an upward view) explains the
+  differences.
+- **The dial runs counter-clockwise with 0° (Bélier) at the right** and 90° (Écrevisse) at the
+  top [S: the graduation 0–360 by tens on the band]. §2's estimate is confirmed.
+- **The original shows mean motions**, as the replica does.
+
+**14.2 Sizes** [E ±10 % for radii, ±30 % for the spheres]. Scale: the zodiac circle, 2.20 m
+[S: ELS], measures 1080 px across, so 491 px/m, and 275 mm at 1:8 is 3.93 px/mm.
+
+| Item | Original | **1:8** |
+|---|---|---|
+| Mercury's orbit radius | 0.12 m | **15 mm** |
+| Venus | 0.20 m | **25 mm** |
+| Earth | 0.34 m | **42.5 mm** |
+| Mars | 0.49 m | **62 mm** |
+| Jupiter | 0.68 m | **85 mm** |
+| Saturn | 1.06 m | **132 mm** |
+| Moon from the Earth | 0.06 m | ≈ 8 mm |
+| **Raised central disc** (dark, with a rim) | 0.76 m | **Ø 95 mm** |
+| Sun (gilt sunburst) | 0.15 m | **Ø 18 mm** with rays; the ball ≈ Ø 10 mm |
+| Spheres | — | Jupiter and the Earth ≈ 4.5–5 mm; Saturn ≈ 3.5; Mars and Venus ≈ 3; Mercury and the Moon ≈ 2.5 |
+
+- So §4.5's placeholder radii (40 … 128 mm) and §2's Sun estimate (≈ 76 mm, which was the
+  central disc, not the Sun) are replaced.
+- **The arms.** Mercury, Venus and the Earth stand on thin wires in front of the central disc.
+  The arms of Mars, Jupiter and Saturn come out **from behind the disc's edge**: each visible rod
+  starts at about the disc's radius.
+- **Colours today:** a dark slate field (DA says azure), a gilt band with the French sign names
+  (BÉLIER, TAUREAU, GÉMEAUX, ÉCREVISSE, LION, VIERGE, BALANCE, SCORPION, SAGITTAIRE …), the signs'
+  symbols and painted figures, and the graduation. For M2 Paul kept DA's 1844 scheme; the same
+  choice is assumed here unless he says otherwise.
+
+**14.3 The Moon globe.** Mostly gilt, with a dark crescent on the right, on a blue starry ground.
+The Moon was 19.2 days old [D: from the mean new Moon of 6 Jan 2000, 18:14 UT, and the synodic
+month], waning gibbous, which is lit on the left as seen from the north. The globe agrees. Its
+terminator is close to vertical. A faint horizontal line crosses the globe at mid-height,
+perhaps a seam. The tilt of the axis still cannot be read from one view; it stays a parameter
+(§8).
+
+**14.4 The change to propose: the central disc as the Earth's drum.**
+
+The measured radii break the accepted arrangement (§5 A, §4.2):
+- Mercury (15 mm) and Venus (25 mm) lie **inside** the fixed 78-tooth wheel (Ø 64 at module 0.8).
+  In the accepted stack that wheel is in front of every arm, so it would hide them.
+- The original's Sun is Ø 18 mm, so it cannot hide that wheel either.
+
+The photograph suggests the answer: the Ø 95 mm raised disc.
+
+| Option | How | For | Against |
+|---|---|---|---|
+| **A′. The disc turns with the Earth (proposed)** | The Ø 95 disc is a shallow drum on the Earth tube. The Moon gearing (fixed wheel, compound, idler, pinion) is inside it, the Earth sphere and the Moon on its face at 42.5 mm. Mercury and Venus are on tubes inside the Earth's, so their arms are in front of the drum. Mars, Jupiter and Saturn are on tubes outside it, so their arms come out from behind its edge, as in the photograph. The fixed wheel is on a fixed tube between Venus's and the Earth's. | Matches the photograph: the radii, the small Sun, the disc, the outer arms from behind it. All the Moon gearing is hidden. A plain dark disc looks the same turning or still. | Tubes, inside out: fixed Ø3 (Sun), Mercury 4, Venus 5, **fixed 6**, Earth 7, Mars 8, Jupiter 9, Saturn 10. That is D4's limit of seven tubes. The fixed Ø6 tube must be held at the back, between gear levels. **The Moon gearing must fit inside r 47.5 mm**: at module 0.8 the compound's 62 reaches 66 mm, so it needs module 0.5 [D: then it reaches 41 mm] or a new, more compact Moon train. At module 0.5 the capacity falls to a quarter [D: m²]: with 12 mm faces the clutch window is 9 … 15 N·mm [D: 82 × 0.25 × 12/8 / 2]. Tight but open. A train search in the detail design may find a better one. |
+| A. As accepted | Moon gears on the arm in front; fixed wheel in front of all arms | Already accepted | Hides Mercury and Venus at their measured radii, or needs them moved out past ≈ 35 mm and a Sun ≥ Ø 66 mm, unlike the original |
+| A″. Larger drum | As A′, with the drum and the Earth's orbit enlarged (e.g. Ø 120, Earth at 55 mm), keeping module 0.8 | Stronger Moon gearing | The proportions no longer match the original's |
+
+**Recommendation: A′**, with the Moon train re-searched for compactness in the detail design.
+Fall back to module 0.5 with 12 mm faces if no better train is found. The Earth tube is now
+Ø7 instead of Ø4, which is stiffer for its 139 N·mm.
+
+**Decision needed from Paul:** A′ instead of the accepted A (§11 item 2). Everything else in §11
+stands.

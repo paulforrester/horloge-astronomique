@@ -193,21 +193,17 @@ the carrying, which gets most of B's benefit.
 
 1. **Drive: A, the lay shaft** (bevel at W, vertical shaft, 1:1 spur pair to the turntable), §5.
 2. **Chariots: A, fixed to the turntable on a decorative rail**, §6.
-3. **Size: the faithful R ≈ 105 mm (≈ 235 mm deep)**, a parameter, to be checked against the case
-   depth, §7.
-4. **Phase: each chariot centred at local mean noon, with Bordeaux as the local reference** (Paul:
-   "we are basing the localtime on Bordeaux, not Strasbourg").
-   - Bordeaux mean noon is **13:02 CET** (14:02 CEST) [D: D2, Bordeaux LMT = UT − 2.28 min].
-   - W follows M2's mean-time arbor, which D2 sets to Strasbourg mean time (UT + 31.00 min). So
-     the carousel is set **33.3 min later** than Strasbourg mean noon [D: 31.00 + 2.28]. That is
-     only a setting offset: 33.3 min is 1.2° of the carousel [D: 360° × 33.3 / (7 × 1440)], a
-     sixth of a dog tooth (4.4). No gear changes.
-   - **Asked back on PR #20:** D2 records the dials' time as Strasbourg mean time (items 1, 2, 5),
-     with only the sky set for Bordeaux. If Paul means D2 itself should now use Bordeaux mean time,
-     that changes M1 and M2 as well, outside M7. Either way, M7 takes Bordeaux mean noon.
-5. **The photograph crop** in §8: IMG_0766 is not in the repository (only the gallery crop is),
-   so Paul is asked to attach it, or a crop round the chariot opening. Until then R and the
-   figures are parameters.
+3. **Size: the faithful size**, a parameter, to be checked against the case depth, §7. Measured
+   from Paul's photograph (§12): **R ≈ 100 mm, about 225 mm deep** [E ±15 %].
+4. **Phase: each chariot centred at Bordeaux mean noon**, 13:02 CET (14:02 CEST) (Paul: "we are
+   basing the localtime on Bordeaux, not Strasbourg").
+   - Paul then chose Bordeaux mean time for the whole clock, "the sky over this house"
+     (decision D-next (M5–M7), `docs/decisions.md`, 8 Nov 2026). W follows M2's mean-time arbor,
+     so the carousel is centred at mean noon with **no setting offset**.
+   - (Before that decision it would have needed a 33.3 min offset, 1.2° of the carousel, on a
+     Strasbourg-time M2.)
+5. **The photographs**: Paul committed IMG_0762–0764 and IMG_0766 to `docs/img/photos/`
+   (8 Nov 2026). §12 gives what they settle.
 
 No interface change is asked of M2.
 
@@ -236,3 +232,46 @@ No interface change is asked of M2.
 
 Everything else is printed: the bevel and spur pairs, the brackets, the deck, the turntable and
 the figures.
+
+## 12. Measured from Paul's photograph (8 Nov 2026)
+
+<p align="center"><img src="img/m7/original_chariots.jpg" width="600" alt="The chariot opening under the lion gallery on Friday 30 Oct 2026, 10:08 CET: Venus's chariot in the centre, Saturn's in the left niche, Jupiter's in the right"></p>
+
+*IMG_0766 (Paul, 30 Oct 2026, 10:08 CET), crop. Venus's chariot ("VENUS", "VENDREDI") in the
+centre, Saturn's in the left niche, Jupiter's (with its eagle) in the right.*
+
+**What it shows.**
+- A wide, dark cavity under the gallery's cornice. Its back wall has **two arched niches**. The
+  day's chariot stands in the open **between** them, nearest the viewer. The chariots either side
+  pass behind the wall and show through the niches. That is what a turntable whose front arc
+  comes forward of the wall gives, and it confirms the vertical axis (§1).
+- Each chariot is a two-wheeled car with large spoked wheels facing the viewer, a deity seated or
+  standing, and its animal or attendant in front (Venus: Cupid and doves).
+- The day's chariot faces right, the way it is going (§1: left to right across the front).
+
+**Scale.** The mean-time dial above, in the same plane as the facade: its pearled minute ring is
+≈ 0.83 m and its bezel ≈ 0.98 m (`docs/reference-notes.md`, *Mean-time dial*). On the crop
+they measure ≈ 505 and ≈ 635 px, so **≈ 620 px per metre** [E ±15 %, the reference sizes' own
+uncertainty].
+
+| Item | Photo | Original | 1:8 | Tag |
+|---|---|---|---|---|
+| Venus's chariot, length (scroll to shaft) | ≈ 310 px | ≈ 0.50 m | **≈ 62 mm** | [E ±15 %] |
+| Its wheel | ≈ 136 px | ≈ 0.22 m | ≈ 27 mm | [E ±15 %] |
+| Chariot and figure, height | ≈ 297 px | ≈ 0.48 m | **≈ 60 mm** | [E ±15 %] |
+| Niche chariots' centres from the middle | ≈ ±380 px | ≈ 0.61 m | ≈ 77 mm | [E ±15 %] |
+| Niches, width × height | ≈ 260 × 340 px | ≈ 0.42 × 0.55 m | ≈ 52 × 69 mm | [E ±15 %] |
+| Cavity height, arch to floor | ≈ 585 px | ≈ 0.94 m | ≈ 118 mm | [E ±15 %] |
+| Chariots' floor below the mean-time dial's centre | ≈ 880 px | ≈ 1.42 m | ≈ 177 mm, so **≈ 390 mm above the floor** | [E ±15 %, on M1's 567 mm [E]] |
+
+**What follows.**
+- **Radius.** The niche chariots are one place (51.4°) round, so 0.782 R ≈ 77 mm and R ≈ 98 mm
+  [D]. They stand further back than the facade, so they look a little small; **R ≈ 100 mm**
+  [E ±15 %]. The band check in §2 with L = 62 mm gives 96 mm [D: (106 − 31) / 0.782]. They agree.
+- **Depth** ≈ 2R + 25 mm ≈ **225 mm** [D], a little less than §7's 235 mm.
+- **Deck height.** The chariots' floor at ≈ 390 mm is where §4.2 put the deck, just above the
+  calendar ring's top (383.5 mm). The figures, ≈ 60 mm tall, reach ≈ 450 mm, under M1's lowest
+  part (≈ 479 mm, §2).
+- **Figures.** Seven parametric groups, ≈ 62 mm long and ≈ 60 mm tall. Their likenesses are a
+  detail-design question; IMG_0766 shows Venus, Saturn and Jupiter. The other four need a
+  photograph on another day, or the books.

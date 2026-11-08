@@ -31,6 +31,7 @@ from behind) was accepted on 5 Nov 2026.
 | D14 | When the shows run: mean time or legal time (revises D2 item 2) | **Legal time**: the quarters at :15, :30, :45 and :00 of CET/CEST, the noon show at 12:00 | **Accepted** 4 Nov 2026 (Paul, PR #11) | Phase 2 (M1) |
 | D15 | The noon procession: Christ and the Apostles, or a personal set | **Astronomy and time**: twelve figures from Pythagoras to Einstein pass **Urania**, on the original's mechanism | **Accepted** 4 Nov 2026 (Paul, PR #11) | Phase 2 (E3) |
 | D16 | How a stepper is reached for service | **Plug-in from behind**: each motor on a printed adapter plate, held by 2 × M3 into heat-set inserts; its drive part slides on the D-shaft and is held by stops | **Accepted** 5 Nov 2026 (Paul, PR #13) | every stepper module (M1 and M2 done) |
+| D-next (M5–M7) | Mean time: Strasbourg or Bordeaux (revises D2 items 1 and 5) | **Bordeaux mean time**, "the sky over this house"; the shows stay on legal time (D14) | **Accepted** 8 Nov 2026 (Paul, PR #20) | Phase 3 (firmware constant) |
 
 Plus **Blockers** at the end: the network allowlist and the documents to obtain.
 
@@ -828,6 +829,40 @@ attribute (a telescope, a pendulum, an armillary sphere), so it reads at 57 mm.
   Ø22.5 hole, so it stays pressed on the shaft and leaves with the motor. M2 needs no stops in the
   module (`docs/m2-design.md` §2, `cad/lib/motor_mount.py`).
 - New modules (E2's state stepper, M5, M6) start with it.
+
+## D-next (M5–M7) — Mean time: Strasbourg or Bordeaux (revises D2)
+
+**Status: Accepted, 8 Nov 2026** (Paul, PR #20: "We are basing the localtime on Bordeaux, not
+Strasbourg", then "I'd prefer to use the 'the sky over this house' approach"). The number is
+assigned when the PR merges.
+
+**Context.**
+- D2 set the dials' time to **Strasbourg** mean time (items 1, 2 and 5) because "the noon show is
+  important", and only the sky (sunrise/sunset, the globe) to Bordeaux.
+- D14 has since moved every show to legal time, so the noon show no longer depends on mean time.
+- The mean-time offset is one firmware constant (architecture P1). No gear, cam or printed part
+  depends on it [D: a search of `cad/`, `spec/`, `firmware/` and `sim/` finds it only in a
+  comment in `cad/modules/m1_time/mechanism.py`].
+
+**Decision: Bordeaux mean time for the whole clock.**
+- Mean time = **UT − 2.28 min** [D: D2, Bordeaux longitude]. Mean noon is 13:02 CET / 14:02 CEST.
+- So the gilt mean-time hands (M1), the main dial's apparent time, Sun and Moon hands (M2), the
+  calendar ring's midnight and the weekday carousel (M7) all refer to Bordeaux.
+- The globe (M6) was already on Bordeaux sidereal time; unchanged.
+- **D2's sub-question (ii) falls away.** The mobile horizon no longer needs the fixed 33.3 min
+  longitude offset: dial and sky are now on the same meridian, so it is symmetric about the dial's
+  noon and still means "the Sun is up outside".
+- The shows stay on legal time (D14): quarters on the quarter, noon show at 12:00 CET/CEST.
+
+**Consequences.**
+- The gilt hands read 1 h 02 min behind legal time in winter and 2 h 02 min in summer
+  (Strasbourg's would be 29 min and 1 h 29 min). The silver legal-time hands (M1b) are unchanged.
+- The calendar ring and the carousel change over at Bordeaux mean midnight: 01:02 CET, 02:02 CEST.
+- The replica's gilt hands read 33.3 min behind the cathedral's. Accepted for consistency.
+- Documents that still say "Strasbourg mean time" or "12:29" (D2, `docs/m1-design.md`,
+  `docs/e2-design.md`, the inventory, the reference notes) are left as their owners wrote them;
+  this record supersedes them. The firmware's mean-time constant is set from this record in
+  Phase 3. M7's 33.3 min setting offset becomes zero (`docs/m7-design.md` §9).
 
 ## Blockers (not decisions, but they need Paul)
 
