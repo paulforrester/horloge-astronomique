@@ -1,7 +1,7 @@
 {
  "model": "e2_ages",
- "unique_parts": 68,
- "printed_parts": 86,
+ "unique_parts": 70,
+ "printed_parts": 87,
  "sets": {},
  "parts": [
   {
@@ -551,6 +551,25 @@
   },
   {
    "names": [
+    "release_cam"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    32.0,
+    32.0,
+    3.0
+   ],
+   "note": "grooved underneath: in phase A it rocks the quarter release shaft, whose arm turns the quarter hook out (part 2b)",
+   "file": "release_cam.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
     "lock_switch_bracket"
    ],
    "material": "PETG",
@@ -620,44 +639,6 @@
    ],
    "note": "part 2b's quarter rack falls on it: 1 to 4 pairs",
    "file": "quarter_snail.stl",
-   "overhang_mm2": 0.0,
-   "fits_single": true,
-   "fits_dual": true,
-   "mesh_ok": true
-  },
-  {
-   "names": [
-    "release_cam_hour"
-   ],
-   "material": "PLA",
-   "nozzle": 0.4,
-   "set": "",
-   "size": [
-    20.0,
-    21.9,
-    3.0
-   ],
-   "note": "trips its rack hook a minute before each show (part 2b): the time train decides when (rule 4)",
-   "file": "release_cam_hour.stl",
-   "overhang_mm2": 0.0,
-   "fits_single": true,
-   "fits_dual": true,
-   "mesh_ok": true
-  },
-  {
-   "names": [
-    "release_cam_quarter"
-   ],
-   "material": "PLA",
-   "nozzle": 0.4,
-   "set": "",
-   "size": [
-    23.8,
-    23.8,
-    3.0
-   ],
-   "note": "trips its rack hook a minute before each show (part 2b): the time train decides when (rule 4)",
-   "file": "release_cam_quarter.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
    "fits_dual": true,
@@ -862,7 +843,7 @@
    "set": "",
    "size": [
     33.0,
-    54.1,
+    55.1,
     5.5
    ],
    "note": "quarter rack, gathered: its tail falls onto the quarter snail; 4 teeth of pitch 2.5",
@@ -913,8 +894,7 @@
   },
   {
    "names": [
-    "quarter_hook",
-    "hour_hook"
+    "quarter_hook"
    ],
    "material": "PLA",
    "nozzle": 0.2,
@@ -972,25 +952,6 @@
   },
   {
    "names": [
-    "quarter_release_lever"
-   ],
-   "material": "PLA",
-   "nozzle": 0.4,
-   "set": "",
-   "size": [
-    11.0,
-    56.1,
-    2.5
-   ],
-   "note": "its nose rides the release cam; the lobe tips it and it presses the hook out",
-   "file": "quarter_release_lever.stl",
-   "overhang_mm2": 0.0,
-   "fits_single": true,
-   "fits_dual": true,
-   "mesh_ok": true
-  },
-  {
-   "names": [
     "hour_rack"
    ],
    "material": "PLA",
@@ -1029,6 +990,25 @@
   },
   {
    "names": [
+    "hour_hook"
+   ],
+   "material": "PLA",
+   "nozzle": 0.2,
+   "set": "",
+   "size": [
+    23.5,
+    14.8,
+    8.1
+   ],
+   "note": "rack hook: holds each gathered tooth",
+   "file": "hour_hook.stl",
+   "overhang_mm2": 1.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
     "hour_strap"
    ],
    "material": "PLA",
@@ -1041,25 +1021,6 @@
    ],
    "note": "strap from the eccentric to the feed lever's pin",
    "file": "hour_strap.stl",
-   "overhang_mm2": 0.0,
-   "fits_single": true,
-   "fits_dual": true,
-   "mesh_ok": true
-  },
-  {
-   "names": [
-    "hour_release_lever"
-   ],
-   "material": "PLA",
-   "nozzle": 0.4,
-   "set": "",
-   "size": [
-    16.2,
-    72.5,
-    2.5
-   ],
-   "note": "its nose rides the release cam; the lobe tips it and it presses the hook out",
-   "file": "hour_release_lever.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
    "fits_dual": true,
@@ -1250,7 +1211,7 @@
     61.0,
     3.0
    ],
-   "note": "hangs from the deck: the shafts' bearings and the hour train's studs",
+   "note": "hangs from the deck: the shafts' bearings, the hour train's studs, the hour trip shaft and its stop",
    "file": "strike_plate_middle.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
@@ -1266,10 +1227,10 @@
    "set": "",
    "size": [
     61.0,
-    48.0,
+    52.5,
     3.0
    ],
-   "note": "hangs from the deck: the quarter shaft's bearing and the quarter studs",
+   "note": "hangs from the deck: the quarter shaft's bearing, the quarter studs and both release shafts",
    "file": "strike_plate_right.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
@@ -1290,6 +1251,82 @@
    ],
    "note": "carries the witness Hall beside the hour snail",
    "file": "witness_bracket.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_release_arm"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    15.8,
+    6.6,
+    2.9
+   ],
+   "note": "pressed on the release shaft: in phase A it pushes the quarter hook's weighted tail, and the hook turns out",
+   "file": "quarter_release_arm.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "quarter_release_follower"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    12.7,
+    6.4,
+    8.7
+   ],
+   "note": "pressed on the release shaft: its \u00d82 pin runs in the release disc's groove",
+   "file": "quarter_release_follower.stl",
+   "overhang_mm2": 4.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hour_trip_arm_a"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    14.0,
+    16.8,
+    5.4
+   ],
+   "note": "pressed on the trip shaft: the quarter rack's pin lifts its shoe past three pairs",
+   "file": "hour_trip_arm_a.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "hour_trip_arm_b"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    8.0,
+    12.4,
+    7.8
+   ],
+   "note": "pressed on the trip shaft: pushes the hour hook's tab, and the hook turns out",
+   "file": "hour_trip_arm_b.stl",
    "overhang_mm2": 0.0,
    "fits_single": true,
    "fits_dual": true,

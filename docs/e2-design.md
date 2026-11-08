@@ -787,9 +787,9 @@ It is a rack and snail, as the concept gate decided (§4.2, §4.4), adapted for 
   - no interference, and every part fits the bed.
 
 **Size and files.**
-- **Parts:** 164, of which 86 are printed. Every part fits the H2D's bed.
+- **Parts:** 168, of which 87 are printed. Every part fits the H2D's bed.
 - **Envelope:** unchanged (x −145 to 152, y −66.2 to 235, z −114 to 100).
-- **Print files:** 68 in `export/print/e2_ages/`.
+- **Print files:** 70 in `export/print/e2_ages/`.
 - **SketchUp:** both models now include the counting trains; the exploded view drops them 200 mm.
 
 ### 12.6 What changed in part 2a
