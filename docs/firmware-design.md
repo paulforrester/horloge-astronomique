@@ -854,7 +854,7 @@ change; each is listed again in the PR's "Decisions needed".
    waits (`docs/e2-design.md` §10.3). The hour rack is tripped by the quarter rack at :00, before
    the first pair; the hour train and its opto are used only at :00 (§12.1, §12.4).
 3. **E2 part 2b:** answered on PR #21 (`docs/e2-design.md` §12.4): a pair every 3 s, the age 1 s
-   after the cue; Death one stroke per 3 s [E: Paul to time it]. The sequencer's timeouts follow
+   after the cue; Death one stroke per 3 s [S: Paul, PR #21, 8 Nov 2026], so twelve take 33 s first to last [D: 11 × 3 s]. The sequencer's timeouts follow
    those.
 4. **E1:** the genie's stroke must land well within ≈ 1 s of E2's cue (`docs/e2-design.md` §2),
    and E1's lock must close before the next cue (3 s later). Proposed target: stroke within

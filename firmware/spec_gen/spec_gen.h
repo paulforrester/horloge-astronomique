@@ -6,7 +6,7 @@
 
 namespace horloge::spec {
 
-constexpr const char* kSpecHash = "e026b0df9f173c07";  // sha256 of clock.yaml, first 16 hex
+constexpr const char* kSpecHash = "910ad23975591a5a";  // sha256 of clock.yaml, first 16 hex
 constexpr int64_t kUstepsPerMotorRev = 3200;
 constexpr int64_t kMeanTimeOffsetS = 1860;
 constexpr int32_t kCatchUpUstepsPerS = 3200;

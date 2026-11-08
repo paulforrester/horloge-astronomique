@@ -489,7 +489,7 @@ events:
   - {id: E2.walk_a,   motor: E2.walk,     nominal_s: 8.68,  tag: D, source: "e2-design §11.3: 1.80 + 5.16 + 1.72 s"}
   - {id: E2.walk_b,   motor: E2.walk,     nominal_s: 13.83, tag: D, source: "e2-design §11.3: 1.80 + 10.31 + 1.72 s"}
   - {id: E2.quarters, motor: E2.quarters, nominal_s: 3.0, per: pair,   tag: S, source: "a pair every 3 s (Paul, e2-design §2)"}
-  - {id: E2.hours,    motor: E2.hours,    nominal_s: 3.0, per: stroke, tag: E, source: "e2-design §12.4; Paul to time it"}
+  - {id: E2.hours,    motor: E2.hours,    nominal_s: 3.0, per: stroke, tag: S, source: "one stroke every 3 s (Paul, PR #21, 8 Nov 2026; e2-design §2, §12.4)"}
   - {id: E6.division, motor: E6,          nominal_s: 0.6,  tag: E, source: "one turn at 100 rpm, Pololu #994 no-load [S: pololu.com/product/994]; slower under load"}
   - {id: E1.bell,     motor: E1.bell,     nominal_s: null}
   - {id: E1.hourglass, motor: E1.hourglass, nominal_s: null}
