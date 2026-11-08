@@ -5,8 +5,10 @@ gallery. The genie on the left (A1) strikes his hand bell with his sceptre, once
 the age's strokes. The genie on the right (A2) turns his hourglass each hour, half a turn,
 alternately right and left.
 
-**Status: concept for review.** Nothing is modelled yet. The decisions Paul is asked for are in
-§10. Tags as in `docs/reference-notes.md`: [S] sourced, [D] derived, [E] estimate, [?] unclear.
+**Status: concept, second round.** Paul answered the first round on PR #18 (8 Nov 2026; §12). He
+chose **one motor with a selector**, so §13 works out that concept and asks two new questions.
+Nothing is modelled yet. Tags as in `docs/reference-notes.md`: [S] sourced, [D] derived,
+[E] estimate, [?] unclear.
 
 <p align="center"><img src="img/e1/original_genies.jpg" width="640" alt="The original lion gallery on 30 Oct 2026 at 10:10 CET: on the left the genie with his hand bell held up and the striker low in his other hand; in the middle the mean-time dial; on the right the genie holding the hourglass upright in both hands"></p>
 
@@ -112,7 +114,7 @@ The glass has ≈ 10.8 s of margin before Death [D: 23.8 − 10 − 3].
 
 ## 4. Proposed concept
 
-**4.1 Two small cassettes, one per genie.**
+**4.1 Two small cassettes, one per genie.** *(Superseded: Paul chose one motor, §12–13.)*
 - The genies are ≈ 173 mm apart [D: 85 + 88], with M1's cassette between them. M1's gate already
   set them as separate modules (`docs/m1-design.md` §6, confirmed by Paul).
 - Each cassette is a small printed frame behind its figure, on the internal frame, outboard of
@@ -174,7 +176,7 @@ The glass has ≈ 10.8 s of margin before Death [D: 23.8 − 10 − 3].
   start, after E2's walk on as now.
 - **Catch-up and night:** skip both (architecture §5). Nothing needs restoring.
 
-## 5. Decision 1: one event motor or two
+## 5. Decision 1: one event motor or two — B, one motor (Paul, PR #18, 8 Nov 2026)
 
 The architecture allows E1 one or two motors (§10). The BOM already counts two.
 
@@ -186,7 +188,10 @@ The architecture allows E1 one or two motors (§10). The BOM already counts two.
 **Recommended: A, two motors.** B saves one small motor at the cost of a shaft across M1 and a
 selector.
 
-## 6. Decision 2: how the sceptre strikes
+**Decided: B** (Paul: "I would prefer one motor with a selector. It seems truer to the original
+design."). §13 works it out.
+
+## 6. Decision 2: how the sceptre strikes — A (Paul, PR #18, 8 Nov 2026)
 
 | Option | How | For | Against |
 |---|---|---|---|
@@ -197,7 +202,10 @@ selector.
 **Recommended: A**, with B as the fallback if the test bell is too quiet. This is the same rule as
 E2's strike (`docs/e2-design.md` §7, item 4). It is soft, which suits the living room (D8).
 
-## 7. Decision 3: how the glass turns and alternates
+**Decided: A.** Paul: "The angel's arm holding the striker moves and strikes the bell." [S: Paul,
+from his video.]
+
+## 7. Decision 3: how the glass turns and alternates — A (Paul, PR #18, 8 Nov 2026)
 
 | Option | How | For | Against |
 |---|---|---|---|
@@ -211,10 +219,13 @@ mechanical, with a forward-only motor.
 
 **Which parts turn** depends on Paul's video (§2): the glass alone between still hands, or the
 glass with the forearms. Both work with A: the turning part is either the glass's frame or one
-print of the frame and the forearms. **Recommended until Paul has checked:** the glass and its
-frame turn, between hands that are cupped round the frame's pivots.
+print of the frame and the forearms.
 
-## 8. Decision 4: figure size, the bell and the glass
+**Decided: A.** Paul, from his video: "The forearms turn the glass. It turns in the facade plane.
+It takes about 3 seconds for the rotation." So the turning part is **one print of the forearms and
+the glass's frame**, on the chest arbor, and the half turn takes **≈ 3 s** [S: Paul].
+
+## 8. Decision 4: figure size, the bell and the glass (Paul, PR #18, 8 Nov 2026)
 
 1. **Figure size.** Measured on the photograph: 78 mm (bell genie) and 81 mm (hourglass genie)
    head to soles, ±20 % [E, §2]. M1's earlier 78 mm agrees.
@@ -290,3 +301,92 @@ No stepper, no Hall sensor and no new controller channel type.
   frame; the gearmotor drops out (D16's rule for access); bed fit and print poses.
 - **Files:** print files (`export/print/e1_angels/`), SketchUp files with an exploded view
   (`export/sketchup/e1_*.dae`), BOM rows, and a decision record ("D-next (E1)") if Paul wants one.
+
+## 12. Decisions (Paul, PR #18, 8 Nov 2026)
+
+1. **Motors: one, with a selector** (§5, option B). Paul: "It seems truer to the original
+   design." §13 works it out.
+2. **The strike: A.** The genie's arm holding the striker moves and strikes the bell [S: Paul,
+   from his video].
+3. **The glass: A, Scotch yoke, rack and pinion.** From Paul's video [S]:
+   - the **forearms turn with the glass**, so they are one print with the glass's frame, on the
+     chest arbor;
+   - it turns **in the facade plane**;
+   - the half turn takes **about 3 s**.
+4. **Sizes and parts.**
+   - Both figures **78 mm**, parametric.
+   - **The bells have different tones: E2's is slightly higher than E1's** [S: Paul]. One bell
+     size is fine if it gives the two tones; otherwise the bells are sized differently.
+     - For bells of one shape and metal, the pitch goes roughly as wall thickness over diameter
+       squared [E: thin-shell scaling; to confirm by ear]. So E1's lower note needs a thinner
+       wall or a slightly larger bell. One semitone lower is ≈ 3 % larger at the same wall
+       [D: √1.059 = 1.029], so ≈ Ø 21.6 mm against E2's 21 mm.
+     - **Plan:** buy a few candidate bells in Ø 20–25 mm and choose the pair by ear in the local
+       phase. The CAD keeps the bell's size a parameter.
+   - A bought miniature hourglass with red sand.
+5. **Night:** the glass turns every hour that Death strikes, day and night.
+6. **Interface with E2: as recommended.** The genie–age gap is ≈ 0.7–0.9 s; E2 is not changed.
+
+The open questions in §2 about the sceptre arm, the forearms and the turn's time are answered by
+items 2 and 3.
+
+## 13. One motor: the concept, and two new questions
+
+**What one motor has to do.**
+- **Bell:** one fast stroke per cue, ≤ 0.3 s after it, up to four times at 3 s intervals.
+- **Glass:** one slow half turn, ≈ 3 s, once an hour, day and night (decision 5). At night the
+  bell is silent while the glass still turns, so **the glass cannot depend on the bell's
+  strokes.**
+- **One speed serves both** [D]. With the gearmotor at ≈ 200 rpm under load [E]:
+  - the bell cam turns 1:1, once in 0.3 s;
+  - the glass's crank turns through 20:1 (for example 12/48 · 12/60). Half a crank turn is then
+    10 motor turns, which takes 3.0 s [D: 0.5 × 20 / 200 × 60]. PWM trims it.
+
+**13.1 Question 1: the selector.** None of these is known from the original: DA does not say how
+the genies are driven.
+
+| Option | How | For | Against |
+|---|---|---|---|
+| **A. The direction selects** | Forward strikes the bell; reverse turns the glass. Each output sits on its own one-way needle bearing (e.g. HF0612, Ø 6 bore ⚠ verify), so the other output stands still. Each has its own lock switch. Firmware: forward until the bell's lock closes, or reverse until the glass's lock closes. | Two parts make the selector, and both are bought, metric and silent. The glass is free of the bell's count, so it turns at night and after any skipped quarter. The dual H-bridge already reverses: no new hardware. | **The motor runs both ways.** Architecture §10 says "DC gearmotors, one direction". That rule protects steppers' backlash (CLAUDE.md rule 3); an event motor's direction does not touch any time train. Needs Paul's approval to note the exception there. |
+| B. A count wheel | Forward only. The genie strikes 10 times an hour [D: 1 + 2 + 3 + 4]. A count wheel on the bell train releases the glass at every 10th stroke, which is "au dernier coup des quatre quarts". | The most clock-like: one direction, the moment set mechanically, as a striking train's count wheel | **The glass cannot turn at night**, when the genie is silent (against decision 5). Any skipped quarter puts the count out, and putting it right means ringing the bell. The released glass needs its own slow train, which the same motor must also drive. |
+| C. A shift actuator | Forward only. A small servo or solenoid moves a dog between the bell cam and the glass's train | Forward only; any order | A second actuator and channel, and a sensor to confirm the shift. A solenoid that only moves a dog is not against D8, but it is one more part to fail. |
+
+**Recommended: A.** It is the simplest selector, and the only one that keeps decision 5 and stays
+right after skipped shows.
+
+**13.2 Question 2: how the drive crosses to the far genie.**
+- **The motor and the selector go in the bell genie's cassette, on the left.** The bell needs the
+  short, fast path; the glass is slow and tolerates a long link.
+- The far genie is ≈ 173 mm away, with M1's cassette between.
+- **The crank, the yoke, the rack and the pinion stay at the glass.** So whatever slack the link
+  has acts at the crank's dead centres, where it hardly moves the glass (§4.3: 5° of crank, 0.34°
+  of glass).
+
+| Option | For | Against |
+|---|---|---|
+| **A. A rigid Ø 5 cross shaft**, with a single-dog coupling at each cassette | No slack, no windup; the glass's phase stays fixed. Simple, metric parts. | It needs a straight route. **Under M1:** M1's lowest part is at y −88 below the dial's centre (`docs/m1-design.md` §9.2), but M7's carousel is below the gallery and not yet designed. **Behind M1:** behind its motors, which needs ≈ 15 mm more depth [E]. |
+| B. A flexible rotating shaft | Routes round M1 and M7 freely. Its windup acts at the dead centres, so the glass's rests stay exact. | Flexible shafts this small are model-boat parts ⚠ to source (metric, EU). They need a gentle bend radius and a sleeve. |
+| C. A push-pull cable carrying the rack's stroke | The fewest parts | The crank would stay at the motor, so the cable's slack acts at the glass. 0.5 mm of slack is ≈ 6° of glass [D: 0.5 / 15 × 180]. |
+
+**Recommended: A, routed in the detail design against M1's model and M7's design, with B as the
+fallback** if no straight route is free.
+
+**13.3 What changes.**
+- **Service:** E1 becomes two cassettes and a link. The far (glass) cassette has no motor and no
+  wiring, if its lock switch sits on the reverse output at the motor end. The cross shaft lifts
+  out after its two couplings.
+- **BOM** (§9), if A and A are accepted [E]:
+  - **DC gearmotors: E1 ×1**, so the Batch 2 total goes from 8 + 1 to 7 + 1. The four dual
+    H-bridges stay, with one spare channel.
+  - **New:** 2 one-way needle bearings (HF0612 class), a Ø 5 cross shaft ≈ 0.25 m, 2 single-dog
+    couplings (printed), and the 20:1 reduction (printed).
+  - The bells: 3 + 1 of **two sizes or two wall thicknesses**, chosen by ear (§12, item 4).
+- **Shared files:** architecture §10's "one direction", and its E1×1–2 count, change only once
+  Paul approves 13.1 A. The note goes in that PR as an append-only line.
+
+## 14. Decisions needed from Paul (second round)
+
+1. **The selector (13.1):** A, the direction selects (forward for the bell, reverse for the glass),
+   with an exception to "one direction" for this one event motor. *Recommended.*
+2. **The link (13.2):** A, a rigid cross shaft, routed under or behind M1 in the detail design,
+   with a flexible shaft as the fallback. *Recommended.*
