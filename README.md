@@ -85,6 +85,12 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 python3 tools/envelope/plate_measurements.py # stage heights estimated from the lithograph
 ```
 
+Firmware core host tests (Phase 3; see [`firmware/README.md`](firmware/README.md); needs g++ or clang++):
+
+```bash
+.venv/bin/python -m pytest firmware
+```
+
 CAD (build123d, its own venv; see [`cad/README.md`](cad/README.md)):
 
 ```bash
