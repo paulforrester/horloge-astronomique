@@ -35,6 +35,8 @@ Z_I2, Z_W = 12, 60                        # intermediate 12 -> count wheel 60
 Z_SECTOR, Z_C = 36, 36                    # the mutilated gear on W (18 teeth kept) -> cross shaft 36
 SECTOR_TEETH = 18
 Z_PINION = 12                             # the glass arbor's pinion, driven by the rack
+Z_DRIVE = 20                              # the gearmotor's pinion and the bell shaft's drive gear: 1:1 (Paul, PR #23)
+DRIVE_DIR = 0.0                           # the gearmotor's axis from B: straight up (+y), above the plates
 
 # --- the bell tower's axes, (y, z) -------------------------------------------------------------------------------
 B = (-7.0, -46.0)                         # bell shaft
@@ -71,6 +73,7 @@ def gears() -> dict:
          "sector": Gear(Z_SECTOR, M, backlash=BACKLASH), "c36": Gear(Z_C, M, backlash=BACKLASH)}
     sp, _ = pair_shifts(Z_PINION, 60)                      # the pinion's own anti-undercut shift (rack: any)
     g["pinion"] = Gear(Z_PINION, M, shift=sp, backlash=BACKLASH)
+    g["drive"] = Gear(Z_DRIVE, M, backlash=BACKLASH)
     return g
 
 
@@ -96,7 +99,8 @@ def axes() -> dict:
     cands = [(mx + h * dy / d, my - h * dx / d), (mx - h * dy / d, my + h * dx / d)]
     i = min(cands, key=lambda p: p[1])                     # the one further back (more negative z)
     c = _polar(W, centre_distance(g["sector"], g["c36"]), THETA_WC)
-    return {"B": B, "I": i, "W": W, "C": c, "d_BI": d1, "d_IW": d2}
+    mot = _polar(B, centre_distance(g["drive"], g["drive"]), DRIVE_DIR)
+    return {"B": B, "I": i, "W": W, "C": c, "M": mot, "d_BI": d1, "d_IW": d2}
 
 
 # ------------------------------------------------------------------------------------------------ the snail

@@ -210,7 +210,7 @@ H-bridge row's four duals keep a spare channel.
 |---|---|---|---|---|
 | Bearing MR85ZZ | 5 × 8 × 2.5 | 10 | the bell tower's four arbors 2 each; the crank's stub 2 | as Batch 1 |
 | Bearing MR63ZZ | 3 × 6 × 2.5 | 4 | the shoulder arbor 2; the glass arbor 2 | as Batch 1 |
-| Rod Ø5 | DIN 175 h9 | 0.35 m | bell shaft 34, intermediate 31, count arbor 31, left stub 36, cross shaft 166, right stub 15.5 mm [D: model] | as Batch 1 |
+| Rod Ø5 | DIN 175 h9 | 0.35 m | bell shaft 38, intermediate 38, count arbor 38, left stub 43, cross shaft 166, right stub 15.5 mm [D: model] | as Batch 1 |
 | Rod Ø4 | DIN 175 h9 | 0.2 m | the slider rod, 192 mm [D: model] | as Batch 1 |
 | Rod Ø3 | DIN 175 h9 | 0.2 m | the glass arbor 120, the shoulder arbor 49, the lever's pivot pin 9 mm [D: model] | as Batch 1 |
 | Steel pin | Ø3 × 7.5, ISO 2338 m6 (or cut from silver steel) | 1 | the crank pin | as Batch 1 |
@@ -222,7 +222,7 @@ H-bridge row's four duals keep a spare channel.
 | Micro metal gearmotor | ≈ 200 rpm under load (100:1 HP 6 V class) | counted (one of the 7 DC gearmotors) | E1, bell and glass | Gotronic (Pololu) ⚠ check the speed under load |
 | Subminiature roller-lever microswitch | as E2's | counted (2 of Batch 2's microswitches) | the bell lock, the count wheel's home | Gotronic ⚠ choose |
 | Screws M3 × 30 + nuts | A2 | 4 + 4 | the bell tower's four pillars | as Batch 1 |
-| Screws M2 × 6 + M2 heat-set inserts | A2 | 10 + 10 | the gearmotor bracket 2, the two switches 4, the slider's guides 4 | as Batch 1 |
+| Screws M2 × 6 + M2 heat-set inserts | A2 | 12 + 12 | the gearmotor's saddle 4 (on the plates' top edges), the two switches 4, the slider's guides 4 | as Batch 1 |
 | Screws M3 × 8 + M3 heat-set inserts | A2 | 8 + 8 | the shoulder bracket 2, the crank block 2, the glass arbor's arms 4 | as Batch 1 |
 
 ## Batch 3 — v1.5 / v2

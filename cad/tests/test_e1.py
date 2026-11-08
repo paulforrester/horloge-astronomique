@@ -177,12 +177,24 @@ def test_m1s_motors_still_draw_out_backwards(built, m1):
             assert _hits(m1[n].shape.moved(bd.Location((0, 0, dz))), a.items) == [], (n, dz)
 
 
-def test_the_gearmotor_slides_out_to_the_left(built):
-    """Undo the bracket's two M2: the gearmotor slides out of its sleeve, its D-shaft out of the coupling."""
+def test_the_gearmotor_lifts_out_upwards_with_its_saddle(built):
+    """Paul, PR #23: the motor folded inside the bell tower. Undo the saddle's screws: the saddle, the gearmotor and
+    its pinion lift straight up; the pinion leaves the bell shaft's 20 and touches nothing."""
     a, _ = built
-    others = [i for i in a.items if i.name not in ("gearmotor", "gearmotor_bracket")]
-    for dx in (-0.5, -5.0, -12.0, -40.0):
-        assert _hits(a["gearmotor"].shape.moved(bd.Location((dx, 0, 0))), others) == []
+    unit = ("gearmotor", "motor_pinion_20", "gearmotor_bracket")
+    others = [i for i in a.items if i.name not in unit]
+    for dy in (0.5, 5.0, 25.0, 60.0):
+        for n in unit:
+            assert _hits(a[n].shape.moved(bd.Location((0, dy, 0))), others) == [], (n, dy)
+
+
+def test_the_gearmotor_stays_inside_the_towers_width(built):
+    from cad.modules.e1_angels import mechanism as M
+    a, _ = built
+    bb = a["gearmotor"].shape.bounding_box()
+    assert bb.min.X >= M.X_OUTER[0] - 1.0 and bb.max.X <= -82.0       # outer plate .. clear of M1's back plate (−81)
+    assert math.dist(P.axes()["M"], P.axes()["B"]) == pytest.approx(centre_distance(P.gears()["drive"],
+                                                                                    P.gears()["drive"]))
 
 
 def test_the_sceptre_is_shown_cocked_and_its_tip_reaches_the_bell(built):

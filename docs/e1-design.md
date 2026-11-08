@@ -505,7 +505,7 @@ upright.
 Frame: M1's (`docs/m1-design.md` §9.2): origin at the dial's centre on its face, +X right, +Y up, +Z towards the
 viewer.
 
-<p align="center"><img src="img/e1/e1_front.png" width="760" alt="E1 from the front: the bell genie's tower on the left with the gearmotor sticking out to the left, the cross shaft behind M1's position, the glass tower on the right with its tall plate, the slider rod and the rack; placeholder figures on their plinths"></p>
+<p align="center"><img src="img/e1/e1_front.png" width="760" alt="E1 from the front: the bell genie's tower on the left with the gearmotor folded inside above its plates, the cross shaft behind M1's position, the glass tower on the right with its tall plate, the slider rod and the rack; placeholder figures on their plinths"></p>
 
 <p align="center"><img src="img/e1/e1_bell_tower.png" width="480" alt="The bell tower from inside, plates hidden: the bell shaft with the snail, the follower lever and its wire up to the shoulder lever on the shoulder bracket, the intermediate 48 + 12, the count wheel 60, the mutilated sector and the cross gear 36"> <img src="img/e1/e1_glass_drive.png" width="440" alt="The glass drive from inside, its plate hidden: the cross shaft and its crank in the crank block, the yoke on the slider rod, the rack at the top meshing the glass arbor's pinion"></p>
 
@@ -513,7 +513,7 @@ viewer.
 
 ### 16.1 Layout, and why
 
-- **Two towers and a shaft.** The bell tower (left, x −119 to −88) holds the motor and all the trains. The glass
+- **Two towers and a shaft.** The bell tower (left, x −126 to −88) holds the motor and all the trains. The glass
   tower (right, x 88 to 119) holds only the crank, yoke, rack and pinion. A Ø5 cross shaft joins them.
 - **The cross shaft runs behind M1, at y −65.1, z −106.8** [D: 36 mm from W at 228°].
   - M1's motor adapters reach down to y −55.5. A Ø12 coupling on the shaft tops out at −59.1, so **M1's motors
@@ -528,7 +528,8 @@ viewer.
 
 | Axis (y, z) | Carries, plane by plane (inner to outer) | Turns |
 |---|---|---|
-| B (−7, −46), bell shaft | the snail; the 12; the lock cam; the gearmotor's coupling outside | once per stroke (0.30 s) |
+| B (−7, −46), bell shaft | the snail; the 12; the lock cam; the drive gear 20 | once per stroke (0.30 s) |
+| M (13, −46), the gearmotor | its pinion 20, in the drive plane. The motor lies along X above the plates' top edge, behind the plinth, in a saddle (Paul, PR #23) | once per stroke |
 | I (−5.23, −75.95) | 48 + 12 in one print | 1 in 4 |
 | W (−41, −80), count arbor | the silencing cam; the mutilated sector 36 (18 teeth); the count wheel 60; the home cam | 1 in 20 |
 | C (−65.09, −106.75), cross shaft's stub | the 36; the detent disc; out to the coupling | half a turn per hour |
@@ -539,12 +540,14 @@ viewer.
 | B → I | 12 / 48 | 30.000 | +0.298 / −0.298 | |
 | I → W | 12 / 60 | 36.000 | +0.298 / −0.298 | (12/48)(12/60) = **1/20 exactly** [D] |
 | W → C | sector 36 (18 teeth) / 36 | 36.000 | 0 | 1:1 while engaged: 18 × 10° = 180° [D] |
+| M → B | 20 / 20 | 20.000 | 0 | 1:1 [D] |
 
 Module 1.0, backlash 0.15, faces 3 mm, as M1. Bearings: eight MR85ZZ in the two plates.
 
 **The planes, along X:** inner plate −91 to −88; the follower lever −94.5 to −92; the snail and the silencing cam
 −98.5 to −95.5; the sector and the cross gear −102.5 to −99.5; the 60 and I's 12 −106.5 to −103.5; I's 48 and B's 12
-−110.5 to −107.5; the lock, home and detent cams −114.5 to −111.5; outer plate −119 to −116.
+−110.5 to −107.5; the lock, home and detent cams −114.5 to −111.5; the drive pair −121.5 to −118.5; outer plate
+−126 to −123.
 
 ### 16.3 The strike
 
@@ -588,15 +591,14 @@ Module 1.0, backlash 0.15, faces 3 mm, as M1. Bearings: eight MR85ZZ in the two 
 
 ### 16.6 Size and parts
 
-- **Envelope [D]:** x −165.5 to 121.8 (the gearmotor sticks out 47 mm left of the bell tower); y −110 to 95;
-  z −126 to 29 (the bell at the front).
-- **Parts:** 70, of which 35 are printed. Every printed part fits the H2D's bed and meshes clean.
-- **Print files:** `export/print/e1_angels/` (32 files for 35 prints).
+- **Envelope [D]:** x −126.5 to 121.8; y −110 to 95; z −126 to 29 (the bell at the front).
+- **Parts:** 71, of which 36 are printed. Every printed part fits the H2D's bed and meshes clean.
+- **Print files:** `export/print/e1_angels/` (33 files for 36 prints).
 - **SketchUp:** `export/sketchup/e1_angels.dae` and `e1_angels_exploded.dae` (pulled apart along X).
 
 ### 16.7 Checks
 
-`cad/tests/test_e1.py`, 22 tests.
+`cad/tests/test_e1.py`, 23 tests.
 - **The program:**
   - the 1/20 ratio;
   - the centre distances;
@@ -622,7 +624,7 @@ Module 1.0, backlash 0.15, faces 3 mm, as M1. Bearings: eight MR85ZZ in the two 
   - no interference, and every part fits the bed;
   - E1 is clear of M1;
   - M1's motors still draw out backwards;
-  - the gearmotor slides out to the left;
+  - the gearmotor stays within the tower's width, and lifts out upwards with its saddle and pinion;
   - the arm is shown cocked, and struck its tip is 0.2–1.0 mm from the bell.
 
 ### 16.8 Estimates to confirm, and decisions
@@ -646,9 +648,18 @@ Module 1.0, backlash 0.15, faces 3 mm, as M1. Bearings: eight MR85ZZ in the two 
 - **The case:** the gallery's bay must take E1 from x −166 to 122 and back to z −126.
 
 **Decisions for Paul:**
-1. **The gearmotor sticking out on the left.** It is coaxial with the bell shaft, 47 mm outboard of the tower.
-   - **A. Keep it** (recommended): straight drive, no extra gears, and it slides out to the left for service.
-   - B. Fold it inside the tower with a 1:1 pair, at the cost of 2 gears and ≈ 15 mm more depth.
+1. **The gearmotor: B, folded inside the bell tower** (Paul, PR #23: "Fold it inside the bell tower").
+   - It now lies along X **above the plates' top edge**, behind the plinth (y 8 to 18, z −52 to −40). A 20/20
+     pair in its own plane drives the bell shaft 1:1, so the timing is unchanged.
+   - **What it cost.**
+     - The two gears, as expected.
+     - The outer plate moves out 7 mm, to x −126.
+     - The saddle has a relief cut for the intermediate's 48.
+     - **No depth**: the motor sits inside the tower's existing z range. My ≈ 15 mm estimate was for a motor
+       between the plates, which do not have room for its 34.5 mm length.
+   - **What it gained.** The whole module is 39 mm narrower: its left end moves from x −165.5 to −126.5.
+   - **Service.** Undo the saddle's four M2 screws and lift the saddle, the motor and its pinion straight up
+     (tested). Nothing above it is in the way: the plinth and the shoulder bracket are further forward.
 2. **The glass tower's tall plate** (y −110 to 95). It carries the slider and both of the glass arbor's arms.
    - **A. Keep one plate** (recommended): simple and stiff.
    - B. Two smaller brackets, if the case's cornice needs room.

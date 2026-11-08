@@ -1,7 +1,7 @@
 {
  "model": "e1_angels",
- "unique_parts": 32,
- "printed_parts": 35,
+ "unique_parts": 33,
+ "printed_parts": 36,
  "sets": {},
  "parts": [
   {
@@ -50,13 +50,13 @@
    "nozzle": 0.4,
    "set": "",
    "size": [
-    25.0,
+    32.0,
     81.0,
     98.0
    ],
    "note": "four pillars between the plates (M3 through)",
    "file": "tower_pillars.stl",
-   "overhang_mm2": 790.0,
+   "overhang_mm2": 1011.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true
@@ -291,19 +291,38 @@
   },
   {
    "names": [
-    "coupling_bell"
+    "bell_drive_gear_20"
    ],
    "material": "PLA",
    "nozzle": 0.4,
    "set": "",
    "size": [
-    10.5,
-    10.0,
-    10.0
+    3.0,
+    22.0,
+    22.0
    ],
-   "note": "printed: the bell shaft pressed in one end; the gearmotor's D-shaft slides in the other",
-   "file": "coupling_bell.stl",
-   "overhang_mm2": 91.0,
+   "note": "pressed on the bell shaft",
+   "file": "bell_drive_gear_20.stl",
+   "overhang_mm2": 109.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "motor_pinion_20"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    3.0,
+    21.8,
+    21.8
+   ],
+   "note": "pressed on the gearmotor's \u00d83 D-shaft; 1:1 with the bell shaft",
+   "file": "motor_pinion_20.stl",
+   "overhang_mm2": 102.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true
@@ -316,13 +335,13 @@
    "nozzle": 0.4,
    "set": "",
    "size": [
-    15.6,
-    13.6,
-    42.5
+    42.0,
+    16.4,
+    15.0
    ],
-   "note": "holds the gearmotor; two M2 screws into the outer plate: undo them and the motor slides out to the left",
+   "note": "a saddle on the plates' top edges (4 \u00d7 M2): its cheeks hold the gearmotor; lift it out upwards",
    "file": "gearmotor_bracket.stl",
-   "overhang_mm2": 113.0,
+   "overhang_mm2": 431.0,
    "fits_single": true,
    "fits_dual": true,
    "mesh_ok": true

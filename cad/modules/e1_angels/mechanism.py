@@ -51,8 +51,9 @@ X_P3 = (-102.5, -99.5)                         # the mutilated sector (W) and th
 X_P2 = (-106.5, -103.5)                        # W's 60 and I's 12
 X_P1 = (-110.5, -107.5)                        # I's 48 and B's 12
 X_LOCK = (-114.5, -111.5)                      # B's lock cam, W's home cam, C's detent disc
-X_OUTER = (-119.0, -116.0)
-X_COUPLING = (-130.0, -119.5)
+X_DRIVE = (-121.5, -118.5)                     # the 20/20 pair: the gearmotor's pinion and the bell shaft's gear
+X_OUTER = (-126.0, -123.0)
+MOTOR_FACE = -117.5                            # the gearmotor's face; its body runs +x above the plates to -83
 TOWER_YZ = (-76.0, 4.0, -120.0, -22.0)         # the bell tower's plates: y0, y1, z0, z1
 
 # --- the glass tower --------------------------------------------------------------------------------------------
@@ -179,8 +180,7 @@ def build():
         a.allow("tower_pillars", nm)
 
     # ------------------------------------------------------------------ arbors and bearings
-    xl = X_COUPLING[0]
-    arbors = {"bell_shaft": (B, xl + 8.0, X_INNER[1]), "intermediate_arbor": (I, X_OUTER[0], X_INNER[1]),
+    arbors = {"bell_shaft": (B, X_OUTER[0], X_INNER[1]), "intermediate_arbor": (I, X_OUTER[0], X_INNER[1]),
               "count_arbor": (W, X_OUTER[0], X_INNER[1]), "cross_stub_left": (C, X_OUTER[0], COUPLING[0] + 4.0)}
     for nm, (yz, xa, xb) in arbors.items():
         a.add(nm, at_yz(parts.rod(5.0, xb - xa), yz, xa), material="steel", printed=False, group="trains",
@@ -273,7 +273,7 @@ def build():
           "two notches 180° apart: holds the cross shaft at a dead centre between hours")
     for x_, y_ in (("bell_lock_cam", "bell_shaft"), ("home_cam", "count_arbor"), ("detent_disc", "cross_stub_left")):
         a.allow(x_, y_)
-    sw_x = (X_OUTER[1], X_OUTER[1] + SWITCH["w"])
+    sw_x = (X_DRIVE[1] + 0.2, X_DRIVE[1] + 0.2 + SWITCH["w"])
     for nm, yz in (("bell_lock_switch", (B[0] - 10.0 - 1.0 - SWITCH["h"] / 2, B[1])),
                    ("home_switch", (W[0] + 2.0, W[1] + 12.0 + 1.0 + SWITCH["l"] / 2))):
         body = onx(box(SWITCH["h"], SWITCH["l"], span(sw_x), (yz[0], yz[1], span(sw_x) / 2)), sw_x[0])
@@ -284,26 +284,34 @@ def build():
     a.add("detent_spring", onx(box(2.0, 1.2, span(X_LOCK), (C[0] + 9.6, C[1] - 6.0, span(X_LOCK) / 2)), X_LOCK[0]),
           material="steel", printed=False, group="tower", note="leaf spring with a nose in the detent's notch [E]")
 
-    # ------------------------------------------------------------------ the gearmotor and its coupling
-    gm = GEARMOTOR
-    face = X_COUPLING[0] - 1.0
-    a.add("coupling_bell", at_yz(zdisc(10.0, 0, span(X_COUPLING), bore=0.0) - zdisc(5.0 + parts.FITS.press, 8.0,
-                                                                                     span(X_COUPLING) + 1)
-                                 - zdisc(gm["shaft_d"] + parts.FITS.sliding, -1, 7.0), B, X_COUPLING[0]),
-          group="motor", note="printed: the bell shaft pressed in one end; the gearmotor's D-shaft slides in the other")
-    motor = onx(box(gm["d"], gm["w"], gm["length"], (B[0], B[1], -gm["length"] / 2)), face) + \
-        at_yz(parts.rod(gm["shaft_d"], gm["shaft_l"] - 2.0), B, face)
+    # ------------------------------------------------------------------ the gearmotor, folded inside (Paul, PR #23)
+    # It lies along X above the plates' top edge, behind the plinth, and drives the bell shaft through a 20/20 pair
+    # in its own plane between the lock plane and the outer plate. To change it, undo the saddle's screws and lift
+    # the saddle, the motor and its pinion straight up.
+    gm, Mx = GEARMOTOR, ax["M"]
+    place("bell_drive_gear_20", gear_local(g["drive"], span(X_DRIVE), 5.0), B, X_DRIVE, "pressed on the bell shaft")
+    rot_m = mesh_rotation(g["drive"], g["drive"], P.DRIVE_DIR)
+    a.add("motor_pinion_20", at_yz(gear_local(g["drive"], span(X_DRIVE), gm["shaft_d"], rot_m), Mx, X_DRIVE[0]),
+          group="motor", note="pressed on the gearmotor's Ø3 D-shaft; 1:1 with the bell shaft")
+    motor = onx(box(gm["d"], gm["w"], gm["length"], (Mx[0], Mx[1], gm["length"] / 2)), MOTOR_FACE)
+    motor += at_yz(parts.rod(gm["shaft_d"], gm["shaft_l"]), Mx, MOTOR_FACE - gm["shaft_l"])
     a.add("gearmotor", motor, material="black", printed=False, group="motor",
-          note="micro metal gearmotor ≈ 200 rpm under load [E] ⚠ choose; forward only")
-    sleeve = onx(box(gm["d"] + 3.6, gm["w"] + 3.6, gm["length"] - 4.0, (B[0], B[1], -(gm["length"] - 4.0) / 2))
-                 - box(gm["d"] + 0.4, gm["w"] + 0.4, gm["length"] + 2.0, (B[0], B[1], -gm["length"] / 2 - 2.0)), face)
-    arm = onx(box(gm["d"] + 3.6, gm["w"] + 3.6, X_OUTER[0] - face, (B[0], B[1], (X_OUTER[0] - face) / 2)), face)
-    arm -= at_yz(zdisc(12.0, -1, X_OUTER[0] - face + 1), B, face)
-    a.add("gearmotor_bracket", sleeve + arm, material="PETG", group="motor", print_up=(-1, 0, 0),
-          note="holds the gearmotor; two M2 screws into the outer plate: undo them and the motor slides out to the left")
-    for x_, y_ in (("coupling_bell", "bell_shaft"), ("coupling_bell", "gearmotor"), ("gearmotor_bracket", "gearmotor"),
-                   ("gearmotor_bracket", "tower_outer_plate"), ("bell_shaft", "bell_shaft_bearing_outer")):
+          note="micro metal gearmotor ≈ 200 rpm under load [E] ⚠ choose; forward only; inside the tower")
+    y_top = TOWER_YZ[1]
+    base = onx(box(4.0, 16.0, X_INNER[1] - X_OUTER[0], (y_top + 2.0, Mx[1], (X_INNER[1] - X_OUTER[0]) / 2)), X_OUTER[0])
+    base -= at_yz(zdisc(2 * (g["drive"].tip_radius + 1.0), -0.5, span(X_DRIVE) + 1.0), Mx, X_DRIVE[0])
+    base -= at_yz(zdisc(2 * (g["i48"].tip_radius + 1.0), -0.5, span(X_P1) + 1.0), I, X_P1[0])     # the 48's relief
+    cheek_len = X_INNER[1] + 4.0 - MOTOR_FACE
+    for dz in (-(gm["w"] / 2 + 1.2), gm["w"] / 2 + 1.2):
+        base += onx(box(gm["d"] + 1.0, 2.0, cheek_len, (Mx[0] + 0.5, Mx[1] + dz, cheek_len / 2)), MOTOR_FACE)
+    a.add("gearmotor_bracket", base, material="PETG", group="motor", print_up=(0, -1, 0),
+          note="a saddle on the plates' top edges (4 × M2): its cheeks hold the gearmotor; lift it out upwards")
+    for x_, y_ in (("gearmotor_bracket", "gearmotor"), ("gearmotor_bracket", "tower_inner_plate"),
+                   ("gearmotor_bracket", "tower_outer_plate"), ("motor_pinion_20", "gearmotor"),
+                   ("bell_drive_gear_20", "bell_shaft"), ("motor_pinion_20", "bell_drive_gear_20"),
+                   ("bell_shaft", "bell_shaft_bearing_outer")):
         a.allow(x_, y_)
+    data["drive"] = {"pair": f"{P.Z_DRIVE}/{P.Z_DRIVE}", "motor_axis_yz": [round(v, 2) for v in Mx]}
 
     # ------------------------------------------------------------------ plinths and figures
     plinths = {"bell": (-116.0, -70.0, TOWER_YZ[1]), "glass": (72.0, GX_OUTER[0], 8.0)}
