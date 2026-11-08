@@ -86,6 +86,7 @@ who strikes at 12:00, waits at the right. Photograph: Tangopaso, Wikimedia Commo
 | Turntable that fits these positions | four ages 90° apart on a ring of R ≈ 121 mm, its centre ≈ 94 mm behind Death; the front of the ring ≈ 27 mm in front of Death; **≈ 243 mm deep in all** | [D: a circle through both doorways (±0.42 of the hall's width, at Death's depth) and 0.15 of the width in front of Death; the photograph's rest positions (±0.41 and −0.46 of the width) fall at ±45° on it] |
 | Stroke cadence | **the genie strikes, the age strikes 1 s later, then a 2 s pause; repeated n times.** So a pair every 3 s, and the old man's four pairs take ≈ 10 s from the genie's first stroke to his last | [S: Paul's observation, 6 Nov 2026]; [D: 3 × 3 s + 1 s] |
 | Walk duration | **the walk on takes ≈ 10 s**: from the old man's last stroke, past Death to the left doorway. The next age comes into view at the right during the same move. The walk out, from the right doorway to the bell, was not timed; at the same speed it would take ≈ 6 s | [S: Paul's observation, 6 Nov 2026]; [E: 34° of the ring's 56° walk on, at its 5.6°/s (§2 geometry), 34/56 × 10 s] |
+| Death's cadence | **one stroke every 3 s** | [S: Paul, PR #21, 8 Nov 2026] |
 | What follows the walk | **Death starts the hour as soon as the walk ends.** The hourglass turns "au dernier coup des quatre quarts", so it runs during the walk | [S: Paul, 6 Nov 2026; DA p. 51] |
 | How the original moves the ages | not described in DA; Ungerer 1922 and Bach et al. 1992 may show it | [?]: the books are still to obtain |
 | State arbor | 1 rev/h, legal time; quarter snail 1:1; hour snail through 12:1 (12/48 · 15/45, as M1's motion work) | [S: M1 gate, decision 1; architecture §3] |
@@ -165,9 +166,13 @@ As everywhere: **pass timing electrically and position mechanically** (architect
 **4.5 Night, catch-up and setting.**
 - Quiet hours are firmware (D10). The minimal faithful setting silences the ages at night, while
   Death strikes day and night [S: DA p. 58, 65].
+  - **Changed in part 2b:** the walk train releases the racks (Paul, PR #21, 8 Nov 2026), so Death is
+    silent whenever the ages are. Paul: "I'm okay with Death not striking during the quiet time at
+    night". E2 goes quiet as a whole (`docs/firmware-design.md` §8, F6).
 - At the end of quiet hours, and after a power cut, the controller runs the walk train alone,
   silently (4.3). Then the right age waits in view. Nothing else needs catching up: the snails
-  are on the state arbor.
+  are on the state arbor. The silent walk drops the racks; they rest on their snails until the next
+  show gathers them (§12.2).
 - No hands to set: the state arbor's phase is the stepper's (P1). The hour snail is meshed at its
   mark at commissioning, and its witness checks it.
 
@@ -519,9 +524,11 @@ B (the waiting arm in). Program angles [D: `program.py`]:
 
 ### 11.5 The state module
 
+As designed in part 2a. Part 2b rearranged the arbor and reversed its turn (§12.6).
+
 | Item | Value |
 |---|---|
-| State arbor | Ø5 ground rod along X at y −42.85, z −81 (under the bell rod), x −31 to 79.5. Two MR85ZZ (the left plate and the right block); a Starlock at its left end. It turns at 1 rev/h legal time, anticlockwise seen from the motor |
+| State arbor | Ø5 ground rod along X at y −42.85, z −81 (under the bell rod), x −31 to 79.5. Two MR85ZZ (the left plate and the right block); a Starlock at its left end. It turns at 1 rev/h legal time; clockwise seen from the motor since part 2b (§12.2) |
 | Coupling (x 56.6–95.5) | the arbor is pressed into one end; the NEMA's D-shaft slides into a D socket at the other (slip fit, D16) |
 | Index (x 45.5–48.5) | a Ø24 disc with a magnet at R 9 (minute 0); the index Hall is on the right block |
 | Quarter snail (x 39.5–43.5) | radii 14, 12, 10, 8 for 1–4 pairs; each step is centred on its show |
@@ -604,3 +611,216 @@ B (the waiting arm in). Program angles [D: `program.py`]:
 - Death's arm, and the ages' arms with their push pins (lifted at the bell station from below the
   ring).
 - **The bells ⚠:** to source.
+
+## 12. Detail design, part 2b: the quarter and hour counting trains
+
+Part 2b counts the quarters' pairs and Death's strokes and drives the two strike shafts:
+- the racks, snails and gathering;
+- the releases, by the walk train (Paul, PR #21);
+- the lock, cue and home switches;
+- the two gearmotors.
+
+Part 2c takes each strike shaft's lift up to the figures: the ages' push pins and arms at the bell station,
+and Death's forearm. Part 3 is the figures.
+
+Model:
+- `cad/modules/e2_ages/striking.py`: the geometry and logic, with no CAD;
+- `cad/modules/e2_ages/strikers.py`: the CAD;
+- `drives.py`: the state arbor, rearranged for the racks, and the release disc on the walk's program shaft
+  (§12.6).
+
+The model shows the rest state at 12:10: both racks gathered, the hooks in, the pawls held out, the shafts
+at their lock angle, the release arms clear of the hooks.
+
+**What changed on Paul's review (PR #21, 8 Nov 2026).** The walk train now releases the racks (decision 1,
+§12.7). The release cams and levers on the state arbor are gone. In their place:
+- a grooved release disc on the walk's program shaft;
+- the quarter release shaft, with its follower and arm;
+- the hour trip shaft, rocked by a pin in the quarter rack at the fourth quarter.
+
+Death is now silent whenever the ages are (§4.5).
+
+<p align="center"><img src="img/e2/e2_strike.png" width="480" alt="E2 part 2b from behind: the hour train at the left (its gearmotor outside the left plate, the 24-tooth gear, the hour rack's long toothed arc), the middle and right strike plates, the quarter train at the right with its cams and gearmotor, the racks' tails reaching forward to the snails on the state arbor"> <img src="img/e2/e2_strike_yz.png" width="440" alt="The two counting trains seen along X: each rack at home and at its full count, its tail over the snail, the hook and the gathering pawl at the teeth, the strike shaft; the quarter release arm and the hour trip's arms, at rest and released"></p>
+
+### 12.1 How each train counts
+
+It is a rack and snail, as the concept gate decided (§4.2, §4.4), adapted for printing.
+
+1. **Release, by the walk train** (Paul, PR #21, decision 1).
+   - **Quarters.** A grooved disc under the program shaft's lock cam moves the follower of the quarter release
+     shaft once per program turn, in phase A. The shaft's arm pushes the quarter hook's weighted tail: the hook
+     turns out and the quarter rack falls. Every show releases it.
+   - **Hours.** A pin in the quarter rack lifts arm A of the hour trip shaft, but only when the rack falls past
+     three pairs: at the fourth quarter. Arm B then pushes a tab on the hour hook, which turns out, and the hour
+     rack falls. The first pair gathered lowers the pin again, and the hour hook drops back into the teeth.
+   - The time train still decides *when* (rule 4): the controller starts each walk from the time base, and the
+     snails on the state arbor set the counts.
+   - **So a show that does not walk strikes nothing, Death included.** E2 goes quiet as a whole at night
+     (§4.5).
+2. **Fall.** A spring pulls the rack's spoke up, so the rack turns until its tail finger rests on the snail.
+   The snail's step sets how many teeth fall: 1–4 pairs, or 1–12 strokes.
+   - The spring is needed because the toothed side outweighs the tail (§12.3).
+3. **Strike.** The controller runs the strike shaft, one turn per stroke (3 s), after the walk out. Each turn:
+   - closes the cue switch (quarters only), so E1's genie strikes;
+   - lifts the striking figure and drops it 1 s later (part 2c);
+   - gathers one tooth.
+4. **Lock.** When the rack is home, its vane blocks the home opto. The controller stops at the next closing of
+   the lock switch.
+   - **Simulated:** every count gives exactly that many strokes, and the rack comes home (`simulate_show`).
+
+**Two printing adaptations:**
+- **The gathering pallet becomes a gathering pawl.**
+  - A one-tooth pallet that gathers exactly one tooth of a 2.5 mm-pitch rack would need a radius of about 3 mm,
+    too small to print.
+  - Instead, an eccentric on the strike shaft rocks a feed lever, coaxial with the rack, through 1.6 teeth. Its
+    pawl pushes the rack 1.3 teeth: the hook drops behind the next tooth and the rack settles back onto it.
+  - At rest the pawl's tail sits on a fixed guard pin, so the pawl is out of the teeth and the rack can fall.
+- **The racks amplify.** The teeth are on an arc at a larger radius than the tail, so a fine snail step
+  becomes a printable tooth.
+  - The pitch is 2.5 mm, the module-0.8 class, printed with the 0.2 mm nozzle [E: CLAUDE.md working defaults].
+  - Both racks turn on one Ø3 stud behind the state arbor.
+
+### 12.2 The racks and snails [D: `striking.py`]
+
+| | Quarters | Hours |
+|---|---|---|
+| Counts | 1–4 pairs | 1–12 strokes |
+| Rack's tooth arc | R 30, 4.775° per tooth | R 48, 2.984° per tooth |
+| Tail | 24 mm from the stud (−18.85, −67), above the snail | the same |
+| Snail radii (derived) | 14.00, 12.00, 10.01, 8.05 | 20.00, 18.78, 17.55, 16.32, 15.07, 13.83, 12.58, 11.33, 10.09, 8.85, 7.64, 6.47 |
+| Gathered tail above the count-1 step | 1.99 | 1.21 |
+| Rack's swing | 19.1° | 35.8° |
+| Snail steps | each centred on its show; the one rise (4 → 1) is a ramp from :07.5 to :12 | each centred on its hour; the 12 → 1 rise is a ramp from 12:30 to 12:51 |
+
+- **The radii are derived from the rack.** Each count turns the rack exactly one more tooth, and its radius is
+  where the tail then rests. Part 2a's 0.9 mm hour steps are replaced by these.
+- **Ramps instead of rising steps.** A rack left down rests on its snail: after a silent walk (the catch-up
+  at the end of quiet hours, §4.5), or a fault. The snail may
+  drop away from the tail, but it only rises on a ramp of at most 2 mm per minute (tested), so the tail is
+  lifted, never struck.
+- **The state arbor now turns clockwise, seen from its motor.** Only the snails' past steps, never their coming
+  ones, then pass under the racks' tail arms. Otherwise the hour rack's arm would have hit the 1-stroke step at
+  noon. The stepper can turn either way, and part 2a's cams work in either direction.
+
+### 12.3 The parts
+
+| Part | What it is |
+|---|---|
+| Rack | printed lever (body 3 mm thick; teeth rim 5.5 mm, flush with the body's +X face so it prints flat), on the 0.2 mm nozzle. A tail arm and finger on one side; a spoke and the toothed rim on the other; a vane for the home opto; a Ø2 pin for its spring |
+| Rack spring | Sodemann E00940110500S, the extension spring M2 already uses (accepted by Paul, D13). It hangs vertically from an anchor on the strike plate to the pin on the spoke, 10 mm from the pivot. Stretched 7.3 mm at home; quarters 12.2 → 9.0 N·mm and hours 10.9 → 5.2 N·mm from home to the full count, against the toothed side's weight of 0.13 and 0.48 N·mm [D] |
+| Hook | printed pawl on a Ø3 stud (0.2 mm nozzle). Its rounded tip sits in the notch before the hooked face, clear of the next tooth's slope, on a radial stem; the lump on its tail keeps it in the teeth (its weight 0.9 mm on the far side of the pivot) |
+| Feed lever and pawl | printed lever on the rack's stud, carrying the gathering pawl on a Ø2 pin; the pawl works the rim's left half |
+| Eccentric and strap | eccentric on the strike shaft, throw 2.07 mm (quarters) and 2.02 mm (hours); a printed strap to the feed lever's pin |
+| Release disc | printed, pressed on the walk's program shaft under its lock cam (z −62 to −59, R 16). Its groove (1.6 deep, 2.6 wide, underneath) runs at R 13.2 except in the release window, where it eases to R 11.0 and back: rise 30–65°, hold to 80°, back by 115° of the program (harmonic; pressure angle 25.1° [D]) |
+| Quarter release shaft | Ø3 rod at (24.32, −72), turning in the right strike plate and the quarter motor plate. Its follower (5 mm thick, under the disc) carries a Ø2 steel pin, pressed upright in its top block, that runs in the groove: a round pin, so the groove's slope never pinches it (0.15 mm clear all round, tested). Its arm (beside the quarter hook) ends 0.4 mm off the hook's weighted tail. The groove turns it 13.1°: the hook turns out 0.199 rad, its tip 1.18 mm above the teeth's tips (0.11 rad is enough) [D]. Positively driven both ways |
+| Trip pin | Ø2 pin in a lobe of the quarter rack, R 28 from the stud, beyond the rim's spare tooth (the hook and the pawl never reach it). From three to four pairs it rises 2.33 mm |
+| Hour trip shaft | Ø2 rod at (19, −67), turning in the middle and right strike plates. Arm A (x 21.8–24, beside the quarter rack) has a level shoe 0.6 mm above the pin at three pairs; at four pairs the pin turns the shaft 9.7°. Arm B (beside the hour hook) runs along the line to the hour hook's pivot and ends 0.4 mm off a tab on the hook: the hook turns out 0.192 rad [D]. A lump on arm A holds arm B on a Ø2 stop pin, with 3.3 times its bearings' friction [D; E: μ 0.3] |
+| Hour hook's tab | 7.5 mm, toward the trip shaft; the hook's tail lump grows to R 4 to keep its weight 0.9 mm on the far side of its pivot |
+| Guard | Ø2 pin under the pawl's tail at rest |
+| Strike shaft | Ø5 ground rod in two MR85ZZ. Quarters at (10.0, −90.0), x 1.5–42; hours at (24.3, −97.0), x −35.8–5.5 |
+| Cams on it | lock (R 9, notch at the rest angle); lifter (R 7 → 13, drop at 120° = 1 s, part 2c); cue, quarters only (R 9 → 10.5 over 5–35°) |
+| Drive | 12/24 at m 1 (cd 18) from a micro metal gearmotor at ≈ 40 rpm [E] ⚠: 20 rpm, 3 s per stroke. The motors sit outside the trains (hours to the left, quarters to the right) on plates hanging from the deck; each slides out along X after two M1.6 (tested) |
+| Switches | lock: one subminiature roller microswitch per train; cue: one (quarters); home: one Vishay TCST1202 slotted opto per rack (no force on the rack) |
+| Plates | the middle (x 2–5) and right (x 27.6–30.6) strike plates hang from the deck; they carry the trip shaft, and the right one the quarter release shaft (it reaches out to y 28.5 for it). The quarter motor plate carries the release shaft's other end; its top is cut back under the walk's lock and release cams. The state module's left plate now also carries the hour strike shaft's left bearing |
+
+**The strike cycle**, in strike-shaft degrees:
+
+| Angle | Event |
+|---|---|
+| 0 | rest |
+| 5–35 | cue (E1's genie) |
+| 20–110–120 | lift, hold, drop: the figure's stroke at 1.0 s |
+| 150–330 | the eccentric's gathering stroke |
+| 350–360 | lock |
+
+### 12.4 Timing
+
+- A pair every 3 s, with the age 1 s after the cue (Paul).
+- Death's strokes: one every 3 s [S: Paul, PR #21, 8 Nov 2026]. So twelve at noon take 33 s from the first to the last [D: 11 × 3 s].
+- **The release, in a show's walk** (at the walk motor's estimated 32 rpm, §11.8) [D: `release_times_s`]:
+
+  | Seconds into phase A | |
+  |---|---|
+  | 1.9 | the follower starts to move (the waiting age has just been let go) |
+  | 4.1 | the quarter hook is out: the quarter rack falls (and, at the hour, trips the hour rack) |
+  | 5.0 | the hook starts back |
+  | 7.2 | the hook is back in |
+  | 8.7 | the program stops at the lock notch: the strikes start |
+
+  So the racks fall about 4.6 s before the first pair, and the snails' steps are centred on the shows.
+- The controller's sequence on the hour:
+  1. the walk out (phase A, ≈ 8.7 s, started early so the first pair lands on time);
+  2. the quarters: n turns;
+  3. the walk on (phase B);
+  4. the hours: H turns.
+
+  Each train is run until its home opto is blocked, then stopped at its lock angle.
+
+### 12.5 Checks
+
+`cad/tests/test_e2.py` now has these part 2b tests:
+- **The logic:**
+  - the snail radii come from the rack: one tooth per count, about one step of home clearance;
+  - every count is struck and the rack comes home;
+  - each show reads the right step, from the fall to the end of the gathering;
+  - the snails never rise steeply;
+  - the walk releases inside phase A: after the waiting age is let go, back in at least 1 s before the strikes,
+    and at rest the rest of the turn; pressure angle under 30°;
+  - the strike cycle's timing (1 s, 3 s);
+  - the gathering stroke gathers exactly one tooth;
+  - the releases turn each hook clear (0.03 rad past the turn that lifts its tip 0.3 above the teeth); at rest
+    each release arm stands 0.4 off its hook, and a hook riding the teeth only moves away from it;
+  - the quarter release follows its window;
+  - the hour trip works only at the fourth quarter, and its weight holds it on its stop.
+- **The racks fall and the pawls drop in:**
+  - each rack spring gives at least three times the toothed side's weight, plus 1 N·mm, at every count, within
+    the spring's range;
+  - the hooks' and pawls' weighted tails turn them into the teeth.
+- **The CAD:**
+  - each rack rests on its snail at every count, touching only with its tail;
+  - the hook locks, and lifted, the hook and the guard-held pawl let the rack fall to every count;
+  - the home opto sees only home;
+  - the racks swing clear of everything fixed;
+  - the release parts move clear: through the window, the release arm, its follower (its pin never touches the
+    groove's walls) and the turned-out quarter hook; at every count, the trip pin; at four pairs, the tripped
+    arms and the turned-out hour hook;
+  - the strike gearmotors slide out;
+  - no interference, and every part fits the bed.
+
+**Size and files.**
+- **Parts:** 168, of which 87 are printed. Every part fits the H2D's bed.
+- **Envelope:** unchanged (x −145 to 152, y −66.2 to 235, z −114 to 100).
+- **Print files:** 70 in `export/print/e2_ages/`.
+- **SketchUp:** both models now include the counting trains; the exploded view drops them 200 mm.
+
+### 12.6 What changed in part 2a
+
+- **The state arbor is rearranged:**
+  - the motion work moves to the left end;
+  - the hour wheel's tube runs right to the hour snail (x −12.5 to −8.5);
+  - the quarter snail moves to x 18–22;
+  - the witness magnet is on the hour snail's 6 o'clock step (R 9), and the witness Hall sits under it at
+    12:00, on a bracket from the middle strike plate.
+- **The state arbor turns clockwise** (§12.2).
+- **The left plate is extended** to carry the hour strike shaft.
+- **The program shaft** reaches 4 mm lower, to carry the release disc under the lock cam.
+
+### 12.7 Estimates to confirm, and decisions
+
+**Estimates [E]:**
+- the strike gearmotors (≈ 40 rpm under load) ⚠;
+- the 2.5 mm tooth pitch with the 0.2 mm nozzle: the tolerance test sets it;
+- the pawls', hooks' and the hour trip's weights, which do the work of springs (a click spring each is the
+  fallback): to try on the test rig.
+
+**Now sourced:** Death's cadence, one stroke every 3 s (Paul, PR #21, 8 Nov 2026; §12.4).
+
+**Decisions (settled, Paul, PR #21, 8 Nov 2026):**
+1. **The walk train releases the racks.** Paul: "Lets try for the walk train described. I'm okay with Death not
+   striking during the quiet time at night". So the quarter rack is released in every show's phase A, and the
+   hour rack by the quarter rack at the fourth quarter (§12.1). The recommendation had been release cams on the
+   state arbor; they are gone.
+2. **A gathering pawl on an eccentric, instead of a one-tooth gathering pallet**, as recommended: printable, and
+   the same count.
+3. **Home detection by slotted opto** (as M2's E6), as recommended: it puts no force on the rack.
+4. **A rack spring each:** M2's Sodemann extension spring (D13), as recommended.

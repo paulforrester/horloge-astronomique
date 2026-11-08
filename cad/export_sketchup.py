@@ -53,7 +53,7 @@ EXPLODE = {                             # model -> exploded() arguments (front o
     "test_rig": dict(offsets={"hands": 50.0, "front": 25.0}, spread=1.5, use_item_explode=False),
     "m1_time": dict(offsets={"hands": 60.0, "front": 35.0, "drive": -40.0}, spread=1.5, use_item_explode=False),
     "e2_ages": dict(offsets={"figures": 150.0, "hall": 70.0, "ring": 30.0, "stops": -30.0, "drive": -60.0,
-                             "state": -130.0}, spread=1.0, use_item_explode=False),
+                             "state": -130.0, "strike": -200.0}, spread=1.0, use_item_explode=False),
     "tolerance_coupons": dict(spread=0.0),     # gears lift off the board by their own explode vectors
     "m2_e6_fallback_pawl": dict(spread=1.5, use_item_explode=False),   # its layers come apart along the shafts
     "m7_weekdays": dict(axis=1, offsets={"figures": 120.0, "carousel": 60.0, "drive": -30.0, "frame": -15.0},
