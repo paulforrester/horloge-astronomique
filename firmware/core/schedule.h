@@ -44,9 +44,9 @@ bool is_quiet(ShowClass c, uint16_t legal_minute, int64_t unix_s, const QuietCon
 // the next quarter waits at the right doorway.
 constexpr uint8_t age_for_quarter(uint8_t n) { return static_cast<uint8_t>((n + 3) % 4); }
 constexpr uint8_t age_waiting_after(uint8_t n) { return static_cast<uint8_t>(n % 4); }
-// Program turns the resync must run (two walk releases each) to bring `due` to the doorway.
-constexpr uint8_t resync_turns(uint8_t waiting, uint8_t due) {
-  return static_cast<uint8_t>((due + 4 - waiting) % 4);
-}
+// The resync after skipped shows is one silent program turn (two walk releases), whatever age is
+// waiting: the age cam on the state arbor makes the next walk stop on the due age, for all 16
+// pairs of waiting and due age (docs/e2-design.md §10.3, PR #21). No sensor or count is needed.
+constexpr uint8_t kResyncTurns = 1;
 
 }  // namespace horloge

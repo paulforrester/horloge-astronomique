@@ -136,7 +136,5 @@ TEST(e2_ring_ages) {
   CHECK_EQ(age_for_quarter(4), 3);       // the old man strikes :00
   CHECK_EQ(age_waiting_after(4), 0);     // then the child waits
   CHECK_EQ(age_waiting_after(1), 1);
-  CHECK_EQ(resync_turns(0, 0), 0);
-  CHECK_EQ(resync_turns(1, 0), 3);
-  CHECK_EQ(resync_turns(2, 3), 1);
+  CHECK_EQ(kResyncTurns, 1);  // one silent walk, whatever age waits (e2-design §10.3)
 }

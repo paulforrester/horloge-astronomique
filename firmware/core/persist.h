@@ -20,7 +20,7 @@ struct PersistRecord {
   int32_t j = 0;                  // the summer-time count (§6.1)
   uint8_t walk_phase = 0;         // E2 walk: 0 at rest, 1 locked for the strikes
   uint8_t e6_divisions = 0;       // E6 divisions made tonight
-  uint8_t ring_age = 0;           // E2: the age waiting at the right doorway (0..3)
+  uint8_t ring_age = 0;           // E2: the age waiting (0..3), for the log only; the resync needs none
   uint8_t flags = 0;              // spare
   uint32_t faults = 0;            // active fault bits
 };

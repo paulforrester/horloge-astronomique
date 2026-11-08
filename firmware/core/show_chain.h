@@ -9,6 +9,8 @@
 // Rule 4: the release flags on M1b gate each step. A step whose window is not open is skipped and
 // reported. A motor that faults counts as done, so the rest of the chain goes on where it can.
 // When E2 is silent (quiet hours) the hourglass runs at T on the hour, and the noon show at T.
+// The hour train (and so its home opto) is used only at :00: at other quarters a rack left down by
+// a silent walk is not a fault (docs/e2-design.md §12.4).
 #pragma once
 #include <cstdint>
 

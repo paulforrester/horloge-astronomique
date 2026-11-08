@@ -541,16 +541,17 @@ From `docs/m2-design.md` §6:
 **E2 resync (P2).** The next age waits in view between shows (`docs/e2-design.md` §3). After
 skipped shows the wrong age would be waiting, so the controller runs the walk train alone:
 - at the end of quiet hours, and after catch-up, a minute before the next quarter;
-- as many program turns as there are skipped ages, modulo 4;
-- without strikes.
+- **one program turn**, whatever age is waiting: the age cam on the state arbor makes the walk stop
+  on the due age for all 16 pairs of waiting and due age (`docs/e2-design.md` §10.3, PR #21);
+- without strikes. The walk drops the racks as it passes; they rest on their ramped snails and the
+  next show strikes the count due then (above).
 
 **E2's racks after a silent walk.** If the walk runs without a show, a rack it releases stays
 down on its snail. The snails are ramped, so nothing jams, and the next show strikes the count due
 then (`docs/e2-design.md` §12, PR #21). The firmware does nothing special.
 
-The firmware knows how many: it records in FRAM which age the ring holds at the waiting
-position, and the bell-station Hall confirms each age's arrival. One question is open for E2
-part 2b: how the firmware finds the ring's age if FRAM is lost (§13).
+No sensor and no count are needed for this, so losing FRAM costs nothing here (E2 session,
+PR #21; this answers §13 item 2).
 
 ## 8. Time: NTP, RTC, summer time, quiet hours
 
@@ -643,7 +644,7 @@ On power-up:
 - per axis: position (int64), `P_k`, the driver's microstep phase;
 - J, the summer-time count;
 - each event motor's state (E2's walk phase, E6's divisions tonight, E5's progress);
-- the E2 ring's waiting age;
+- the E2 ring's waiting age (for the log; the resync does not need it);
 - quiet-hour and show settings, fault flags;
 - a sequence number and a CRC-32.
 
@@ -848,9 +849,10 @@ change; each is listed again in the PR's "Decisions needed".
 1. **BOM Batch 2 (append-only rows):** MCP23017 × 3, not 2 (§3.5); DRV8833 × 5, not 4 (§3.4);
    PCA9685 × 1; a 24 → 6 V buck (F5); RV-3028-C7 breakout (F3); FRAM; bulk capacitors (§3.7);
    Micro-Fit connector pairs (§4). Added only once the decisions are made.
-2. **E2 part 2b:** how does the controller learn which age the ring holds if FRAM is lost? For
-   example, a second Hall at the bell station reading a code magnet under one age only. Today the
-   four magnets are alike (`docs/e2-design.md` §11.4).
+2. **E2 part 2b:** how does the controller learn which age the ring holds if FRAM is lost?
+   **Answered (PR #21):** it need not. One silent walk brings the due age to the doorway, whatever
+   waits (`docs/e2-design.md` §10.3). The hour rack is tripped by the quarter rack at :00, before
+   the first pair; the hour train and its opto are used only at :00 (§12.1, §12.4).
 3. **E2 part 2b:** answered on PR #21 (`docs/e2-design.md` §12.4): a pair every 3 s, the age 1 s
    after the cue; Death one stroke per 3 s [E: Paul to time it]. The sequencer's timeouts follow
    those.
