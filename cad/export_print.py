@@ -33,6 +33,7 @@ STL_ANGULAR = 0.3             # rad
 
 
 def _models():
+    from cad.modules.e1_angels import mechanism as e1
     from cad.modules.e2_ages import mechanism as e2
     from cad.modules.m1_time import mechanism as m1
     from cad.modules.m2_main_dial import e6
@@ -43,6 +44,7 @@ def _models():
         "test_rig": lambda: rig.build()[0],
         "m1_time": lambda: m1.build()[0],
         "e2_ages": lambda: e2.build()[0],
+        "e1_angels": lambda: e1.build()[0],
         "m2_main_dial": lambda: m2_full.build()[0],
         "m2_e6_fallback_pawl": lambda: e6.fallback_assembly(),    # Paul: keep design A (crank and pawl)
     }

@@ -1,0 +1,638 @@
+{
+ "model": "e1_angels",
+ "unique_parts": 33,
+ "printed_parts": 36,
+ "sets": {},
+ "parts": [
+  {
+   "names": [
+    "tower_inner_plate"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    98.0,
+    80.0,
+    3.0
+   ],
+   "note": "carries the bell shaft, the intermediate, the count wheel and the cross shaft (MR85ZZ seats)",
+   "file": "tower_inner_plate.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "tower_outer_plate"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    98.0,
+    80.0,
+    3.0
+   ],
+   "note": "carries the bell shaft, the intermediate, the count wheel and the cross shaft (MR85ZZ seats)",
+   "file": "tower_outer_plate.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "tower_pillars"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    32.0,
+    81.0,
+    98.0
+   ],
+   "note": "four pillars between the plates (M3 through)",
+   "file": "tower_pillars.stl",
+   "overhang_mm2": 1011.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "bell_pinion_12"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    3.0,
+    14.6,
+    14.6
+   ],
+   "note": "pressed on the bell shaft",
+   "file": "bell_pinion_12.stl",
+   "overhang_mm2": 67.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "intermediate_48_12"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    7.0,
+    49.4,
+    49.4
+   ],
+   "note": "48 + 12 in one print, pressed on the intermediate arbor",
+   "file": "intermediate_48_12.stl",
+   "overhang_mm2": 325.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "count_wheel_60"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    4.0,
+    61.4,
+    61.4
+   ],
+   "note": "the count wheel: one turn per hour's work (1:20)",
+   "file": "count_wheel_60.stl",
+   "overhang_mm2": 312.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "sector_36"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    35.7,
+    35.7,
+    3.0
+   ],
+   "note": "mutilated gear: 18 teeth over 180\u00b0 turn the cross shaft half a turn while the count wheel makes its silent half",
+   "file": "sector_36.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "cross_gear_36"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    3.0,
+    38.0,
+    38.0
+   ],
+   "note": "pressed on the cross shaft's stub",
+   "file": "cross_gear_36.stl",
+   "overhang_mm2": 185.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "snail"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    3.0,
+    20.4,
+    18.2
+   ],
+   "note": "one stroke per turn: rest in the high dwell, the drop 30\u00b0 on, the rise 60\u2013280\u00b0 (pressure angle \u2264 9\u00b0)",
+   "file": "snail.stl",
+   "overhang_mm2": 52.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "silencing_cam"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    3.0,
+    41.0,
+    36.2
+   ],
+   "note": "holds the follower lever off the snail for the ten silent turns (count wheel 180\u2013360\u00b0)",
+   "file": "silencing_cam.stl",
+   "overhang_mm2": 96.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "follower_lever"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    60.0,
+    7.5,
+    6.5
+   ],
+   "note": "pivots on a \u00d83 pin in the inner plate: roller on the snail, pin on the silencing cam, wire at the tip",
+   "file": "follower_lever.stl",
+   "overhang_mm2": 247.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "follower_roller"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    3.0,
+    4.0,
+    4.0
+   ],
+   "note": "printed sleeve, free on the lever's axle",
+   "file": "follower_roller.stl",
+   "overhang_mm2": 11.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "bell_lock_cam"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    3.0,
+    19.9,
+    20.0
+   ],
+   "note": "one notch: the bell lock (the switch opens at rest)",
+   "file": "bell_lock_cam.stl",
+   "overhang_mm2": 55.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "home_cam"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    3.0,
+    24.0,
+    23.9
+   ],
+   "note": "one notch 18\u00b0 wide: only the twentieth turn's lock falls in it (home)",
+   "file": "home_cam.stl",
+   "overhang_mm2": 59.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "detent_disc"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    3.0,
+    17.8,
+    18.0
+   ],
+   "note": "two notches 180\u00b0 apart: holds the cross shaft at a dead centre between hours",
+   "file": "detent_disc.stl",
+   "overhang_mm2": 55.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "bell_drive_gear_20"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    3.0,
+    22.0,
+    22.0
+   ],
+   "note": "pressed on the bell shaft",
+   "file": "bell_drive_gear_20.stl",
+   "overhang_mm2": 109.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "motor_pinion_20"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    3.0,
+    21.8,
+    21.8
+   ],
+   "note": "pressed on the gearmotor's \u00d83 D-shaft; 1:1 with the bell shaft",
+   "file": "motor_pinion_20.stl",
+   "overhang_mm2": 102.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "gearmotor_bracket"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    42.0,
+    16.4,
+    15.0
+   ],
+   "note": "a saddle on the plates' top edges (4 \u00d7 M2): its cheeks hold the gearmotor; lift it out upwards",
+   "file": "gearmotor_bracket.stl",
+   "overhang_mm2": 431.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "plinth_bell"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    46.0,
+    10.0,
+    52.0
+   ],
+   "note": "printed, painted: the ledge the genie sits on; it belongs to E1, the wooden cornice fits round it with a gap (D12 R5)",
+   "file": "plinth_bell.stl",
+   "overhang_mm2": 60.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "plinth_glass"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    44.0,
+    12.0,
+    52.0
+   ],
+   "note": "printed, painted: the ledge the genie sits on; it belongs to E1, the wooden cornice fits round it with a gap (D12 R5)",
+   "file": "plinth_glass.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "shoulder_bracket"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    23.0,
+    48.0,
+    13.0
+   ],
+   "note": "on the plinth: the shoulder arbor's two MR63ZZ, the spring's post and the banking stop",
+   "file": "shoulder_bracket.stl",
+   "overhang_mm2": 96.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "shoulder_lever"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    21.0,
+    7.0,
+    2.5
+   ],
+   "note": "15.5 mm lever: the wire's 8.1 mm pull cocks the arm 30\u00b0",
+   "file": "shoulder_lever.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "sceptre_arm"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    24.9,
+    13.2,
+    3.0
+   ],
+   "note": "the arm and the striker in one print, pressed on the shoulder arbor; painted with the figure",
+   "file": "sceptre_arm.stl",
+   "overhang_mm2": 30.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "coupling_left",
+    "coupling_right"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    12.0,
+    12.0,
+    8.0
+   ],
+   "note": "single-dog coupling (two halves; one way round only: the glass's phase)",
+   "file": "coupling_left.stl",
+   "overhang_mm2": 28.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "glass_crank_block"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    28.0,
+    50.0,
+    16.0
+   ],
+   "note": "two MR85ZZ for the crank's stub; screwed to the glass tower's plate",
+   "file": "glass_crank_block.stl",
+   "overhang_mm2": 70.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "crank"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    25.8,
+    25.8,
+    3.0
+   ],
+   "note": "r 9.425 = \u03c0\u00b7r_p / 2 [D]: its 2r stroke is half a turn of the pinion",
+   "file": "crank.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "yoke"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    15.2,
+    30.8,
+    9.0
+   ],
+   "note": "Scotch yoke: the crank pin runs in its slot",
+   "file": "yoke.stl",
+   "overhang_mm2": 219.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "rack"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    26.2,
+    37.7,
+    5.2
+   ],
+   "note": "12 teeth, module 1.0: pressed on the slider rod; turns the glass's pinion",
+   "file": "rack.stl",
+   "overhang_mm2": 260.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "glass_pinion_12"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    14.6,
+    14.6,
+    4.0
+   ],
+   "note": "pressed on the glass arbor",
+   "file": "glass_pinion_12.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "glass_tower_plate"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    100.8,
+    205.1,
+    3.0
+   ],
+   "note": "the glass tower's plate: guides, arms and the crank block screw to it; M5 tabs to the internal frame",
+   "file": "glass_tower_plate.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "guide_low",
+    "guide_high"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    9.0,
+    10.0,
+    6.0
+   ],
+   "note": "the slider rod's guide",
+   "file": "guide_low.stl",
+   "overhang_mm2": 0.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "glass_arm_rear",
+    "glass_arm_front"
+   ],
+   "material": "PETG",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    39.0,
+    10.0,
+    5.0
+   ],
+   "note": "carries one MR63ZZ of the glass arbor",
+   "file": "glass_arm_rear.stl",
+   "overhang_mm2": 18.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  },
+  {
+   "names": [
+    "forearms_and_frame"
+   ],
+   "material": "PLA",
+   "nozzle": 0.4,
+   "set": "",
+   "size": [
+    27.5,
+    22.6,
+    15.6
+   ],
+   "note": "the forearms and the glass's frame in one print (Paul: the forearms turn the glass)",
+   "file": "forearms_and_frame.stl",
+   "overhang_mm2": 281.0,
+   "fits_single": true,
+   "fits_dual": true,
+   "mesh_ok": true
+  }
+ ]
+}
